@@ -3,6 +3,7 @@ architecture.html
 notifications.html
 playbook.html
 security.html
+reports.html
 node_modules/
 .DS_Store
 *.log
