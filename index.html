@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="navy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoBots Nexus</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+/* ══════════════════════════════════
+   1. GLOBAL — Variables, Reset, Nav, Aurora, Dividers
+══════════════════════════════════ */
+:root {
+  --bg:#080c14; --bg-card:#0d1424; --bg-raised:#0f1a30; --bg-surface:#1a2a50;
+  --accent:#64b4ff; --accent-2:#4a9aee; --accent-3:#a78bfa; --accent2:#4a9aee; --accent3:#a78bfa;
+  --text:#e8f4ff; --text-sub:#7a90aa; --text-dim:rgba(232,244,255,0.3);
+  --sub:#7a90aa; --dim:rgba(232,244,255,0.25);
+  --raised:#0f1a30;
+  --green:#00ff64; --amber:#f5a94f; --red:#ff4a36; --blue:#64b4ff; --pink:#f739f7;
+  --orange:#ff8c42; --purple:#a855f7;
+  --border:rgba(255,255,255,0.06); --border-b:rgba(255,255,255,0.12);
+  --border-acc:rgba(100,180,255,0.25); --border-accent:rgba(100,180,255,0.25);
+  --ease-out:cubic-bezier(0.215,0.61,0.355,1); --ease-snap:cubic-bezier(0.4,0.5,0,1);
+  --ease:cubic-bezier(0.215,0.61,0.355,1);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; scroll-behavior:smooth; scrollbar-width:none; }
+html::-webkit-scrollbar { display:none; }
+body { font-family:'Share Tech Mono',monospace; background:var(--bg); color:var(--text); overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+
+#aurora { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* ── NAV ── */
+.site-nav { position:fixed; top:0; left:0; right:0; z-index:200; background:transparent; padding:0 clamp(1rem,2.5vw,2.5rem); height:clamp(48px,5.5vh,60px); display:flex; align-items:center; }
+.site-nav-inner { max-width:1600px; margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
+.site-nav .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.site-nav .logo-mark { width:28px; height:28px; border-radius:6px; background:linear-gradient(145deg,var(--bg-raised),var(--bg-surface)); border:1px solid var(--border-acc); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.site-nav .logo-text { font-family:'Oxanium',sans-serif; font-size:clamp(0.72rem,0.95vw,0.92rem); font-weight:800; letter-spacing:0.1em; color:var(--text); }
+.site-nav .logo-text .sep { color:rgba(232,244,255,0.3); margin:0 3px; }
+.site-nav .logo-text .nexus { color:var(--accent); }
+.nav-links { display:flex; gap:2px; list-style:none; }
+.nav-links:hover a { opacity:0.3; }
+.nav-links a:hover { opacity:1 !important; color:var(--text); }
+.nav-links a { color:var(--sub); text-decoration:none; font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.82vw,0.82rem); letter-spacing:0.08em; text-transform:uppercase; padding:clamp(6px,0.7vh,10px) clamp(10px,1vw,16px); border-radius:4px; transition:opacity 0.18s,color 0.18s; position:relative; }
+.nav-links a::before { content:''; position:absolute; left:14px; right:14px; bottom:4px; height:1px; background:var(--accent); transform:scaleX(0); transition:transform 0.3s cubic-bezier(0.76,0,0.24,1); transform-origin:100% 0; }
+.nav-links a:hover::before, .nav-links a.active::before { transform:scaleX(1); transform-origin:0% 0; }
+@media(max-width:860px){ .nav-links { display:none; } }
+
+.section-divider { height:1px; max-width:1500px; margin:0 auto; background:linear-gradient(90deg, transparent, rgba(100,180,255,0.15), transparent); }
+
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+@keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+/* ══════════════════════════════════
+   2. HERO SECTION CSS (#sec-hero)
+   Restored from autobots-hero.html original
+══════════════════════════════════ */
+#sec-hero { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:100px 2rem 80px; }
+#sec-hero .status-ticker-wrap { width:100%; max-width:min(1000px,60vw); margin-bottom:2.5rem; opacity:0; transform:translateY(20px); }
+#sec-hero .status-ticker-wrap.in { animation:fadeUp 0.7s var(--ease-out) 0.1s forwards; }
+#sec-hero .status-pills { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px; }
+#sec-hero .status-pill { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:100px; font-family:'Share Tech Mono',monospace; font-size:0.72rem; letter-spacing:0.08em; border:1px solid; white-space:nowrap; }
+#sec-hero .pill-live { color:var(--green); border-color:rgba(0,255,100,0.3); background:rgba(0,255,100,0.06); }
+#sec-hero .pill-paper { color:var(--accent); border-color:rgba(100,180,255,0.3); background:rgba(100,180,255,0.06); }
+#sec-hero .pill-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+#sec-hero .pill-live .pill-dot { background:var(--green); box-shadow:0 0 6px var(--green); animation:pulseDot 1.8s ease-in-out infinite; }
+#sec-hero .pill-paper .pill-dot { background:var(--accent); box-shadow:0 0 6px var(--accent); animation:pulseDot 2.4s ease-in-out infinite; }
+#sec-hero .status-ticker { overflow:hidden; border:1px solid var(--border); border-radius:6px; background:rgba(13,20,36,0.6); padding:6px 0; position:relative; }
+#sec-hero .status-ticker::before, #sec-hero .status-ticker::after { content:''; position:absolute; top:0; bottom:0; width:48px; z-index:2; pointer-events:none; }
+#sec-hero .status-ticker::before { left:0; background:linear-gradient(90deg, rgba(13,20,36,0.95), transparent); }
+#sec-hero .status-ticker::after { right:0; background:linear-gradient(270deg, rgba(13,20,36,0.95), transparent); }
+#sec-hero .ticker-track { display:flex; width:max-content; animation:tickerScroll 29s linear infinite; }
+@keyframes tickerScroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+#sec-hero .ticker-item { display:inline-flex; align-items:center; gap:8px; padding:0; font-family:'Share Tech Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; color:var(--text-dim); white-space:nowrap; }
+#sec-hero .ticker-item .ticker-dot { width:3px; height:3px; border-radius:50%; background:var(--text-dim); flex-shrink:0; }
+#sec-hero .ticker-sep { color:rgba(100,180,255,0.3); margin:0 20px; }
+#sec-hero .hero-headline { font-family:'Oxanium',sans-serif; font-size:clamp(2.5rem,7vw,5rem); font-weight:800; line-height:1.05; letter-spacing:-0.01em; text-transform:uppercase; max-width:min(1100px,70vw); margin-bottom:1.5rem; }
+#sec-hero .headline-line { overflow:hidden; display:block; }
+#sec-hero .headline-word { display:inline-block; will-change:transform,opacity; transform:translateY(100%); opacity:0; transition:transform 0.75s var(--ease-out), opacity 0.55s ease; }
+#sec-hero .headline-word.in { transform:translateY(0); opacity:1; }
+#sec-hero .headline-word.accent { color:var(--accent); }
+#sec-hero .headline-word.accent3 { color:var(--accent-3); }
+#sec-hero .hero-sub { font-size:clamp(0.95rem,1.8vw,1.1rem); font-weight:400; color:var(--text-sub); max-width:580px; line-height:1.8; margin-bottom:3rem; opacity:0; transform:translateY(20px); }
+#sec-hero .hero-sub.in { animation:fadeUp 0.7s var(--ease-out) 0.9s forwards; }
+#sec-hero .hero-stats { display:flex; border:1px solid var(--border); border-radius:10px; overflow:hidden; max-width:min(1000px,60vw); width:100%; margin-bottom:3rem; background:rgba(13,20,36,0.7); backdrop-filter:blur(12px); opacity:0; transform:translateY(20px); }
+#sec-hero .hero-stats.in { animation:fadeUp 0.7s var(--ease-out) 1.1s forwards; }
+#sec-hero .h-stat { flex:1; padding:22px 14px; border-right:1px solid var(--border); text-align:center; transition:background 0.3s; }
+#sec-hero .h-stat:last-child { border-right:none; }
+#sec-hero .h-stat:hover { background:var(--bg-raised); }
+#sec-hero .h-stat-num { font-family:'Oxanium',sans-serif; font-weight:800; font-size:clamp(1.8rem,3vw,2.5rem); line-height:1; margin-bottom:6px; display:block; }
+#sec-hero .h-stat:nth-child(1) .h-stat-num { color:var(--accent); }
+#sec-hero .h-stat:nth-child(2) .h-stat-num { color:var(--accent-3); }
+#sec-hero .h-stat:nth-child(3) .h-stat-num { color:var(--green); }
+#sec-hero .h-stat:nth-child(4) .h-stat-num { color:var(--amber); }
+#sec-hero .h-stat:nth-child(5) .h-stat-num { color:var(--blue); }
+#sec-hero .h-stat-label { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; line-height:1.4; white-space:nowrap; }
+@media(min-width:2561px){
+  #sec-hero { min-height:110vh; padding-top:140px; padding-bottom:100px; }
+  #sec-hero .hero-headline { font-size:6.5rem; max-width:1400px; margin-bottom:3rem; }
+  #sec-hero .hero-sub { font-size:1.35rem; max-width:720px; margin-bottom:5rem; }
+  #sec-hero .status-pill { font-size:0.88rem; padding:8px 22px; }
+  #sec-hero .ticker-item { font-size:0.82rem; }
+  #sec-hero .status-ticker { padding:9px 0; }
+  #sec-hero .status-ticker-wrap { max-width:1200px; margin-bottom:4.5rem; }
+  #sec-hero .hero-stats { max-width:1200px; margin-bottom:4rem; }
+  #sec-hero .h-stat { padding:30px 20px; }
+  #sec-hero .h-stat-num { font-size:3.2rem; margin-bottom:10px; }
+  #sec-hero .h-stat-label { font-size:0.88rem; }
+}
+
+/* ══════════════════════════════════
+   3. ARCHITECTURE SECTION CSS (#sec-arch)
+══════════════════════════════════ */
+#sec-arch { position:relative; z-index:1; }
+/* Screen 1 — Title + Summary */
+#sec-arch .arch-screen1 { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:100px 2rem 60px; position:relative; }
+#sec-arch .sec-eyebrow { font-family:'Share Tech Mono',monospace; font-size:clamp(0.72rem,0.95vw,0.95rem); letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:clamp(0.4rem,0.6vw,0.6rem); opacity:0; transform:translateY(20px); }
+#sec-arch .sec-eyebrow.in { animation:fadeUp 0.6s var(--ease-out) forwards; }
+#sec-arch .sec-title { font-family:'Oxanium',sans-serif; font-size:clamp(2.6rem,6vw,4.2rem); font-weight:800; letter-spacing:0.02em; line-height:1.1; margin-bottom:clamp(0.4rem,0.6vw,0.6rem); }
+#sec-arch .sec-title span { color:var(--accent); }
+#sec-arch .title-line { overflow:hidden; display:block; }
+#sec-arch .title-word { display:inline-block; transform:translateY(100%); opacity:0; transition:transform 0.7s var(--ease-out), opacity 0.5s ease; color:var(--text); }
+#sec-arch .title-word.in { transform:translateY(0); opacity:1; }
+#sec-arch .title-word.accent, #sec-arch .title-word.accent.in { color:var(--accent) !important; }
+#sec-arch .sec-summary { font-size:1.05rem; color:var(--sub); line-height:1.8; max-width:680px; opacity:0; transform:translateY(16px); }
+#sec-arch .sec-summary.in { animation:fadeUp 0.4s var(--ease-out) forwards; }
+#sec-arch .sec-hint { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); letter-spacing:0.15em; color:var(--dim); text-transform:uppercase; opacity:0; position:absolute; top:12px; left:0; right:0; text-align:center; transform:translateY(14px); z-index:3; pointer-events:none; }
+#sec-arch .sec-hint.in { animation:fadeUp 0.6s var(--ease-out) forwards; }
+/* Screen 2 — Interactive Graph */
+#sec-arch .arch-screen2 { min-height:100vh; display:flex; justify-content:center; position:relative; z-index:1; }
+#sec-arch .arch-screen2-inner { max-width:1840px; width:100%; display:grid; grid-template-columns:65% 35%; padding:0 1.5rem; margin:0 auto; }
+#sec-arch .arch-graph-col { position:relative; display:flex; align-items:stretch; }
+#sec-arch .arch-graph-col .network-area { position:relative; width:100%; height:100%; overflow:hidden; }
+#sec-arch #archNetCanvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+#sec-arch .tier-labels { position:absolute; left:0; top:0; bottom:0; width:24px; pointer-events:none; z-index:2; }
+#sec-arch .tier-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.52rem,0.7vw,0.72rem); letter-spacing:0.15em; text-transform:uppercase; position:absolute; left:0; width:100%; text-align:center; transform:translateY(-50%); opacity:0; transition:opacity 0.3s ease, top 0.15s ease; }
+#sec-arch .tier-label.in { opacity:0.4; }
+#sec-arch .tl-1 { color:var(--amber); }
+#sec-arch .tl-2 { color:var(--accent); }
+#sec-arch .tl-3 { color:var(--blue); }
+#sec-arch .tl-4 { color:var(--green); }
+#sec-arch .tl-5 { color:var(--sub); }
+#sec-arch .arch-panel-col { display:flex; align-items:stretch; opacity:0; transition:opacity 0.3s ease; }
+#sec-arch .arch-panel-col.in { opacity:1; }
+#sec-arch .arch-panel-inner { width:100%; padding:60px 0 0 2rem; display:flex; flex-direction:column; height:100%; }
+#sec-arch .arch-panel-top { flex:1; display:flex; flex-direction:column; justify-content:center; overflow:hidden; padding-top:70px; padding-left:8px; }
+#sec-arch .arch-panel-bottom { flex:1; display:flex; flex-direction:column; justify-content:flex-start; padding-top:1rem; padding-bottom:70px; padding-left:8px; overflow-y:auto; transition:justify-content 0.3s ease; }
+#sec-arch .arch-panel-inner.has-detail .arch-panel-bottom { justify-content:center; }
+#sec-arch .arch-panel-inner.has-detail .detail-panel { display:grid !important; animation:archDetailIn 0.3s ease forwards; }
+@keyframes archDetailIn { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+#sec-arch .detail-panel { display:grid; grid-template-columns:16px 1fr; gap:clamp(0.8rem,1.2vw,1.2rem); align-items:start; transition:all 0.3s ease; }
+#sec-arch .detail-panel.highlighted .dp-name { color:var(--accent); }
+#sec-arch .dp-indicator { width:14px; height:14px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+#sec-arch .dp-tier { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); margin-bottom:clamp(3px,0.4vw,5px); }
+#sec-arch .dp-name { font-family:'Oxanium',sans-serif; font-size:clamp(1.4rem,2.5vw,1.8rem); font-weight:700; margin-bottom:clamp(5px,0.6vw,8px); line-height:1.15; color:var(--text); transition:color 0.3s ease; }
+#sec-arch .dp-desc { font-size:clamp(0.85rem,1.05vw,1.05rem); color:var(--sub); line-height:1.75; margin-bottom:clamp(8px,1vw,14px); max-width:720px; }
+#sec-arch .dp-chips { display:flex; flex-wrap:wrap; gap:clamp(4px,0.5vw,6px); }
+#sec-arch .dp-chip { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); padding:clamp(3px,0.35vw,4px) clamp(8px,0.9vw,12px); border-radius:100px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--sub); display:flex; align-items:center; gap:clamp(3px,0.4vw,5px); letter-spacing:0.04em; transition:border-color 0.2s, color 0.2s; }
+#sec-arch .dp-chip:hover { border-color:var(--border-b); color:var(--text); }
+#sec-arch .dp-chip .dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+#sec-arch .legend { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem 1.5rem; }
+#sec-arch .legend-title { font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--dim); margin-bottom:0.4rem; padding-bottom:0.2rem; border-bottom:1px solid var(--border); }
+#sec-arch .legend-items { display:flex; flex-direction:column; gap:6px; }
+#sec-arch .legend-item { display:flex; align-items:center; gap:8px; }
+#sec-arch .legend-item svg { width:30px !important; height:10px !important; flex-shrink:0; }
+#sec-arch .legend-item svg[viewBox="0 0 22 22"] { width:16px !important; height:16px !important; }
+#sec-arch .legend-label { font-size:0.72rem; color:var(--sub); line-height:1.35; }
+#sec-arch .legend-label strong { display:block; font-weight:600; color:var(--text); font-size:0.76rem; margin-bottom:0; }
+@media (max-width:768px) { #sec-arch .arch-screen2-inner { grid-template-columns:1fr; grid-template-rows:60vh auto; padding:0 1rem; } #sec-arch .arch-panel-inner { padding:1rem 0 0 1rem; } #sec-arch .legend { grid-template-columns:1fr; gap:0.8rem; } #sec-arch .tier-labels { width:20px; } #sec-arch .tier-label { font-size:0.5rem; } }
+@media (max-width:600px) { #sec-arch .tier-labels { display:none; } #sec-arch .detail-panel { grid-template-columns:12px 1fr; gap:0.8rem; } }
+
+/* ══════════════════════════════════
+   5. PLAYBOOK SECTION CSS (#sec-playbook)
+══════════════════════════════════ */
+#sec-playbook { min-height:100vh; position:relative; z-index:1; display:flex; align-items:center; }
+#sec-playbook .playbook-layout { display:grid; grid-template-columns:40% 60%; width:100%; min-height:100vh; align-items:center; }
+#sec-playbook .playbook-left { padding:clamp(2rem,4vw,4rem) clamp(1.5rem,3vw,3rem) clamp(2rem,4vw,4rem) clamp(2rem,4vw,5rem); display:flex; flex-direction:column; justify-content:center; align-items:flex-end; text-align:right; }
+#sec-playbook .sec-eyebrow { font-family:'Share Tech Mono',monospace; font-size:clamp(0.72rem,0.95vw,0.95rem); letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:clamp(0.5rem,0.8vw,0.8rem); opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+#sec-playbook .sec-eyebrow.in { opacity:1; transform:translateY(0); }
+#sec-playbook .sec-title { font-family:'Oxanium',sans-serif; font-size:clamp(2.2rem,4.5vw,3.8rem); font-weight:800; letter-spacing:0.02em; line-height:1.1; margin-bottom:clamp(1rem,1.5vw,1.5rem); opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out) 0.15s, transform 0.7s var(--ease-out) 0.15s; }
+#sec-playbook .sec-title.in { opacity:1; transform:translateY(0); }
+#sec-playbook .sec-title .accent { color:var(--accent); }
+#sec-playbook .sec-summary { font-family:'Space Grotesk',sans-serif; font-size:clamp(0.92rem,1.1vw,1.08rem); color:var(--sub); line-height:1.8; max-width:520px; margin-bottom:clamp(1.5rem,2vw,2rem); opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out) 0.3s, transform 0.7s var(--ease-out) 0.3s; }
+#sec-playbook .sec-summary.in { opacity:1; transform:translateY(0); }
+#sec-playbook .phase-progress { display:flex; align-items:center; gap:clamp(0.5rem,0.7vw,0.7rem); opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out) 0.45s, transform 0.7s var(--ease-out) 0.45s; }
+#sec-playbook .phase-progress.in { opacity:1; transform:translateY(0); }
+#sec-playbook .prog-bar { display:flex; gap:5px; align-items:center; }
+#sec-playbook .prog-seg { width:clamp(26px,2.5vw,36px); height:4px; border-radius:2px; background:var(--border-b); transition:background 0.4s ease; position:relative; overflow:hidden; }
+#sec-playbook .prog-seg.done { background:var(--green); }
+#sec-playbook .prog-seg.live { background:var(--raised); }
+#sec-playbook .prog-seg.live::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,var(--accent),transparent); animation:shimmer 1.8s ease-in-out infinite; }
+@keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+#sec-playbook .prog-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.72rem,0.88vw,0.88rem); letter-spacing:0.12em; color:var(--sub); margin-left:clamp(0.4rem,0.6vw,0.6rem); }
+#sec-playbook .prog-label strong { color:var(--green); }
+#sec-playbook .playbook-right { position:relative; overflow:hidden; }
+#sec-playbook .scroll-section { position:relative; width:100%; -webkit-mask-image:linear-gradient(to right, transparent 0%, black 14%, black 88%, transparent 100%); mask-image:linear-gradient(to right, transparent 0%, black 14%, black 88%, transparent 100%); }
+#sec-playbook .scroll-track { display:flex; gap:clamp(12px,1.5vw,20px); padding:clamp(1.2rem,2vw,2rem) clamp(20px,3vw,40px); width:max-content; cursor:grab; user-select:none; }
+#sec-playbook .scroll-track:active { cursor:grabbing; }
+#sec-playbook .phase-card { width:clamp(280px,22vw,380px); flex-shrink:0; position:relative; padding:clamp(1.2rem,1.8vw,1.8rem); background:linear-gradient(145deg,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0.01) 100%); border:1px solid var(--border); border-radius:4px; overflow:hidden; transition:border-color 0.3s ease,transform 0.3s ease; opacity:0; }
+#sec-playbook .phase-card.revealed { opacity:1; transition:opacity 0.6s ease,border-color 0.3s ease,transform 0.3s ease; }
+#sec-playbook .phase-card:hover { border-color:var(--border-b); transform:translateY(-4px); }
+#sec-playbook .card-watermark { position:absolute; top:-0.5rem; right:1rem; font-family:'Oxanium',sans-serif; font-size:clamp(4rem,7vw,7rem); font-weight:800; line-height:1; color:rgba(255,255,255,0.025); pointer-events:none; user-select:none; }
+#sec-playbook .card-accent-line { position:absolute; top:0; left:0; right:0; height:2px; }
+#sec-playbook .card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:clamp(0.8rem,1.2vw,1.2rem); position:relative; z-index:1; }
+#sec-playbook .card-phase-num { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.2em; color:var(--dim); text-transform:uppercase; margin-bottom:clamp(0.15rem,0.25vw,0.25rem); }
+#sec-playbook .card-title { font-family:'Oxanium',sans-serif; font-size:clamp(0.9rem,1.1vw,1.1rem); font-weight:700; line-height:1.2; color:var(--text); }
+#sec-playbook .card-status { display:inline-flex; align-items:center; gap:clamp(3px,0.4vw,5px); padding:clamp(2px,0.3vw,3px) clamp(7px,0.8vw,10px); border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:clamp(0.52rem,0.65vw,0.65rem); letter-spacing:0.12em; text-transform:uppercase; flex-shrink:0; margin-top:2px; }
+#sec-playbook .status-done { background:rgba(0,255,100,0.1); color:var(--green); border:1px solid rgba(0,255,100,0.25); }
+#sec-playbook .status-live { background:rgba(100,180,255,0.1); color:var(--accent); border:1px solid rgba(100,180,255,0.25); }
+#sec-playbook .status-active { background:rgba(245,169,79,0.08); color:var(--amber); border:1px solid rgba(245,169,79,0.2); }
+#sec-playbook .status-planned { background:rgba(122,144,170,0.06); color:var(--sub); border:1px solid rgba(122,144,170,0.15); }
+#sec-playbook .status-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+#sec-playbook .status-done .status-dot { background:var(--green); }
+#sec-playbook .status-live .status-dot { background:var(--accent); animation:sdpulse 1.8s ease-in-out infinite; }
+#sec-playbook .status-active .status-dot { background:var(--amber); animation:sdpulse 2.2s ease-in-out infinite; }
+#sec-playbook .status-planned .status-dot { background:var(--sub); }
+@keyframes sdpulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+#sec-playbook .card-summary { font-size:clamp(0.85rem,1.05vw,1.05rem); color:var(--sub); line-height:1.7; margin-bottom:clamp(0.8rem,1.2vw,1.2rem); position:relative; z-index:1; }
+#sec-playbook .card-pills { display:flex; flex-wrap:wrap; gap:clamp(3px,0.4vw,5px); margin-bottom:clamp(0.8rem,1.2vw,1.2rem); position:relative; z-index:1; }
+#sec-playbook .pill { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.05em; padding:clamp(2px,0.3vw,3px) clamp(6px,0.7vw,9px); border-radius:2px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--sub); white-space:nowrap; }
+#pbCard0 .pill { border-color:rgba(117,119,224,0.4); background:rgba(117,119,224,0.06); }
+#pbCard1 .pill { border-color:rgba(52,211,153,0.4); background:rgba(52,211,153,0.06); }
+#pbCard2 .pill { border-color:rgba(244,162,97,0.4); background:rgba(244,162,97,0.06); }
+#pbCard3 .pill { border-color:rgba(60,200,200,0.4); background:rgba(60,200,200,0.06); }
+#pbCard4 .pill { border-color:rgba(96,165,250,0.4); background:rgba(96,165,250,0.06); }
+#pbCard5 .pill { border-color:rgba(243,186,47,0.4); background:rgba(243,186,47,0.06); }
+#pbCard6 .pill { border-color:rgba(232,65,66,0.4); background:rgba(232,65,66,0.06); }
+#sec-playbook .card-decision { position:relative; z-index:1; padding:clamp(0.4rem,0.7vw,0.7rem) clamp(0.6rem,0.9vw,0.9rem); border-left:2px solid var(--border-b); background:rgba(255,255,255,0.02); }
+#sec-playbook .card-decision-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.52rem,0.65vw,0.65rem); letter-spacing:0.15em; color:var(--dim); text-transform:uppercase; margin-bottom:clamp(0.15rem,0.25vw,0.25rem); }
+#sec-playbook .card-decision-text { font-size:clamp(0.78rem,0.95vw,0.95rem); color:var(--sub); line-height:1.5; font-style:italic; }
+#sec-playbook .card-done .card-accent-line { background:var(--green); }
+#sec-playbook .card-live .card-accent-line { background:var(--accent); }
+#sec-playbook .card-active .card-accent-line { background:var(--amber); }
+#sec-playbook .card-planned .card-accent-line { background:var(--border-b); }
+#sec-playbook .card-done:hover .card-decision { border-left-color:var(--green); }
+#sec-playbook .card-live:hover .card-decision { border-left-color:var(--accent); }
+#sec-playbook .card-active:hover .card-decision { border-left-color:var(--amber); }
+@media(max-width:900px){
+  #sec-playbook .playbook-layout { grid-template-columns:1fr; grid-template-rows:auto 1fr; min-height:auto; }
+  #sec-playbook .playbook-left { padding:clamp(80px,10vh,120px) 2rem 1.5rem; text-align:center; align-items:center; }
+  #sec-playbook .sec-summary { max-width:600px; }
+  #sec-playbook .phase-progress { justify-content:center; }
+}
+@media(max-width:768px){#sec-playbook .phase-card{width:300px;padding:1.5rem;}#sec-playbook .card-watermark{font-size:5rem;}}
+@media(max-width:480px){#sec-playbook .phase-card{width:260px;padding:1.2rem;}}
+
+/* ══════════════════════════════════
+   6. NOTIFICATIONS SECTION CSS (#sec-notif)
+══════════════════════════════════ */
+#sec-notif { position:relative; z-index:1; padding-bottom:clamp(5rem,10vw,10rem); padding-top:clamp(80px,10vh,120px); }
+#sec-notif .header { padding:0 clamp(1rem,2vw,2rem); max-width:1560px; margin:0 auto; min-height:calc(100vh - 90px); display:flex; flex-direction:column; justify-content:center; }
+#sec-notif .sec-eyebrow { font-family:'Share Tech Mono',monospace; font-size:clamp(0.72rem,0.95vw,0.95rem); letter-spacing:0.22em; color:var(--accent); text-transform:uppercase; margin-bottom:clamp(0.4rem,0.6vw,0.6rem); clip-path:inset(0 100% 0 0); transition:clip-path 1.2s cubic-bezier(0.77,0,0.175,1) 0.2s; }
+#sec-notif .sec-eyebrow.in { clip-path:inset(0 0% 0 0); }
+#sec-notif .sec-title { font-family:'Oxanium',sans-serif; font-size:clamp(2.6rem,6vw,4.2rem); font-weight:800; line-height:1.1; margin-bottom:clamp(0.3rem,0.5vw,0.5rem); clip-path:inset(0 100% 0 0); transition:clip-path 1.8s cubic-bezier(0.77,0,0.175,1) 0.6s; }
+#sec-notif .sec-title.in { clip-path:inset(0 0% 0 0); }
+#sec-notif .sec-title .ac { color:var(--accent); }
+#sec-notif .sec-sub { font-size:clamp(0.88rem,1.1vw,1.1rem); color:var(--sub); line-height:1.8; max-width:640px; opacity:0; transition:opacity 1.2s ease 1.8s; }
+#sec-notif .sec-sub.in { opacity:1; }
+#sec-notif .signal-section { max-width:1560px; margin:clamp(2rem,4vw,4rem) auto 0; padding:0 clamp(1rem,2vw,2rem); position:relative; }
+#sec-notif .signal-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.22em; color:rgba(232,244,255,0.55); text-transform:uppercase; margin-bottom:clamp(1.2rem,2vw,2rem); display:flex; align-items:center; gap:clamp(0.5rem,0.8vw,0.8rem); }
+#sec-notif .signal-label::after { content:''; flex:1; height:1px; background:var(--border); }
+#sec-notif .hub-wrap { position:relative; width:100%; height:clamp(360px,38vw,580px); display:flex; align-items:center; justify-content:center; }
+#sec-notif #notifHubCanvas { position:absolute; inset:0; width:100%; height:100%; }
+#sec-notif .hub-center { position:absolute; width:clamp(70px,7vw,110px); height:clamp(70px,7vw,110px); border-radius:50%; background:var(--bg-card); border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; z-index:5; cursor:pointer; box-shadow:0 0 20px rgba(100,180,255,0.3),0 0 60px rgba(100,180,255,0.1); transition:box-shadow 0.3s ease,transform 0.2s ease; opacity:0; animation:hubIn 0.8s var(--ease) 0.4s forwards; }
+@keyframes hubIn{to{opacity:1;}}
+#sec-notif .hub-center:hover { transform:scale(1.08); box-shadow:0 0 30px rgba(100,180,255,0.5),0 0 80px rgba(100,180,255,0.2); }
+#sec-notif .hub-center.selected { border-color:var(--accent3); box-shadow:0 0 30px rgba(100,180,255,0.6),0 0 80px rgba(100,180,255,0.3); }
+#sec-notif .hub-center-icon { font-family:'Oxanium',sans-serif; font-size:clamp(0.52rem,0.72vw,0.72rem); font-weight:700; letter-spacing:0.06em; color:var(--accent); text-align:center; line-height:1.3; }
+#sec-notif .bot-node { position:absolute; transform:translate(-50%,-50%); cursor:pointer; z-index:6; opacity:0; }
+#sec-notif .bot-node.visible { animation:nodeIn 0.6s var(--ease) forwards; }
+@keyframes nodeIn { from{opacity:0;transform:translate(-50%,-50%) scale(0.4);} to{opacity:1;transform:translate(-50%,-50%) scale(1);} }
+#sec-notif .node-ring { width:clamp(60px,6.5vw,100px); height:clamp(60px,6.5vw,100px); border-radius:50%; border:1.5px solid; background:rgba(13,20,36,0.8); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; transition:transform 0.3s var(--ease),box-shadow 0.3s ease; position:relative; }
+#sec-notif .bot-node:hover .node-ring { transform:scale(1.15); }
+#sec-notif .node-svg { width:clamp(24px,2.8vw,40px); height:clamp(24px,2.8vw,40px); transition:filter 0.25s; }
+#sec-notif .bot-node:hover:not(.future) .node-svg { filter:brightness(1.3); }
+#sec-notif .bot-node.selected-node .node-svg { filter:brightness(1.5); }
+#sec-notif .node-label { position:absolute; font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.8vw,0.8rem); letter-spacing:0.08em; white-space:nowrap; text-transform:uppercase; color:var(--sub); top:calc(100% + 14px); left:50%; transform:translateX(-50%); text-align:center; transition:color 0.2s; }
+#sec-notif .bot-node:hover .node-label { color:var(--text); }
+#sec-notif .bot-node.selected-node .node-ring { transform:scale(1.12); }
+#sec-notif .bot-node.selected-node .node-label { color:var(--text); }
+#sec-notif .bot-node.future .node-ring { opacity:0.4; }
+#sec-notif .future-badge { position:absolute; top:-8px; right:-8px; font-family:'Share Tech Mono',monospace; font-size:clamp(0.32rem,0.38vw,0.42rem); padding:clamp(1px,0.2vw,2px) clamp(3px,0.4vw,5px); background:var(--border-b); color:var(--dim); letter-spacing:0.06em; border-radius:2px; }
+#sec-notif .hub-layout { display:grid; grid-template-columns:1fr 0fr; gap:0; align-items:stretch; min-height:clamp(360px,38vw,580px); transition:grid-template-columns 0.6s cubic-bezier(0.4,0,0.2,1); }
+#sec-notif .hub-layout.expanded { grid-template-columns:1fr 1fr; }
+#sec-notif .hub-col { position:relative; display:flex; align-items:center; justify-content:center; }
+#sec-notif .hub-detail-col { border-left:1px solid var(--border); display:flex; align-items:stretch; overflow:hidden; width:0; opacity:0; transition:width 0.6s cubic-bezier(0.4,0,0.2,1),opacity 0.4s ease 0.2s,border-color 0.3s ease; border-left-color:transparent; }
+#sec-notif .hub-layout.expanded .hub-detail-col { width:100%; opacity:1; border-left-color:var(--border); }
+#sec-notif .hub-detail { width:100%; min-width:clamp(280px,25vw,400px); padding:clamp(2rem,3.2vw,3.2rem) clamp(1.5rem,2.6vw,2.6rem); display:flex; flex-direction:column; gap:clamp(0.8rem,1.4vw,1.4rem); opacity:0; transform:translateX(24px); transition:opacity 0.4s ease 0.4s,transform 0.4s var(--ease) 0.4s; }
+#sec-notif .hub-layout.expanded .hub-detail { opacity:1; transform:translateX(0); }
+#sec-notif .hub-detail.switching .hd-desc, #sec-notif .hub-detail.switching .hd-types, #sec-notif .hub-detail.switching .hd-name { opacity:0; transform:translateY(8px); }
+#sec-notif .hd-top { display:flex; gap:clamp(0.6rem,1vw,1rem); align-items:flex-start; margin-top:auto; }
+#sec-notif .hd-color-bar { width:3px; min-height:52px; border-radius:2px; flex-shrink:0; transition:background 0.3s ease; }
+#sec-notif .hd-header { flex:1; }
+#sec-notif .hd-handle { font-family:'Share Tech Mono',monospace; font-size:clamp(0.65rem,0.82vw,0.82rem); letter-spacing:0.1em; margin-bottom:clamp(0.2rem,0.35vw,0.35rem); transition:color 0.3s ease; }
+#sec-notif .hd-name { font-family:'Oxanium',sans-serif; font-size:clamp(1.3rem,1.8vw,1.8rem); font-weight:800; line-height:1.1; transition:opacity 0.25s ease,transform 0.25s var(--ease); }
+#sec-notif .hd-desc { font-size:clamp(0.85rem,1.05vw,1.05rem); color:var(--sub); line-height:1.8; transition:opacity 0.25s ease 0.05s,transform 0.25s var(--ease) 0.05s; }
+#sec-notif .hd-types { display:flex; flex-wrap:wrap; gap:clamp(5px,0.5vw,7px); transition:opacity 0.25s ease 0.1s,transform 0.25s var(--ease) 0.1s; }
+#sec-notif .hd-type { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); padding:clamp(4px,0.5vw,6px) clamp(10px,1.2vw,16px); border-radius:100px; background:rgba(var(--pill-rgb,100,180,255),0.08); border:1px solid rgba(var(--pill-rgb,100,180,255),0.35); color:rgba(var(--pill-rgb,100,180,255),1); }
+#sec-notif .hd-footer { margin-top:auto; padding-top:clamp(0.6rem,1vw,1rem); border-top:1px solid var(--border); }
+#sec-notif .hd-status-wrap { display:flex; align-items:center; gap:clamp(0.5rem,0.8vw,0.8rem); }
+#sec-notif .hd-status-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.52rem,0.65vw,0.65rem); letter-spacing:0.12em; color:var(--dim); text-transform:uppercase; }
+#sec-notif .hd-status-badge { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); padding:clamp(3px,0.4vw,5px) clamp(10px,1.2vw,16px); border-radius:100px; }
+#sec-notif .flow-section { max-width:1560px; margin:clamp(3rem,6vw,6rem) auto 0; padding:0 clamp(1rem,2vw,2rem); }
+#sec-notif .flow-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.22em; color:rgba(232,244,255,0.55); text-transform:uppercase; margin-bottom:clamp(1rem,1.8vw,1.8rem); display:flex; align-items:center; gap:clamp(0.5rem,0.8vw,0.8rem); }
+#sec-notif .flow-label::after { content:''; flex:1; height:1px; background:var(--border); }
+#sec-notif .flow-track { position:relative; height:clamp(200px,19vw,300px); overflow:visible; }
+#sec-notif #notifFlowCanvas { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; }
+#sec-notif #notifMobileFlowCanvas { display:none; }
+#sec-notif .flow-node { position:absolute !important; top:50px !important; width:160px !important; transform:translateX(-50%) !important; z-index:3; display:flex !important; flex-direction:column; align-items:center; gap:0.4rem; opacity:0; transition:opacity 0.6s ease; }
+#sec-notif .flow-node.in { opacity:1 !important; }
+#sec-notif .flow-node-icon { width:clamp(50px,5vw,80px); height:clamp(50px,5vw,80px); border-radius:50%; border:1px solid var(--border); background:var(--bg-card); display:flex; align-items:center; justify-content:center; font-size:clamp(1.2rem,1.8vw,1.8rem); position:relative; transition:border-color 0.2s,box-shadow 0.2s; }
+#sec-notif .flow-node:hover .flow-node-icon { border-color:var(--accent); box-shadow:0 0 16px rgba(100,180,255,0.3); }
+#sec-notif .flow-node-icon.lit { border-color:var(--glow-col,var(--accent)) !important; box-shadow:0 0 0 5px rgba(var(--glow-rgb,100,180,255),0.15),0 0 28px rgba(var(--glow-rgb,100,180,255),0.6) !important; }
+#sec-notif .flow-node-name { font-family:'Oxanium',sans-serif; font-size:clamp(0.85rem,1.1vw,1.1rem); font-weight:800; text-align:center; margin-top:clamp(6px,0.7vw,10px); }
+#sec-notif .flow-node-sub { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.04em; color:var(--sub); text-align:center; line-height:1.5; }
+#sec-notif .reports-section { max-width:1560px; margin:clamp(3rem,6vw,6rem) auto 0; padding:0 clamp(1rem,2vw,2rem); }
+#sec-notif .reports-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.22em; color:rgba(232,244,255,0.55); text-transform:uppercase; margin-bottom:clamp(1rem,1.8vw,1.8rem); display:flex; align-items:center; gap:clamp(0.5rem,0.8vw,0.8rem); }
+#sec-notif .reports-label::after { content:''; flex:1; height:1px; background:var(--border); }
+#sec-notif .report-cards { display:grid; grid-template-columns:1fr 1fr; gap:clamp(1rem,1.5vw,1.5rem); }
+#sec-notif .report-card { background:var(--bg-card); padding:clamp(1rem,1.5vw,1.5rem) clamp(1rem,1.6vw,1.6rem); border-radius:4px; border:1px solid var(--border); position:relative; overflow:hidden; opacity:0; transform:translateY(20px); transition:opacity 0.5s ease,transform 0.5s var(--ease),background 0.2s; }
+#sec-notif .report-card.in { opacity:1; transform:translateY(0); }
+#sec-notif .report-card:hover { background:rgba(255,255,255,0.02); }
+#sec-notif .report-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); opacity:0; transition:opacity 0.2s; }
+#sec-notif .report-card:hover::before { opacity:1; }
+#sec-notif .report-schedule { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.08em; color:var(--accent); text-transform:uppercase; margin-bottom:clamp(0.3rem,0.5vw,0.5rem); }
+#sec-notif .report-name { font-family:'Oxanium',sans-serif; font-size:clamp(1.2rem,1.6vw,1.6rem); font-weight:800; margin-bottom:clamp(0.4rem,0.7vw,0.7rem); }
+#sec-notif .report-desc { font-size:clamp(0.85rem,1.05vw,1.05rem); color:var(--sub); line-height:1.8; }
+#sec-notif .report-tag { display:inline-block; margin-top:clamp(0.4rem,0.6vw,0.6rem); font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); padding:clamp(3px,0.4vw,5px) clamp(8px,1vw,14px); border-radius:100px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--sub); }
+@media(max-width:900px){#sec-notif .hub-layout{grid-template-columns:1fr !important;}#sec-notif .hub-layout.expanded{grid-template-columns:1fr !important;}#sec-notif .hub-detail-col{width:100% !important;opacity:1 !important;border-left:none !important;border-top:1px solid var(--border);max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1) !important;}#sec-notif .hub-layout.expanded .hub-detail-col{max-height:1200px;}#sec-notif .hub-detail{min-width:0 !important;opacity:0;transform:translateY(10px);transition:opacity 0.3s ease 0.2s,transform 0.3s var(--ease) 0.2s !important;}#sec-notif .hub-layout.expanded .hub-detail{opacity:1;transform:translateY(0);}#sec-notif .hub-wrap{height:400px;}}
+@media(max-width:768px){#sec-notif .hub-center{width:66px !important;height:66px !important;}#sec-notif .hub-center-icon{font-size:0.3rem !important;}#sec-notif .node-ring{width:60px !important;height:60px !important;}#sec-notif .node-svg{width:26px !important;height:26px !important;}#sec-notif .node-label{font-size:0.62rem !important;}#sec-notif .hub-wrap{height:360px;}#sec-notif .report-cards{grid-template-columns:1fr;}#sec-notif #notifFlowCanvas{display:none;}#sec-notif #notifMobileFlowCanvas{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}#sec-notif .flow-node{display:none !important;}#sec-notif .flow-track{height:660px;}}
+
+/* ══════════════════════════════════
+   7. SECURITY SECTION CSS (#sec-security)
+══════════════════════════════════ */
+#sec-security { position:relative; z-index:1; }
+/* Screen 1 — Title */
+#sec-security .sec-screen1 { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:100px 2rem 60px; }
+#sec-security .sec-eyebrow { font-family:'Share Tech Mono',monospace; font-size:clamp(0.72rem,0.95vw,0.95rem); letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:clamp(0.5rem,0.8vw,0.8rem); opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+#sec-security .sec-eyebrow.in { opacity:1; transform:translateY(0); }
+#sec-security .sec-title { font-family:'Oxanium',sans-serif; font-size:clamp(2.6rem,6vw,4.2rem); font-weight:800; line-height:1.1; margin-bottom:clamp(1rem,1.5vw,1.5rem); opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out) 0.15s, transform 0.7s var(--ease-out) 0.15s; }
+#sec-security .sec-title.in { opacity:1; transform:translateY(0); }
+#sec-security .sec-title .gc { color:var(--green); }
+#sec-security .sec-summary { font-family:'Space Grotesk',sans-serif; font-size:clamp(0.92rem,1.1vw,1.08rem); color:var(--sub); line-height:1.8; max-width:620px; opacity:0; transform:translateY(16px); transition:opacity 0.7s var(--ease-out) 0.3s, transform 0.7s var(--ease-out) 0.3s; }
+#sec-security .sec-summary.in { opacity:1; transform:translateY(0); }
+/* Screen 2 — Gauges + Content */
+#sec-security .sec-screen2 { min-height:100vh; padding:clamp(80px,10vh,120px) 0 clamp(3rem,5vw,5rem); }
+#sec-security .stat-strip { margin:0 auto; max-width:1400px; padding:0 clamp(1rem,2vw,2rem); opacity:0; transform:translateY(16px); transition:opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+#sec-security .stat-strip.in { opacity:1; transform:translateY(0); }
+#sec-security .stat-inner { display:flex; border-bottom:1px solid var(--border); }
+#sec-security .stat-cell { flex:1; padding:clamp(0.6rem,1vw,1rem); text-align:center; border-right:1px solid var(--border); }
+#sec-security .stat-cell:last-child { border-right:none; }
+#sec-security .stat-num { font-family:'Oxanium',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:800; line-height:1; margin-bottom:clamp(2px,0.3vw,4px); }
+#sec-security .stat-num.clean { color:var(--green); }
+#sec-security .stat-num.neutral { color:var(--text); }
+#sec-security .stat-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.12em; color:var(--sub); text-transform:uppercase; }
+#sec-security .gauge-section { margin:clamp(2rem,3vw,3rem) auto 0; max-width:1400px; padding:0 clamp(1rem,2vw,2rem); opacity:0; transform:translateY(16px); transition:opacity 0.6s var(--ease-out) 0.3s, transform 0.6s var(--ease-out) 0.3s; }
+#sec-security .gauge-section.in { opacity:1; transform:translateY(0); }
+#sec-security .gauge-label-row { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); letter-spacing:0.25em; color:var(--dim); text-transform:uppercase; margin-bottom:clamp(0.8rem,1.2vw,1.2rem); display:flex; align-items:center; gap:clamp(0.5rem,0.8vw,0.8rem); }
+#sec-security .gauge-label-row::after { content:''; flex:1; height:1px; background:var(--border); }
+#sec-security .gauge-row { display:flex; flex-wrap:wrap; }
+#sec-security .gauge-item { width:calc(100% / 3); background:transparent; padding:clamp(1rem,1.6vw,1.6rem) clamp(0.6rem,1vw,1rem) clamp(0.8rem,1.4vw,1.4rem); display:flex; flex-direction:column; align-items:center; cursor:pointer; position:relative; transition:background 0.25s; overflow:hidden; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+#sec-security .gauge-item:nth-child(3n) { border-right:none; }
+#sec-security .gauge-item:nth-child(4), #sec-security .gauge-item:nth-child(5) { border-bottom:none; }
+#sec-security .gauge-item:nth-child(4) { margin-left:calc(100% / 6); }
+#sec-security .gauge-item:nth-child(5) { border-right:none; }
+#sec-security .gauge-item:hover { background:rgba(255,255,255,0.04); }
+#sec-security .gauge-item.active { background:rgba(255,255,255,0.05); }
+#sec-security .gauge-item::before { content:''; position:absolute; top:0; left:0; bottom:0; width:2px; background:var(--accent); transform:scaleY(0); transform-origin:bottom; transition:transform 0.4s var(--ease); }
+#sec-security .gauge-item.active::before { transform:scaleY(1); }
+#sec-security .gauge-svg { width:clamp(60px,5.5vw,90px); height:clamp(60px,5.5vw,90px); flex-shrink:0; margin-bottom:clamp(0.4rem,0.7vw,0.7rem); }
+#sec-security .gauge-name { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.1em; text-transform:uppercase; color:var(--sub); text-align:center; line-height:1.4; transition:color 0.2s; }
+#sec-security .gauge-item.active .gauge-name { color:var(--text); }
+#sec-security .gauge-status { font-family:'Share Tech Mono',monospace; font-size:clamp(0.52rem,0.65vw,0.65rem); letter-spacing:0.08em; margin-top:3px; text-align:center; }
+#sec-security .detail-wrap { margin:0 auto; max-width:1400px; padding:0 clamp(1rem,2vw,2rem); opacity:0; transition:opacity 0.5s var(--ease-out) 0.6s; }
+#sec-security .detail-wrap.in { opacity:1; }
+#sec-security .detail-panel { border-top:1px solid var(--border); padding-top:clamp(1.2rem,2vw,2rem); overflow:hidden; opacity:0; transform:translateY(12px); transition:opacity 0.5s var(--ease),transform 0.5s var(--ease); pointer-events:none; min-height:clamp(160px,14vw,220px); }
+#sec-security .detail-panel.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+#sec-security .dp-inner { display:grid; grid-template-columns:1fr 1fr; gap:clamp(1.5rem,3vw,3rem); }
+#sec-security .dp-right { border-left:1px solid var(--border); padding-left:clamp(1.5rem,3vw,3rem); }
+#sec-security .dp-eyebrow { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); letter-spacing:0.2em; color:var(--dim); text-transform:uppercase; margin-bottom:clamp(0.2rem,0.35vw,0.35rem); }
+#sec-security .dp-title { font-family:'Oxanium',sans-serif; font-size:clamp(1.2rem,1.6vw,1.6rem); font-weight:800; line-height:1.1; margin-bottom:clamp(0.4rem,0.6vw,0.6rem); }
+#sec-security .dp-summary { font-size:clamp(0.85rem,1.05vw,1.05rem); color:var(--sub); line-height:1.75; margin-bottom:clamp(0.6rem,1vw,1rem); }
+#sec-security .dp-pills { display:flex; flex-wrap:wrap; gap:clamp(3px,0.4vw,5px); }
+#sec-security .dp-pill { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); padding:clamp(3px,0.35vw,4px) clamp(8px,0.9vw,12px); border-radius:100px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--sub); }
+#sec-security .dp-metrics { display:flex; flex-direction:column; }
+#sec-security .dp-metric { display:flex; align-items:center; justify-content:space-between; padding:clamp(0.5rem,0.8vw,0.8rem) 0; border-bottom:1px solid var(--border); gap:clamp(0.5rem,0.8vw,0.8rem); }
+#sec-security .dp-metric:last-child { border-bottom:none; }
+#sec-security .dp-metric-label { font-family:'Share Tech Mono',monospace; font-size:clamp(0.58rem,0.72vw,0.72rem); letter-spacing:0.1em; color:var(--sub); text-transform:uppercase; flex-shrink:0; }
+#sec-security .dp-bar { height:2px; background:var(--border); flex:1; border-radius:2px; overflow:hidden; }
+#sec-security .dp-bar-fill { height:100%; border-radius:2px; width:0; transition:width 1s var(--ease); }
+#sec-security .dp-metric-val { font-family:'Oxanium',sans-serif; font-size:clamp(0.78rem,0.95vw,0.95rem); font-weight:700; flex-shrink:0; }
+#sec-security .dp-metric-val.good { color:var(--green); }
+#sec-security .dp-metric-val.warn { color:var(--amber); }
+@media(max-width:900px){#sec-security .dp-inner{grid-template-columns:1fr;}#sec-security .dp-right{border-left:none;border-top:1px solid var(--border);padding-left:0;padding-top:1.5rem;}}
+@media(max-width:600px){#sec-security .stat-inner{flex-wrap:wrap;}#sec-security .stat-cell{min-width:50%;}}
+</style>
+</head>
+<body>
+
+<canvas id="aurora"></canvas>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="#sec-hero" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><line x1="8.5" y1="5" x2="13.5" y2="5" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><line x1="8.5" y1="17" x2="13.5" y2="17" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><line x1="5" y1="7.5" x2="5" y2="14.5" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><line x1="17" y1="7.5" x2="17" y2="14.5" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><rect x="1.5" y="2.5" width="7" height="5" rx="1" stroke="#64b4ff" stroke-width="1" fill="rgba(100,180,255,0.08)"/><rect x="3" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="5.5" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="13.5" y="2.5" width="7" height="5" rx="1" stroke="#64b4ff" stroke-width="1" fill="rgba(100,180,255,0.08)"/><rect x="15" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="17.5" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="1.5" y="14.5" width="7" height="5" rx="1" stroke="#00ff64" stroke-width="1" fill="rgba(0,255,100,0.08)"/><rect x="3" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/><rect x="5.5" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/><rect x="13.5" y="14.5" width="7" height="5" rx="1" stroke="#00ff64" stroke-width="1" fill="rgba(0,255,100,0.08)"/><rect x="15" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/><rect x="17.5" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/></svg>
+      </div>
+      <div class="logo-text">AUTOBOTS <span class="sep">&middot;</span><span class="nexus"> NEXUS</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#sec-hero" class="active">Home</a></li>
+      <li><a href="#sec-arch">Architecture</a></li>
+      <li><a href="#sec-playbook">Playbook</a></li>
+      <li><a href="#sec-notif">Notifications</a></li>
+      <li><a href="#sec-security">Security</a></li>
+      <li><a href="pipeline.html">Pipeline</a></li>
+      <li><a href="reports.html">Reports</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="sec-hero">
+  <div class="status-ticker-wrap" id="heroTag">
+    <div class="status-pills">
+      <div class="status-pill pill-live"><div class="pill-dot"></div>Research Bot</div>
+      <div class="status-pill pill-live"><div class="pill-dot"></div>Strategy Builder</div>
+      <div class="status-pill pill-live"><div class="pill-dot"></div>Reporting Bot</div>
+      <div class="status-pill pill-live"><div class="pill-dot"></div>Performance Monitor</div>
+      <div class="status-pill pill-paper"><div class="pill-dot"></div>41 Trading Bots &middot; Paper Trading</div>
+    </div>
+    <div class="status-ticker">
+      <div class="ticker-track">
+        <div class="ticker-item"><div class="ticker-dot"></div>BTC &middot; SuperTrend 4H<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>ETH &middot; Panic Breakdown 2H<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>SOL &middot; Chandelier Exit 4H<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>622 Strategies Discovered<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>38 Auto-Deployed Bots<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>178M Candles &middot; 129 Symbols<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>494 Indicators Mapped<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>Gate 2 &middot; Only Human Step<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>P0&ndash;P3 Complete<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>10&times; Flat Leverage &middot; 5% Risk<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>BTC &middot; SuperTrend 4H<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>ETH &middot; Panic Breakdown 2H<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>SOL &middot; Chandelier Exit 4H<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>622 Strategies Discovered<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>38 Auto-Deployed Bots<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>178M Candles &middot; 129 Symbols<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>494 Indicators Mapped<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>Gate 2 &middot; Only Human Step<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>P0&ndash;P3 Complete<span class="ticker-sep">|</span></div>
+        <div class="ticker-item"><div class="ticker-dot"></div>10&times; Flat Leverage &middot; 5% Risk<span class="ticker-sep">|</span></div>
+      </div>
+    </div>
+  </div>
+  <h1 class="hero-headline">
+    <span class="headline-line"><span class="headline-word" id="hw0">Build&nbsp;</span><span class="headline-word" id="hw1">the&nbsp;</span></span>
+    <span class="headline-line"><span class="headline-word accent" id="hw2">Machine&nbsp;</span><span class="headline-word" id="hw3">That&nbsp;</span></span>
+    <span class="headline-line"><span class="headline-word" id="hw4">Builds&nbsp;</span><span class="headline-word" id="hw5">the&nbsp;</span><span class="headline-word accent3" id="hw6">Machines</span></span>
+  </h1>
+  <p class="hero-sub" id="heroSub">An autonomous crypto trading ecosystem &mdash; seven bot types working together to discover, test, build, and deploy trading strategies with minimal human involvement. The pipeline has already deployed 38 trading bots on its own.</p>
+  <div class="hero-stats" id="heroStats">
+    <div class="h-stat"><span class="h-stat-num" data-target="7">0</span><div class="h-stat-label">Bot Types</div></div>
+    <div class="h-stat"><span class="h-stat-num" data-target="5">0</span><div class="h-stat-label">Hierarchy Tiers</div></div>
+    <div class="h-stat"><span class="h-stat-num" data-target="4">0</span><div class="h-stat-label">Engine Bots Live</div></div>
+    <div class="h-stat"><span class="h-stat-num" data-target="41">0</span><div class="h-stat-label">Trading Bots</div></div>
+    <div class="h-stat"><span class="h-stat-num" data-target="7">0</span><div class="h-stat-label">Build Phases</div></div>
+  </div>
+</section>
+
+<!-- ═══════════ ARCHITECTURE ═══════════ -->
+<section id="sec-arch">
+  <div class="arch-screen1" id="archScreen1">
+    <div class="sec-eyebrow" id="archEyebrow">System Architecture &middot; Data Flow</div>
+    <h2 class="sec-title"><span class="title-line"><span class="title-word" id="archTw0">Five&nbsp;</span><span class="title-word" id="archTw1">Tiers,&nbsp;</span><span class="title-word" id="archTw2">One&nbsp;</span><span class="title-word accent" id="archTw3">Ecosystem</span></span></h2>
+    <p class="sec-summary" id="archSummary">The ecosystem is organized into five tiers. Tier 1 is the human operator &mdash; the only person in the loop. Tier 2 holds the manager bots that coordinate everything below them. Tier 3 is where the workers live: research, strategy building, and monitoring. Tier 4 contains the actual trading bots &mdash; both hand-built and pipeline-generated. Tier 5 is the foundation: databases, caches, and communication channels that every bot reads from and writes to.</p>
+  </div>
+  <div class="arch-screen2" id="archScreen2">
+    <div class="arch-screen2-inner">
+    <div class="arch-graph-col">
+      <p class="sec-hint" id="archHint">Drag any node &nbsp;&middot;&nbsp; Hover to trace connections &nbsp;&middot;&nbsp; Click to inspect</p>
+      <div class="network-area">
+        <div class="tier-labels">
+          <div class="tier-label tl-1">T1</div>
+          <div class="tier-label tl-2">T2</div>
+          <div class="tier-label tl-3">T3</div>
+          <div class="tier-label tl-4">T4</div>
+          <div class="tier-label tl-5">T5</div>
+        </div>
+        <canvas id="archNetCanvas"></canvas>
+      </div>
+    </div>
+    <div class="arch-panel-col" id="archPanelCol">
+      <div class="arch-panel-inner" id="archPanelInner">
+        <div class="arch-panel-top" id="archPanelTop">
+          <div class="detail-panel" id="archDetailPanel" style="display:none;">
+            <div class="dp-indicator" id="archDpIndicator" style="background:var(--dim)"></div>
+            <div>
+              <div class="dp-tier" id="archDpTier">Hover or click any node to inspect</div>
+              <div class="dp-name" id="archDpName">AutoBots Nexus &mdash; Architecture</div>
+              <div class="dp-desc" id="archDpDesc">Every bot, every connection, every data path across all five tiers. The ecosystem brain is SQL Server &mdash; every bot reads and writes here. Drag nodes to rearrange, hover to trace connections, click to inspect any bot or system.</div>
+              <div class="dp-chips" id="archDpChips"></div>
+            </div>
+          </div>
+        </div>
+        <div class="arch-panel-bottom" id="archPanelBottom">
+        <div class="legend" id="archLegend">
+          <div class="legend-group">
+            <div class="legend-title">Connection Types</div>
+            <div class="legend-items">
+              <div class="legend-item"><svg viewBox="0 0 44 14" style="width:44px;height:14px;flex-shrink:0"><line x1="0" y1="7" x2="38" y2="7" stroke="#f5a94f" stroke-width="2"/><polygon points="44,7 36,3 36,11" fill="#f5a94f"/></svg><div class="legend-label"><strong>Command Authority</strong>Direct control &mdash; Human and News Bot over their reports.</div></div>
+              <div class="legend-item"><svg viewBox="0 0 44 14" style="width:44px;height:14px;flex-shrink:0"><line x1="0" y1="7" x2="36" y2="7" stroke="#64b4ff" stroke-width="1.5" stroke-dasharray="5 3"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="1.4s" repeatCount="indefinite"/></line><polygon points="44,7 36,3 36,11" fill="#64b4ff"/></svg><div class="legend-label"><strong>Management</strong>Orchestrator coordinates all workers. Animated = live flow.</div></div>
+              <div class="legend-item"><svg viewBox="0 0 44 14" style="width:44px;height:14px;flex-shrink:0"><line x1="0" y1="7" x2="38" y2="7" stroke="#00ff64" stroke-width="2"/><polygon points="44,7 36,3 36,11" fill="#00ff64"/></svg><div class="legend-label"><strong>Deployment</strong>Strategy Builder creates and auto-deploys trading bots.</div></div>
+              <div class="legend-item"><svg viewBox="0 0 44 14" style="width:44px;height:14px;flex-shrink:0"><line x1="0" y1="7" x2="36" y2="7" stroke="#64b4ff" stroke-width="1.5" stroke-dasharray="4 4"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="1.8s" repeatCount="indefinite"/></line><polygon points="44,7 36,3 36,11" fill="#64b4ff"/></svg><div class="legend-label"><strong>Data Flow</strong>Strategies, trades, results, and reports moving between systems.</div></div>
+            </div>
+          </div>
+          <div class="legend-group">
+            <div class="legend-title">Node States</div>
+            <div class="legend-items">
+              <div class="legend-item"><svg style="width:22px;height:22px;flex-shrink:0" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="rgba(0,255,100,0.15)" stroke="#00ff64" stroke-width="1.5"/><circle cx="11" cy="10" r="3.5" fill="#00ff64"><animate attributeName="opacity" values="1;0.2;1" dur="1.8s" repeatCount="indefinite"/></circle></svg><div class="legend-label"><strong>Live / Running</strong>Active and operating right now.</div></div>
+              <div class="legend-item"><svg style="width:22px;height:22px;flex-shrink:0" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="rgba(100,180,255,0.12)" stroke="#64b4ff" stroke-width="1.5"/><circle cx="11" cy="10" r="3.5" fill="#64b4ff"><animate attributeName="opacity" values="1;0.2;1" dur="2.4s" repeatCount="indefinite"/></circle></svg><div class="legend-label"><strong>Paper Trading</strong>Live but trading with simulated capital on Blofin.</div></div>
+              <div class="legend-item"><svg style="width:22px;height:22px;flex-shrink:0" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="rgba(245,169,79,0.1)" stroke="#f5a94f" stroke-width="1.5"/><circle cx="11" cy="10" r="3.5" fill="#f5a94f"/></svg><div class="legend-label"><strong>Human</strong>The only human in the loop &mdash; Gate 2 and promotions.</div></div>
+              <div class="legend-item"><svg style="width:22px;height:22px;flex-shrink:0" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="rgba(122,144,170,0.06)" stroke="rgba(122,144,170,0.4)" stroke-width="1.5" stroke-dasharray="4 2.5"/><circle cx="11" cy="10" r="3" fill="rgba(122,144,170,0.4)"/></svg><div class="legend-label"><strong>Planned / Deferred</strong>Designed but not yet built &mdash; dashed border indicates future.</div></div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════ PLAYBOOK ═══════════ -->
+<section id="sec-playbook">
+  <div class="playbook-layout">
+    <div class="playbook-left">
+      <div class="sec-eyebrow" id="playbookEyebrow">The Playbook</div>
+      <h2 class="sec-title" id="playbookTitle">Seven Phases, One <span class="accent">Ecosystem</span></h2>
+      <p class="sec-summary" id="playbookSummary">The AutoBots ecosystem was built from the ground up in seven sequential phases. Each phase unlocks the next capability &mdash; from database foundations and research infrastructure through autonomous strategy building, reporting, and eventually full orchestration.</p>
+      <div class="phase-progress" id="playbookProgress">
+        <div class="prog-bar">
+          <div class="prog-seg done" title="P0"></div><div class="prog-seg done" title="P1"></div><div class="prog-seg done" title="P2"></div><div class="prog-seg done" title="P3"></div><div class="prog-seg done" title="P4"></div>
+          <div class="prog-seg live" title="P5"></div><div class="prog-seg" title="P6"></div>
+        </div>
+        <span class="prog-label"><strong>5 of 7</strong> phases complete</span>
+      </div>
+    </div>
+    <div class="playbook-right">
+      <div class="scroll-section" id="playbookScrollSection">
+        <div class="scroll-track" id="playbookScrollTrack">
+      <div class="phase-card card-done" id="pbCard0"><div class="card-accent-line"></div><div class="card-watermark">1</div><div class="card-header"><div><div class="card-phase-num">Phase 1</div><div class="card-title">Foundation</div></div><div class="card-status status-done"><div class="status-dot"></div>Done</div></div><p class="card-summary">Connected to the Blofin exchange, built the bot framework and process management layer, and migrated from SQLite to a production-grade SQL Server database. This is the infrastructure everything else runs on.</p><div class="card-pills"><span class="pill">Blofin API</span><span class="pill">Bot Framework</span><span class="pill">PM2</span><span class="pill">SQL Server</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">Every bot needs a reliable foundation &mdash; a production database, a stable framework, and a process manager that keeps everything running. Without this, nothing else works.</div></div></div>
+      <div class="phase-card card-done" id="pbCard1"><div class="card-accent-line"></div><div class="card-watermark">2</div><div class="card-header"><div><div class="card-phase-num">Phase 2</div><div class="card-title">Research Bot</div></div><div class="card-status status-live"><div class="status-dot"></div>Live</div></div><p class="card-summary">The strategy scout &mdash; scanning 14 sources across YouTube, GitHub, Reddit, and trading websites continuously. AI extracts trading rules, validates tickers against the exchange, and transcribes videos overnight using Whisper.</p><div class="card-pills"><span class="pill">14 Active Sources</span><span class="pill">Qwen2.5 14B</span><span class="pill">494 Indicators</span><span class="pill">Whisper GPU</span><span class="pill">1,180 Videos Transcribed</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">Manually finding trading strategies doesn&rsquo;t scale. An automated scout that runs around the clock finds more ideas in a day than a human could find in a month.</div></div></div>
+      <div class="phase-card card-done" id="pbCard2"><div class="card-accent-line"></div><div class="card-watermark">3</div><div class="card-header"><div><div class="card-phase-num">Phase 3</div><div class="card-title">Strategy Builder</div></div><div class="card-status status-live"><div class="status-dot"></div>Live</div></div><p class="card-summary">The autonomous pipeline &mdash; takes discovered strategies and puts them through 11 steps of testing. AI generates code, backtests against years of data, optimizes parameters, stress-tests through crashes, and auto-deploys survivors as paper trading bots.</p><div class="card-pills"><span class="pill">38 Bots Deployed</span><span class="pill">Dynamic Golden Numbers</span><span class="pill">Grouped Runners</span><span class="pill">Walk-Forward Validation</span><span class="pill">Crash Stress Testing</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">Finding strategies is only half the problem &mdash; most of them don&rsquo;t actually work. An autonomous pipeline that tests hundreds of ideas and only deploys the survivors eliminates guesswork.</div></div></div>
+      <div class="phase-card card-done" id="pbCard3"><div class="card-accent-line"></div><div class="card-watermark">4</div><div class="card-header"><div><div class="card-phase-num">Phase 4</div><div class="card-title">Reporting Bot</div></div><div class="card-status status-live"><div class="status-dot"></div>Live</div></div><p class="card-summary">The messenger &mdash; consolidates all ecosystem activity into plain-English email reports sent four times: Morning Briefing at 9 AM, Evening Briefing at 8 PM, Weekly Trading Review on Sunday, and Strategy Comparison on Sunday. Five dedicated Telegram bots handle real-time alerts.</p><div class="card-pills"><span class="pill">4 Email Reports</span><span class="pill">5 Telegram Bots</span><span class="pill">Plain English</span><span class="pill">LLM Error Translation</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">With dozens of bots running simultaneously, checking each one individually isn&rsquo;t practical. One consolidated report tells the full story without digging through dashboards.</div></div></div>
+      <div class="phase-card card-done" id="pbCard4"><div class="card-accent-line"></div><div class="card-watermark">5</div><div class="card-header"><div><div class="card-phase-num">Phase 5</div><div class="card-title">Performance Monitor</div></div><div class="card-status status-live"><div class="status-dot"></div>Live</div></div><p class="card-summary">The judge &mdash; classifies weekly market conditions per ticker, compares strategies using normalized metrics, and generates monthly rankings with recommendations. Determines which strategy earns the one live trading slot per ticker.</p><div class="card-pills"><span class="pill">Market Classification</span><span class="pill">Strategy Rankings</span><span class="pill">Monthly Rollups</span><span class="pill">Correlation Analysis</span><span class="pill">Daily Candle Updates</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">Not every strategy works in every market. Tracking how each one performs across different conditions ensures the best strategy gets the live slot &mdash; not just the newest one.</div></div></div>
+      <div class="phase-card card-active" id="pbCard5"><div class="card-accent-line"></div><div class="card-watermark">6</div><div class="card-header"><div><div class="card-phase-num">Phase 6</div><div class="card-title">News Bot</div></div><div class="card-status status-active"><div class="status-dot"></div>Next</div></div><p class="card-summary">The market watchdog &mdash; will monitor macro economic data releases like CPI, jobs reports, and Fed decisions, plus ticker-specific news like protocol upgrades, rebrandings, partnerships, and any developments that could move prices. Covers both the macro side and the buy-the-rumor-sell-the-news opportunities.</p><div class="card-pills"><span class="pill">CPI/PPI/Jobs</span><span class="pill">Fed Decisions</span><span class="pill">Ticker-Specific News</span><span class="pill">Market Intelligence</span><span class="pill">Telegram Alerts</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">Markets move on news before charts react. Knowing about a Fed decision or a major token event before it hits the price gives time to prepare instead of react.</div></div></div>
+      <div class="phase-card card-planned" id="pbCard6"><div class="card-accent-line"></div><div class="card-watermark">7</div><div class="card-header"><div><div class="card-phase-num">Phase 7</div><div class="card-title">Orchestrator</div></div><div class="card-status status-planned"><div class="status-dot"></div>Planned</div></div><p class="card-summary">The coordinator &mdash; will manage scheduling across all bots, resolve resource conflicts, and centralize decision-making so the entire ecosystem operates as one synchronized system.</p><div class="card-pills"><span class="pill">Bot Coordination</span><span class="pill">Scheduling</span><span class="pill">Conflict Resolution</span><span class="pill">Full Autonomy</span></div><div class="card-decision"><div class="card-decision-label">Why This Exists</div><div class="card-decision-text">As the ecosystem grows, bots competing for GPU time, database connections, and scheduling windows creates conflicts. A central coordinator prevents bottlenecks and keeps everything synchronized.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════ NOTIFICATIONS ═══════════ -->
+<section id="sec-notif">
+  <div class="header">
+    <div class="sec-eyebrow" id="notifEyebrow">Notification System</div>
+    <h2 class="sec-title" id="notifTitle">The System <span class="ac">Never Goes Silent</span></h2>
+    <p class="sec-sub" id="notifSub">Six Telegram bots and four scheduled reports keep you informed of everything happening across the ecosystem - trades, errors, approvals, and performance - in real time and on schedule.</p>
+  </div>
+  <div class="signal-section">
+    <div class="signal-label">Telegram Signal Bots - Click to Inspect</div>
+    <div class="hub-layout">
+      <div class="hub-col">
+        <div class="hub-wrap">
+          <canvas id="notifHubCanvas"></canvas>
+          <div class="hub-center" id="hubCenterBtn"><div class="hub-center-icon">AUTOBOTS<br>HUB</div></div>
+        </div>
+      </div>
+      <div class="hub-detail-col">
+        <div class="hub-detail" id="hubDetail">
+          <div class="hd-top"><div class="hd-color-bar" id="hdBar"></div><div class="hd-header"><div class="hd-handle" id="hdHandle"></div><div class="hd-name" id="hdName"></div></div></div>
+          <div class="hd-desc" id="hdDesc"></div>
+          <div class="hd-types" id="hdTypes"></div>
+          <div class="hd-footer"><div class="hd-status-wrap"><span class="hd-status-label">STATUS</span><span class="hd-status-badge" id="hdBadge"></span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flow-section" style="margin-top:clamp(5rem,9vw,9rem)">
+    <div class="flow-label">Live Signal Flow</div>
+    <p style="font-size:clamp(0.82rem,1vw,0.95rem);color:var(--text-sub);line-height:1.7;margin-bottom:clamp(1.2rem,2vw,2rem);max-width:680px;">Messages route from bots through categorized Telegram channels to the operator in real-time. Each node lights up as the signal passes through.</p>
+    <div class="flow-track" id="notifFlowTrack">
+      <canvas id="notifFlowCanvas"></canvas>
+      <canvas id="notifMobileFlowCanvas"></canvas>
+      <div class="flow-node" style="left:10%"><div class="flow-node-icon">&#9889;</div><div class="flow-node-name">Event</div><div class="flow-node-sub">Trade / Error<br>Lifecycle</div></div>
+      <div class="flow-node" style="left:30%"><div class="flow-node-icon">&#128241;</div><div class="flow-node-name">Telegram</div><div class="flow-node-sub">Real-time alert<br>to operator</div></div>
+      <div class="flow-node" style="left:50%"><div class="flow-node-icon">&#128452;&#65039;</div><div class="flow-node-name">SQL Server</div><div class="flow-node-sub">Data logged<br>&amp; persisted</div></div>
+      <div class="flow-node" style="left:70%"><div class="flow-node-icon">&#129302;</div><div class="flow-node-name">Reporting Bot</div><div class="flow-node-sub">Aggregates<br>on schedule</div></div>
+      <div class="flow-node" style="left:90%"><div class="flow-node-icon">&#127760;</div><div class="flow-node-name">AutoBots Nexus</div><div class="flow-node-sub">Reports published<br>on this site</div></div>
+    </div>
+  </div>
+  <div class="reports-section">
+    <div class="reports-label">Scheduled Reports</div>
+    <div class="report-cards" id="notifReportCards">
+      <div class="report-card" style="transition-delay:0.1s"><div class="report-schedule">Daily &middot; 9:00 AM ET</div><div class="report-name">Morning Briefing</div><div class="report-desc">Full overnight summary covering trade activity, bot health, codegen and Whisper stats, errors and warnings, and action items.</div><span class="report-tag" style="border-color:rgba(100,180,255,0.3);color:var(--blue)">&#9679; Daily</span></div>
+      <div class="report-card" style="transition-delay:0.2s"><div class="report-schedule">Daily &middot; 8:00 PM ET</div><div class="report-name">Evening Briefing</div><div class="report-desc">Same five sections covering daytime activity since the morning report.</div><span class="report-tag" style="border-color:rgba(168,85,247,0.3);color:var(--purple)">&#9679; Daily</span></div>
+      <div class="report-card" style="transition-delay:0.3s"><div class="report-schedule">Sunday &middot; 8:00 AM ET</div><div class="report-name">Weekly Trading Review</div><div class="report-desc">Weekly trading performance with per-bot cards grouped by ticker, promotion status tracking, and week-over-week comparison.</div><span class="report-tag" style="border-color:rgba(0,255,100,0.3);color:var(--green)">&#9679; Weekly</span></div>
+      <div class="report-card" style="transition-delay:0.4s"><div class="report-schedule">Sunday &middot; 8:30 AM ET &middot; Monthly on first Sunday</div><div class="report-name">Weekly Strategy Comparison</div><div class="report-desc">Per-ticker strategy comparison with market condition context. First Sunday of month includes month-over-month rankings.</div><span class="report-tag" style="border-color:rgba(245,169,79,0.3);color:var(--amber)">&#9679; Weekly + Monthly</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════ SECURITY ═══════════ -->
+<section id="sec-security">
+  <div class="sec-screen1" id="secScreen1">
+    <div class="sec-eyebrow" id="secEyebrow">System Security</div>
+    <h2 class="sec-title" id="secTitle">Zero <span class="gc">Vulnerabilities</span>. Zero <span class="gc">Secrets</span> Leaked.</h2>
+    <p class="sec-summary" id="secSummary">Every commit goes through automated security scanning before it can be merged. Bandit checks Python code for vulnerabilities, pip-audit flags dependency risks against CVE databases, and Gitleaks catches accidentally committed secrets. The ecosystem runs these checks continuously to keep the codebase clean.</p>
+  </div>
+  <div class="sec-screen2" id="secScreen2">
+    <div class="stat-strip" id="secStatStrip">
+      <div class="stat-inner">
+        <div class="stat-cell"><div class="stat-num neutral" data-target="98906" data-fmt="comma">0</div><div class="stat-label">Lines Scanned</div></div>
+        <div class="stat-cell"><div class="stat-num neutral" data-target="690" data-fmt="none">0</div><div class="stat-label">Python Files</div></div>
+        <div class="stat-cell"><div class="stat-num clean" data-target="0" data-fmt="none">0</div><div class="stat-label">High Severity</div></div>
+        <div class="stat-cell"><div class="stat-num clean" data-target="0" data-fmt="none">0</div><div class="stat-label">Secrets Leaked</div></div>
+      </div>
+    </div>
+    <div class="gauge-section" id="secGaugeSection">
+      <div class="gauge-label-row">Security Domains &mdash; Click to Inspect</div>
+      <div class="gauge-row" id="gaugeRow"></div>
+    </div>
+    <div class="detail-wrap" id="secDetailWrap" style="margin-top:2rem;padding-bottom:3rem;">
+      <div class="detail-panel" id="secDetailPanel">
+        <div class="dp-inner">
+          <div class="dp-left"><div class="dp-eyebrow" id="secDpEyebrow">&mdash;</div><div class="dp-title" id="secDpTitle">&mdash;</div><div class="dp-summary" id="secDpSummary">Select a security domain above to inspect its full status.</div><div class="dp-pills" id="secDpPills"></div></div>
+          <div class="dp-right"><div class="dp-metrics" id="secDpMetrics"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+/* ══ 0. FORCE SCROLL TO TOP ══ */
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+
+/* ══ 1. GLOBAL AURORA ══ */
+const aurora = document.getElementById('aurora');
+const aCtx = aurora.getContext('2d');
+const AURORA_SCHEME = {bg:'#080c14',orbs:[[100,180,255],[26,42,80],[167,139,250],[0,255,100],[100,180,255],[245,169,79]]};
+const orbBase=[{x:0.15,y:0.25,r:0.42,s:0.32,o:0},{x:0.85,y:0.55,r:0.36,s:0.22,o:2.1},{x:0.5,y:0.85,r:0.3,s:0.42,o:1.3},{x:0.08,y:0.7,r:0.26,s:0.28,o:3.7},{x:0.92,y:0.15,r:0.28,s:0.18,o:5.1},{x:0.55,y:0.4,r:0.2,s:0.35,o:4.2}];
+let auroraT=0;
+let auroraScrollY=0;
+let auroraTargetScrollY=0;
+function resizeAurora(){aurora.width=window.innerWidth;aurora.height=window.innerHeight;}
+resizeAurora();window.addEventListener('resize',resizeAurora);
+window.addEventListener('scroll',function(){
+  auroraTargetScrollY=window.scrollY;
+},{ passive:true });
+function drawAurora(){const W=aurora.width,H=aurora.height;auroraScrollY+=(auroraTargetScrollY-auroraScrollY)*0.04;const scrollOff=auroraScrollY*0.12;aCtx.fillStyle=AURORA_SCHEME.bg;aCtx.fillRect(0,0,W,H);orbBase.forEach((o,i)=>{const c=AURORA_SCHEME.orbs[i];const x=(o.x+Math.sin(auroraT*o.s+o.o)*0.22)*W;const baseY=(o.y+Math.cos(auroraT*o.s*0.73+o.o)*0.18)*H;const y=baseY-scrollOff+(i%2===0?Math.sin(scrollOff*0.003+i)*40:-Math.cos(scrollOff*0.003+i)*40);const r=o.r*Math.max(W,H);const g=aCtx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${c},0.15)`);g.addColorStop(0.5,`rgba(${c},0.05)`);g.addColorStop(1,`rgba(${c},0)`);aCtx.fillStyle=g;aCtx.beginPath();aCtx.arc(x,y,r,0,Math.PI*2);aCtx.fill();});auroraT+=0.005;requestAnimationFrame(drawAurora);}
+drawAurora();
+
+/* ══ 2. NAV SCROLL SPY ══ */
+const navLinks=document.querySelectorAll('.nav-links a[href^="#"]');
+const allSections=document.querySelectorAll('section[id^="sec-"]');
+const navObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.remove('active'));const link=document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);if(link)link.classList.add('active');}});},{threshold:0.08,rootMargin:'-8% 0px -40% 0px'});
+allSections.forEach(s=>navObs.observe(s));
+
+/* ══ 3. SECTION REVEAL OBSERVER ══ */
+let revealHero, revealArch, revealPlaybook, revealNotifications, revealSecurity;
+const sectionObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;const id=entry.target.id;if(id==='sec-hero'&&revealHero)revealHero();else if(id==='sec-arch'&&revealArch)revealArch();else if(id==='sec-playbook'&&revealPlaybook)revealPlaybook();else if(id==='sec-notif'&&revealNotifications)revealNotifications();else if(id==='sec-security'&&revealSecurity)revealSecurity();sectionObs.unobserve(entry.target);});},{threshold:0.1});
+allSections.forEach(s=>sectionObs.observe(s));
+
+/* ══ 4. HERO JS (IIFE) ══ */
+(function(){
+  function runSlotMachine(){
+    const nums=document.querySelectorAll('#sec-hero .h-stat-num');
+    const targets=Array.from(nums).map(n=>parseInt(n.dataset.target));
+    const rollDur=1800,rollStart=performance.now();let revealed=-1;
+    function rollAll(now){const elapsed=now-rollStart;if(elapsed<rollDur){nums.forEach((n,i)=>{if(i>revealed)n.textContent=Math.floor(Math.random()*10);});requestAnimationFrame(rollAll);}else{revealNext(0);}}
+    requestAnimationFrame(rollAll);
+    function revealNext(idx){if(idx>=nums.length)return;const el=nums[idx],tgt=targets[idx],dur=550,st=performance.now();function lockIn(now){const p=(now-st)/dur;if(p<0.7){el.textContent=Math.random()<p?tgt:[Math.max(0,tgt-1),Math.min(9,tgt+1),Math.floor(Math.random()*10)][Math.floor(Math.random()*3)];}else if(p<1){el.textContent=tgt;}else{el.textContent=tgt;revealed=idx;const pst=performance.now();function keepRolling(now){if(now-pst<220){nums.forEach((n,i)=>{if(i>idx)n.textContent=Math.floor(Math.random()*10);});requestAnimationFrame(keepRolling);}else revealNext(idx+1);}requestAnimationFrame(keepRolling);return;}nums.forEach((n,i)=>{if(i>idx)n.textContent=Math.floor(Math.random()*10);});requestAnimationFrame(lockIn);}requestAnimationFrame(lockIn);}
+  }
+  revealHero=function(){
+    document.getElementById('heroTag').classList.add('in');
+    ['hw0','hw1','hw2','hw3','hw4','hw5','hw6'].forEach(id=>{document.getElementById(id).classList.add('in');});
+    document.getElementById('heroSub').classList.add('in');
+    document.getElementById('heroStats').classList.add('in');
+    setTimeout(runSlotMachine,400);
+  };
+  setTimeout(revealHero,100);
+})();
+
+/* ══ 5. ARCHITECTURE JS (IIFE) ══ */
+(function(){
+  const canvas=document.getElementById('archNetCanvas');const ctx=canvas.getContext('2d');
+  const TIER_COLORS={1:{stroke:'#f5a94f',fill:'rgba(245,169,79,',glow:'#f5a94f'},2:{stroke:'#64b4ff',fill:'rgba(100,180,255,',glow:'#64b4ff'},3:{stroke:'#64b4ff',fill:'rgba(100,180,255,',glow:'#64b4ff'},4:{stroke:'#00ff64',fill:'rgba(0,255,100,',glow:'#00ff64'},5:{stroke:'#7a90aa',fill:'rgba(122,144,170,',glow:'#7a90aa'}};
+  const STATUS={live:{dot:'#00ff64'},paper:{dot:'#64b4ff'},future:{dot:'#7a90aa'},running:{dot:'#00ff64'},human:{dot:'#f5a94f'}};
+  const nodeData=[{id:'human',tier:1,label:'Human',sublabel:'Operator',status:'human',radius:28,future:false,info:{tier:'T1 · Human',name:'Human Operator',desc:'The only human in the entire system. Everything runs autonomously except two decisions: approving strategies that survive the full pipeline (Gate 2), and promoting paper trading bots to live capital.',chips:['Gate 2 Approvals','Promotion Decisions']}},{id:'orchestrator',tier:2,label:'Orchestrator',sublabel:'Phase 7',status:'future',radius:22,future:true,info:{tier:'T2 · Managers',name:'Orchestrator Bot',desc:'The future coordinator of the ecosystem. When built, it will manage scheduling across all bots, resolve resource conflicts, and centralize decision-making.',chips:['Phase 7','Not yet built','Capstone bot']}},{id:'reporting',tier:2,label:'Reporting',sublabel:'Bot',status:'live',radius:22,future:false,info:{tier:'T2 · Managers',name:'Reporting Bot',desc:'The messenger of the ecosystem. Compiles everything into plain-English email reports - Morning Briefing at 9 AM, Evening Briefing at 8 PM, and two Sunday reports.',chips:['9AM + 8PM Eastern','Email + Telegram','LLM error summaries']}},{id:'research',tier:3,label:'Research',sublabel:'Bot',status:'live',radius:22,future:false,info:{tier:'T3 · Workers',name:'Research Bot',desc:'The strategy scout. Scans 14 sources across YouTube, GitHub, Reddit, and trading websites around the clock.',chips:['14 Active Sources','YouTube · GitHub · Reddit','622 strategies found','494 indicators']}},{id:'builder',tier:3,label:'Strategy',sublabel:'Builder',status:'live',radius:24,future:false,info:{tier:'T3 · Workers',name:'Strategy Builder',desc:'The factory floor. Fully autonomous 11-step pipeline - AI generates code, backtests, optimizes, stress-tests, and auto-deploys survivors as paper trading bots.',chips:['38 bots deployed','Walk-forward validation','Crash stress testing','Auto-deploy']}},{id:'perfmon',tier:3,label:'Perf',sublabel:'Monitor',status:'live',radius:19,future:false,info:{tier:'T3 · Workers',name:'Performance Monitor',desc:'The judge. Classifies weekly market conditions, compares strategies, and generates monthly rankings.',chips:['Market Classification','Strategy Rankings','Monthly Rollups','Slot recommendations']}},{id:'newsbot',tier:3,label:'News',sublabel:'Bot',status:'future',radius:19,future:true,info:{tier:'T3 · Workers',name:'News Bot',desc:'The market watchdog. Will monitor economic data releases like CPI, jobs reports, and Fed rate decisions.',chips:['Phase 6','CPI/PPI/Jobs','Fed Decisions','Telegram Alerts']}},{id:'handbuilt',tier:4,label:'3 Hand',sublabel:'Built',status:'paper',radius:20,future:false,info:{tier:'T4 · Traders',name:'Hand-Crafted Bots (3)',desc:'The originals. Three manually coded trading strategies built before the autonomous pipeline existed.',chips:['Paper trading','Blofin hedge mode','BTC · ETH · SOL']}},{id:'pipeline',tier:4,label:'38 Pipeline',sublabel:'Bots',status:'paper',radius:26,future:false,info:{tier:'T4 · Traders',name:'38 Pipeline Bots',desc:'The army. 38 strategies auto-deployed by the Strategy Builder pipeline, running across 9 tickers through grouped runners.',chips:['Auto-deployed','Grouped Runners','9 Tickers','Multiple timeframes']}},{id:'sqlserver',tier:5,label:'SQL Server',sublabel:'The Brain',status:'running',radius:24,future:false,info:{tier:'T5 · Foundation',name:'SQL Server',desc:'The brain. Every bot reads from and writes to this central database. 7 schemas and 29 tables.',chips:['Central hub','29 tables','31 migrations']}},{id:'postgres',tier:5,label:'PostgreSQL',sublabel:'178M candles',status:'running',radius:21,future:false,info:{tier:'T5 · Foundation',name:'PostgreSQL',desc:'The history vault. 178 million one-minute candles across 129 trading symbols.',chips:['178M candles','129 symbols','42 GB']}},{id:'memurai',tier:5,label:'Memurai',sublabel:'Cache',status:'running',radius:18,future:false,info:{tier:'T5 · Foundation',name:'Memurai',desc:'The speed layer. A Redis-compatible cache for the Jesse trading framework.',chips:['Redis-compatible','Speed layer','Strategy Builder only']}},{id:'comms',tier:5,label:'Telegram',sublabel:'5 Bots',status:'running',radius:18,future:false,info:{tier:'T5 · Foundation',name:'Telegram + Email',desc:'Five dedicated Telegram bots deliver real-time alerts organized by type.',chips:['5 Telegram Bots','Real-time alerts','Gate 2 buttons']}},{id:'gmail',tier:5,label:'Gmail',sublabel:'Reports',status:'running',radius:16,future:false,info:{tier:'T5 · Foundation',name:'Gmail',desc:'The email delivery channel for all four scheduled reports.',chips:['4 Email Reports','Reporting Bot only']}}];
+  const connections=[{from:'human',to:'comms',style:'command'},{from:'reporting',to:'human',style:'data'},{from:'comms',to:'human',style:'data'},{from:'orchestrator',to:'reporting',style:'manage'},{from:'orchestrator',to:'research',style:'manage'},{from:'orchestrator',to:'builder',style:'manage'},{from:'orchestrator',to:'perfmon',style:'manage'},{from:'orchestrator',to:'newsbot',style:'manage'},{from:'reporting',to:'sqlserver',style:'data'},{from:'sqlserver',to:'reporting',style:'data'},{from:'reporting',to:'gmail',style:'data'},{from:'reporting',to:'comms',style:'data'},{from:'research',to:'sqlserver',style:'data'},{from:'sqlserver',to:'research',style:'data'},{from:'research',to:'comms',style:'data'},{from:'builder',to:'sqlserver',style:'data'},{from:'sqlserver',to:'builder',style:'data'},{from:'builder',to:'postgres',style:'data'},{from:'postgres',to:'builder',style:'data'},{from:'builder',to:'memurai',style:'data'},{from:'memurai',to:'builder',style:'data'},{from:'builder',to:'pipeline',style:'deploy'},{from:'builder',to:'comms',style:'data'},{from:'perfmon',to:'sqlserver',style:'data'},{from:'sqlserver',to:'perfmon',style:'data'},{from:'perfmon',to:'postgres',style:'data'},{from:'postgres',to:'perfmon',style:'data'},{from:'perfmon',to:'comms',style:'data'},{from:'handbuilt',to:'sqlserver',style:'data'},{from:'sqlserver',to:'handbuilt',style:'data'},{from:'handbuilt',to:'comms',style:'data'},{from:'pipeline',to:'sqlserver',style:'data'},{from:'sqlserver',to:'pipeline',style:'data'},{from:'pipeline',to:'comms',style:'data'},{from:'newsbot',to:'sqlserver',style:'data'},{from:'newsbot',to:'comms',style:'data'}];
+  let W,H;const nodes={};let hoveredNode=null,selectedNode=null,dragNode=null,dragOffX=0,dragOffY=0,animT=0;
+  /* Build animation state */
+  let buildPhase='waiting'; // 'waiting' | 'building' | 'done'
+  const nodeVisible={};nodeData.forEach(n=>{nodeVisible[n.id]={opacity:0,scale:0};});
+  const edgeVisible={};connections.forEach((c,i)=>{edgeVisible[i]=0;});
+
+  function initLayout(){W=canvas.width;H=canvas.height;const leftPad=W<600?10:24,usableW=W-leftPad-10,topPad=50,botPad=40,usableH=H-topPad-botPad,tierH=usableH/5,tierNodes={};nodeData.forEach(n=>{if(!tierNodes[n.tier])tierNodes[n.tier]=[];tierNodes[n.tier].push(n.id);});nodeData.forEach(n=>{const siblings=tierNodes[n.tier],idx=siblings.indexOf(n.id),count=siblings.length;nodes[n.id]={...n,x:leftPad+(usableW/(count+1))*(idx+1),y:topPad+tierH*(n.tier-0.5),vx:0,vy:0};});updateTierLabels();}
+  function updateTierLabels(){var labels=document.querySelectorAll('#sec-arch .tier-label');labels.forEach(function(el,i){var tier=i+1;var tierY=[];Object.values(nodes).forEach(function(n){if(n.tier===tier)tierY.push(n.y);});if(tierY.length>0){var avg=tierY.reduce(function(a,b){return a+b;},0)/tierY.length;el.style.top=avg+'px';}});}
+  function resize(){const area=document.querySelector('#sec-arch .network-area');if(!area)return;canvas.width=area.offsetWidth;canvas.height=area.offsetHeight;W=canvas.width;H=canvas.height;initLayout();}
+  function getNodeAt(x,y){let best=null,bestD=Infinity;Object.values(nodes).forEach(n=>{const d=Math.hypot(n.x-x,n.y-y);if(d<n.radius+10&&d<bestD){bestD=d;best=n;}});return best;}
+
+  /* Event handlers — gated by buildPhase */
+  canvas.addEventListener('mousemove',e=>{if(buildPhase!=='done')return;const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;if(dragNode){dragNode.x=Math.max(dragNode.radius+62,Math.min(W-dragNode.radius,mx+dragOffX));dragNode.y=Math.max(dragNode.radius,Math.min(H-dragNode.radius,my+dragOffY));return;}hoveredNode=getNodeAt(mx,my);canvas.style.cursor=hoveredNode?'grab':'default';});
+  canvas.addEventListener('mousedown',e=>{if(buildPhase!=='done')return;const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;const n=getNodeAt(mx,my);if(n){dragNode=n;dragOffX=n.x-mx;dragOffY=n.y-my;canvas.style.cursor='grabbing';}else{deselectArchNode();}});
+  canvas.addEventListener('mouseup',e=>{if(buildPhase!=='done')return;if(dragNode){const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;if(Math.hypot(dragNode.x-(mx+dragOffX),dragNode.y-(my+dragOffY))<5)selectArchNode(dragNode);dragNode=null;canvas.style.cursor=hoveredNode?'grab':'default';}});
+  canvas.addEventListener('mouseleave',()=>{dragNode=null;hoveredNode=null;canvas.style.cursor='default';});
+  canvas.addEventListener('touchstart',e=>{if(buildPhase!=='done')return;e.preventDefault();const r=canvas.getBoundingClientRect(),t=e.touches[0];const n=getNodeAt(t.clientX-r.left,t.clientY-r.top);if(n){dragNode=n;dragOffX=n.x-(t.clientX-r.left);dragOffY=n.y-(t.clientY-r.top);}else{deselectArchNode();}},{passive:false});
+  canvas.addEventListener('touchmove',e=>{if(buildPhase!=='done')return;e.preventDefault();if(!dragNode)return;const r=canvas.getBoundingClientRect(),t=e.touches[0];dragNode.x=Math.max(dragNode.radius+62,Math.min(W-dragNode.radius,t.clientX-r.left+dragOffX));dragNode.y=Math.max(dragNode.radius,Math.min(H-dragNode.radius,t.clientY-r.top+dragOffY));},{passive:false});
+  canvas.addEventListener('touchend',()=>{if(buildPhase!=='done')return;if(dragNode){selectArchNode(dragNode);dragNode=null;}});
+
+  function selectArchNode(n){
+    if(selectedNode&&selectedNode.id===n.id){deselectArchNode();return;}
+    selectedNode=n;
+    const panel=document.getElementById('archDetailPanel');const inner=document.getElementById('archPanelInner');
+    panel.classList.add('highlighted');inner.classList.add('has-detail');panel.style.display='grid';
+    const tc=TIER_COLORS[n.tier].stroke,dot=STATUS[n.status]?.dot||'#7a90aa';
+    const ind=document.getElementById('archDpIndicator');ind.style.background=dot;ind.style.boxShadow='0 0 10px '+dot;
+    document.getElementById('archDpTier').style.color=tc;document.getElementById('archDpTier').textContent=n.info.tier;
+    document.getElementById('archDpName').textContent=n.info.name;document.getElementById('archDpDesc').textContent=n.info.desc;
+    document.getElementById('archDpChips').innerHTML=n.info.chips.map(function(c){return '<div class="dp-chip"><div class="dot" style="background:'+dot+'"></div>'+c+'</div>';}).join('');
+  }
+  function deselectArchNode(){
+    selectedNode=null;
+    const panel=document.getElementById('archDetailPanel');const inner=document.getElementById('archPanelInner');
+    panel.classList.remove('highlighted');inner.classList.remove('has-detail');panel.style.display='none';
+  }
+  function getConnected(id){const ids=new Set();connections.forEach(c=>{if(c.from===id)ids.add(c.to);if(c.to===id)ids.add(c.from);});return ids;}
+
+  /* Smooth animation helpers */
+  function animateNodeIn(nodeId,dur){
+    const nv=nodeVisible[nodeId];const start=performance.now();
+    function tick(now){
+      const p=Math.min(1,(now-start)/dur);
+      const ease=1-Math.pow(1-p,3);
+      nv.opacity=ease;nv.scale=ease;
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function animateEdgeIn(edgeIdx,dur){
+    const start=performance.now();
+    function tick(now){
+      const p=Math.min(1,(now-start)/dur);
+      edgeVisible[edgeIdx]=p;
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* Cascading build animation */
+  function startBuild(){
+    buildPhase='building';
+    const timeline=[];let t=0;
+    /* Phase 1: Human node */
+    timeline.push({t:t,action:function(){animateNodeIn('human',400);}});
+    t+=500;
+    /* Phase 2: Edges from human to T2, then T2 nodes. Also catch T2 nodes connected TO human or with no human edge. */
+    var t2Edges=[];connections.forEach(function(c,i){if(c.from==='human'&&nodes[c.to]&&nodes[c.to].tier===2)t2Edges.push({idx:i,to:c.to});else if(c.to==='human'&&nodes[c.from]&&nodes[c.from].tier===2)t2Edges.push({idx:i,to:c.from});});
+    var t2Done=new Set();
+    t2Edges.forEach(function(e,i){
+      timeline.push({t:t+i*200,action:function(){animateEdgeIn(e.idx,300);}});
+      if(!t2Done.has(e.to)){t2Done.add(e.to);timeline.push({t:t+i*200+300,action:function(){animateNodeIn(e.to,300);}});}
+    });
+    /* Also reveal T2 nodes not yet connected from/to human */
+    var allT2=nodeData.filter(function(n){return n.tier===2;}).map(function(n){return n.id;});
+    var extraT2=allT2.filter(function(id){return !t2Done.has(id);});
+    extraT2.forEach(function(id,i){
+      timeline.push({t:t+t2Edges.length*200+300+i*200,action:function(){animateNodeIn(id,300);}});
+    });
+    t+=Math.max(t2Edges.length,1)*200+400+(extraT2.length*200);
+    /* Phase 3: Edges from T2 to T3, then T3 nodes */
+    var t3Done=new Set();var t3Edges=[];
+    connections.forEach(function(c,i){if(nodes[c.from]&&nodes[c.from].tier===2&&nodes[c.to]&&nodes[c.to].tier===3)t3Edges.push({idx:i,to:c.to});});
+    t3Edges.forEach(function(e,i){
+      timeline.push({t:t+i*200,action:function(){animateEdgeIn(e.idx,300);}});
+      if(!t3Done.has(e.to)){t3Done.add(e.to);timeline.push({t:t+i*200+300,action:function(){animateNodeIn(e.to,300);}});}
+    });
+    /* Also reveal T3 nodes not yet connected from T2 */
+    var allT3=nodeData.filter(function(n){return n.tier===3;}).map(function(n){return n.id;});
+    var extraT3=allT3.filter(function(id){return !t3Done.has(id);});
+    extraT3.forEach(function(id,i){
+      timeline.push({t:t+t3Edges.length*200+300+i*200,action:function(){animateNodeIn(id,300);}});
+    });
+    t+=Math.max(t3Edges.length,1)*200+400+(extraT3.length*200);
+    /* Phase 4: Edges from T3 to T4, then T4 nodes */
+    var t4Done=new Set();var t4Edges=[];
+    connections.forEach(function(c,i){if(nodes[c.from]&&nodes[c.from].tier===3&&nodes[c.to]&&nodes[c.to].tier===4)t4Edges.push({idx:i,to:c.to});});
+    t4Edges.forEach(function(e,i){
+      timeline.push({t:t+i*150,action:function(){animateEdgeIn(e.idx,300);}});
+      if(!t4Done.has(e.to)){t4Done.add(e.to);timeline.push({t:t+i*150+300,action:function(){animateNodeIn(e.to,300);}});}
+    });
+    var allT4=nodeData.filter(function(n){return n.tier===4;}).map(function(n){return n.id;});
+    var extraT4=allT4.filter(function(id){return !t4Done.has(id);});
+    extraT4.forEach(function(id,i){
+      timeline.push({t:t+t4Edges.length*150+300+i*200,action:function(){animateNodeIn(id,300);}});
+    });
+    t+=Math.max(t4Edges.length,1)*150+400+(extraT4.length*200);
+    /* Phase 5: Edges from T3/T4 to T5, then T5 nodes */
+    var t5Done=new Set();var t5Edges=[];
+    connections.forEach(function(c,i){if(nodes[c.to]&&nodes[c.to].tier===5&&nodes[c.from]&&nodes[c.from].tier<5)t5Edges.push({idx:i,to:c.to});});
+    t5Edges.forEach(function(e,i){
+      timeline.push({t:t+i*100,action:function(){animateEdgeIn(e.idx,250);}});
+      if(!t5Done.has(e.to)){t5Done.add(e.to);timeline.push({t:t+i*100+250,action:function(){animateNodeIn(e.to,300);}});}
+    });
+    var allT5=nodeData.filter(function(n){return n.tier===5;}).map(function(n){return n.id;});
+    var extraT5=allT5.filter(function(id){return !t5Done.has(id);});
+    extraT5.forEach(function(id,i){
+      timeline.push({t:t+t5Edges.length*100+250+i*200,action:function(){animateNodeIn(id,300);}});
+    });
+    t+=Math.max(t5Edges.length,1)*100+350+(extraT5.length*200);
+    /* Phase 6: Remaining cross-tier edges */
+    var usedEdges=new Set();
+    [t2Edges,t3Edges,t4Edges,t5Edges].forEach(function(arr){arr.forEach(function(e){usedEdges.add(e.idx);});});
+    var remaining=[];connections.forEach(function(c,i){if(!usedEdges.has(i))remaining.push(i);});
+    remaining.forEach(function(idx,i){
+      timeline.push({t:t+i*100,action:function(){animateEdgeIn(idx,200);}});
+    });
+    t+=remaining.length*100+200;
+    /* Phase 7: Tier labels fade in (fast) + Panel column simultaneously */
+    var tierLabels=document.querySelectorAll('#sec-arch .tier-label');
+    tierLabels.forEach(function(el,i){
+      timeline.push({t:t+i*80,action:function(){el.classList.add('in');}});
+    });
+    timeline.push({t:t+200,action:function(){
+      document.getElementById('archPanelCol').classList.add('in');
+    }});
+    t+=tierLabels.length*80+300;
+    /* Phase 8: Enable interaction */
+    timeline.push({t:t,action:function(){
+      buildPhase='done';
+    }});
+    /* Execute timeline */
+    timeline.forEach(function(item){setTimeout(item.action,item.t);});
+  }
+
+  /* Draw loop */
+  function draw(){
+    ctx.clearRect(0,0,W,H);animT+=0.02;
+    const activeNode=(buildPhase==='done')?(hoveredNode||selectedNode):null;
+    const connectedIds=activeNode?getConnected(activeNode.id):new Set();
+    /* Draw edges */
+    connections.forEach(function(c,ci){
+      const a=nodes[c.from],b=nodes[c.to];if(!a||!b)return;
+      const progress=edgeVisible[ci]||0;if(progress<=0)return;
+      const isHighlighted=activeNode&&(c.from===activeNode.id||c.to===activeNode.id);
+      let color,baseAlpha,dashOn,dashOff,animated;
+      switch(c.style){case'command':color='#f5a94f';baseAlpha=0.22;dashOn=0;dashOff=0;animated=false;break;case'manage':color='#64b4ff';baseAlpha=0.14;dashOn=6;dashOff=4;animated=true;break;case'deploy':color='#00ff64';baseAlpha=0.18;dashOn=0;dashOff=0;animated=false;break;case'data':color='#64b4ff';baseAlpha=0.1;dashOn=4;dashOff=5;animated=true;break;default:color='#ffffff';baseAlpha=0.07;dashOn=0;dashOff=0;animated=false;}
+      const alpha=(isHighlighted?Math.min(baseAlpha*4,0.85):baseAlpha);
+      const hex=function(h){const r2=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b2=parseInt(h.slice(5,7),16);return 'rgba('+r2+','+g+','+b2+','+alpha+')';};
+      /* Compute partial endpoint */
+      const endX=a.x+(b.x-a.x)*progress,endY=a.y+(b.y-a.y)*progress;
+      ctx.save();ctx.strokeStyle=hex(color);ctx.lineWidth=isHighlighted?2.5:1;
+      if(dashOn>0){ctx.setLineDash([dashOn,dashOff]);ctx.lineDashOffset=animated&&isHighlighted?-(animT*25%(dashOn+dashOff)):0;}else{ctx.setLineDash([]);}
+      ctx.beginPath();ctx.moveTo(a.x,a.y);
+      const td=Math.abs(a.tier-b.tier);
+      if(td>1&&progress>=1){const cx2=(a.x+b.x)/2+(b.y>a.y?-50:50),cy2=(a.y+b.y)/2;ctx.quadraticCurveTo(cx2,cy2,b.x,b.y);}
+      else if(td>1){/* partial curve — approximate with line for simplicity */ctx.lineTo(endX,endY);}
+      else{ctx.lineTo(endX,endY);}
+      ctx.stroke();
+      if(isHighlighted&&progress>=1&&c.from===activeNode?.id){const angle=Math.atan2(b.y-a.y,b.x-a.x);const ax2=b.x-Math.cos(angle)*(b.radius+5),ay2=b.y-Math.sin(angle)*(b.radius+5);ctx.fillStyle=hex(color);ctx.setLineDash([]);ctx.translate(ax2,ay2);ctx.rotate(angle);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-10,-5);ctx.lineTo(-10,5);ctx.closePath();ctx.fill();}
+      ctx.restore();
+    });
+    /* Draw nodes */
+    Object.values(nodes).forEach(function(n){
+      const tc=TIER_COLORS[n.tier];
+      const nv=nodeVisible[n.id]||{opacity:0,scale:0};
+      if(nv.opacity<=0)return;
+      const isActive=activeNode?.id===n.id;const isConnected=connectedIds.has(n.id);
+      const isDimmed=activeNode&&!isActive&&!isConnected;
+      const revealScale=0.3+0.7*nv.scale;
+      ctx.save();ctx.globalAlpha=(isDimmed?0.2:nv.opacity);
+      ctx.translate(n.x,n.y);ctx.scale(revealScale,revealScale);ctx.translate(-n.x,-n.y);
+      if(isActive){const grd=ctx.createRadialGradient(n.x,n.y,n.radius*0.5,n.x,n.y,n.radius*2.5);grd.addColorStop(0,tc.fill+'0.2)');grd.addColorStop(1,tc.fill+'0)');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(n.x,n.y,n.radius*2.5,0,Math.PI*2);ctx.fill();}
+      /* Glow pulse for human during build */
+      if(n.id==='human'&&buildPhase==='building'&&nv.opacity>0.5){const glowPulse=0.1+Math.sin(animT*4)*0.08;const gg=ctx.createRadialGradient(n.x,n.y,n.radius,n.x,n.y,n.radius*2.2);gg.addColorStop(0,tc.fill+glowPulse+')');gg.addColorStop(1,tc.fill+'0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(n.x,n.y,n.radius*2.2,0,Math.PI*2);ctx.fill();}
+      const bg=ctx.createRadialGradient(n.x-n.radius*0.3,n.y-n.radius*0.3,0,n.x,n.y,n.radius);
+      bg.addColorStop(0,tc.fill+(n.future?'0.12)':'0.22)'));bg.addColorStop(1,tc.fill+(n.future?'0.04)':'0.08)'));
+      ctx.fillStyle=bg;ctx.beginPath();ctx.arc(n.x,n.y,n.radius,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle=isActive?tc.stroke:(n.future?tc.stroke+'55':tc.stroke+'99');ctx.lineWidth=isActive?2.5:1.5;
+      if(n.future)ctx.setLineDash([4,3]);else ctx.setLineDash([]);
+      ctx.beginPath();ctx.arc(n.x,n.y,n.radius,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+      const dot=STATUS[n.status]?.dot||'#7a90aa';const dotR=isActive?6:4.5;
+      const pulse=n.status==='live'||n.status==='running'?0.55+Math.sin(animT*2+n.x)*0.45:1;
+      ctx.globalAlpha=(isDimmed?0.2:nv.opacity)*pulse;ctx.fillStyle=dot;
+      ctx.beginPath();ctx.arc(n.x,n.y-3,dotR,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=isDimmed?0.2:nv.opacity;
+      const labelPx=W<600?(n.radius>22?10:9):(n.radius>22?14:12);
+      ctx.fillStyle=isActive?(n.future?tc.stroke+'99':tc.stroke):(n.future?'rgba(122,144,170,0.5)':'rgba(232,244,255,0.85)');
+      ctx.font=(isActive?'700 ':'600 ')+labelPx+'px "Oxanium",sans-serif';ctx.textAlign='center';
+      ctx.fillText(n.label,n.x,n.y+n.radius+18);
+      ctx.fillStyle=n.future?'rgba(122,144,170,0.35)':'rgba(232,244,255,0.3)';
+      ctx.font='400 '+(W<600?8:10)+'px "Share Tech Mono",monospace';
+      if(W>=500)ctx.fillText(n.sublabel,n.x,n.y+n.radius+32);
+      ctx.restore();
+    });
+    if(dragNode)updateTierLabels();
+    requestAnimationFrame(draw);
+  }
+
+  /* Screen 1 reveal — triggered by global section observer */
+  revealArch=function(){
+    document.getElementById('archEyebrow').classList.add('in');
+    ['archTw0','archTw1','archTw2','archTw3'].forEach(function(id,i){setTimeout(function(){document.getElementById(id).classList.add('in');},200+i*100);});
+    setTimeout(function(){document.getElementById('archSummary').classList.add('in');},800);
+  };
+
+  /* Screen 2 observer — triggers build animation */
+  let screen2Fired=false;
+  const screen2Obs=new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting&&!screen2Fired){
+      screen2Fired=true;
+      resize();
+      draw();
+      document.getElementById('archHint').classList.add('in');
+      setTimeout(startBuild,200);
+      screen2Obs.disconnect();
+    }
+  },{threshold:0.1});
+  screen2Obs.observe(document.getElementById('archScreen2'));
+
+  window.addEventListener('resize',resize);
+  /* Ensure canvas sized on first visibility */
+  const archVisObs=new IntersectionObserver(function(entries){if(entries[0].isIntersecting){resize();archVisObs.disconnect();}},{threshold:0.01});
+  archVisObs.observe(document.getElementById('archScreen2'));
+})();
+
+/* ══ 7. PLAYBOOK JS (IIFE) ══ */
+(function(){
+  const track=document.getElementById('playbookScrollTrack');
+  const original=Array.from(track.children);
+  original.forEach(card=>{const clone=card.cloneNode(true);clone.classList.add('revealed');track.appendChild(clone);});
+  const SPEED=0.6;let offset=0,paused=false,isDragging=false,dragStartX=0,dragStartOffset=0,setWidth=0;
+  function getSetWidth(){const gap=20,cards=track.querySelectorAll('.phase-card'),halfCount=cards.length/2;let w=0;for(let i=0;i<halfCount;i++)w+=cards[i].offsetWidth+gap;return w;}
+  function animate(){if(!paused&&!isDragging){offset+=SPEED;if(setWidth>0&&offset>=setWidth)offset-=setWidth;}track.style.transform=`translateX(${-offset}px)`;requestAnimationFrame(animate);}
+  function revealCards(){const cards=document.querySelectorAll('#sec-playbook .phase-card:not(.revealed)');cards.forEach((card,i)=>{setTimeout(()=>card.classList.add('revealed'),i*120);});}
+  revealPlaybook=function(){document.getElementById('playbookEyebrow').classList.add('in');setTimeout(()=>document.getElementById('playbookTitle').classList.add('in'),200);setTimeout(()=>document.getElementById('playbookSummary').classList.add('in'),400);setTimeout(()=>document.getElementById('playbookProgress').classList.add('in'),600);setTimeout(()=>{revealCards();requestAnimationFrame(()=>{setWidth=getSetWidth();});},800);};
+  animate();
+  track.addEventListener('mouseenter',()=>paused=true);
+  track.addEventListener('mouseleave',()=>{if(!isDragging)paused=false;});
+  track.addEventListener('touchstart',e=>{paused=true;isDragging=true;dragStartX=e.touches[0].clientX;dragStartOffset=offset;},{passive:true});
+  track.addEventListener('touchmove',e=>{const dx=dragStartX-e.touches[0].clientX;offset=dragStartOffset+dx;if(setWidth>0){if(offset<0)offset+=setWidth;if(offset>=setWidth)offset-=setWidth;}},{passive:true});
+  track.addEventListener('touchend',()=>{isDragging=false;setTimeout(()=>{paused=false;},1200);});
+  track.addEventListener('mousedown',e=>{isDragging=true;dragStartX=e.clientX;dragStartOffset=offset;track.style.cursor='grabbing';});
+  window.addEventListener('mousemove',e=>{if(!isDragging)return;const dx=dragStartX-e.clientX;offset=dragStartOffset+dx;if(setWidth>0){if(offset<0)offset+=setWidth;if(offset>=setWidth)offset-=setWidth;}});
+  window.addEventListener('mouseup',()=>{if(isDragging){isDragging=false;track.style.cursor='grab';setTimeout(()=>{paused=false;},800);}});
+  window.addEventListener('resize',()=>{setWidth=getSetWidth();});
+})();
+
+/* ══ 8. NOTIFICATIONS JS (IIFE) ══ */
+(function(){
+  const bots=[{id:'errors',label:'Errors',handle:'@AutoBotErrorsBot',name:'AutoBot Errors',color:'#ff4a36',desc:'Every failure, crash, and exception from every bot in the ecosystem lands here. Pipeline failures, backtest errors, exchange connection issues, and unhandled exceptions. If this chat has a message, something needs attention.',types:['Pipeline Failures','Backtest Errors','Exchange Errors','Unhandled Exceptions'],status:'Active',future:false},{id:'approvals',label:'Approvals',handle:'@AutoBotApprovalsBot',name:'AutoBot Approvals',color:'#00ff64',desc:'The only notifications that need a response. Gate 2 strategy approvals arrive here with approve/reject buttons - this is the single human checkpoint in the pipeline. Promotion decisions and new ticker approvals also come through here.',types:['Gate 2 Approvals','Promotion Decisions','New Ticker Approvals','Interactive Buttons'],status:'Active',future:false},{id:'lifecycle',label:'Lifecycle',handle:'@AutoBotLifecycleBot',name:'AutoBot Lifecycle',color:'#64b4ff',desc:'Informational updates on what the system is doing - bot starts and stops, strategies passing Tier 1, optimizations completing, backtests finishing. No action needed, just awareness of system activity.',types:['Bot Start/Stop','Tier 1 Pass','Optimization Events','Backtest Summaries','New Ticker Complete'],status:'Active',future:false},{id:'trading',label:'Trading',handle:'@AutoBotTradingActivityBot',name:'AutoBot Trading Activity',color:'#ff8c42',desc:'Real-time trade notifications - every time a bot opens a position, closes one, hits a take-profit level, or triggers a drawdown warning. This is the pulse of the trading operation.',types:['Trade Opened','Trade Closed','TP1 Hit','Drawdown Warning','Position Recovery','Health Alert'],status:'Active',future:false},{id:'reports',label:'Reports',handle:'@AutoBotReportsBot',name:'AutoBot Reports',color:'#a855f7',desc:'Confirmation that scheduled reports were generated and delivered successfully. If a report fails to send after two attempts, an alert fires here so the operator knows to check manually.',types:['Report Sent','Report Failed','Delivery Confirmation'],status:'Active',future:false},{id:'news',label:'News',handle:'@AutoBotNewsBot',name:'AutoBot News',color:'#8e8da0',desc:'Will deliver macro economic data and market-moving event alerts - CPI releases, jobs reports, Fed rate decisions, plus ticker-specific news like protocol upgrades, rebrandings, and developments that could move prices. Keeps the operator informed of conditions that could affect open trades across all tickers.',types:['CPI/PPI/Jobs','Fed Decisions','Ticker-Specific News','Market Events'],status:'Planned',future:true}];
+  const botIcons=[`<svg viewBox="0 0 32 32" fill="none"><path d="M16 4L29 27H3L16 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="16" y1="13" x2="16" y2="20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="23.5" r="1.2" fill="currentColor"/></svg>`,`<svg viewBox="0 0 32 32" fill="none"><path d="M16 3L28 8V17C28 23 22 28 16 30C10 28 4 23 4 17V8L16 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="10,16 14,20 22,12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,`<svg viewBox="0 0 32 32" fill="none"><path d="M27 16A11 11 0 1 1 16 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="16,2 16,7 21,7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="16" r="3" fill="currentColor" opacity="0.5"/></svg>`,`<svg viewBox="0 0 32 32" fill="none"><line x1="8" y1="5" x2="8" y2="27" stroke="#ff4a36" stroke-width="1.5" opacity="0.5"/><rect x="5" y="9" width="6" height="10" rx="1" fill="#ff4a36" fill-opacity="0.25" stroke="#ff4a36" stroke-width="1.8"/><line x1="16" y1="3" x2="16" y2="27" stroke="#00ff64" stroke-width="1.5" opacity="0.5"/><rect x="13" y="7" width="6" height="14" rx="1" fill="#00ff64" fill-opacity="0.25" stroke="#00ff64" stroke-width="1.8"/><line x1="24" y1="7" x2="24" y2="27" stroke="#ff4a36" stroke-width="1.5" opacity="0.5"/><rect x="21" y="11" width="6" height="8" rx="1" fill="#ff4a36" fill-opacity="0.25" stroke="#ff4a36" stroke-width="1.8"/></svg>`,`<svg viewBox="0 0 32 32" fill="none"><rect x="7" y="5" width="18" height="22" rx="2" stroke="currentColor" stroke-width="2"/><line x1="11" y1="11" x2="21" y2="11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="16" x2="21" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="21" x2="17" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,`<svg viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="18" rx="2" stroke="currentColor" stroke-width="2"/><line x1="4" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><line x1="8" y1="16" x2="16" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="19.5" x2="14" y2="19.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`];
+  const hubCanvas=document.getElementById('notifHubCanvas');const hctx=hubCanvas.getContext('2d');const hubWrap=document.querySelector('#sec-notif .hub-wrap');
+  let nodePositions=[],lineProgress=[],pulses=[],selectedBot=null;
+  function buildHubCanvas(){hubCanvas.width=hubWrap.offsetWidth;hubCanvas.height=hubWrap.offsetHeight;document.querySelectorAll('#sec-notif .bot-node').forEach((node,i)=>{const positions=getNodePositions();if(positions[i]){node.style.left=positions[i].x+'px';node.style.top=positions[i].y+'px';}});}
+  function getNodePositions(){const cx=hubCanvas.width/2,cy=hubCanvas.height/2,r=Math.min(hubCanvas.width,hubCanvas.height)*0.40,N=bots.length,startAngle=-Math.PI/2-Math.PI/N;return bots.map((_,i)=>{const angle=startAngle+(i/N)*Math.PI*2;return{x:cx+Math.cos(angle)*r,y:cy+Math.sin(angle)*r};});}
+  function drawHub(){hctx.clearRect(0,0,hubCanvas.width,hubCanvas.height);const center={x:hubCanvas.width/2,y:hubCanvas.height/2};const positions=getNodePositions();nodePositions=positions;positions.forEach((pos,i)=>{const progress=lineProgress[i]||0;if(progress<=0)return;const bot=bots[i];const tx=center.x+(pos.x-center.x)*progress,ty=center.y+(pos.y-center.y)*progress;hctx.beginPath();hctx.moveTo(center.x,center.y);hctx.lineTo(tx,ty);const isSelected=selectedBot===i;const alpha=bot.future?0.15:isSelected?0.8:0.3;hctx.strokeStyle=bot.future?'rgba(122,144,170,0.2)':isSelected?bot.color:`rgba(100,180,255,${alpha})`;hctx.lineWidth=isSelected?1.5:1;hctx.setLineDash(bot.future?[4,6]:[]);hctx.stroke();hctx.setLineDash([]);if(!bot.future&&progress>=1){pulses.filter(p=>p.node===i).forEach(p=>{const px=center.x+(pos.x-center.x)*p.t,py=center.y+(pos.y-center.y)*p.t;const grd=hctx.createRadialGradient(px,py,0,px,py,5);grd.addColorStop(0,bot.color);grd.addColorStop(1,'transparent');hctx.fillStyle=grd;hctx.beginPath();hctx.arc(px,py,4,0,Math.PI*2);hctx.fill();});}});requestAnimationFrame(drawHub);}
+  function animateLines(startDelay){bots.forEach((_,i)=>{lineProgress[i]=0;if(!bots[i].future){setInterval(()=>{pulses.push({node:i,t:0,speed:0.004+Math.random()*0.003,arrived:false});if(pulses.length>40)pulses.shift();},1800+i*300);}setTimeout(()=>{let start=null;const dur=900;function step(ts){if(!start)start=ts;const p=Math.min((ts-start)/dur,1);lineProgress[i]=p;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);},startDelay+i*180);});}
+  setInterval(()=>{pulses.forEach(p=>{p.t+=p.speed;if(p.t>0.88&&!p.arrived){p.arrived=true;const nodeRings=Array.from(document.querySelectorAll('#sec-notif .bot-node:not(.future) .node-ring'));const ring=nodeRings[p.node];if(ring&&!bots[p.node]?.future){const col=bots[p.node].color;ring.style.boxShadow=`0 0 0 4px ${col}33, 0 0 24px ${col}99`;ring.style.borderColor=col;setTimeout(()=>{if(ring){ring.style.boxShadow='';ring.style.borderColor='';}},380);}}if(p.t>=0.95){p.t=0.05;p.arrived=false;}});},16);
+  function buildNodes(startDelay){const positions=getNodePositions();document.querySelectorAll('#sec-notif .bot-node').forEach(e=>e.remove());bots.forEach((bot,i)=>{const pos=positions[i];const node=document.createElement('div');node.className='bot-node'+(bot.future?' future':'');node.style.left=pos.x+'px';node.style.top=pos.y+'px';node.innerHTML=`<div class="node-ring" style="border-color:${bot.color}40;color:${bot.color};${bot.future?'':'box-shadow:0 0 12px '+bot.color+'22'}">${bot.future?'<div class="future-badge">P6</div>':''}<div class="node-svg">${botIcons[i]}</div></div><div class="node-label">${bot.label}</div>`;node.addEventListener('click',()=>selectBotFn(i));hubWrap.appendChild(node);setTimeout(()=>node.classList.add('visible'),startDelay+i*180+400);});}
+  const hubData={id:'hub',label:'Ecosystem Hub',handle:'AutoBots Trading - Central Nervous System',name:'AutoBots Hub',color:'#64b4ff',desc:'The central routing point for every signal in the ecosystem. All five active bots originate from this hub.',types:['5 active signal bots','1 future bot (Phase 6)','Real-time + scheduled delivery','Telegram + AutoBots Nexus'],status:'Online'};
+  function expandLayout(){const layout=document.querySelector('#sec-notif .hub-layout');if(layout&&!layout.classList.contains('expanded'))layout.classList.add('expanded');}
+  function populatePanel(data,delay){const panel=document.getElementById('hubDetail');const isActive=data.status==='Active'||data.status==='Online';const fill=()=>{panel.classList.add('switching');setTimeout(()=>{document.getElementById('hdBar').style.background=data.color;document.getElementById('hdHandle').style.color=data.color;document.getElementById('hdHandle').textContent=data.handle;document.getElementById('hdName').textContent=data.name;document.getElementById('hdDesc').textContent=data.desc;const hexCol=(data.color||'#64b4ff').replace('#','');const pr=parseInt(hexCol.substring(0,2),16),pg=parseInt(hexCol.substring(2,4),16),pb=parseInt(hexCol.substring(4,6),16);document.getElementById('hdTypes').style.setProperty('--pill-rgb',`${pr},${pg},${pb}`);document.getElementById('hdTypes').innerHTML=data.types.map(t=>`<span class="hd-type">${t}</span>`).join('');const badge=document.getElementById('hdBadge');badge.textContent=data.status;badge.style.background=isActive?'rgba(0,255,100,0.1)':'rgba(255,255,255,0.04)';badge.style.border=`1px solid ${isActive?'rgba(0,255,100,0.3)':'var(--border)'}`;badge.style.color=isActive?'var(--green)':'var(--sub)';panel.classList.remove('switching');},300);};if(delay)setTimeout(fill,delay);else fill();}
+  function selectBotFn(idx){const layout=document.querySelector('#sec-notif .hub-layout');const alreadyExpanded=layout&&layout.classList.contains('expanded');if(selectedBot===idx){selectedBot=null;document.querySelectorAll('#sec-notif .bot-node').forEach(n=>n.classList.remove('selected-node'));if(layout)layout.classList.remove('expanded');return;}selectedBot=idx;document.getElementById('hubCenterBtn').classList.remove('selected');document.querySelectorAll('#sec-notif .bot-node').forEach(n=>n.classList.remove('selected-node'));const allNodes=document.querySelectorAll('#sec-notif .bot-node');if(allNodes[idx])allNodes[idx].classList.add('selected-node');if(!alreadyExpanded){expandLayout();populatePanel(bots[idx],500);}else populatePanel(bots[idx],0);}
+  function selectHub(){const layout=document.querySelector('#sec-notif .hub-layout');const alreadyExpanded=layout&&layout.classList.contains('expanded');if(selectedBot==='hub'&&alreadyExpanded){selectedBot=null;document.getElementById('hubCenterBtn').classList.remove('selected');if(layout)layout.classList.remove('expanded');return;}selectedBot='hub';document.querySelectorAll('#sec-notif .bot-node').forEach(n=>n.classList.remove('selected-node'));document.getElementById('hubCenterBtn').classList.add('selected');if(!alreadyExpanded){expandLayout();populatePanel(hubData,500);}else populatePanel(hubData,0);}
+  function initFlowRelay(){const track=document.getElementById('notifFlowTrack');if(!track)return;const canvas=document.getElementById('notifFlowCanvas');if(!canvas)return;const WIRE_Y=85;const nodeColors=['251,231,78','80,155,245','255,120,50','220,80,180','51,184,135'];const nodes=Array.from(track.querySelectorAll('.flow-node'));const icons=nodes.map(n=>n.querySelector('.flow-node-icon'));const PCT=[0.10,0.30,0.50,0.70,0.90];function getW(){return track.offsetWidth||900;}function getXs(W){return PCT.map(p=>p*W);}let fctx,fW,fH;function setupCanvas(){const dpr=window.devicePixelRatio||1;fW=getW();fH=track.offsetHeight||260;canvas.width=fW*dpr;canvas.height=fH*dpr;canvas.style.width=fW+'px';canvas.style.height=fH+'px';fctx=canvas.getContext('2d');fctx.setTransform(dpr,0,0,dpr,0,0);}setupCanvas();function litIcon(i){const ic=icons[i];if(!ic)return;ic.style.setProperty('--glow-col',`rgb(${nodeColors[i]})`);ic.style.setProperty('--glow-rgb',nodeColors[i]);ic.classList.add('lit');}function unlitIcon(i){const ic=icons[i];if(ic)ic.classList.remove('lit');}const SEG=1200,DWELL=700,EXIT=500,TRAIL=50;function makePacket(){return{seg:-1,t:0,px:PCT[0]*getW(),phase:'travel',arrivedIdx:-1,col:'255,255,255',done:false};}let packets=[makePacket()];let lastTs=null;function fdraw(ts){if(!track.closest('body'))return;const dt=lastTs?Math.min(ts-lastTs,50):16;lastTs=ts;const CW=getW();if(Math.abs(CW-fW)>2)setupCanvas();fctx.clearRect(0,0,fW,fH);const xs=getXs(fW);fctx.beginPath();fctx.moveTo(xs[0],WIRE_Y);fctx.lineTo(xs[xs.length-1],WIRE_Y);fctx.strokeStyle='rgba(255,255,255,0.09)';fctx.lineWidth=1;fctx.stroke();const ease=t=>t<0.5?2*t*t:-1+(4-2*t)*t;packets=packets.filter(p=>!p.done);packets.forEach(p=>{if(p.phase==='travel'){p.t+=dt/SEG;const fx=p.seg===-1?xs[0]:xs[p.seg];const tx=xs[p.seg+1];p.px=fx+(tx-fx)*ease(Math.min(p.t,1));drawFDot(p.px,p.col);if(p.t>=1){p.arrivedIdx=p.seg+1;p.col=nodeColors[p.arrivedIdx];litIcon(p.arrivedIdx);p.phase='dwell';p.t=0;}}else if(p.phase==='dwell'){p.t+=dt;drawFDot(p.px,p.col);if(p.t>=DWELL){unlitIcon(p.arrivedIdx);if(p.arrivedIdx>=nodes.length-1){packets.push(makePacket());p.phase='exit';p.t=0;}else{p.seg=p.arrivedIdx;p.phase='travel';p.t=0;}}}else if(p.phase==='exit'){p.t+=dt/EXIT;p.px=xs[xs.length-1]+80*ease(Math.min(p.t,1));drawFDot(p.px,p.col,Math.max(0,1-p.t*2));if(p.t>=1)p.done=true;}});function drawFDot(px,col,alpha=1){const t0=Math.max(xs[0]-10,px-TRAIL);if(px>xs[0]-20){const g=fctx.createLinearGradient(t0,WIRE_Y,px,WIRE_Y);g.addColorStop(0,`rgba(${col},0)`);g.addColorStop(1,`rgba(${col},${0.85*alpha})`);fctx.beginPath();fctx.moveTo(t0,WIRE_Y);fctx.lineTo(px,WIRE_Y);fctx.strokeStyle=g;fctx.lineWidth=2;fctx.stroke();}fctx.shadowColor=`rgb(${col})`;fctx.shadowBlur=10;const g2=fctx.createRadialGradient(px,WIRE_Y,0,px,WIRE_Y,8);g2.addColorStop(0,`rgba(255,255,255,${alpha})`);g2.addColorStop(0.4,`rgba(${col},${alpha})`);g2.addColorStop(1,`rgba(${col},0)`);fctx.fillStyle=g2;fctx.beginPath();fctx.arc(px,WIRE_Y,8,0,Math.PI*2);fctx.fill();fctx.shadowBlur=0;fctx.shadowColor='transparent';}requestAnimationFrame(fdraw);}requestAnimationFrame(fdraw);window.addEventListener('resize',setupCanvas);}
+  revealNotifications=function(){document.getElementById('notifEyebrow').classList.add('in');document.getElementById('notifTitle').classList.add('in');document.getElementById('notifSub').classList.add('in');buildHubCanvas();buildNodes(300);animateLines(300);drawHub();setTimeout(()=>{document.getElementById('hubCenterBtn').addEventListener('click',selectHub);},500);const flowTrack=document.getElementById('notifFlowTrack');if(flowTrack){flowTrack.querySelectorAll('.flow-node').forEach((n,i)=>setTimeout(()=>n.classList.add('in'),i*120));setTimeout(initFlowRelay,700);}document.querySelectorAll('#sec-notif .report-card').forEach(card=>card.classList.add('in'));};
+  if(window.ResizeObserver)new ResizeObserver(()=>buildHubCanvas()).observe(hubWrap);
+  window.addEventListener('resize',()=>buildHubCanvas());
+})();
+
+/* ══ 9. SECURITY JS (IIFE) ══ */
+(function(){
+  function animateCounter(el,target,fmt){if(target===0){el.textContent='0';return;}const dur=2800,start=performance.now();function step(ts){const p=Math.min((ts-start)/dur,1);const e=1-Math.pow(1-p,3);const v=Math.round(e*target);el.textContent=fmt==='comma'?v.toLocaleString():v;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+  function animateGaugePct(txtEl,target,delay){setTimeout(()=>{const dur=1400,start=performance.now();function step(ts){const p=Math.min((ts-start)/dur,1);const e=1-Math.pow(1-p,3);txtEl.textContent=Math.round(e*target)+'%';if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);},delay);}
+  const domains=[{id:'secrets',name:'Secret\nDetection',statusLabel:'Clean',statusColor:'#00ff64',fill:1.0,color:'#00ff64',eyebrow:'Gitleaks · Secret Detection',title:'Zero Secrets Leaked',summary:'Gitleaks scans every commit for accidentally included passwords, API keys, and tokens. Zero findings across the entire codebase.',pills:['Gitleaks','Full history','Pre-commit hook','Zero findings'],metrics:[{label:'Secrets Found',val:'0',cls:'good',bar:0},{label:'Coverage',val:'100%',cls:'good',bar:1},{label:'Status',val:'Active',cls:'good',bar:null}]},{id:'code',name:'Code\nAnalysis',statusLabel:'Clean',statusColor:'#00ff64',fill:0.92,color:'#00ff64',eyebrow:'Bandit · Static Analysis',title:'Zero High-Severity Issues',summary:'Bandit scans all Python source code. 98,906 lines across 690 files - zero high-severity findings.',pills:['Bandit','98,906 lines','690 Python files','Pre-merge scan'],metrics:[{label:'High Severity',val:'0',cls:'good',bar:0},{label:'Medium',val:'3',cls:'warn',bar:0.03},{label:'Low Info',val:'142',cls:'',bar:0.35},{label:'Lines Scanned',val:'98,906',cls:'',bar:1}]},{id:'deps',name:'Dependency\nAudit',statusLabel:'Fixable',statusColor:'#f5a94f',fill:0.72,color:'#f5a94f',eyebrow:'pip-audit · CVE Scanning',title:'16 Known CVEs - All Fixable',summary:'pip-audit checks all packages against known CVE databases. 16 CVEs across 5 packages - all have fix versions available.',pills:['pip-audit','All packages','CVE databases','Fix versions available'],metrics:[{label:'Known CVEs',val:'16',cls:'warn',bar:0.2},{label:'Affected Packages',val:'5',cls:'warn',bar:0.1},{label:'Fix Available',val:'All',cls:'good',bar:1},{label:'Critical',val:'0',cls:'good',bar:0}]},{id:'bots',name:'Bot\nProtections',statusLabel:'Secured',statusColor:'#00ff64',fill:0.96,color:'#00ff64',eyebrow:'Bot-Level · Security Measures',title:'All 45 Bots Secured',summary:'Every trading bot passed full security scanning. API keys protected, risk locked at 5%.',pills:['45 bots scanned','API keys protected','5% risk hardcoded','10x leverage fixed'],metrics:[{label:'Bots Scanned',val:'45/45',cls:'good',bar:1},{label:'Research Bot',val:'Clean',cls:'good',bar:1},{label:'Strategy Builder',val:'Clean',cls:'good',bar:1},{label:'Trading Bots',val:'Clean',cls:'good',bar:1}]},{id:'database',name:'Database\nSafety',statusLabel:'Protected',statusColor:'#00ff64',fill:1.0,color:'#00ff64',eyebrow:'SQL Server · Database Security',title:'Injection-Proof Database',summary:'All 29 tables use parameterized queries exclusively. 31 migrations applied cleanly.',pills:['Parameterized queries','Auth required','29 tables','31 migrations','Regular backups'],metrics:[{label:'Injection Risk',val:'None',cls:'good',bar:0},{label:'Auth Required',val:'Yes',cls:'good',bar:1},{label:'Tables Secured',val:'29/29',cls:'good',bar:1},{label:'Migrations',val:'31',cls:'good',bar:1}]}];
+  const svgNS='http://www.w3.org/2000/svg';const R=38,CX=45,CY=45,SW=7;const ARC_START=Math.PI*0.75,ARC_TOTAL=Math.PI*1.5,CIRC=2*Math.PI*R;const arcLen=(ARC_TOTAL/(2*Math.PI))*CIRC;const startOff=-(ARC_START/(2*Math.PI))*CIRC;
+  let gaugesBuilt=false;
+  function buildGauges(){const gaugeRow=document.getElementById('gaugeRow');domains.forEach((d,i)=>{const item=document.createElement('div');item.className='gauge-item';item.onclick=()=>selectDomain(i);const fillLen=arcLen*d.fill;const svg=document.createElementNS(svgNS,'svg');svg.setAttribute('class','gauge-svg');svg.setAttribute('viewBox','0 0 90 90');const track=document.createElementNS(svgNS,'circle');track.setAttribute('cx',CX);track.setAttribute('cy',CY);track.setAttribute('r',R);track.setAttribute('fill','none');track.setAttribute('stroke','rgba(255,255,255,0.06)');track.setAttribute('stroke-width',SW);track.setAttribute('stroke-dasharray',`${arcLen} ${CIRC}`);track.setAttribute('stroke-dashoffset',`${startOff}`);track.setAttribute('stroke-linecap','round');svg.appendChild(track);const arc=document.createElementNS(svgNS,'circle');arc.setAttribute('cx',CX);arc.setAttribute('cy',CY);arc.setAttribute('r',R);arc.setAttribute('fill','none');arc.setAttribute('stroke',d.color);arc.setAttribute('stroke-width',SW);arc.setAttribute('stroke-dasharray',`0 ${CIRC}`);arc.setAttribute('stroke-dashoffset',`${startOff}`);arc.setAttribute('stroke-linecap','round');arc.setAttribute('opacity','0.9');arc.dataset.fillLen=fillLen;svg.appendChild(arc);const pct=Math.round(d.fill*100);const txt=document.createElementNS(svgNS,'text');txt.setAttribute('x',CX);txt.setAttribute('y',CY+5);txt.setAttribute('text-anchor','middle');txt.setAttribute('font-family','Oxanium,sans-serif');txt.setAttribute('font-size','16');txt.setAttribute('font-weight','800');txt.setAttribute('fill',d.color);txt.textContent='0%';txt.dataset.pct=pct;svg.appendChild(txt);item.appendChild(svg);const nameEl=document.createElement('div');nameEl.className='gauge-name';nameEl.textContent=d.name.replace('\n',' ');const statusEl=document.createElement('div');statusEl.className='gauge-status';statusEl.style.color=d.statusColor;statusEl.textContent=d.statusLabel;item.appendChild(nameEl);item.appendChild(statusEl);gaugeRow.appendChild(item);});}
+  function animateGaugesIn(){const arcs=document.querySelectorAll('#gaugeRow circle[data-fill-len]');const txts=document.querySelectorAll('#gaugeRow text[data-pct]');arcs.forEach((arc,i)=>{const fillLen=parseFloat(arc.dataset.fillLen);const delay=i*200;arc.style.transition=`stroke-dasharray 1.4s cubic-bezier(0.4,0,0.2,1) ${delay}ms`;requestAnimationFrame(()=>arc.setAttribute('stroke-dasharray',`${fillLen} ${CIRC-fillLen}`));});txts.forEach((txt,i)=>{animateGaugePct(txt,parseInt(txt.dataset.pct),i*200);});}
+  function selectDomain(idx){const d=domains[idx];document.querySelectorAll('#sec-security .gauge-item').forEach((el,i)=>el.classList.toggle('active',i===idx));const panel=document.getElementById('secDetailPanel');const wasVisible=panel.classList.contains('visible');panel.classList.remove('visible');setTimeout(()=>{document.getElementById('secDpEyebrow').textContent=d.eyebrow;const titleEl=document.getElementById('secDpTitle');titleEl.textContent=d.title;titleEl.style.color=d.color;document.getElementById('secDpSummary').textContent=d.summary;document.getElementById('secDpPills').innerHTML=d.pills.map(p=>`<span class="dp-pill">${p}</span>`).join('');document.getElementById('secDpMetrics').innerHTML=d.metrics.map(m=>`<div class="dp-metric"><span class="dp-metric-label">${m.label}</span>${m.bar!==null?`<div class="dp-bar"><div class="dp-bar-fill" style="background:${m.cls==='good'?'var(--green)':m.cls==='warn'?'var(--amber)':'var(--accent)'}"></div></div>`:''}<span class="dp-metric-val ${m.cls}">${m.val}</span></div>`).join('');panel.classList.add('visible');setTimeout(()=>{const fills=document.querySelectorAll('#sec-security .dp-bar-fill');const barMetrics=d.metrics.filter(m=>m.bar!==null);fills.forEach((bar,i)=>{bar.style.transition=`width 1s var(--ease) ${i*0.1}s`;bar.style.width=(barMetrics[i].bar*100)+'%';});},120);},wasVisible?220:0);}
+  /* Screen 1 — title reveal */
+  revealSecurity=function(){document.getElementById('secEyebrow').classList.add('in');setTimeout(()=>document.getElementById('secTitle').classList.add('in'),150);setTimeout(()=>document.getElementById('secSummary').classList.add('in'),300);if(!gaugesBuilt){gaugesBuilt=true;buildGauges();}};
+  /* Screen 2 — gauges observer */
+  const screen2Obs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;screen2Obs.unobserve(entry.target);document.getElementById('secStatStrip').classList.add('in');document.querySelectorAll('#sec-security .stat-num[data-target]').forEach(el=>animateCounter(el,parseInt(el.dataset.target),el.dataset.fmt));setTimeout(()=>{document.getElementById('secGaugeSection').classList.add('in');animateGaugesIn();},400);setTimeout(()=>document.getElementById('secDetailWrap').classList.add('in'),1200);});},{threshold:0.15});
+  screen2Obs.observe(document.getElementById('secScreen2'));
+})();
+</script>
+</body>
+</html>

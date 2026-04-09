@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="navy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoBots Nexus - Pipeline</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+:root{
+  --bg:#080c14;--bg-card:#0d1424;--bg-raised:#0f1a30;
+  --accent:#64b4ff;--accent-2:#4a9aee;--accent-3:#a78bfa;
+  --text:#e8f4ff;--text-sub:#7a90aa;--text-dim:rgba(232,244,255,0.35);
+  --green:#00ff64;--amber:#f5a94f;--red:#ff4a36;--blue:#64b4ff;
+  --border:rgba(255,255,255,0.07);--border-accent:rgba(100,180,255,0.25);
+  --ease-snap:cubic-bezier(0.4,0.5,0,1);--ease-out:cubic-bezier(0.215,0.61,0.355,1);
+}
+[data-scheme="spotify"]{--bg:#121212;--bg-card:#1f1f1f;--bg-raised:#2a2a2a;--accent:#1ed760;--accent-2:#1abc54;--accent-3:#3be477;--text:#ffffff;--text-sub:#b3b3b3;--text-dim:rgba(255,255,255,0.35);--green:#1ed760;--amber:#ffa42b;--blue:#4cb3ff;--border:rgba(255,255,255,0.09);--border-accent:rgba(30,215,96,0.25);}
+[data-scheme="navy"]{--bg:#080c14;--bg-card:#0d1424;--bg-raised:#0f1a30;--accent:#64b4ff;--accent-2:#4a9aee;--accent-3:#a78bfa;--text:#e8f4ff;--text-sub:#7a90aa;--text-dim:rgba(232,244,255,0.35);--green:#00ff64;--amber:#f5a94f;--blue:#64b4ff;--border:rgba(255,255,255,0.07);--border-accent:rgba(100,180,255,0.25);}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+html{overflow-y:scroll;scrollbar-width:none;}html::-webkit-scrollbar{display:none;}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;}
+
+#aurora-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* ── SWITCHER ── */
+/* ── INTRO ── */
+.intro-section{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;padding-top:90px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.intro-eyebrow{font-family:'Share Tech Mono',monospace;font-size:clamp(0.72rem,0.95vw,0.95rem);letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;opacity:0;animation:fadeUp 0.8s var(--ease-out) 0.3s forwards;}
+.intro-title{font-family:'Oxanium',sans-serif;font-size:clamp(2.6rem,6vw,4.2rem);font-weight:800;letter-spacing:0.04em;line-height:1.1;margin-bottom:1.2rem;opacity:0;animation:fadeUp 0.8s var(--ease-out) 0.5s forwards;}
+.intro-title span{color:var(--accent);}
+.intro-sub{font-size:clamp(0.92rem,1.1vw,1.08rem);color:var(--text-sub);max-width:520px;line-height:1.7;opacity:0;animation:fadeUp 0.8s var(--ease-out) 0.7s forwards;}
+.scroll-hint{margin-top:2.5rem;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 0.8s var(--ease-out) 1s forwards;}
+.scroll-hint-text{font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;}
+.scroll-hint-bar{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 1.8s ease-in-out infinite;}
+@keyframes scrollPulse{0%,100%{opacity:0.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+
+/* ── PIPELINE SCROLL SECTION ── */
+#pipeline-scroll-section{position:relative;z-index:1;height:100vh;}
+#pipeline-fixed{position:sticky;top:0;height:100vh;overflow:hidden;opacity:0;transition:opacity 0.4s ease;}
+
+/* Progress bar */
+.pipeline-progress-track{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,0.06);z-index:10;}
+.pipeline-progress-fill{height:100%;background:var(--accent);width:0%;transition:width 0.1s linear;}
+
+/* Step counter */
+.step-counter{position:absolute;top:1.2rem;right:2rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;z-index:10;}
+.step-counter span{color:var(--accent);font-size:0.68rem;}
+
+/* Side dot nav */
+.side-dots{position:absolute;left:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;align-items:center;z-index:10;}
+.side-dot{position:relative;cursor:pointer;}
+.side-dot::before{content:'';display:block;width:5px;height:5px;border-radius:8px;background:none;box-shadow:rgba(255,255,255,0.2) 0 0 0 1.5px;transition:0.6s cubic-bezier(0.645,0.045,0.355,1);}
+.side-dot.active::before{height:44px;background:var(--accent);box-shadow:var(--accent) 0 0 0 0.5px;border-radius:3px;}
+.side-dot:hover::before{box-shadow:rgba(117,119,224,0.5) 0 0 0 1.5px;}
+
+
+/* Pipeline step base */
+.pipeline-step{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;width:100%;max-width:960px;
+  padding:0 6rem 0 8rem;
+  pointer-events:none;
+  will-change:transform,opacity;
+}
+/* .active just makes it interactive -animation classes handle appearance */
+.pipeline-step.active{ pointer-events:all; opacity:1; }
+
+/* Step layout */
+.step-layout{display:grid;grid-template-columns:90px 1fr;gap:2.5rem;align-items:start;position:relative;}
+.step-number{font-family:'Oxanium',sans-serif;font-size:5rem;font-weight:800;line-height:1;color:rgba(117,119,224,0.1);text-align:right;padding-top:6px;user-select:none;transition:color 0.5s ease;}
+.pipeline-step.active .step-number{color:rgba(117,119,224,0.18);}
+/* Badge */
+.step-type-badge{display:inline-flex;align-items:center;gap:7px;font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;padding:5px 13px;border-radius:100px;border:1px solid var(--border-accent);color:var(--text-sub);margin-bottom:0.8rem;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.badge-auto{border-color:rgba(117,119,224,0.3);}
+.badge-eval{border-color:rgba(145,135,255,0.3);}
+.badge-stress{border-color:rgba(255,107,90,0.3);}
+.badge-human{border-color:rgba(251,231,78,0.3);}
+.badge-deploy{border-color:rgba(51,184,135,0.3);}
+
+/* Text */
+.step-title{font-family:'Oxanium',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:0.03em;line-height:1.1;margin-bottom:1rem;color:var(--text);}
+.step-desc{font-family:'Space Grotesk',sans-serif;font-size:clamp(0.92rem,1.1vw,1.08rem);font-weight:400;color:var(--text-sub);line-height:1.75;max-width:580px;margin-bottom:1.5rem;}
+.step-chips{display:flex;gap:9px;flex-wrap:wrap;}
+.chip{padding:7px 15px;border-radius:6px;background:var(--bg-card);border:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:clamp(0.62rem,1vw,0.72rem);letter-spacing:0.07em;color:var(--text-sub);}
+.chip strong{color:var(--text);font-weight:600;}
+
+/* ── PILL-COLORED STEP BORDERS ── */
+.s0 .chip { border-color:rgba(100,180,255,0.4); background:rgba(100,180,255,0.06); }
+.s1 .chip { border-color:rgba(100,180,255,0.4); background:rgba(100,180,255,0.06); }
+.s2 .chip { border-color:rgba(100,180,255,0.4); background:rgba(100,180,255,0.06); }
+.s3 .chip { border-color:rgba(167,139,250,0.4); background:rgba(167,139,250,0.06); }
+.s4 .chip { border-color:rgba(167,139,250,0.4); background:rgba(167,139,250,0.06); }
+.s5 .chip { border-color:rgba(255,107,90,0.4); background:rgba(255,107,90,0.06); }
+.s6 .chip { border-color:rgba(100,180,255,0.4); background:rgba(100,180,255,0.06); }
+.s7 .chip { border-color:rgba(245,169,79,0.4); background:rgba(245,169,79,0.06); }
+.s8 .chip { border-color:rgba(0,255,100,0.4); background:rgba(0,255,100,0.06); }
+.s10 .chip { border-color:rgba(0,255,100,0.4); background:rgba(0,255,100,0.06); }
+.s11 .chip { border-color:rgba(245,169,79,0.4); background:rgba(245,169,79,0.06); }
+
+/* ── OUTRO ── */
+.outro-section{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;pointer-events:none;transition:opacity 1.6s ease;}
+.outro-inner{position:relative;padding:3rem 4rem;}
+.outro-section.visible{opacity:1;pointer-events:all;}
+
+/* ── TRANSFORMERS MECHANICAL LETTER ASSEMBLY ── */
+.outro-title{
+  font-family:'Oxanium',sans-serif;
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:800;letter-spacing:0.06em;text-transform:uppercase;
+  line-height:1;margin-bottom:1.4rem;
+  display:flex;align-items:center;justify-content:center;
+  gap:0.02em;position:relative;
+}
+.tf-letter{
+  display:inline-block;position:relative;
+}
+/* Face hidden purely by clip-path -no opacity, no transform, no boxes */
+.tf-face{
+  display:block;
+  clip-path:inset(0 100% 0 0);
+}
+.tf-green .tf-face{color:var(--green);}
+.tf-gap{display:inline-block;width:0.55em;}
+
+/* 6 wipe directions -clip-path only, no opacity/transform */
+.tf-letter.dir-0.lock .tf-face{ animation:tfWipe0 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes tfWipe0{ from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0% 0 0)} }
+
+.tf-letter.dir-1.lock .tf-face{ animation:tfWipe1 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes tfWipe1{ from{clip-path:inset(0 0 0 100%)} to{clip-path:inset(0 0 0 0%)} }
+
+.tf-letter.dir-2.lock .tf-face{ animation:tfWipe2 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes tfWipe2{ from{clip-path:inset(100% 0 0 0)} to{clip-path:inset(0% 0 0 0)} }
+
+.tf-letter.dir-3.lock .tf-face{ animation:tfWipe3 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes tfWipe3{ from{clip-path:inset(0 0 100% 0)} to{clip-path:inset(0 0 0% 0)} }
+
+.tf-letter.dir-4.lock .tf-face{ animation:tfWipe4 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes tfWipe4{ from{clip-path:inset(0 50% 0 50%)} to{clip-path:inset(0 0% 0 0%)} }
+
+.tf-letter.dir-5.lock .tf-face{ animation:tfWipe5 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes tfWipe5{ from{clip-path:inset(50% 0 50% 0)} to{clip-path:inset(0% 0 0% 0)} }
+
+/* Flash on the letter itself via filter -no extra elements */
+.tf-letter.flash .tf-face{ animation-name:tfWipe0,tfFlash !important; }
+.tf-letter.flash{ filter:brightness(2.5); animation:tfLetterFlash 0.3s ease forwards; }
+@keyframes tfLetterFlash{
+  0%  {filter:brightness(3);}
+  100%{filter:brightness(1);}
+}
+
+/* Final scanline sweeps full width after last letter locks */
+.outro-scanline{
+  position:absolute;left:0;width:0;height:2px;top:calc(50% - 1px);
+  background:linear-gradient(90deg,transparent,var(--accent),rgba(255,255,255,0.95),var(--accent),transparent);
+  box-shadow:0 0 14px var(--accent),0 0 35px rgba(117,119,224,0.4);
+  z-index:10;opacity:0;
+}
+.outro-scanline.sweep{animation:tfScan 0.55s cubic-bezier(0.4,0,0.2,1) forwards;}
+@keyframes tfScan{
+  0%  {opacity:1;width:0;}
+  100%{opacity:0;width:100%;}
+}
+
+/* Subtitle */
+.outro-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(0.78rem,1.4vw,0.92rem);
+  letter-spacing:0.22em;color:var(--text-sub);
+  opacity:0;text-transform:uppercase;
+}
+
+/* Spark canvas */
+.spark-canvas{
+  position:absolute;inset:-60px;
+  width:calc(100%+120px);height:calc(100%+120px);
+  pointer-events:none;opacity:0;
+}
+
+/* ══════════════════════════════════════════
+   10 UNIQUE STEP ANIMATIONS
+   Each uses its own keyframe family.
+   All elements start invisible; the animation
+   handles both appearing AND the motion.
+══════════════════════════════════════════ */
+
+/* ── STEP 0: GLITCH DECODE ──
+   Title scrambles with hue-shifted slice distortion,
+   resolves into real text. */
+.s0.active .step-type-badge{opacity:0;animation:s0fade 0.8s ease 0.5s forwards;}
+.s0.active .step-title{animation:s0glitch 2.8s steps(1) 0.2s both;}
+.s0.active .step-desc{opacity:0;animation:s0fade 0.9s ease 1.7s forwards;}
+.s0.active .chip:nth-child(1){opacity:0;animation:s0fade 0.6s ease 2.2s forwards;}
+.s0.active .chip:nth-child(2){opacity:0;animation:s0fade 0.6s ease 2.45s forwards;}
+.s0.active .chip:nth-child(3){opacity:0;animation:s0fade 0.6s ease 2.7s forwards;}
+.s0.active .chip:nth-child(4){opacity:0;animation:s0fade 0.6s ease 2.95s forwards;}
+@keyframes s0fade{to{opacity:1}}
+@keyframes s0glitch{
+  0%,6%  {opacity:1;clip-path:inset(45% 0 48% 0);transform:translate(-6px,0) skewX(-5deg);filter:hue-rotate(200deg) brightness(1.8);}
+  7%,13% {clip-path:inset(8% 0 82% 0);transform:translate(7px,-2px) skewX(4deg);filter:hue-rotate(90deg) brightness(2);}
+  14%,20%{clip-path:inset(65% 0 18% 0);transform:translate(-4px,3px);filter:hue-rotate(300deg);}
+  21%,27%{clip-path:inset(82% 0 4% 0);transform:translate(8px,0);filter:hue-rotate(0deg);}
+  28%,36%{clip-path:inset(25% 0 55% 0);transform:translate(-3px,-2px) skewX(2deg);filter:hue-rotate(120deg);}
+  37%,48%{clip-path:inset(0% 0 0% 0);transform:translate(2px,1px);filter:hue-rotate(30deg);}
+  49%,65%{clip-path:inset(0% 0 0% 0);transform:translate(-1px,0);filter:hue-rotate(0deg);}
+  66%,100%{clip-path:inset(0% 0 0% 0);transform:none;filter:none;opacity:1;}
+}
+
+/* ── STEP 1: 3D CARD FLIP ──
+   Entire layout rotates in on Y axis with elastic overshoot. */
+.s1.active .step-layout{animation:s1flip 1.5s cubic-bezier(0.34,1.3,0.64,1) 0.15s both;transform-style:preserve-3d;}
+@keyframes s1flip{
+  0%  {opacity:0;transform:perspective(1000px) rotateY(-95deg) scale(0.85);}
+  50% {opacity:1;transform:perspective(1000px) rotateY(12deg) scale(1.02);}
+  70% {transform:perspective(1000px) rotateY(-5deg) scale(0.99);}
+  85% {transform:perspective(1000px) rotateY(2deg);}
+  100%{transform:perspective(1000px) rotateY(0deg) scale(1);opacity:1;}
+}
+
+/* ── STEP 2: VENETIAN BLINDS ──
+   Content strips open vertically like physical blinds rotating. */
+.s2.active .step-type-badge{animation:s2blinds 1.4s ease 0.15s both;}
+.s2.active .step-title     {animation:s2blinds 1.5s ease 0.45s both;}
+.s2.active .step-desc      {animation:s2blinds 1.5s ease 0.8s both;}
+.s2.active .step-chips     {animation:s2blinds 1.4s ease 1.2s both;}
+@keyframes s2blinds{
+  0%  {opacity:0;transform:scaleY(0.08) skewX(-3deg);filter:blur(6px);}
+  38% {opacity:1;filter:blur(0);transform:scaleY(1.07) skewX(1.5deg);}
+  58% {transform:scaleY(0.96) skewX(0);}
+  76% {transform:scaleY(1.02);}
+  100%{transform:scaleY(1);opacity:1;}
+}
+
+/* ── STEP 3: SLOT MACHINE ROLL ──
+   Elements snap up from below with elastic decel, like reels stopping. */
+.s3.active .step-type-badge      {opacity:0;animation:s0fade 0.7s ease 0.15s forwards;}
+.s3.active .step-title           {animation:s3slot 1.8s cubic-bezier(0.22,1,0.36,1) 0.35s both;}
+.s3.active .step-desc            {opacity:0;animation:s0fade 0.8s ease 1.5s forwards;}
+.s3.active .chip:nth-child(1)    {animation:s3slot 1.2s cubic-bezier(0.22,1,0.36,1) 1.8s both;}
+.s3.active .chip:nth-child(2)    {animation:s3slot 1.2s cubic-bezier(0.22,1,0.36,1) 2.1s both;}
+.s3.active .chip:nth-child(3)    {animation:s3slot 1.2s cubic-bezier(0.22,1,0.36,1) 2.4s both;}
+.s3.active .chip:nth-child(4)    {animation:s3slot 1.2s cubic-bezier(0.22,1,0.36,1) 2.7s both;}
+@keyframes s3slot{
+  0%  {opacity:0;transform:translateY(100px) scaleY(1.8);filter:blur(6px);}
+  50% {opacity:1;filter:blur(0);transform:translateY(-12px) scaleY(0.95);}
+  70% {transform:translateY(6px) scaleY(1.03);}
+  85% {transform:translateY(-3px) scaleY(0.99);}
+  100%{transform:translateY(0) scaleY(1);opacity:1;}
+}
+
+/* ── STEP 4: TELEGRAPH FLASH ──
+   Each element blinks in with an electric surge, chips pop one by one. */
+.s4.active .step-type-badge   {animation:s4flash 1.3s ease 0.15s both;}
+.s4.active .step-title        {animation:s4flash 1.4s ease 0.6s both;}
+.s4.active .step-desc         {animation:s4flash 1.4s ease 1.2s both;}
+.s4.active .chip:nth-child(1) {animation:s4pop 0.75s ease 1.9s both;}
+.s4.active .chip:nth-child(2) {animation:s4pop 0.75s ease 2.2s both;}
+.s4.active .chip:nth-child(3) {animation:s4pop 0.75s ease 2.5s both;}
+.s4.active .chip:nth-child(4) {animation:s4pop 0.75s ease 2.8s both;}
+.s4.active .chip:nth-child(5) {animation:s4pop 0.75s ease 3.1s both;}
+@keyframes s4flash{
+  0%  {opacity:0;}
+  10% {opacity:1;filter:brightness(3) hue-rotate(30deg);}
+  25% {opacity:0.15;filter:brightness(1);}
+  40% {opacity:1;filter:brightness(2);}
+  65% {filter:brightness(1);}
+  100%{opacity:1;}
+}
+@keyframes s4pop{
+  0%  {opacity:0;transform:scale(0);}
+  45% {transform:scale(1.18);opacity:1;}
+  70% {transform:scale(0.95);}
+  100%{transform:scale(1);opacity:1;}
+}
+
+/* ── STEP 5: EARTHQUAKE ──
+   Violent multi-axis shake decelerates, then chips crack in from the side. */
+.s5.active .step-layout         {animation:s5quake 2.0s ease 0.1s both;}
+.s5.active .chip:nth-child(1)   {animation:s5crack 0.7s var(--ease-out) 2.1s both;}
+.s5.active .chip:nth-child(2)   {animation:s5crack 0.7s var(--ease-out) 2.45s both;}
+.s5.active .chip:nth-child(3)   {animation:s5crack 0.7s var(--ease-out) 2.8s both;}
+.s5.active .chip:nth-child(4)   {animation:s5crack 0.7s var(--ease-out) 3.15s both;}
+@keyframes s5quake{
+  0%  {opacity:0;transform:translate(0,0);}
+  5%  {opacity:1;transform:translate(-24px,2px);}
+  11% {transform:translate(21px,-3px);}
+  17% {transform:translate(-18px,3px);}
+  23% {transform:translate(15px,-1px);}
+  29% {transform:translate(-12px,2px);}
+  35% {transform:translate(9px,-2px);}
+  41% {transform:translate(-7px,1px);}
+  47% {transform:translate(5px,-1px);}
+  53% {transform:translate(-3px,0);}
+  59% {transform:translate(2px,1px);}
+  65% {transform:translate(-1px,0);}
+  72%,100%{transform:translate(0,0);opacity:1;}
+}
+@keyframes s5crack{
+  0%  {opacity:0;transform:scaleX(0) skewX(22deg);transform-origin:left;}
+  55% {transform:scaleX(1.08) skewX(-3deg);opacity:1;}
+  80% {transform:scaleX(0.98) skewX(0);}
+  100%{transform:scaleX(1);opacity:1;}
+}
+
+/* ── STEP 6: MATRIX CASCADE ──
+   Elements drop from above glowing green, desaturate as they land. */
+.s6.active .step-type-badge   {animation:s6drop 1.4s ease 0.15s both;}
+.s6.active .step-title        {animation:s6drop 1.5s ease 0.45s both;}
+.s6.active .step-desc         {animation:s6drop 1.6s ease 0.85s both;}
+.s6.active .chip:nth-child(1) {animation:s6char 1.1s ease 1.6s both;}
+.s6.active .chip:nth-child(2) {animation:s6char 1.1s ease 1.9s both;}
+.s6.active .chip:nth-child(3) {animation:s6char 1.1s ease 2.2s both;}
+.s6.active .chip:nth-child(4) {animation:s6char 1.1s ease 2.5s both;}
+@keyframes s6drop{
+  0%  {opacity:0;transform:translateY(-80px);filter:brightness(3.5) hue-rotate(110deg);color:var(--green);}
+  45% {opacity:1;color:var(--green);filter:brightness(2) hue-rotate(45deg);transform:translateY(6px);}
+  70% {color:var(--text);filter:brightness(1);transform:translateY(0);}
+  100%{opacity:1;filter:none;color:var(--text);}
+}
+@keyframes s6char{
+  0%  {opacity:0;transform:translateY(-55px);filter:brightness(4) hue-rotate(110deg);color:var(--green);}
+  55% {opacity:1;transform:translateY(0);color:var(--green);filter:brightness(1.5);}
+  100%{opacity:1;color:var(--text-sub);filter:none;}
+}
+
+/* ── STEP 7: TELEGRAM PING ──
+   Whole layout expands from a tiny bubble. Badge gets amber glow. */
+.s7.active .step-layout     {animation:s7ping 1.8s cubic-bezier(0.34,1.5,0.64,1) 0.15s both;transform-origin:center center;}
+.s7.active .step-type-badge {animation:s7glow 2.0s ease 0.8s both;}
+.s7.active .step-desc       {opacity:0;animation:s0fade 0.9s ease 1.5s forwards;}
+.s7.active .step-chips      {opacity:0;animation:s0fade 0.9s ease 1.9s forwards;}
+@keyframes s7ping{
+  0%  {opacity:0;transform:scale(0.12) translateY(40px);filter:blur(14px);}
+  40% {opacity:1;filter:blur(0);}
+  62% {transform:scale(1.06) translateY(-6px);}
+  78% {transform:scale(0.98) translateY(3px);}
+  90% {transform:scale(1.01);}
+  100%{transform:scale(1) translateY(0);opacity:1;}
+}
+@keyframes s7glow{
+  0%,100%{box-shadow:none;}
+  40%    {box-shadow:0 0 28px rgba(251,231,78,0.8),0 0 60px rgba(251,231,78,0.3);}
+}
+
+/* ── STEP 8: CIRCUIT TRACE ──
+   Glowing green line sweeps left to right. Elements illuminate as line passes. */
+.s8.active .step-layout::before{
+  content:'';position:absolute;left:0;top:50%;height:2px;width:0;
+  background:linear-gradient(90deg,transparent,var(--green),rgba(255,255,255,0.95),var(--green),transparent);
+  box-shadow:0 0 16px var(--green),0 0 40px rgba(51,184,135,0.35);
+  animation:s8traceline 2.4s ease 0.1s forwards;
+  pointer-events:none;z-index:5;
+}
+@keyframes s8traceline{0%{width:0;opacity:1}85%{opacity:1}100%{width:100%;opacity:0}}
+.s8.active .step-type-badge   {animation:s8lit 1.1s ease 0.7s both;}
+.s8.active .step-title        {animation:s8lit 1.2s ease 1.1s both;}
+.s8.active .step-desc         {animation:s8lit 1.3s ease 1.6s both;}
+.s8.active .chip:nth-child(1) {animation:s8chip 0.85s ease 2.3s both;}
+.s8.active .chip:nth-child(2) {animation:s8chip 0.85s ease 2.65s both;}
+.s8.active .chip:nth-child(3) {animation:s8chip 0.85s ease 3.0s both;}
+.s8.active .chip:nth-child(4) {animation:s8chip 0.85s ease 3.35s both;}
+@keyframes s8lit{
+  0%  {opacity:0;color:var(--green);filter:brightness(3);text-shadow:0 0 12px var(--green);}
+  40% {opacity:1;filter:brightness(1.6);text-shadow:0 0 5px var(--green);}
+  75% {color:var(--text);filter:brightness(1);text-shadow:none;}
+  100%{opacity:1;filter:none;text-shadow:none;}
+}
+@keyframes s8chip{
+  0%  {opacity:0;transform:scaleX(0);transform-origin:left;}
+  55% {transform:scaleX(1);opacity:1;}
+  100%{opacity:1;}
+}
+
+/* ── STEP 9: HEARTBEAT ──
+   Content flatlines then spikes with a sharp Y-scale surge and oscillates to rest. */
+.s9.active .step-layout       {animation:s9beat 2.2s ease 0.1s both;}
+.s9.active .step-desc         {opacity:0;animation:s0fade 0.9s ease 2.0s forwards;}
+.s9.active .chip:nth-child(1) {animation:s9pulse 0.85s ease 2.5s both;}
+.s9.active .chip:nth-child(2) {animation:s9pulse 0.85s ease 2.85s both;}
+.s9.active .chip:nth-child(3) {animation:s9pulse 0.85s ease 3.2s both;}
+.s9.active .chip:nth-child(4) {animation:s9pulse 0.85s ease 3.55s both;}
+@keyframes s9beat{
+  0%  {opacity:0;transform:scaleX(0.96) scaleY(0.2);filter:blur(4px);}
+  18% {opacity:0.5;transform:scaleX(1) scaleY(0.2);filter:blur(0);}
+  32% {transform:scaleX(1.04) scaleY(1.25);opacity:1;}
+  46% {transform:scaleX(0.99) scaleY(0.9);}
+  60% {transform:scaleX(1.005) scaleY(1.06);}
+  73% {transform:scaleX(0.998) scaleY(0.97);}
+  85% {transform:scaleX(1.001) scaleY(1.01);}
+  100%{transform:scaleX(1) scaleY(1);opacity:1;}
+}
+@keyframes s9pulse{
+  0%  {opacity:0;transform:scale(0.4);border-color:var(--green);background:rgba(51,184,135,0.2);box-shadow:0 0 16px rgba(51,184,135,0.5);}
+  45% {transform:scale(1.12);opacity:1;}
+  68% {transform:scale(0.97);box-shadow:none;}
+  100%{transform:scale(1);opacity:1;border-color:var(--border);background:var(--bg-card);}
+}
+
+/* ── STEP 10 (index 9): WARP ARRIVAL ──
+   Content zooms from deep space: scale(4)→scale(1) with motion blur, then sharpens. */
+.s10.active .step-layout    {animation:s10warp 2.0s cubic-bezier(0.165,0.84,0.44,1) 0.1s both;}
+.s10.active .step-type-badge{opacity:0;animation:s10beam 1.0s ease 1.4s forwards;}
+.s10.active .step-title     {animation:s10streak 1.4s cubic-bezier(0.22,1,0.36,1) 1.7s both;}
+.s10.active .step-desc      {opacity:0;animation:s0fade 1.0s ease 2.4s forwards;}
+.s10.active .chip:nth-child(1){opacity:0;animation:s10land 0.8s var(--ease-out) 2.9s forwards;}
+.s10.active .chip:nth-child(2){opacity:0;animation:s10land 0.8s var(--ease-out) 3.2s forwards;}
+.s10.active .chip:nth-child(3){opacity:0;animation:s10land 0.8s var(--ease-out) 3.5s forwards;}
+.s10.active .chip:nth-child(4){opacity:0;animation:s10land 0.8s var(--ease-out) 3.8s forwards;}
+@keyframes s10warp{
+  0%  {opacity:0;transform:scale(4.5) translateZ(0);filter:blur(22px) brightness(3.5);}
+  35% {opacity:1;filter:blur(3px) brightness(1.6);transform:scale(1.18);}
+  60% {filter:blur(0) brightness(1);transform:scale(0.97);}
+  78% {transform:scale(1.02);}
+  100%{transform:scale(1);opacity:1;filter:none;}
+}
+@keyframes s10streak{
+  0%  {opacity:0;transform:scaleX(2.2) translateX(50px);filter:blur(8px);}
+  55% {opacity:1;filter:blur(0);transform:scaleX(1.03) translateX(-4px);}
+  100%{transform:scaleX(1) translateX(0);opacity:1;}
+}
+@keyframes s10beam{
+  0%  {opacity:0;transform:scaleX(2.5);filter:blur(5px);}
+  55% {opacity:1;filter:blur(0);transform:scaleX(1.05);}
+  100%{transform:scaleX(1);opacity:1;}
+}
+@keyframes s10land{
+  0%  {opacity:0;transform:translateX(70px) scaleX(0.25);filter:blur(5px);}
+  55% {opacity:1;filter:blur(0);transform:translateX(-5px) scaleX(1.03);}
+  100%{transform:translateX(0) scaleX(1);opacity:1;}
+}
+
+/* -- STEP 11: FINISH LINE --
+   Golden number + glitch title + same timing as Step 10 + confetti */
+.s11-confetti { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:20; }
+
+/* Default hidden states */
+.s11 .step-title      { opacity:0; }
+.s11 .step-type-badge { opacity:0; }
+.s11 .step-desc       { opacity:0; }
+
+/* 1. NUMBER - golden bounce with radial burst */
+.s11.active .step-number {
+  animation:s11num 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;
+}
+.s11.active .step-layout::before {
+  content:''; position:absolute; right:calc(100% - 90px); top:0;
+  width:180px; height:180px; border-radius:50%;
+  background:radial-gradient(circle, rgba(245,169,79,0.45) 0%, rgba(245,169,79,0.1) 40%, transparent 70%);
+  animation:s11burst 2.0s ease 0.05s both;
+  pointer-events:none; z-index:0;
+}
+/* 2. BADGE - 300ms after number lands (~2.2s) */
+.s11.active .step-type-badge {
+  animation:s11badge 1.6s ease 2.2s forwards;
+}
+/* 3. TITLE - glitch flicker, 300ms after badge lands (~4.1s) */
+.s11.active .step-title {
+  animation:s11glitch 1.2s steps(1) 4.1s forwards;
+}
+/* 4. DESC - blur-to-sharp, 300ms after title lands (~5.6s) */
+.s11.active .step-desc {
+  animation:s11focus 0.8s ease 5.6s forwards;
+}
+/* 5. CHIPS - cascade, 300ms after desc lands (~6.7s) */
+.s11.active .chip:nth-child(1) { opacity:0; animation:s11chipBounce 0.8s var(--ease-out) 6.7s forwards; }
+.s11.active .chip:nth-child(2) { opacity:0; animation:s11chipBounce 0.8s var(--ease-out) 6.9s forwards; }
+.s11.active .chip:nth-child(3) { opacity:0; animation:s11chipBounce 0.8s var(--ease-out) 7.1s forwards; }
+.s11.active .chip:nth-child(4) { opacity:0; animation:s11chipBounce 0.8s var(--ease-out) 7.3s forwards; }
+.s11.active .chip:nth-child(5) { opacity:0; animation:s11chipBounce 0.8s var(--ease-out) 7.5s forwards; }
+
+@keyframes s11num {
+  0%   { opacity:0; transform:scale(0.3); color:rgba(245,169,79,0); }
+  30%  { opacity:1; transform:scale(1.25); color:rgba(245,169,79,0.6); }
+  50%  { transform:scale(0.95); color:rgba(245,169,79,0.4); }
+  70%  { transform:scale(1.05); }
+  100% { opacity:1; transform:scale(1); color:rgba(245,169,79,0.25); }
+}
+@keyframes s11burst {
+  0%   { opacity:0; transform:scale(0.2); }
+  20%  { opacity:1; transform:scale(1.0); }
+  60%  { opacity:0.4; transform:scale(1.6); }
+  100% { opacity:0; transform:scale(2.2); }
+}
+@keyframes s11badge {
+  0%   { opacity:0; transform:translateY(6px); box-shadow:none; }
+  30%  { opacity:1; transform:translateY(0); }
+  55%  { box-shadow:0 0 28px rgba(251,231,78,0.8), 0 0 60px rgba(251,231,78,0.3); }
+  80%  { box-shadow:0 0 12px rgba(251,231,78,0.3); }
+  100% { opacity:1; box-shadow:none; }
+}
+/* Glitch flicker: text rapidly flickers 4 times then stays visible */
+@keyframes s11glitch {
+  0%       { opacity:0; transform:scale(1.5); filter:blur(8px) brightness(2); }
+  8%       { opacity:1; transform:scale(1.05) skewX(-4deg); filter:blur(0) brightness(1.8); }
+  16%      { opacity:0; transform:scale(1.0) skewX(3deg); filter:brightness(1); }
+  24%      { opacity:1; transform:scale(1.02) skewX(-2deg); filter:brightness(2.2); }
+  32%      { opacity:0; transform:scale(1.0) skewX(1deg); }
+  40%      { opacity:1; transform:scale(1.03); filter:brightness(1.6); }
+  48%      { opacity:0.3; transform:scale(1.0); filter:brightness(1); }
+  60%      { opacity:1; transform:scale(1.01); filter:brightness(1.3); }
+  75%,100% { opacity:1; transform:scale(1) skewX(0); filter:none; }
+}
+@keyframes s11focus {
+  0%   { opacity:0; filter:blur(10px); transform:translateY(6px); }
+  50%  { opacity:0.7; filter:blur(3px); transform:translateY(1px); }
+  100% { opacity:1; filter:blur(0); transform:translateY(0); }
+}
+@keyframes s11chipBounce {
+  0%   { opacity:0; transform:translateY(14px) scale(0.85); }
+  50%  { opacity:1; transform:translateY(-3px) scale(1.05); }
+  75%  { transform:translateY(1px) scale(0.98); }
+  100% { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ── EXIT TRANSITION: EMBER BURN ──
+   Outgoing step brightens with a warm hue then dissolves upward. */
+.pipeline-step.exit{
+  animation:s_burn 0.7s ease forwards !important;
+  transform:translate(-50%,-50%) !important;
+}
+@keyframes s_burn{
+  0%  {opacity:1;filter:none;transform:translate(-50%,-50%) scale(1);}
+  22% {filter:brightness(1.6) hue-rotate(22deg) saturate(2);transform:translate(-50%,-51%) scale(1.01);}
+  60% {opacity:0.3;filter:brightness(3) blur(4px) hue-rotate(45deg);transform:translate(-50%,-57%) scale(0.96);}
+  100%{opacity:0;filter:brightness(4) blur(10px);transform:translate(-50%,-68%) scale(0.88);}
+}
+
+/* ── BUBBLE TRANSITION OVERLAY ── */
+#bubble-overlay{
+  position:fixed;inset:0;z-index:50;
+  pointer-events:none;
+  overflow:hidden;
+}
+.bubble{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:0;
+  transition:none;
+  will-change:transform,opacity;
+}
+/* Burst keyframes -each bubble flies to a different corner */
+@keyframes bubbleBurst0{
+  0%  {opacity:0.75;transform:translate(0,0) scale(1);}
+  30% {opacity:0.7;transform:translate(-18vw,-15vh) scale(1.3);}
+  100%{opacity:0;transform:translate(-70vw,-60vh) scale(3);}
+}
+@keyframes bubbleBurst1{
+  0%  {opacity:0.75;transform:translate(0,0) scale(1);}
+  30% {opacity:0.7;transform:translate(18vw,-12vh) scale(1.3);}
+  100%{opacity:0;transform:translate(70vw,-60vh) scale(3);}
+}
+@keyframes bubbleBurst2{
+  0%  {opacity:0.75;transform:translate(0,0) scale(1);}
+  30% {opacity:0.65;transform:translate(-15vw,14vh) scale(1.3);}
+  100%{opacity:0;transform:translate(-60vw,70vh) scale(3);}
+}
+@keyframes bubbleBurst3{
+  0%  {opacity:0.75;transform:translate(0,0) scale(1);}
+  30% {opacity:0.65;transform:translate(16vw,13vh) scale(1.3);}
+  100%{opacity:0;transform:translate(60vw,70vh) scale(3);}
+}
+/* Idle float animation before burst */
+@keyframes bubbleFloat0{0%,100%{transform:translate(0,0);}50%{transform:translate(-15px,-20px);}}
+@keyframes bubbleFloat1{0%,100%{transform:translate(0,0);}50%{transform:translate(20px,-15px);}}
+@keyframes bubbleFloat2{0%,100%{transform:translate(0,0);}50%{transform:translate(-10px,18px);}}
+@keyframes bubbleFloat3{0%,100%{transform:translate(0,0);}50%{transform:translate(18px,12px);}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .pipeline-step{padding:0 2rem 0 4rem;}
+  .step-layout{grid-template-columns:70px 1fr;gap:1.5rem;}
+  .step-number{font-size:3.5rem;}
+  .step-title{font-size:1.8rem;}
+}
+@media(max-width:768px){
+  .pipeline-step{padding:0 1.5rem 0 3.5rem;}
+  .step-layout{grid-template-columns:1fr;gap:0.4rem;}
+  .step-number{font-size:2.2rem;text-align:left;min-width:unset;}
+  .side-dots{left:0.7rem;gap:10px;}
+  .side-dot::before{width:4px;height:4px;}
+  .side-dot.active::before{height:28px;}
+  .step-counter{top:0.8rem;right:1rem;font-size:0.5rem;}
+  .intro-sub{font-size:0.9rem;}
+  .step-desc{max-width:100%;}
+  .step-chips{gap:6px;}
+}
+@media(max-width:480px){
+  .pipeline-step{padding:0 1rem 0 2.5rem;}
+  .side-dots{display:none;}
+  .step-title{font-size:1.5rem;}
+  .chip{font-size:0.6rem;padding:6px 11px;}
+  .step-type-badge{font-size:0.56rem;padding:4px 10px;}
+}
+/* ── SITE NAV ── */
+.site-nav { position:fixed; top:0; left:0; right:0; z-index:200; background:transparent; padding:0 clamp(1rem,2.5vw,2.5rem); height:clamp(48px,5.5vh,60px); display:flex; align-items:center; }
+.site-nav-inner { max-width:1600px; margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
+.site-nav .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.site-nav .logo-mark { width:28px; height:28px; border-radius:6px; background:linear-gradient(145deg,var(--bg-raised),var(--bg-surface,#1a2a50)); border:1px solid var(--border-accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.site-nav .logo-text { font-family:'Oxanium',sans-serif; font-size:clamp(0.72rem,0.95vw,0.92rem); font-weight:800; letter-spacing:0.1em; color:var(--text); }
+.site-nav .logo-text .sep { color:rgba(232,244,255,0.3); margin:0 3px; }
+.site-nav .logo-text .nexus { color:var(--accent); }
+.site-nav-links { display:flex; gap:2px; list-style:none; }
+.site-nav-links:hover a { opacity:0.3; }
+.site-nav-links a:hover { opacity:1 !important; color:var(--text); }
+.site-nav-links a { color:var(--sub,#8e8da0); text-decoration:none; font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.82vw,0.82rem); letter-spacing:0.08em; text-transform:uppercase; padding:clamp(6px,0.7vh,10px) clamp(10px,1vw,16px); border-radius:4px; transition:opacity 0.18s,color 0.18s; position:relative; }
+.site-nav-links a::before { content:''; position:absolute; left:14px; right:14px; bottom:4px; height:1px; background:var(--accent); transform:scaleX(0); transition:transform 0.3s cubic-bezier(0.76,0,0.24,1); transform-origin:100% 0; }
+.site-nav-links a:hover::before, .site-nav-links a.active::before { transform:scaleX(1); transform-origin:0% 0; }
+@media(max-width:860px){ .site-nav-links { display:none; } }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><line x1="8.5" y1="5" x2="13.5" y2="5" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><line x1="8.5" y1="17" x2="13.5" y2="17" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><line x1="5" y1="7.5" x2="5" y2="14.5" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><line x1="17" y1="7.5" x2="17" y2="14.5" stroke="#64b4ff" stroke-width="0.8" opacity="0.5"/><rect x="1.5" y="2.5" width="7" height="5" rx="1" stroke="#64b4ff" stroke-width="1" fill="rgba(100,180,255,0.08)"/><rect x="3" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="5.5" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="13.5" y="2.5" width="7" height="5" rx="1" stroke="#64b4ff" stroke-width="1" fill="rgba(100,180,255,0.08)"/><rect x="15" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="17.5" y="4" width="1.5" height="1.5" rx="0.3" fill="#a78bfa"/><rect x="1.5" y="14.5" width="7" height="5" rx="1" stroke="#00ff64" stroke-width="1" fill="rgba(0,255,100,0.08)"/><rect x="3" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/><rect x="5.5" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/><rect x="13.5" y="14.5" width="7" height="5" rx="1" stroke="#00ff64" stroke-width="1" fill="rgba(0,255,100,0.08)"/><rect x="15" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/><rect x="17.5" y="16" width="1.5" height="1.5" rx="0.3" fill="#00ff64"/></svg>
+      </div>
+      <div class="logo-text">AUTOBOTS <span class="sep">&middot;</span><span class="nexus"> NEXUS</span></div>
+    </a>
+    <ul class="site-nav-links">
+      <li><a href="index.html#sec-hero">Home</a></li>
+      <li><a href="index.html#sec-arch">Architecture</a></li>
+      <li><a href="index.html#sec-playbook">Playbook</a></li>
+      <li><a href="index.html#sec-notif">Notifications</a></li>
+      <li><a href="index.html#sec-security">Security</a></li>
+      <li><a href="pipeline.html" class="active">Pipeline</a></li>
+      <li><a href="reports.html">Reports</a></li>
+    </ul>
+  </div>
+</nav>
+
+<canvas id="aurora-canvas"></canvas>
+
+<!-- BUBBLE TRANSITION OVERLAY -->
+<div id="bubble-overlay">
+  <div class="bubble" id="b0"></div>
+  <div class="bubble" id="b1"></div>
+  <div class="bubble" id="b2"></div>
+  <div class="bubble" id="b3"></div>
+</div>
+
+<!-- TITLE SLIDE -->
+<section class="intro-section" id="introSection">
+  <div class="intro-eyebrow">Strategy Builder &middot; Pipeline</div>
+  <h1 class="intro-title">From Discovery to<br><span>Deployment</span></h1>
+  <p class="intro-sub">Eleven steps. Zero human intervention until Gate 2. The Strategy Builder runs continuously, discovering and testing strategies around the clock.</p>
+  <div class="scroll-hint">
+    <span class="scroll-hint-text">Scroll to explore</span>
+    <div class="scroll-hint-bar"></div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline-scroll-section">
+  <div id="pipeline-fixed">
+    <div class="pipeline-progress-track"><div class="pipeline-progress-fill" id="progressFill"></div></div>
+    <div class="step-counter">Step <span id="stepNum">1</span> of 11</div>
+    <div class="side-dots" id="sideDots">
+      <div class="side-dot type-auto" data-step="0"></div>
+      <div class="side-dot type-auto" data-step="1"></div>
+      <div class="side-dot type-auto" data-step="2"></div>
+      <div class="side-dot type-eval" data-step="3"></div>
+      <div class="side-dot type-eval" data-step="4"></div>
+      <div class="side-dot type-stress" data-step="5"></div>
+      <div class="side-dot type-auto" data-step="6"></div>
+      <div class="side-dot type-human" data-step="7"></div>
+      <div class="side-dot type-deploy" data-step="8"></div>
+      <div class="side-dot type-deploy" data-step="9"></div>
+      <div class="side-dot type-human" data-step="10"></div>
+      <div class="side-dot type-outro" id="outroDot"></div>
+    </div>
+
+    <!-- Step 0 -->
+    <div class="pipeline-step s0" data-step="0">
+      <div class="step-layout">
+        <div class="step-number">01</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-auto"><div class="badge-dot" style="background:var(--accent)"></div>Autonomous</div>
+          <h2 class="step-title">Strategy Discovery</h2>
+          <p class="step-desc">Research Bot scans 14 sources across YouTube, GitHub, Reddit, and trading websites. AI extracts the trading rules, indicators, and risk management approach from each source. Videos without captions are transcribed overnight by Whisper so nothing gets missed.</p>
+          <div class="step-chips">
+            <div class="chip"><strong>14</strong> Sources</div>
+            <div class="chip">YouTube · GitHub · Reddit</div>
+            <div class="chip">AI Extraction</div>
+            <div class="chip">Whisper GPU</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="pipeline-step s1" data-step="1">
+      <div class="step-layout">
+        <div class="step-number">02</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-auto"><div class="badge-dot" style="background:var(--accent)"></div>Autonomous</div>
+          <h2 class="step-title">Quality Checks</h2>
+          <p class="step-desc">Every extraction goes through pre-screening to filter out low-quality or incomplete strategies. Duplicate detection prevents the same idea from being processed twice. Strategies that fail get up to 3 retry attempts before being permanently shelved.</p>
+          <div class="step-chips">
+            <div class="chip">Pre-screening</div>
+            <div class="chip">Duplicate Detection</div>
+            <div class="chip"><strong>3</strong> Retry Attempts</div>
+            <div class="chip">Quality Filters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="pipeline-step s2" data-step="2">
+      <div class="step-layout">
+        <div class="step-number">03</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-auto"><div class="badge-dot" style="background:var(--accent)"></div>Autonomous</div>
+          <h2 class="step-title">Code Generation</h2>
+          <p class="step-desc">AI translates the extracted strategy description into executable trading code. Two independent code versions are generated and compared to catch inconsistencies. A security scan checks for dangerous patterns and a dry run on 100 candles verifies the code actually executes. Current pass rate: 73%.</p>
+          <div class="step-chips">
+            <div class="chip">Dual Code Gen</div>
+            <div class="chip">Security Scan</div>
+            <div class="chip">Dry Run Validation</div>
+            <div class="chip">73% Pass Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="pipeline-step s3" data-step="3">
+      <div class="step-layout">
+        <div class="step-number">04</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-eval"><div class="badge-dot" style="background:var(--accent-3)"></div>Evaluation</div>
+          <h2 class="step-title">Tier 1 Screening</h2>
+          <p class="step-desc">Three parallel backtests run across every ticker and timeframe combination. Each combo is evaluated against performance thresholds that scale with the length of historical data tested. Strategies scoring above 80 auto-advance with no human involvement.</p>
+          <div class="step-chips">
+            <div class="chip"><strong>3</strong> Parallel Backtests</div>
+            <div class="chip">Dynamic Thresholds</div>
+            <div class="chip">Score > 80 Auto-advance</div>
+            <div class="chip">No Human Input</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="pipeline-step s4" data-step="4">
+      <div class="step-layout">
+        <div class="step-number">05</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-eval"><div class="badge-dot" style="background:var(--accent-3)"></div>Evaluation</div>
+          <h2 class="step-title">Walk-Forward Optimization</h2>
+          <p class="step-desc">Runs overnight from 8 PM to 8 AM. The optimizer tunes strategy parameters across 6 rolling time windows, testing up to 500 parameter combinations per window. This ensures the strategy works across different market periods, not just one lucky stretch.</p>
+          <div class="step-chips">
+            <div class="chip">8 PM - 8 AM Window</div>
+            <div class="chip"><strong>6</strong> Rolling Windows</div>
+            <div class="chip">500 Combos/Window</div>
+            <div class="chip">Cross-period Validation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="pipeline-step s5" data-step="5">
+      <div class="step-layout">
+        <div class="step-number">06</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-stress"><div class="badge-dot" style="background:#ff6b5a"></div>Stress Test</div>
+          <h2 class="step-title">Tier 2 Evaluation</h2>
+          <p class="step-desc">The optimized strategy is evaluated strictly on data it has never seen before against six metrics: Profit Factor, Sharpe Ratio, Max Drawdown, Trade Count, Expectancy, and Recovery Factor. These thresholds are dynamic - a strategy tested on 5 years of data has different requirements than one tested on 2 years. Only strategies that prove a real edge on unseen data advance.</p>
+          <div class="step-chips">
+            <div class="chip"><strong>6</strong> Metrics</div>
+            <div class="chip">Unseen Data Only</div>
+            <div class="chip">Dynamic Thresholds</div>
+            <div class="chip">Profit Factor · Sharpe · Drawdown</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="pipeline-step s6" data-step="6">
+      <div class="step-layout">
+        <div class="step-number">07</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-auto"><div class="badge-dot" style="background:var(--accent)"></div>Autonomous</div>
+          <h2 class="step-title">Crash Stress Testing</h2>
+          <p class="step-desc">The strategy is forced into trades during three real historical crashes: COVID (March 2020), Luna collapse (May 2022), and FTX collapse (November 2022). Both long and short entries are tested. Crash performance is factored into the overall evaluation - a strategy that holds up under extreme conditions carries more confidence into the approval step.</p>
+          <div class="step-chips">
+            <div class="chip">COVID March 2020</div>
+            <div class="chip">Luna May 2022</div>
+            <div class="chip">FTX Nov 2022</div>
+            <div class="chip">Long + Short Tested</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="pipeline-step s7" data-step="7">
+      <div class="step-layout">
+        <div class="step-number">08</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-human"><div class="badge-dot" style="background:var(--amber)"></div>Human Gate</div>
+          <h2 class="step-title">My Decision</h2>
+          <p class="step-desc">The first of two human touchpoints. A Telegram notification arrives with the full performance report and approve/reject buttons. The operator reviews the numbers and decides if the strategy is worth paper trading. The second touchpoint comes later - deciding which strategy earns the live trading slot once it builds a track record.</p>
+          <div class="step-chips">
+            <div class="chip">Telegram Notification</div>
+            <div class="chip">Full Report Card</div>
+            <div class="chip">Approve/Reject</div>
+            <div class="chip">Single Human Step</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 8 -->
+    <div class="pipeline-step s8" data-step="8">
+      <div class="step-layout">
+        <div class="step-number">09</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-deploy"><div class="badge-dot" style="background:var(--green)"></div>Deploy</div>
+          <h2 class="step-title">Auto-Deployment</h2>
+          <p class="step-desc">Approved strategies are automatically added to the grouped ticker runner for their ticker and begin paper trading immediately. No manual process creation or configuration needed - the pipeline handles everything.</p>
+          <div class="step-chips">
+            <div class="chip">Grouped Runners</div>
+            <div class="chip">Auto-registration</div>
+            <div class="chip">Immediate Start</div>
+            <div class="chip">Zero Manual Steps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 9 -->
+    <div class="pipeline-step s10" data-step="9">
+      <div class="step-layout">
+        <div class="step-number">10</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-deploy"><div class="badge-dot" style="background:var(--green)"></div>Live</div>
+          <h2 class="step-title">Paper Trading Monitor</h2>
+          <p class="step-desc">Weekly health checks track every deployed strategy. The Performance Monitor compares strategies on the same ticker and ranks them. When a strategy hits its promotion threshold, it becomes eligible for the one live trading slot per ticker.</p>
+          <div class="step-chips">
+            <div class="chip">Weekly Health Checks</div>
+            <div class="chip">Strategy Rankings</div>
+            <div class="chip">Promotion Threshold</div>
+            <div class="chip">One Live Slot/Ticker</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 10 -->
+    <div class="pipeline-step s11" data-step="10">
+      <canvas class="s11-confetti" id="s11Confetti"></canvas>
+      <div class="step-layout">
+        <div class="step-number">11</div>
+        <div class="step-body">
+          <div class="step-type-badge badge-human"><div class="badge-dot" style="background:var(--amber)"></div>Human Gate</div>
+          <h2 class="step-title">Live Promotion</h2>
+          <p class="step-desc">The finish line. When a paper trading strategy builds enough track record and the Performance Monitor ranks it as the top performer for its ticker, it becomes eligible for the one live trading slot. The operator makes the final call - reviewing the strategy's real trading history, market condition performance, and risk metrics before promoting it to live capital. This is the second and final human decision in the entire pipeline.</p>
+          <div class="step-chips">
+            <div class="chip">Live Capital</div>
+            <div class="chip">Track Record</div>
+            <div class="chip">Performance Rankings</div>
+            <div class="chip">Final Approval</div>
+            <div class="chip">One Slot Per Ticker</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- OUTRO -->
+<section class="outro-section">
+  <div class="outro-inner" id="outroInner">
+    <div class="outro-title" id="outroTitle">
+      <div class="outro-scanline" id="outroScanline"></div>
+      <!-- AUTOBOTS -->
+      <span class="tf-letter" data-l="A"><span class="tf-face">A</span></span>
+      <span class="tf-letter" data-l="U"><span class="tf-face">U</span></span>
+      <span class="tf-letter" data-l="T"><span class="tf-face">T</span></span>
+      <span class="tf-letter" data-l="O"><span class="tf-face">O</span></span>
+      <span class="tf-letter" data-l="B"><span class="tf-face">B</span></span>
+      <span class="tf-letter" data-l="O2"><span class="tf-face">O</span></span>
+      <span class="tf-letter" data-l="T"><span class="tf-face">T</span></span>
+      <span class="tf-letter" data-l="S"><span class="tf-face">S</span></span>
+      <span class="tf-gap"></span>
+      <!-- NEVER STOP -->
+      <span class="tf-letter tf-green" data-l="N"><span class="tf-face">N</span></span>
+      <span class="tf-letter tf-green" data-l="E"><span class="tf-face">E</span></span>
+      <span class="tf-letter tf-green" data-l="V"><span class="tf-face">V</span></span>
+      <span class="tf-letter tf-green" data-l="E2"><span class="tf-face">E</span></span>
+      <span class="tf-letter tf-green" data-l="R"><span class="tf-face">R</span></span>
+      <span class="tf-gap"></span>
+      <span class="tf-letter tf-green" data-l="S2"><span class="tf-face">S</span></span>
+      <span class="tf-letter tf-green" data-l="T2"><span class="tf-face">T</span></span>
+      <span class="tf-letter tf-green" data-l="O3"><span class="tf-face">O</span></span>
+      <span class="tf-letter tf-green" data-l="P"><span class="tf-face">P</span></span>
+    </div>
+    <p class="outro-sub" id="outroSub">Autonomous · Relentless · Always Improving</p>
+    <canvas class="spark-canvas" id="sparkCanvas"></canvas>
+  </div>
+</section>
+
+<script>
+/* ── AURORA ── */
+const canvas=document.getElementById('aurora-canvas'),ctx=canvas.getContext('2d');
+const sD={purple:{bg:'#181824',orbs:[[107,102,218],[54,57,85],[145,135,255],[80,155,245],[107,102,218],[247,57,247]]},spotify:{bg:'#121212',orbs:[[30,215,96],[20,60,30],[59,228,119],[76,179,255],[30,215,96],[255,164,43]]},navy:{bg:'#080c14',orbs:[[100,180,255],[26,42,80],[167,139,250],[0,255,100],[100,180,255],[245,169,79]]}};
+const oB=[{x:0.2,y:0.3,r:0.4,s:0.35,o:0},{x:0.8,y:0.6,r:0.35,s:0.25,o:2.1},{x:0.5,y:0.9,r:0.3,s:0.45,o:1.3},{x:0.1,y:0.7,r:0.28,s:0.3,o:3.7},{x:0.9,y:0.2,r:0.32,s:0.2,o:5.1},{x:0.55,y:0.4,r:0.22,s:0.38,o:4.2}];
+let cS='navy',cB='aurora',bT=0,pts=[];
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;pts=Array.from({length:80},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*1.5+0.5,l:Math.random()}));}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+function drawAurora(){
+  const W=canvas.width,H=canvas.height;ctx.fillStyle=sD[cS].bg;ctx.fillRect(0,0,W,H);
+  if(cB==='aurora'){oB.forEach((o,i)=>{const c=sD[cS].orbs[i],x=(o.x+Math.sin(bT*o.s+o.o)*0.25)*W,y=(o.y+Math.cos(bT*o.s*0.7+o.o)*0.2)*H,r=o.r*Math.max(W,H),g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${c},0.15)`);g.addColorStop(0.5,`rgba(${c},0.05)`);g.addColorStop(1,`rgba(${c},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();});}
+  else if(cB==='grid'){const c=sD[cS].orbs[0],gs=30;ctx.strokeStyle=`rgba(${c},0.07)`;ctx.lineWidth=0.5;for(let i=0;i<=Math.ceil(W/gs);i++){ctx.beginPath();ctx.moveTo(i*gs,0);ctx.lineTo(i*gs,H);ctx.stroke();}for(let i=0;i<=Math.ceil(H/gs);i++){ctx.beginPath();ctx.moveTo(0,i*gs);ctx.lineTo(W,i*gs);ctx.stroke();}for(let r=0;r<=Math.ceil(H/gs);r++)for(let cc=0;cc<=Math.ceil(W/gs);cc++){const p=(Math.sin(bT*1.5+r*0.7+cc*0.5)+1)*0.5;if(p>0.75){ctx.fillStyle=`rgba(${c},${(p-0.75)*0.7})`;ctx.beginPath();ctx.arc(cc*gs,r*gs,1.5,0,Math.PI*2);ctx.fill();}}}
+  else{const c=sD[cS].orbs[0],c2=sD[cS].orbs[2];pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.l+=0.003;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;const a=(Math.sin(p.l*Math.PI*2)*0.4+0.5)*0.7;ctx.fillStyle=`rgba(${c},${a*0.8})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();});ctx.lineWidth=0.4;for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<90){ctx.strokeStyle=`rgba(${c2},${(1-d/90)*0.12})`;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}}}
+  bT+=0.006;requestAnimationFrame(drawAurora);
+}
+drawAurora();
+
+function setBg(n,btn){cB=n;resizeCanvas();document.querySelectorAll('.switcher .sw-group:nth-child(2) .sw-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+
+/* ── BUBBLE SYSTEM ── */
+const overlay = document.getElementById('bubble-overlay');
+const bubbles = [
+  document.getElementById('b0'),
+  document.getElementById('b1'),
+  document.getElementById('b2'),
+  document.getElementById('b3'),
+];
+
+// Bubble colors match aurora orbs per scheme
+const bubbleColors = {
+  purple: ['107,102,218','145,135,255','80,155,245','247,57,247'],
+  spotify: ['30,215,96','59,228,119','76,179,255','255,164,43'],
+  navy:   ['100,180,255','167,139,250','0,255,100','245,169,79'],
+};
+
+function applyBubbleColors() {
+  const colors = bubbleColors[cS] || bubbleColors.purple;
+  const W = window.innerWidth, H = window.innerHeight;
+  const positions = [
+    { left:'35%', top:'30%', w:'55vmin', h:'55vmin' },
+    { left:'50%', top:'25%', w:'45vmin', h:'45vmin' },
+    { left:'30%', top:'50%', w:'40vmin', h:'40vmin' },
+    { left:'55%', top:'45%', w:'50vmin', h:'50vmin' },
+  ];
+  bubbles.forEach((b, i) => {
+    const p = positions[i];
+    b.style.cssText = `
+      width:${p.w};height:${p.h};left:${p.left};top:${p.top};
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle at 40% 40%, rgba(${colors[i]},0.55), rgba(${colors[i]},0.08));
+      filter:blur(55px);opacity:0.65;
+      animation:bubbleFloat${i} ${3.5+i*0.7}s ease-in-out infinite;
+    `;
+  });
+}
+applyBubbleColors();
+
+// Re-apply on scheme change
+let burstDone = false;
+let pipelineUnlocked = false;
+
+function burstBubbles() {
+  if (burstDone) return;
+  burstDone = true;
+
+  const intro = document.getElementById('introSection');
+
+  // Bubbles burst outward simultaneously with intro fade
+  bubbles.forEach((b, i) => {
+    b.style.animation = 'none';
+    void b.offsetWidth;
+    b.style.animation = `bubbleBurst${i} 3.2s cubic-bezier(0.0,0,0.2,1) ${i*0.12}s forwards`;
+  });
+
+  intro.style.transition = 'opacity 2.0s ease, transform 1.8s ease';
+  intro.style.opacity = '0';
+  intro.style.transform = 'scale(1.05)';
+
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    intro.style.display = 'none';
+
+    // Fade in the pipeline
+    const pf = document.getElementById('pipeline-fixed');
+    pf.style.opacity = '1';
+
+    pipelineUnlocked = true;
+
+    // Activate step 0 -no scroll jump needed since intro was fixed
+    steps[0].classList.add('active');
+    triggerAnim(steps[0]);
+    dots[0].classList.add('active');
+  }, 2500);
+}
+
+// Intercept first scroll while on intro
+let introScrolled = false;
+
+function handleFirstScroll(e) {
+  if (introScrolled || pipelineUnlocked) return;
+
+  // Only if we're still on the intro (scrollY near 0)
+  if (window.scrollY > window.innerHeight * 0.3) return;
+
+  // Check direction -only trigger on scroll down
+  const delta = e.deltaY || e.touches?.[0]?.clientY;
+  if (e.deltaY !== undefined && e.deltaY <= 0) return;
+
+  introScrolled = true;
+  e.preventDefault();
+  burstBubbles();
+}
+
+window.addEventListener('wheel', handleFirstScroll, { passive: false });
+window.addEventListener('touchstart', (e) => {
+  if (introScrolled || pipelineUnlocked) return;
+  lastTouchY = e.touches[0].clientY;
+}, { passive: true });
+let lastTouchY = 0;
+window.addEventListener('touchmove', (e) => {
+  if (introScrolled || pipelineUnlocked) return;
+  const delta = lastTouchY - e.touches[0].clientY;
+  if (delta > 10) {
+    introScrolled = true;
+    burstBubbles();
+  }
+}, { passive: true });
+
+/* ── PIPELINE SCROLL LOGIC ── */
+const steps=document.querySelectorAll('.pipeline-step');
+const dots=document.querySelectorAll('.side-dot');
+const progressFill=document.getElementById('progressFill');
+const stepNum=document.getElementById('stepNum');
+const section=document.getElementById('pipeline-scroll-section');
+const outroInner=document.getElementById('outroInner');
+const ANIM_CLASSES=['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+const TOTAL_STEPS=11;
+let currentStep=0;
+let stepCooldown=false; // prevent rapid multi-step jumps
+
+function triggerAnim(stepEl){
+  const cls=ANIM_CLASSES.find(c=>stepEl.classList.contains(c));
+  if(!cls)return;
+  stepEl.classList.remove(cls);
+  void stepEl.offsetWidth;
+  stepEl.classList.add(cls);
+  // Fire confetti when Step 11 activates (after all content lands ~4s)
+  if(cls==='s11') setTimeout(fireS11Confetti, 8600);
+}
+
+function fireS11Confetti(){
+  const cv=document.getElementById('s11Confetti');
+  if(!cv)return;
+  const parent=cv.parentElement;
+  cv.width=parent.offsetWidth; cv.height=parent.offsetHeight;
+  const cx=cv.getContext('2d');
+  const COLORS=['#f7931a','#627eea','#9945ff','#34d399','#60a5fa','#f3ba2f','#e84142','#ffffff'];
+  const N=90;
+  const H=cv.height;
+  const particles=Array.from({length:N},()=>{
+    const angle=Math.random()*Math.PI*2;
+    const speed=1.2+Math.random()*3.5;
+    const isRect=Math.random()>0.45;
+    return {
+      x:cv.width*0.4+Math.random()*cv.width*0.2,
+      y:cv.height*0.35+Math.random()*cv.height*0.1,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed-3.5,
+      rot:Math.random()*360,
+      rotV:(Math.random()-0.5)*8,
+      swayAmp:0.3+Math.random()*0.8,
+      swaySpeed:0.02+Math.random()*0.03,
+      swayT:Math.random()*Math.PI*2,
+      size:isRect?[3+Math.random()*5,7+Math.random()*9]:[2+Math.random()*3.5],
+      color:COLORS[Math.floor(Math.random()*COLORS.length)],
+      life:1,
+      isRect:isRect,
+      phase:'burst',
+      burstFrames:0,
+    };
+  });
+  function draw(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    let alive=false;
+    particles.forEach(p=>{
+      if(p.life<=0)return;
+      alive=true;
+      p.burstFrames++;
+      // Burst phase: initial explosion, then transition to falling
+      if(p.phase==='burst'&&p.burstFrames>18){
+        p.phase='fall';
+        p.vx*=0.3;
+        p.vy=Math.abs(p.vy)*0.15+0.3;
+      }
+      if(p.phase==='burst'){
+        p.x+=p.vx; p.y+=p.vy;
+        p.vy+=0.08;
+        p.vx*=0.97;
+      } else {
+        // Falling: gravity + sway
+        p.vy+=0.04;
+        p.vy=Math.min(p.vy,2.2);
+        p.swayT+=p.swaySpeed;
+        p.x+=p.vx+Math.sin(p.swayT)*p.swayAmp;
+        p.y+=p.vy;
+        p.vx*=0.995;
+        p.rotV*=0.998;
+        // Fade near bottom
+        const bottomZone=H*0.75;
+        if(p.y>bottomZone){
+          p.life-=0.008;
+        }
+        // Slow constant fade
+        p.life-=0.0018;
+      }
+      p.rot+=p.rotV;
+      // Off-screen fade
+      if(p.y>H)p.life=0;
+      cx.save();
+      cx.globalAlpha=Math.max(0,Math.min(1,p.life));
+      cx.translate(p.x,p.y);
+      cx.rotate(p.rot*Math.PI/180);
+      cx.fillStyle=p.color;
+      if(p.isRect){
+        cx.fillRect(-p.size[0]/2,-p.size[1]/2,p.size[0],p.size[1]);
+      } else {
+        cx.beginPath();cx.arc(0,0,p.size[0],0,Math.PI*2);cx.fill();
+      }
+      cx.restore();
+    });
+    if(alive)requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+function setStep(newStep){
+  if(newStep===currentStep)return;
+  if(newStep<0||newStep>=TOTAL_STEPS)return;
+  steps[currentStep].classList.remove('active');
+  steps[currentStep].classList.add('exit');
+  setTimeout(()=>steps[currentStep].classList.remove('exit'),700);
+  dots[currentStep].classList.remove('active');
+  currentStep=newStep;
+  triggerAnim(steps[currentStep]);
+  steps[currentStep].classList.add('active');
+  dots[currentStep].classList.add('active');
+  stepNum.textContent=currentStep+1;
+  progressFill.style.width=((currentStep/(TOTAL_STEPS-1))*100)+'%';
+}
+
+function advance(dir){
+  // dir: +1 forward, -1 backward
+  if(stepCooldown)return;
+  if(dir>0 && currentStep===TOTAL_STEPS-1){
+    // Already on last step -fire outro on next forward scroll
+    if(!outroFired)fireOutro();
+    return;
+  }
+  if(dir<0 && currentStep===0){
+    restoreIntro();
+    return;
+  }
+  setStep(currentStep+dir);
+  stepCooldown=true;
+  setTimeout(()=>stepCooldown=false, 1400);
+}
+
+// Wheel: one meaningful scroll tick = one step
+let wheelAcc=0;
+let wheelTimer=null;
+window.addEventListener('wheel',(e)=>{
+  if(!pipelineUnlocked)return;
+  e.preventDefault();
+  wheelAcc+=e.deltaY;
+  clearTimeout(wheelTimer);
+  wheelTimer=setTimeout(()=>{
+    if(Math.abs(wheelAcc)>20){
+      advance(wheelAcc>0?1:-1);
+    }
+    wheelAcc=0;
+  },40);
+},{passive:false});
+
+// Touch: swipe up/down = one step
+let touchStartY=0;
+window.addEventListener('touchstart',(e)=>{
+  if(!pipelineUnlocked)return;
+  touchStartY=e.touches[0].clientY;
+},{passive:true});
+window.addEventListener('touchend',(e)=>{
+  if(!pipelineUnlocked)return;
+  const dy=touchStartY-e.changedTouches[0].clientY;
+  if(Math.abs(dy)>40)advance(dy>0?1:-1);
+},{passive:true});
+
+// Dot click nav
+dots.forEach((dot,i)=>{
+  dot.addEventListener('click',()=>{
+    if(!pipelineUnlocked)return;
+    if(i===currentStep)return;
+    const dir=i>currentStep?1:-1;
+    // Jump directly, bypassing cooldown for dot clicks
+    stepCooldown=false;
+    setStep(i);
+    stepCooldown=true;
+    setTimeout(()=>stepCooldown=false,1400);
+  });
+});
+
+function restoreIntro(){
+  pipelineUnlocked = false;
+  burstDone = false;
+  introScrolled = false;
+  outroFired = false;
+  stepCooldown = false;
+  wheelAcc = 0;
+
+  // Hide pipeline
+  const pf = document.getElementById('pipeline-fixed');
+  pf.style.transition = 'opacity 0.5s ease';
+  pf.style.opacity = '0';
+
+  // Hide outro if showing
+  const outroSec = document.querySelector('.outro-section');
+  if(outroSec) outroSec.classList.remove('visible');
+
+  // Restore intro
+  const intro = document.getElementById('introSection');
+  intro.style.display = '';
+  intro.style.transform = 'scale(1)';
+  intro.style.opacity = '0';
+  void intro.offsetWidth;
+  intro.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  intro.style.opacity = '1';
+
+  // Restore overlay bubbles
+  overlay.style.display = '';
+  applyBubbleColors();
+
+  // Reset steps
+  steps.forEach(s=>{ s.classList.remove('active','exit'); });
+  dots.forEach(d=>d.classList.remove('active'));
+  currentStep=0;
+  stepNum.textContent='1';
+  progressFill.style.width='0%';
+}
+
+let outroFired = false;
+function fireOutro() {
+  outroFired = true;
+  const outroSec = document.querySelector('.outro-section');
+  if(outroSec) outroSec.classList.add('visible');
+  // Fade out pipeline so step 10 doesn't show behind outro and aurora is visible
+  const pf = document.getElementById('pipeline-fixed');
+  if(pf){ pf.style.transition='opacity 1.2s ease'; pf.style.opacity='0'; }
+  // Deactivate current step dot, activate outro dot
+  dots[currentStep].classList.remove('active');
+  const outroDot = document.getElementById('outroDot');
+  if(outroDot) outroDot.classList.add('active');
+
+  function resetOutro() {
+    document.querySelectorAll('.tf-letter').forEach(l=>{
+      l.classList.remove('lock','flash','dir-0','dir-1','dir-2','dir-3','dir-4','dir-5');
+      const face = l.querySelector('.tf-face');
+      if(face){ face.style.animation='none'; void face.offsetWidth; face.style.animation=''; }
+    });
+    const sub = document.getElementById('outroSub');
+    if(sub) sub.style.opacity='0';
+    const scanline = document.getElementById('outroScanline');
+    if(scanline) scanline.classList.remove('sweep');
+  }
+
+  // Allow scrolling back from outro
+  outroSec.addEventListener('wheel',(e)=>{
+    if(e.deltaY < 0){
+      e.stopPropagation();
+      outroSec.classList.remove('visible');
+      // Restore pipeline and dots
+      const pf2 = document.getElementById('pipeline-fixed');
+      if(pf2){ pf2.style.transition='opacity 0.6s ease'; pf2.style.opacity='1'; }
+      dots[currentStep].classList.add('active');
+      const outroDot2 = document.getElementById('outroDot');
+      if(outroDot2) outroDot2.classList.remove('active');
+      // Re-trigger step 10's entry animation
+      steps[currentStep].classList.remove('active');
+      void steps[currentStep].offsetWidth;
+      triggerAnim(steps[currentStep]);
+      steps[currentStep].classList.add('active');
+      setTimeout(resetOutro, 500);
+      outroFired = false;
+      stepCooldown = true;
+      setTimeout(()=>stepCooldown=false, 1400);
+    }
+  },{passive:false, capture:true});
+
+  // Wait for the section to fully fade in (1.6s transition) before assembling
+  const FADE_DELAY = 1700;
+  const GAP_MS = 120;
+  const LOCK_DUR = 500;
+
+  // Assign dissolve direction to each letter (cycles 0-5)
+  const letters = document.querySelectorAll('.tf-letter');
+  letters.forEach((l, i) => l.classList.add(`dir-${i % 6}`));
+
+  letters.forEach((letter, i) => {
+    setTimeout(() => {
+      letter.classList.add('lock');
+      setTimeout(() => {
+        letter.classList.add('flash');
+        if(i % 3 === 2) runLetterSpark(letter);
+        setTimeout(() => letter.classList.remove('flash'), 300);
+      }, LOCK_DUR * 0.7);
+    }, FADE_DELAY + i * GAP_MS);
+  });
+
+  const totalTime = FADE_DELAY + letters.length * GAP_MS + LOCK_DUR;
+  setTimeout(() => {
+    const scanline = document.getElementById('outroScanline');
+    if(scanline) scanline.classList.add('sweep');
+    runSparks();
+  }, totalTime);
+
+  setTimeout(() => {
+    const sub = document.getElementById('outroSub');
+    if(sub){ sub.style.transition='opacity 1.2s ease'; sub.style.opacity='1'; }
+  }, totalTime + 700);
+}
+
+function runLetterSpark(letterEl) {
+  const sc = document.getElementById('sparkCanvas');
+  if(!sc.width) { sc.width=sc.offsetWidth; sc.height=sc.offsetHeight; }
+  const cx = sc.getContext('2d');
+  sc.style.opacity = '1';
+  const rect = letterEl.getBoundingClientRect();
+  const canvasRect = sc.getBoundingClientRect();
+  const cx0 = rect.left + rect.width/2 - canvasRect.left;
+  const cy0 = rect.top + rect.height/2 - canvasRect.top;
+  const colors = cS==='spotify'?['30,215,96','255,255,255']:cS==='navy'?['100,180,255','255,255,255']:['255,200,80','255,255,255','117,119,224'];
+  const sparks = Array.from({length:12},()=>({
+    x:cx0,y:cy0,
+    vx:(Math.random()-0.5)*7,vy:(Math.random()-0.5)*6-1,
+    life:1,decay:0.06+Math.random()*0.06,
+    len:2+Math.random()*8,
+    color:colors[Math.floor(Math.random()*colors.length)],
+  }));
+  function draw(){
+    let alive=false;
+    sparks.forEach(s=>{
+      if(s.life<=0)return;
+      alive=true;s.life-=s.decay;s.x+=s.vx;s.y+=s.vy;s.vy+=0.2;
+      cx.beginPath();cx.moveTo(s.x,s.y);cx.lineTo(s.x-s.vx*s.len*0.3,s.y-s.vy*s.len*0.3);
+      cx.strokeStyle=`rgba(${s.color},${Math.max(0,s.life)})`;cx.lineWidth=1.2;cx.stroke();
+    });
+    if(alive)requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+function runSparks() {
+  const sc = document.getElementById('sparkCanvas');
+  const rect = sc.parentElement.getBoundingClientRect();
+  sc.width = sc.offsetWidth;
+  sc.height = sc.offsetHeight;
+  const cx = sc.getContext('2d');
+  sc.style.opacity = '1';
+
+  const colors = cS === 'spotify' ? ['30,215,96','255,255,255','255,164,43']
+               : cS === 'navy'    ? ['100,180,255','255,255,255','167,139,250']
+               :                    ['117,119,224','255,255,255','145,135,255'];
+
+  const sparks = Array.from({length:55}, () => ({
+    x: sc.width/2 + (Math.random()-0.5)*sc.width*0.7,
+    y: sc.height/2 + (Math.random()-0.5)*sc.height*0.5,
+    vx: (Math.random()-0.5)*9,
+    vy: (Math.random()-0.5)*7 - 2,
+    life:1, decay: 0.025+Math.random()*0.04,
+    len: 4+Math.random()*18,
+    color: colors[Math.floor(Math.random()*colors.length)],
+  }));
+
+  function drawSparks() {
+    cx.clearRect(0,0,sc.width,sc.height);
+    let alive = false;
+    sparks.forEach(s => {
+      if(s.life <= 0) return;
+      alive = true;
+      s.life -= s.decay;
+      s.x += s.vx; s.y += s.vy; s.vy += 0.18;
+      cx.beginPath();
+      cx.moveTo(s.x, s.y);
+      cx.lineTo(s.x - s.vx*s.len*0.4, s.y - s.vy*s.len*0.4);
+      cx.strokeStyle = `rgba(${s.color},${Math.max(0,s.life)})`;
+      cx.lineWidth = 1.5;
+      cx.stroke();
+    });
+    if(alive) requestAnimationFrame(drawSparks);
+    else sc.style.opacity='0';
+  }
+  requestAnimationFrame(drawSparks);
+}
+
+// Outro dot click -jump straight to outro
+const outroDotEl = document.getElementById('outroDot');
+if(outroDotEl){
+  outroDotEl.addEventListener('click',()=>{
+    if(!pipelineUnlocked) return;
+    if(outroFired) return;
+    stepCooldown = false;
+    fireOutro();
+  });
+}
+function setScheme(n,btn){
+  cS=n;const m={purple:'',spotify:'spotify',navy:'navy'};const a=m[n];
+  if(a)document.documentElement.setAttribute('data-scheme',a);
+  else document.documentElement.removeAttribute('data-scheme');
+  document.querySelectorAll('.switcher .sw-group:nth-child(1) .sw-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(!burstDone)applyBubbleColors();
+}
+</script>
+</body>
+</html>

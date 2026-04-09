@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server 8000)",
+      "Bash(python \"C:\\\\Users\\\\drsat\\\\AppData\\\\Local\\\\Temp\\\\test_reports.py\")",
+      "Bash(pip install:*)",
+      "Bash(python -m playwright install chromium)",
+      "Bash(python:*)",
+      "Bash(mv autobots-hero-FINAL.html autobots-hero.html)",
+      "Bash(mv arch-final.html architecture.html)",
+      "Bash(mv pipeline-oryzo.html pipeline.html)",
+      "Bash(mv security-d.html security.html)",
+      "Bash(mv reports-v2.html reports.html)",
+      "Bash(where python:*)",
+      "Bash(PYTHONUTF8=1 python:*)",
+      "Bash(pm2 logs:*)",
+      "Bash(ls -d \"A:/GitHub-Repos/trading-bot/jesse_trading/strategies/Generated_\"*)",
+      "Bash(grep -rl \"ta\\\\.supertrend\" \"A:/GitHub-Repos/trading-bot/jesse_trading/strategies/Generated_\"*)",
+      "Bash(find \"A:/GitHub-Repos/trading-bot/jesse_trading/strategies/Generated_\"* -name \"__init__.py\")",
+      "Bash(grep -h \"ta\\\\.\" \"A:/GitHub-Repos/trading-bot/jesse_trading/strategies/Generated_\"*/__init__.py)",
+      "Bash(grep -l \"ta\\\\.supertrend\" \"A:/GitHub-Repos/trading-bot/jesse_trading/strategies/Generated_\"*/__init__.py)",
+      "Bash(sed -n '172p' index.html)",
+      "Bash(sed -n '613p' index.html)",
+      "Bash(sed -n '614p' index.html)",
+      "Bash(claude --version)"
+    ]
+  }
+}
