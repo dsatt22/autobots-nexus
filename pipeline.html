@@ -661,7 +661,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 <section id="pipeline-scroll-section">
   <div id="pipeline-fixed">
     <div class="pipeline-progress-track"><div class="pipeline-progress-fill" id="progressFill"></div></div>
-    <div class="step-counter">Step <span id="stepNum">1</span> of 11</div>
+    <div class="step-counter">Step <span id="stepNum">1</span> of <span data-site="pipeline.total_steps">11</span></div>
     <div class="side-dots" id="sideDots">
       <div class="side-dot type-auto" data-step="0"></div>
       <div class="side-dot type-auto" data-step="1"></div>
@@ -686,7 +686,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
           <h2 class="step-title">Strategy Discovery</h2>
           <p class="step-desc">Research Bot scans 14 sources across YouTube, GitHub, Reddit, and trading websites. AI extracts the trading rules, indicators, and risk management approach from each source. Videos without captions are transcribed overnight by Whisper so nothing gets missed.</p>
           <div class="step-chips">
-            <div class="chip"><strong>14</strong> Sources</div>
+            <div class="chip"><strong data-site="pipeline.sources_scanned">14</strong> Sources</div>
             <div class="chip">YouTube · GitHub · Reddit</div>
             <div class="chip">AI Extraction</div>
             <div class="chip">Whisper GPU</div>
@@ -706,7 +706,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
           <div class="step-chips">
             <div class="chip">Pre-screening</div>
             <div class="chip">Duplicate Detection</div>
-            <div class="chip"><strong>3</strong> Retry Attempts</div>
+            <div class="chip"><strong data-site="pipeline.retry_attempts">3</strong> Retry Attempts</div>
             <div class="chip">Quality Filters</div>
           </div>
         </div>
@@ -725,7 +725,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
             <div class="chip">Dual Code Gen</div>
             <div class="chip">Security Scan</div>
             <div class="chip">Dry Run Validation</div>
-            <div class="chip">73% Pass Rate</div>
+            <div class="chip"><span data-site="pipeline.codegen_pass_rate">73%</span> Pass Rate</div>
           </div>
         </div>
       </div>
@@ -740,9 +740,9 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
           <h2 class="step-title">Tier 1 Screening</h2>
           <p class="step-desc">Three parallel backtests run across every ticker and timeframe combination. Each combo is evaluated against performance thresholds that scale with the length of historical data tested. Strategies scoring above 80 auto-advance with no human involvement.</p>
           <div class="step-chips">
-            <div class="chip"><strong>3</strong> Parallel Backtests</div>
+            <div class="chip"><strong data-site="pipeline.parallel_backtests">3</strong> Parallel Backtests</div>
             <div class="chip">Dynamic Thresholds</div>
-            <div class="chip">Score > 80 Auto-advance</div>
+            <div class="chip">Score > <span data-site="pipeline.score_threshold">80</span> Auto-advance</div>
             <div class="chip">No Human Input</div>
           </div>
         </div>
@@ -759,8 +759,8 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
           <p class="step-desc">Runs overnight from 8 PM to 8 AM. The optimizer tunes strategy parameters across 6 rolling time windows, testing up to 500 parameter combinations per window. This ensures the strategy works across different market periods, not just one lucky stretch.</p>
           <div class="step-chips">
             <div class="chip">8 PM - 8 AM Window</div>
-            <div class="chip"><strong>6</strong> Rolling Windows</div>
-            <div class="chip">500 Combos/Window</div>
+            <div class="chip"><strong data-site="pipeline.rolling_windows">6</strong> Rolling Windows</div>
+            <div class="chip"><span data-site="pipeline.combos_per_window">500</span> Combos/Window</div>
             <div class="chip">Cross-period Validation</div>
           </div>
         </div>
@@ -776,7 +776,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
           <h2 class="step-title">Tier 2 Evaluation</h2>
           <p class="step-desc">The optimized strategy is evaluated strictly on data it has never seen before against six metrics: Profit Factor, Sharpe Ratio, Max Drawdown, Trade Count, Expectancy, and Recovery Factor. These thresholds are dynamic - a strategy tested on 5 years of data has different requirements than one tested on 2 years. Only strategies that prove a real edge on unseen data advance.</p>
           <div class="step-chips">
-            <div class="chip"><strong>6</strong> Metrics</div>
+            <div class="chip"><strong data-site="pipeline.evaluation_metrics">6</strong> Metrics</div>
             <div class="chip">Unseen Data Only</div>
             <div class="chip">Dynamic Thresholds</div>
             <div class="chip">Profit Factor · Sharpe · Drawdown</div>
@@ -794,9 +794,9 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
           <h2 class="step-title">Crash Stress Testing</h2>
           <p class="step-desc">The strategy is forced into trades during three real historical crashes: COVID (March 2020), Luna collapse (May 2022), and FTX collapse (November 2022). Both long and short entries are tested. Crash performance is factored into the overall evaluation - a strategy that holds up under extreme conditions carries more confidence into the approval step.</p>
           <div class="step-chips">
-            <div class="chip">COVID March 2020</div>
-            <div class="chip">Luna May 2022</div>
-            <div class="chip">FTX Nov 2022</div>
+            <div class="chip">COVID <span data-site="pipeline.crash_covid">March 2020</span></div>
+            <div class="chip">Luna <span data-site="pipeline.crash_luna">May 2022</span></div>
+            <div class="chip">FTX <span data-site="pipeline.crash_ftx">Nov 2022</span></div>
             <div class="chip">Long + Short Tested</div>
           </div>
         </div>
@@ -851,7 +851,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
             <div class="chip">Weekly Health Checks</div>
             <div class="chip">Strategy Rankings</div>
             <div class="chip">Promotion Threshold</div>
-            <div class="chip">One Live Slot/Ticker</div>
+            <div class="chip"><span data-site="pipeline.live_slot_per_ticker">One</span> Live Slot/Ticker</div>
           </div>
 
         </div>
@@ -872,7 +872,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
             <div class="chip">Track Record</div>
             <div class="chip">Performance Rankings</div>
             <div class="chip">Final Approval</div>
-            <div class="chip">One Slot Per Ticker</div>
+            <div class="chip"><span data-site="pipeline.live_slot_per_ticker">One</span> Slot Per Ticker</div>
           </div>
         </div>
       </div>
@@ -1432,6 +1432,20 @@ function setScheme(n,btn){
   if(btn)btn.classList.add('active');
   if(!burstDone)applyBubbleColors();
 }
+</script>
+<script>
+/* ══ SITE DATA HYDRATION ══ */
+(function(){
+  fetch('site-data.json').then(function(r){return r.json();}).then(function(d){
+    document.querySelectorAll('[data-site]').forEach(function(el){
+      var path=el.dataset.site.split('.');
+      var val=d;
+      for(var i=0;i<path.length;i++){val=val&&val[path[i]];}
+      if(val===undefined||val===null)return;
+      el.textContent=String(val);
+    });
+  }).catch(function(e){console.warn('site-data.json load failed, using fallback values',e);});
+})();
 </script>
 </body>
 </html>
