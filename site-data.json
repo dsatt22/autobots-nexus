@@ -1,68 +1,45 @@
 {
-  "last_updated": "2026-04-09T08:00:00-04:00",
-
+  "last_updated": "2026-04-10T08:02:35.494592-04:00",
   "hero": {
     "trading_bots_paper": 41,
-    "strategies_discovered": 622,
-    "auto_deployed_bots": 38,
-    "candles": "178M",
+    "strategies_discovered": 640,
+    "auto_deployed_bots": 37,
+    "candles": "179M",
     "symbols": 129,
-    "indicators_mapped": 494,
+    "indicators_mapped": 503,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
     "hierarchy_tiers": 5,
-    "engine_bots_live": 4,
+    "engine_bots_live": 0,
     "trading_bots": 41,
     "build_phases": 7
   },
-
   "architecture": {
     "research_sources": 14,
-    "builder_bots_deployed": 38,
-    "postgresql_candles": "178M",
+    "builder_bots_deployed": 37,
+    "postgresql_candles": "179M",
     "postgresql_symbols": 129,
     "postgresql_size": "42 GB",
     "sql_schemas": 7,
-    "sql_tables": 29,
-    "sql_migrations": 31,
+    "sql_tables": 39,
+    "sql_migrations": 32,
     "hand_built_bots": 3,
-    "pipeline_bots": 38,
+    "pipeline_bots": 37,
     "pipeline_tickers": 9,
     "telegram_bots": 5,
     "email_reports": 4
   },
-
-  "security": {
-    "lines_scanned": 98906,
-    "python_files": 690,
-    "high_severity": 0,
-    "secrets_leaked": 0,
-    "secret_detection_pct": 100,
-    "code_analysis_pct": 92,
-    "dependency_audit_pct": 72,
-    "bot_protections_pct": 96,
-    "database_safety_pct": 100,
-    "medium_severity": 3,
-    "low_severity": 142,
-    "known_cves": 16,
-    "affected_packages": 5,
-    "bots_scanned": 45,
-    "tables_secured": 29,
-    "security_migrations": 31
-  },
-
   "notifications": {
     "active_signal_bots": 5,
     "future_bots": 1
   },
-
   "pipeline": {
     "total_steps": 11,
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "73%",
+    "codegen_pass_rate": "57%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -72,5 +49,23 @@
     "crash_luna": "May 2022",
     "crash_ftx": "Nov 2022",
     "live_slot_per_ticker": 1
+  },
+  "security": {
+    "lines_scanned": 126914,
+    "python_files": 733,
+    "high_severity": 0,
+    "secrets_leaked": 0,
+    "secret_detection_pct": 100,
+    "code_analysis_pct": 92,
+    "dependency_audit_pct": 72,
+    "bot_protections_pct": 96,
+    "database_safety_pct": 100,
+    "medium_severity": 0,
+    "low_severity": 0,
+    "known_cves": 16,
+    "affected_packages": 5,
+    "bots_scanned": 41,
+    "tables_secured": 39,
+    "security_migrations": 32
   }
 }
