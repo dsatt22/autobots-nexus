@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-04-10T10:31:42.525975-04:00",
+  "last_updated": "2026-04-10T19:00:00.024042-04:00",
   "hero": {
     "trading_bots_paper": 41,
-    "strategies_discovered": 641,
+    "strategies_discovered": 643,
     "auto_deployed_bots": 37,
     "candles": "179M",
     "symbols": 129,
-    "indicators_mapped": 503,
+    "indicators_mapped": 504,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 206620,
-    "python_files": 733,
+    "lines_scanned": 207296,
+    "python_files": 738,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
@@ -67,197 +67,5 @@
     "bots_scanned": 45,
     "tables_secured": 39,
     "security_migrations": 32
-  },
-  "roadmap": {
-    "title": "ROADMAP",
-    "subtitle": "Building the Edge",
-    "phases": [
-      {
-        "name": "Completed",
-        "color": "completed",
-        "tasks": [
-          {
-            "id": "perf-monitor",
-            "name": "Performance monitor",
-            "description": "Compares strategies per ticker and ranks them weekly to determine which earns the live trading slot. Classifies market conditions and tracks performance across different environments.",
-            "start": "2026-03-01",
-            "end": "2026-03-31",
-            "status": "complete",
-            "depends_on": []
-          },
-          {
-            "id": "comparison-reports",
-            "name": "Comparison reports",
-            "description": "Weekly and monthly side-by-side strategy comparison with market condition context. Shows which strategies perform best in trending, choppy, and volatile markets.",
-            "start": "2026-03-15",
-            "end": "2026-03-31",
-            "status": "complete",
-            "depends_on": []
-          },
-          {
-            "id": "telegram-reorg",
-            "name": "Telegram reorganization",
-            "description": "Split one noisy notification chat into 5 dedicated channels organized by type - errors, approvals, lifecycle, trading activity, and reports.",
-            "start": "2026-04-01",
-            "end": "2026-04-05",
-            "status": "complete",
-            "depends_on": []
-          },
-          {
-            "id": "github-pages",
-            "name": "GitHub pages",
-            "description": "Moved the site from a local file to a live hosted platform. Automated scanning ensures code quality on every update.",
-            "start": "2026-04-03",
-            "end": "2026-04-09",
-            "status": "complete",
-            "depends_on": []
-          },
-          {
-            "id": "site-updater",
-            "name": "Site auto-updater",
-            "description": "Automatically refreshes all site numbers twice daily from live database queries and security scans. Also triggers on code commits for real-time updates.",
-            "start": "2026-04-08",
-            "end": "2026-04-11",
-            "status": "in_progress",
-            "depends_on": ["github-pages"]
-          }
-        ]
-      },
-      {
-        "name": "Short-term",
-        "color": "short_term",
-        "tasks": [
-          {
-            "id": "risk-sizing",
-            "name": "Per-ticker risk sizing",
-            "description": "Different risk percentages per asset - lower risk on volatile or speculative coins, higher on established ones like BTC and ETH. Adapts position sizing to match each asset's risk profile.",
-            "start": "2026-04-14",
-            "end": "2026-04-18",
-            "status": "ready",
-            "depends_on": []
-          },
-          {
-            "id": "cross-correlation",
-            "name": "Cross-ticker correlation",
-            "description": "Track whether strategies on different tickers are actually diversified or winning and losing together. Prevents overexposure to correlated assets when scaling to multiple live strategies.",
-            "start": "2026-04-21",
-            "end": "2026-04-28",
-            "status": "ready",
-            "depends_on": []
-          },
-          {
-            "id": "regime-switching",
-            "name": "Market regime switching",
-            "description": "Bots adapt their behavior based on current market conditions - reduce trading in choppy markets, stay active in trends, sit out during high volatility events. Preserves capital when conditions are unfavorable.",
-            "start": "2026-04-28",
-            "end": "2026-05-12",
-            "status": "ready",
-            "depends_on": []
-          },
-          {
-            "id": "mobile-responsive",
-            "name": "Mobile responsiveness",
-            "description": "Full review and fixes so the entire site works cleanly on phones and tablets. Every section, animation, and interactive element optimized for touch and small screens.",
-            "start": "2026-05-10",
-            "end": "2026-05-16",
-            "status": "ready",
-            "depends_on": []
-          }
-        ]
-      },
-      {
-        "name": "Mid-term",
-        "color": "mid_term",
-        "tasks": [
-          {
-            "id": "retirement",
-            "name": "Strategy retirement automation",
-            "description": "Automated detection and removal of strategies that consistently underperform. Frees up ticker slots for better-performing strategies without manual monitoring.",
-            "start": "2026-05-18",
-            "end": "2026-06-01",
-            "status": "planned",
-            "depends_on": []
-          },
-          {
-            "id": "regime-build",
-            "name": "Market regime switching",
-            "description": "Bots adapt their behavior based on current market conditions - reduce trading in choppy markets, stay active in trends, sit out during high volatility events.",
-            "start": "2026-05-22",
-            "end": "2026-06-08",
-            "status": "planned",
-            "depends_on": ["regime-switching"]
-          },
-          {
-            "id": "onchain-data",
-            "name": "On-chain data integration",
-            "description": "Exchange inflows and outflows, funding rates, and whale wallet movements as additional market intelligence signals. Adds a layer of insight beyond just price and volume data.",
-            "start": "2026-06-08",
-            "end": "2026-06-22",
-            "status": "planned",
-            "depends_on": []
-          }
-        ]
-      },
-      {
-        "name": "Long-term",
-        "color": "long_term",
-        "tasks": [
-          {
-            "id": "sub-accounts",
-            "name": "Sub-accounts",
-            "description": "Multiple exchange accounts so more than one strategy per ticker can trade live simultaneously. Scales the portfolio beyond the current one-strategy-per-ticker limit.",
-            "start": "2026-08-01",
-            "end": "2026-08-15",
-            "status": "future",
-            "depends_on": []
-          },
-          {
-            "id": "cloud-deploy",
-            "name": "Cloud deployment",
-            "description": "Move from desktop to cloud servers for 24/7 uptime without depending on a home PC being powered on. Eliminates downtime from power outages and restarts.",
-            "start": "2026-09-01",
-            "end": "2026-10-15",
-            "status": "future",
-            "depends_on": []
-          },
-          {
-            "id": "disaster-recovery",
-            "name": "Disaster recovery",
-            "description": "Automated database backups to cloud storage on a schedule. Protects years of strategy data, trade history, and candle data from hardware failure.",
-            "start": "2026-10-15",
-            "end": "2026-10-28",
-            "status": "future",
-            "depends_on": []
-          },
-          {
-            "id": "marketplace",
-            "name": "Strategy marketplace",
-            "description": "Subscription service selling proven trade signals to paying users. The ecosystem generates revenue from strategies with verified live trading track records.",
-            "start": "2027-01-01",
-            "end": "2027-03-15",
-            "status": "future",
-            "depends_on": []
-          },
-          {
-            "id": "multi-exchange",
-            "name": "Multi-exchange support",
-            "description": "Expand beyond Blofin to other exchanges for better liquidity and redundancy. Same strategies, different execution venues.",
-            "start": "2027-07-01",
-            "end": "2027-08-15",
-            "status": "future",
-            "depends_on": []
-          },
-          {
-            "id": "multi-asset",
-            "name": "Multi-asset expansion",
-            "description": "Apply the same autonomous pipeline to forex, stocks, and commodities. Different data sources and market hours, same proven architecture.",
-            "start": "2027-10-01",
-            "end": "2027-12-31",
-            "status": "future",
-            "depends_on": []
-          }
-        ]
-      }
-    ]
   }
 }
