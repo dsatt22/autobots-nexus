@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-10T08:02:35.494592-04:00",
+  "last_updated": "2026-04-10T08:15:19.354487-04:00",
   "hero": {
     "trading_bots_paper": 41,
     "strategies_discovered": 640,
@@ -11,7 +11,7 @@
     "risk_per_trade": "5%",
     "bot_types": 7,
     "hierarchy_tiers": 5,
-    "engine_bots_live": 0,
+    "engine_bots_live": 4,
     "trading_bots": 41,
     "build_phases": 7
   },
@@ -51,7 +51,7 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 126914,
+    "lines_scanned": 206652,
     "python_files": 733,
     "high_severity": 0,
     "secrets_leaked": 0,
@@ -60,11 +60,11 @@
     "dependency_audit_pct": 72,
     "bot_protections_pct": 96,
     "database_safety_pct": 100,
-    "medium_severity": 0,
-    "low_severity": 0,
-    "known_cves": 16,
-    "affected_packages": 5,
-    "bots_scanned": 41,
+    "medium_severity": 4,
+    "low_severity": 158,
+    "known_cves": 0,
+    "affected_packages": 0,
+    "bots_scanned": 45,
     "tables_secured": 39,
     "security_migrations": 32
   }
