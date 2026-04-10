@@ -627,10 +627,11 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
     <ul class="site-nav-links">
       <li><a href="index.html#sec-hero">Home</a></li>
       <li><a href="index.html#sec-arch">Architecture</a></li>
+      <li><a href="pipeline.html" class="active">Pipeline</a></li>
       <li><a href="index.html#sec-playbook">Playbook</a></li>
       <li><a href="index.html#sec-notif">Notifications</a></li>
       <li><a href="index.html#sec-security">Security</a></li>
-      <li><a href="pipeline.html" class="active">Pipeline</a></li>
+      <li><a href="index.html#sec-roadmap">Roadmap</a></li>
       <li><a class="nav-disabled" style="opacity:0.35;pointer-events:none;cursor:default">Reports</a></li>
     </ul>
   </div>
@@ -1443,6 +1444,16 @@ function setScheme(n,btn){
       for(var i=0;i<path.length;i++){val=val&&val[path[i]];}
       if(val===undefined||val===null)return;
       el.textContent=String(val);
+    });
+    /* Patch prose descriptions */
+    var p=d.pipeline;
+    document.querySelectorAll('.step-desc').forEach(function(el){
+      var t=el.textContent;
+      if(t.indexOf('scans 14')!==-1)el.textContent=t.replace('scans 14','scans '+p.sources_scanned);
+      else if(t.indexOf('100 candles')!==-1)el.textContent=t.replace('100 candles',p.dry_run_candles+' candles').replace('pass rate: 73%','pass rate: '+p.codegen_pass_rate);
+      else if(t.indexOf('Three parallel')!==-1)el.textContent=t.replace('Three parallel',p.parallel_backtests+' parallel').replace('above 80','above '+p.score_threshold);
+      else if(t.indexOf('6 rolling')!==-1)el.textContent=t.replace('6 rolling',p.rolling_windows+' rolling').replace('500 parameter',p.combos_per_window+' parameter');
+      else if(t.indexOf('six metrics')!==-1)el.textContent=t.replace('six metrics',p.evaluation_metrics+' metrics');
     });
   }).catch(function(e){console.warn('site-data.json load failed, using fallback values',e);});
 })();
