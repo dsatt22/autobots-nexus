@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-11T15:48:42.533604-04:00",
+  "last_updated": "2026-04-11T19:00:00.007474-04:00",
   "hero": {
     "trading_bots_paper": 41,
     "strategies_discovered": 659,
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 210778,
-    "python_files": 741,
+    "lines_scanned": 240094,
+    "python_files": 754,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
