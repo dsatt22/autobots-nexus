@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-10T22:50:42.523392-04:00",
+  "last_updated": "2026-04-10T23:28:42.515048-04:00",
   "hero": {
     "trading_bots_paper": 41,
     "strategies_discovered": 643,
@@ -23,7 +23,7 @@
     "postgresql_size": "42 GB",
     "sql_schemas": 7,
     "sql_tables": 39,
-    "sql_migrations": 32,
+    "sql_migrations": 33,
     "hand_built_bots": 3,
     "pipeline_bots": 37,
     "pipeline_tickers": 9,
