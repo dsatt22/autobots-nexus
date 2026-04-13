@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-12T13:45:03.577947-04:00",
+  "last_updated": "2026-04-13T08:00:00.024992-04:00",
   "hero": {
     "trading_bots_paper": 41,
     "strategies_discovered": 665,
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "62%",
+    "codegen_pass_rate": "71%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 146143,
-    "python_files": 759,
+    "lines_scanned": 146334,
+    "python_files": 763,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
