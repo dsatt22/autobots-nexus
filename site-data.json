@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-13T08:00:00.024992-04:00",
+  "last_updated": "2026-04-13T11:21:51.952872-04:00",
   "hero": {
     "trading_bots_paper": 41,
     "strategies_discovered": 665,
@@ -11,7 +11,7 @@
     "risk_per_trade": "5%",
     "bot_types": 7,
     "hierarchy_tiers": 5,
-    "engine_bots_live": 0,
+    "engine_bots_live": 4,
     "trading_bots": 41,
     "build_phases": 7
   },
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "71%",
+    "codegen_pass_rate": "70%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
