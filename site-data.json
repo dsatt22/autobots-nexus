@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-04-14T06:27:17.142611-04:00",
+  "last_updated": "2026-04-14T08:00:00.017429-04:00",
   "hero": {
     "trading_bots_paper": 43,
-    "strategies_discovered": 672,
+    "strategies_discovered": 674,
     "auto_deployed_bots": 39,
     "candles": "179M",
     "symbols": 129,
-    "indicators_mapped": 512,
+    "indicators_mapped": 514,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
