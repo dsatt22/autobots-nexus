@@ -1200,12 +1200,14 @@ allSections.forEach(s=>sectionObs.observe(s));
   let hubFired=false;
   const hubObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting||hubFired)return;hubFired=true;hubObs.unobserve(entry.target);buildHubCanvas();buildNodes(300);animateLines(300);drawHub();setTimeout(()=>{document.getElementById('hubCenterBtn').addEventListener('click',selectHub);},500);});},{threshold:0.2});
   hubObs.observe(document.querySelector('#sec-notif .signal-section'));
-  /* Flow relay - triggered by its own observer */
-  const flowObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;flowObs.unobserve(entry.target);const flowTrack=document.getElementById('notifFlowTrack');if(flowTrack){flowTrack.querySelectorAll('.flow-node').forEach((n,i)=>setTimeout(()=>n.classList.add('in'),i*120));setTimeout(initFlowRelay,700);}});},{threshold:0.2});
-  flowObs.observe(document.querySelector('#sec-notif .flow-section'));
-  /* Report cards - triggered by their own observer */
-  const reportsObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;reportsObs.unobserve(entry.target);document.querySelectorAll('#sec-notif .report-card').forEach(card=>card.classList.add('in'));});},{threshold:0.2});
-  reportsObs.observe(document.querySelector('#sec-notif .reports-section'));
+  /* Flow relay - triggered when the flow track itself is 30% visible */
+  const flowTarget=document.getElementById('notifFlowTrack');
+  const flowObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;console.log('[flowObs] fired – element:',entry.target.id||entry.target.className,'ratio:',entry.intersectionRatio.toFixed(2));flowObs.unobserve(entry.target);const flowTrack=document.getElementById('notifFlowTrack');if(flowTrack){flowTrack.querySelectorAll('.flow-node').forEach((n,i)=>setTimeout(()=>n.classList.add('in'),i*120));setTimeout(initFlowRelay,700);}});},{threshold:0.3});
+  if(flowTarget){flowObs.observe(flowTarget);console.log('[flowObs] observing:',flowTarget.id);}
+  /* Report cards - triggered when the report cards grid is 30% visible */
+  const reportsTarget=document.getElementById('notifReportCards');
+  const reportsObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;console.log('[reportsObs] fired – element:',entry.target.id||entry.target.className,'ratio:',entry.intersectionRatio.toFixed(2));reportsObs.unobserve(entry.target);document.querySelectorAll('#sec-notif .report-card').forEach(card=>card.classList.add('in'));});},{threshold:0.3});
+  if(reportsTarget){reportsObs.observe(reportsTarget);console.log('[reportsObs] observing:',reportsTarget.id);}
   if(window.ResizeObserver)new ResizeObserver(()=>buildHubCanvas()).observe(hubWrap);
   window.addEventListener('resize',()=>buildHubCanvas());
 })();
