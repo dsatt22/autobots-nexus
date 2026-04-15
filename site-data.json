@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14T21:53:01.067242-04:00",
+  "last_updated": "2026-04-14T22:44:01.087310-04:00",
   "hero": {
     "trading_bots_paper": 43,
     "strategies_discovered": 676,
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "80%",
+    "codegen_pass_rate": "82%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
