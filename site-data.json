@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-04-14T23:15:01.091894-04:00",
+  "last_updated": "2026-04-15T08:10:39.942679-04:00",
   "hero": {
     "trading_bots_paper": 43,
-    "strategies_discovered": 676,
+    "strategies_discovered": 732,
     "auto_deployed_bots": 39,
     "candles": "179M",
     "symbols": 129,
-    "indicators_mapped": 514,
+    "indicators_mapped": 587,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "82%",
+    "codegen_pass_rate": "87%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -68,5 +68,190 @@
     "tables_secured": 39,
     "security_migrations": 33,
     "last_scan": "2026-04-14T23:06:39.156257-04:00"
+  },
+  "roadmap": {
+    "phases": [
+      {
+        "name": "Completed",
+        "color": "completed",
+        "items": [
+          {
+            "id": "perf-monitor",
+            "name": "Performance monitor",
+            "status": "complete",
+            "display_date": "Q1 2026",
+            "depends_on": [],
+            "requires_funding": false,
+            "started_at": "2026-01-01T00:00:00",
+            "completed_at": "2026-03-31T00:00:00"
+          },
+          {
+            "id": "comparison-reports",
+            "name": "Comparison reports",
+            "status": "complete",
+            "display_date": "Q1 2026",
+            "depends_on": [],
+            "requires_funding": false,
+            "started_at": "2026-01-01T00:00:00",
+            "completed_at": "2026-03-31T00:00:00"
+          },
+          {
+            "id": "telegram-reorg",
+            "name": "Telegram reorganization",
+            "status": "complete",
+            "display_date": "Q2 2026",
+            "depends_on": [],
+            "requires_funding": false,
+            "started_at": "2026-04-01T00:00:00",
+            "completed_at": "2026-06-30T00:00:00"
+          },
+          {
+            "id": "github-pages",
+            "name": "GitHub pages",
+            "status": "complete",
+            "display_date": "Q2 2026",
+            "depends_on": [],
+            "requires_funding": false,
+            "started_at": "2026-04-01T00:00:00",
+            "completed_at": "2026-06-30T00:00:00"
+          },
+          {
+            "id": "site-updater",
+            "name": "Site auto-updater",
+            "status": "in_progress",
+            "display_date": "April 2026",
+            "depends_on": [],
+            "requires_funding": false,
+            "started_at": "2026-04-01T00:00:00"
+          }
+        ]
+      },
+      {
+        "name": "Short-term",
+        "color": "short_term",
+        "items": [
+          {
+            "id": "risk-sizing",
+            "name": "Per-ticker risk sizing",
+            "status": "ready",
+            "display_date": "April 2026",
+            "depends_on": [],
+            "requires_funding": false
+          },
+          {
+            "id": "cross-correlation",
+            "name": "Cross-ticker correlation",
+            "status": "ready",
+            "display_date": "May 2026",
+            "depends_on": [],
+            "requires_funding": false
+          },
+          {
+            "id": "regime-switching",
+            "name": "Market regime switching",
+            "status": "ready",
+            "display_date": "May - June 2026",
+            "depends_on": [],
+            "requires_funding": false
+          }
+        ]
+      },
+      {
+        "name": "Mid-term",
+        "color": "mid_term",
+        "items": [
+          {
+            "id": "mobile-responsive",
+            "name": "Mobile responsiveness",
+            "status": "planned",
+            "display_date": "June - July 2026",
+            "depends_on": [],
+            "requires_funding": false
+          },
+          {
+            "id": "regime-pipeline",
+            "name": "Regime-aware pipeline",
+            "status": "planned",
+            "display_date": "July 2026",
+            "depends_on": [
+              "regime-switching"
+            ],
+            "requires_funding": false
+          },
+          {
+            "id": "onchain-data",
+            "name": "On-chain data integration",
+            "status": "planned",
+            "display_date": "July - August 2026",
+            "depends_on": [],
+            "requires_funding": false
+          }
+        ]
+      },
+      {
+        "name": "Long-term",
+        "color": "long_term",
+        "items": [
+          {
+            "id": "retirement",
+            "name": "Strategy retirement automation",
+            "status": "future",
+            "display_date": "Q3 2026",
+            "depends_on": [
+              "orchestrator"
+            ],
+            "requires_funding": false
+          },
+          {
+            "id": "sub-accounts",
+            "name": "Sub-accounts",
+            "status": "future",
+            "display_date": "Q2-Q3 2027",
+            "depends_on": [],
+            "requires_funding": true
+          },
+          {
+            "id": "disaster-recovery",
+            "name": "Disaster recovery",
+            "status": "future",
+            "display_date": "Q1 2027",
+            "depends_on": [],
+            "requires_funding": true
+          },
+          {
+            "id": "cloud-deploy",
+            "name": "Cloud deployment",
+            "status": "future",
+            "display_date": "Q3 2027+",
+            "depends_on": [],
+            "requires_funding": true
+          },
+          {
+            "id": "multi-exchange",
+            "name": "Multi-exchange support",
+            "status": "future",
+            "display_date": "Q3-Q4 2027",
+            "depends_on": [],
+            "requires_funding": true
+          },
+          {
+            "id": "multi-asset",
+            "name": "Multi-asset expansion",
+            "status": "future",
+            "display_date": "Q4 2027+",
+            "depends_on": [],
+            "requires_funding": true
+          },
+          {
+            "id": "marketplace",
+            "name": "Strategy marketplace",
+            "status": "future",
+            "display_date": "Q4 2027+",
+            "depends_on": [],
+            "requires_funding": true
+          }
+        ]
+      }
+    ]
   }
 }
