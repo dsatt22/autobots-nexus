@@ -1595,7 +1595,7 @@ allSections.forEach(s=>sectionObs.observe(s));
       sd[3].fill=s.bot_protections_pct/100;
       sd[4].fill=s.database_safety_pct/100;
       /* Dynamic gauge colors based on percentage */
-      sd.forEach(function(g){var pct=g.fill*100;if(pct>=80){g.color='#5DCAA5';g.statusColor='#5DCAA5';g.statusLabel='Clean';}else if(pct>=60){g.color='#F0997B';g.statusColor='#F0997B';g.statusLabel='Warning';}else{g.color='#e24b4a';g.statusColor='#e24b4a';g.statusLabel='Critical';}});
+      sd.forEach(function(g){var pct=g.fill*100;if(pct>=80){g.color='#00ff64';g.statusColor='#00ff64';g.statusLabel='Clean';}else if(pct>=60){g.color='#F0997B';g.statusColor='#F0997B';g.statusLabel='Warning';}else{g.color='#e24b4a';g.statusColor='#e24b4a';g.statusLabel='Critical';}});
       /* domains[1] code metrics */
       sd[1].metrics[1].val=String(s.medium_severity);sd[1].metrics[1].bar=s.medium_severity/100;
       sd[1].metrics[2].val=String(s.low_severity);sd[1].metrics[2].bar=s.low_severity/400;
