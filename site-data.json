@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-15T19:00:00.017985-04:00",
+  "last_updated": "2026-04-16T07:23:57.853362-04:00",
   "hero": {
     "trading_bots_paper": 43,
     "strategies_discovered": 733,
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "80%",
+    "codegen_pass_rate": "76%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -64,9 +64,9 @@
     "low_severity": 160,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 41,
-    "tables_secured": 39,
-    "security_migrations": 33,
+    "bots_scanned": 47,
+    "tables_secured": 40,
+    "security_migrations": 34,
     "last_scan": "2026-04-14T23:06:39.156257-04:00"
   },
   "roadmap": {
