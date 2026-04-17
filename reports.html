@@ -880,11 +880,10 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .rpt-nav-arrow:active { transform:translateY(-50%) scale(0.96); }
 .rpt-nav-arrow.visible { opacity:1; }
 .rpt-nav-arrow.hidden-arrow { opacity:0; pointer-events:none; }
-/* Position just outside the 860px report-inner content area */
-/* max(1.5rem, ...) ensures they stay visible on narrower screens */
-/* Just outside the 860px report-inner, centred in the viewport */
-#rptNavPrev { left:  calc(50vw - 430px - 52px); }
-#rptNavNext { right: calc(50vw - 430px - 52px); }
+/* Position just outside the 1200px report-inner content area (half = 600px) */
+/* max() clamps to viewport edge on narrower screens so arrows stay visible */
+#rptNavPrev { left:  max(0.75rem, calc(50vw - 600px - 52px)); }
+#rptNavNext { right: max(0.75rem, calc(50vw - 600px - 52px)); }
 .rpt-nav-arrow svg { display:block; }
 
 /* Counter - in panel header via JS, styled here */
