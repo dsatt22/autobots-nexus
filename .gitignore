@@ -6,3 +6,4 @@ security.html
 node_modules/
 .DS_Store
 *.log
+.claude/settings.local.json

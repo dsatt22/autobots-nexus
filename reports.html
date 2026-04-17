@@ -1703,196 +1703,74 @@ function buildBotBlock(name,detail,hb,online,extra=''){
   return`<div class="bot-block"><div class="bot-block-hdr"><div class="bot-block-name">${name}</div>${badge}${hb?`<div class="bot-block-hb">Last checked in ${hb}</div>`:''}</div><div class="bot-block-detail">${detail}</div>${extra}</div>`;
 }
 
-function buildMorning(date){
-  const groups=[
-    {ticker:'AVAX',trades:[
-      {bot:'avax-15sc-4h',tf:'4H',side:'short',entry:8.6800,status:'Open',tp1Pnl:null,finalPnl:null,duration:'9h 59m'},
-      {bot:'avax-iti-4h', tf:'4H',side:'short',entry:8.6800,status:'Open',tp1Pnl:null,finalPnl:null,duration:'9h 59m'},
-      {bot:'avax-svs-4h', tf:'4H',side:'short',entry:8.6800,status:'Open',tp1Pnl:null,finalPnl:null,duration:'9h 59m'},
-    ]},
-    {ticker:'BNB',trades:[
-      {bot:'bnb-15sc-4h',tf:'4H',side:'short',entry:592.43,status:'Open',tp1Pnl:null,finalPnl:null,duration:'17h 59m'},
-      {bot:'bnb-iti-4h', tf:'4H',side:'short',entry:592.43,status:'Open',tp1Pnl:null,finalPnl:null,duration:'17h 59m'},
-    ]},
-    {ticker:'BTC',trades:[
-      {bot:'btc-biex-4h',tf:'4H',side:'long',entry:67682.60,status:'Open',tp1Pnl:null,finalPnl:null,duration:'2d 17h'},
-    ]},
-    {ticker:'DOGE',trades:[
-      {bot:'doge-iti-4h',tf:'4H',side:'long',entry:0.092430,status:'Open',tp1Pnl:null,finalPnl:null,duration:'3d 17h'},
-      {bot:'doge-svs-4h',tf:'4H',side:'long',entry:0.092430,status:'Open',tp1Pnl:null,finalPnl:null,duration:'3d 17h'},
-      {bot:'doge-de-4h', tf:'4H',side:'long',entry:0.092430,status:'Open',tp1Pnl:null,finalPnl:null,duration:'3d 17h'},
-    ]},
-    {ticker:'DOT',trades:[
-      {bot:'dot-wete-2h',tf:'2H',side:'short',entry:1.4190,status:'TP1 Hit - BE Stop',tp1Pnl:54.55,finalPnl:null,duration:'9d 21h'},
-    ]},
-    {ticker:'ETH',trades:[
-      {bot:'eth-xg-4h',tf:'4H',side:'long',entry:2130.08,status:'Open',tp1Pnl:null,finalPnl:null,duration:'1d 13h'},
-    ]},
-    {ticker:'LINK',trades:[
-      {bot:'link-15sc-4h',tf:'4H',side:'long',entry:8.7400,status:'Closed - Loss',tp1Pnl:null,finalPnl:-52.36,duration:'3d 8h'},
-      {bot:'link-5-sc-4h',tf:'4H',side:'long',entry:8.7400,status:'Closed - Loss',tp1Pnl:null,finalPnl:-52.36,duration:'3d 8h'},
-    ]},
-    {ticker:'SOL',trades:[
-      {bot:'sol-xg-4h',tf:'4H',side:'short',entry:86.7700,status:'TP1 Hit - BE Stop',tp1Pnl:30.90,finalPnl:null,duration:'11d 9h'},
-      {bot:'sol-xg-2h',tf:'2H',side:'short',entry:82.7500,status:'Open',tp1Pnl:null,finalPnl:null,duration:'6d 1h'},
-    ]},
-  ];
-  const hasClosed=groups.some(g=>g.trades.some(t=>t.finalPnl!==null));
-  const d=new Date(date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  return`<div class="report-inner">
-${sec('TLDR',`<div class="rpt-tldr">All 4 infrastructure bots are online. Strategy Builder processed 12 strategies overnight and 4 passed quality checks. 13 trades are currently open (2 with TP1 hit). 2 trades closed since the last report (0W/2L) for <span class="neg">-$104.72</span>. Total realized P&L since last report: <span class="neg">-$104.72</span>.</div>`)}
-${sec('TRADING ACTIVITY',buildTradeSection(groups,hasClosed)+`<div class="rpt-note" style="margin-top:0.8rem">TP1 data is not available for btc-sqs-4h, eth-sqs-4h, eth-pb-2h, and sol-ce-4h. These bots track partial closes in memory only.</div>`)}
-${sec('PARTIAL CLOSES (TP1 HIT)',`<div class="rpt-partial">dot-wete-2h hit its first profit target on a SHORT DOT trade at $1.3800. The position was reduced by 50% and the stop loss was moved to breakeven. The remaining 50% is still open.</div>`)}
-${sec('BOT STATUS',`<div class="all-good">✅ All systems operational</div>
-${buildBotBlock('Orchestrator','Not yet active - this bot has not been deployed yet.',null,false)}
-${buildBotBlock('Reporting Bot','This bot generated the report you are reading. No errors since last report.','5 minutes ago',true)}
-${buildBotBlock('Research Bot','Found 38 new pieces of content across its sources. 1 new strategy added to the database. 5 of 6 sources active. Indicator registry tracks 464 known indicators.','4 minutes ago',true)}
-${buildBotBlock('Strategy Builder','Running a backtest. Pipeline snapshot: 29 waiting for codegen, 1 actively being tested, 137 passed quality gates.','3 minutes ago',true,`<div class="window-box"><strong>Window Performance</strong><br><br>The codegen window (4 PM – 2 AM Eastern) is currently running. It started with 64 strategies queued and 39 remain. The optimization window (10 PM – 8 AM Eastern) has not run since the last report. Last night's Whisper window (2 AM – 8 AM) started with 172 videos in the backlog - 92 were processed (52 usable, 40 failed). 127 remain. At the current pace of ~49 per night, approximately 3 more nights to clear.</div>`)}
-${buildBotBlock('News Bot','Not yet active - this bot has not been deployed yet.',null,false)}
-${buildBotBlock('Performance Monitor','No errors since last report.','5 minutes ago',true)}`)}
-${sec('ERRORS','<div style="font-size:0.9rem;color:var(--sub)">No errors since the last report.</div>')}
-${sec('ACTION ITEMS','<div style="font-size:0.9rem;color:var(--sub)">No action items. Everything looks good.</div>')}
-<div class="rpt-footer">Sent by reporting_bot · Next report: 6:00 PM Eastern</div>
-</div>`;
-}
-
-function buildEvening(date){
-  const groups=[
-    {ticker:'AVAX',trades:[
-      {bot:'avax-15sc-4h',tf:'4H',side:'short',entry:8.6800,status:'Open',tp1Pnl:null,finalPnl:null,duration:'19h 58m'},
-      {bot:'avax-iti-4h', tf:'4H',side:'short',entry:8.6800,status:'Open',tp1Pnl:null,finalPnl:null,duration:'19h 58m'},
-      {bot:'avax-svs-4h', tf:'4H',side:'short',entry:8.6800,status:'Open',tp1Pnl:null,finalPnl:null,duration:'19h 58m'},
-    ]},
-    {ticker:'BNB',trades:[
-      {bot:'bnb-15sc-4h',tf:'4H',side:'short',entry:592.43,status:'Open',tp1Pnl:null,finalPnl:null,duration:'1d 3h 58m'},
-      {bot:'bnb-iti-4h', tf:'4H',side:'short',entry:592.43,status:'Open',tp1Pnl:null,finalPnl:null,duration:'1d 3h 58m'},
-    ]},
-    {ticker:'BTC',trades:[
-      {bot:'btc-biex-4h',tf:'4H',side:'long',entry:67682.60,status:'Open',tp1Pnl:null,finalPnl:null,duration:'3d 1h'},
-    ]},
-    {ticker:'DOGE',trades:[
-      {bot:'doge-iti-4h',tf:'4H',side:'long',entry:0.092430,status:'Open',tp1Pnl:null,finalPnl:null,duration:'4d 1h'},
-      {bot:'doge-svs-4h',tf:'4H',side:'long',entry:0.092430,status:'Open',tp1Pnl:null,finalPnl:null,duration:'4d 1h'},
-      {bot:'doge-de-4h', tf:'4H',side:'long',entry:0.092430,status:'Open',tp1Pnl:null,finalPnl:null,duration:'4d 1h'},
-    ]},
-    {ticker:'DOT',trades:[
-      {bot:'dot-wete-2h',tf:'2H',side:'short',entry:1.4190,status:'TP1 Hit - BE Stop',tp1Pnl:54.55,finalPnl:null,duration:'10d 6h'},
-    ]},
-    {ticker:'ETH',trades:[
-      {bot:'eth-15sc-2h',tf:'2H',side:'long',entry:2118.40,status:'Closed - Win',tp1Pnl:null,finalPnl:87.60,duration:'13d 11h'},
-      {bot:'eth-xg-4h',  tf:'4H',side:'long',entry:2130.08,status:'Open',tp1Pnl:null,finalPnl:null,duration:'1d 21h'},
-    ]},
-    {ticker:'SOL',trades:[
-      {bot:'sol-xg-4h',tf:'4H',side:'short',entry:86.7700,status:'TP1 Hit - BE Stop',tp1Pnl:30.90,finalPnl:null,duration:'11d 18h'},
-      {bot:'sol-xg-2h',tf:'2H',side:'short',entry:82.7500,status:'Open',tp1Pnl:null,finalPnl:null,duration:'6d 10h'},
-    ]},
-  ];
-  const hasClosed=groups.some(g=>g.trades.some(t=>t.finalPnl!==null));
-  return`<div class="report-inner">
-${sec('TLDR',`<div class="rpt-tldr">All 4 infrastructure bots are online. 1 trade closed since the morning report (1W/0L) for <span class="pos">+$87.60</span>. 12 trades remain open (2 with TP1 hit). Total realized P&L since morning report: <span class="pos">+$87.60</span>.</div>`)}
-${sec('TRADING ACTIVITY',buildTradeSection(groups,hasClosed)+`<div class="rpt-note" style="margin-top:0.8rem">TP1 data is not available for btc-sqs-4h, eth-sqs-4h, eth-pb-2h, and sol-ce-4h. These bots track partial closes in memory only.</div>`)}
-${sec('BOT STATUS',`<div class="all-good">✅ All systems operational</div>${buildBotBlock('Strategy Builder','Optimization window running. 4 strategies in Walk-Forward Validation.','2 minutes ago',true)}${buildBotBlock('Research Bot','Whisper window begins at 2 AM ET. Content queue: 127 videos pending.','3 minutes ago',true)}`)}
-${sec('ERRORS','<div style="font-size:0.9rem;color:var(--sub)">No errors since the morning report.</div>')}
-${sec('ACTION ITEMS','<div style="font-size:0.9rem;color:var(--sub)">No action items. Everything looks good.</div>')}
-<div class="rpt-footer">Sent by reporting_bot · Next report: 9:00 AM Eastern</div>
-</div>`;
-}
-
-function buildWeekly(weekStr){
-  const bots=[
-    {bot:'ada-biex-4h',ticker:'ADA',tf:'4H',trades:2,wp:'50%',pnlWk:27.82,pnlTotal:27.82,days:10},
-    {bot:'ada-iti-4h', ticker:'ADA',tf:'4H',trades:2,wp:'50%',pnlWk:27.82,pnlTotal:27.82,days:10},
-    {bot:'btc-biex-4h',ticker:'BTC',tf:'4H',trades:2,wp:'100%',pnlWk:172.41,pnlTotal:172.41,days:15},
-    {bot:'btc-sqs-4h', ticker:'BTC',tf:'4H',trades:3,wp:'33%',pnlWk:10.93,pnlTotal:10.93,days:31},
-    {bot:'btc-surs-4h',ticker:'BTC',tf:'4H',trades:3,wp:'67%',pnlWk:96.29,pnlTotal:96.29,days:6},
-    {bot:'doge-15sc-2h',ticker:'DOGE',tf:'2H',trades:2,wp:'100%',pnlWk:72.17,pnlTotal:72.17,days:10},
-    {bot:'doge-5-sc-2h',ticker:'DOGE',tf:'2H',trades:2,wp:'50%',pnlWk:-22.80,pnlTotal:-22.80,days:10},
-    {bot:'doge-de-4h',ticker:'DOGE',tf:'4H',trades:1,wp:'0%',pnlWk:-52.32,pnlTotal:-52.32,days:10},
-    {bot:'doge-iti-4h',ticker:'DOGE',tf:'4H',trades:1,wp:'0%',pnlWk:-52.32,pnlTotal:-52.32,days:10},
-    {bot:'doge-svs-4h',ticker:'DOGE',tf:'4H',trades:1,wp:'0%',pnlWk:-52.32,pnlTotal:-52.32,days:9},
-    {bot:'dot-wete-2h',ticker:'DOT',tf:'2H',trades:1,wp:'0%',pnlWk:-52.37,pnlTotal:-52.37,days:10},
-    {bot:'eth-15sc-2h',ticker:'ETH',tf:'2H',trades:1,wp:'100%',pnlWk:87.60,pnlTotal:87.60,days:13},
-    {bot:'eth-etmi-4h',ticker:'ETH',tf:'4H',trades:3,wp:'33%',pnlWk:-57.08,pnlTotal:-57.08,days:13},
-    {bot:'sol-ce-4h',  ticker:'SOL',tf:'4H',trades:1,wp:'0%',pnlWk:-89.75,pnlTotal:-89.75,days:31},
-    {bot:'sol-xg-2h',  ticker:'SOL',tf:'2H',trades:2,wp:'50%',pnlWk:1.77,pnlTotal:1.77,days:6},
-  ];
-  const summaryTable=`<div class="rpt-scroll-table"><table class="rpt-table"><thead><tr><th>Bot</th><th>Ticker</th><th>TF</th><th style="text-align:center">Trades</th><th style="text-align:center">Win%</th><th style="text-align:right">P&L (wk)</th><th style="text-align:right">Total P&L</th><th>Days</th><th>Status</th></tr></thead><tbody>${bots.map(r=>`<tr><td style="font-family:'Share Tech Mono',monospace;font-size:0.8rem">${r.bot}</td><td>${tBadge(r.ticker)}</td><td>${r.tf}</td><td style="text-align:center">${r.trades}</td><td style="text-align:center">${r.wp}</td><td style="text-align:right;font-family:'Share Tech Mono',monospace"><span class="${r.pnlWk>0?'pos':r.pnlWk<0?'neg':'zero'}">${r.pnlWk>=0?'+':''}$${Math.abs(r.pnlWk).toFixed(2)}</span></td><td style="text-align:right;font-family:'Share Tech Mono',monospace"><span class="${r.pnlTotal>0?'pos':r.pnlTotal<0?'neg':'zero'}">${r.pnlTotal>=0?'+':''}$${Math.abs(r.pnlTotal).toFixed(2)}</span></td><td style="font-family:'Share Tech Mono',monospace;font-size:0.78rem">${r.days}d</td><td><span class="badge badge-paper">PAPER</span></td></tr>`).join('')}</tbody></table></div>`;
-  const promoRows=[
-    {bot:'btc-biex-4h',ticker:'BTC',tf:'4H',trades:2,tradeTgt:10,days:15,dayTgt:60},
-    {bot:'btc-sqs-4h', ticker:'BTC',tf:'4H',trades:3,tradeTgt:10,days:31,dayTgt:60},
-    {bot:'sol-ce-4h',  ticker:'SOL',tf:'4H',trades:3,tradeTgt:10,days:31,dayTgt:60},
-    {bot:'doge-15sc-2h',ticker:'DOGE',tf:'2H',trades:2,tradeTgt:15,days:10,dayTgt:60},
-    {bot:'ada-biex-4h',ticker:'ADA',tf:'4H',trades:2,tradeTgt:10,days:10,dayTgt:60},
-    {bot:'eth-etmi-4h',ticker:'ETH',tf:'4H',trades:3,tradeTgt:10,days:13,dayTgt:60},
-    {bot:'eth-15sc-2h',ticker:'ETH',tf:'2H',trades:1,tradeTgt:15,days:13,dayTgt:60},
-  ];
-  const promoTable=`<div class="rpt-scroll-table"><table class="rpt-table"><thead><tr><th>Bot</th><th>Ticker</th><th>TF</th><th>Trades Progress</th><th>Days Progress</th><th>Status</th></tr></thead><tbody>${promoRows.map(r=>{const c=tc(r.ticker),tp=Math.min(r.trades/r.tradeTgt*100,100),dp=Math.min(r.days/r.dayTgt*100,100);return`<tr><td style="font-family:'Share Tech Mono',monospace;font-size:0.8rem">${r.bot}</td><td>${tBadge(r.ticker)}</td><td>${r.tf}</td><td style="min-width:160px"><div class="prog-lbl"><span>${r.trades}/${r.tradeTgt}</span><span>${Math.round(tp)}%</span></div><div class="prog-wrap"><div class="prog-fill" style="width:${tp}%;background:${c}"></div></div></td><td style="min-width:160px"><div class="prog-lbl"><span>${r.days}d/${r.dayTgt}d</span><span>${Math.round(dp)}%</span></div><div class="prog-wrap"><div class="prog-fill" style="width:${dp}%;background:${c}"></div></div></td><td><span class="badge badge-open">IN PROGRESS</span></td></tr>`;}).join('')}</tbody></table></div>`;
-
-  return`<div class="report-inner">
-${sec('TLDR',`<div class="rpt-tldr">23 bots closed 18 trades this week (${weekStr}) for a combined gain of <span class="pos">+$362.46</span>. 2 bots are approaching the promotion threshold and will be eligible for Gate 2 review soon.</div>`)}
-${sec('TRADING PERFORMANCE',summaryTable)}
-${sec('TICKER GROUPS',`<div class="rpt-ticker-hdr" style="--tc:${tc('BTC')};--tc-rgb:${hexRgb(tc('BTC'))};margin-bottom:0.7rem">${tBadge('BTC')} 3 bots · 8 trades this week</div>
-<div class="bot-card"><div class="bot-card-hdr"><div class="bot-card-name">btc-biex-4h</div><span class="badge" style="background:rgba(255,255,255,0.06);color:var(--sub);border:1px solid var(--border)">4H</span><div class="bot-card-days">Paper trading for 15 days</div></div><div class="bot-card-grid"><div class="bot-stat-col"><div class="bot-stat-col-lbl">This Week</div><div class="bot-stat-row"><span class="k">Trades</span><span>2</span></div><div class="bot-stat-row"><span class="k">W/L</span><span class="pos">2 / 0</span></div><div class="bot-stat-row"><span class="k">P&L</span><span class="pos">+$172.41</span></div></div><div class="bot-stat-col"><div class="bot-stat-col-lbl">All Time</div><div class="bot-stat-row"><span class="k">Trades</span><span>2</span></div><div class="bot-stat-row"><span class="k">W/L</span><span class="pos">2 / 0</span></div><div class="bot-stat-row"><span class="k">P&L</span><span class="pos">+$172.41</span></div></div></div>
-<div style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;color:var(--sub);margin-bottom:0.4rem;text-transform:uppercase">Trade Log</div>
-<div class="rpt-scroll-table"><table class="rpt-table"><thead><tr><th>Date</th><th>Side</th><th>Entry</th><th>Exit</th><th>P&L</th><th>TP1</th><th>Reason</th></tr></thead><tbody><tr><td>03/17</td><td>${sideBadge('long')}</td><td style="font-family:'Share Tech Mono',monospace">$71,786</td><td style="font-family:'Share Tech Mono',monospace">$75,228</td><td class="pos">+$100.34</td><td class="zero">-</td><td style="font-family:'Share Tech Mono',monospace;font-size:0.78rem">orphan_rst</td></tr><tr><td>03/23</td><td>${sideBadge('short')}</td><td style="font-family:'Share Tech Mono',monospace">$72,914</td><td style="font-family:'Share Tech Mono',monospace">$70,151</td><td class="pos">+$62.83</td><td style="font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--teal)">⚡$69,351</td><td style="font-family:'Share Tech Mono',monospace;font-size:0.78rem">signal</td></tr></tbody></table></div>
-</div><div class="rpt-note">Additional ticker groups (ADA, DOGE, DOT, ETH, SOL) follow the same format.</div>`)}
-${sec('PROMOTION ELIGIBILITY',`<div class="rpt-note" style="margin-bottom:0.9rem">Bots need to reach their promotion threshold - whichever comes first: minimum fully closed trades OR 60 days of paper trading. Minimums by timeframe: 4H = 10 trades, 2H = 15 trades, 1H = 20 trades.</div>${promoTable}`)}
-<div class="rpt-footer">AutoBots Weekly Review · Next report: Sunday April 5, 2026</div>
-</div>`;
-}
-
-function buildComparison(weekStr,isMonthly=false){
-  const monthlyHeader=isMonthly?`<div class="bot-block" style="margin-bottom:1rem"><div class="bot-block-name" style="font-size:0.88rem;margin-bottom:0.4rem">Weekly Market Conditions - March 2026</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;font-size:0.88rem"><div style="color:var(--sub)">Week 1 (Mar 3–9)</div><div>Calm / Ranging</div><div style="color:var(--sub)">Week 2 (Mar 10–16)</div><div>Trending Down</div><div style="color:var(--sub)">Week 3 (Mar 17–23)</div><div>Trending Down</div><div style="color:var(--sub)">Week 4 (Mar 24–30)</div><div>Calm / Ranging</div></div></div>`:'';
-  const btcRows=[['Trades Fully Closed','2','2'],['Trades Partially Closed (TP1)','0','1'],['Open Positions','0','1 (short @ $69,232)'],['PnL - Fully Closed','<span class="neg">-$53.88</span>','<span class="neg">-$21.57</span>'],['PnL - TP1 Partials','<span class="zero">-</span>','<span class="pos">+$77.26</span>'],['Total Realized PnL','<span class="neg">-$53.88</span>','<span class="pos">+$55.69</span>',true],['Return %','<span class="neg">-5.4%</span>','<span class="pos">+5.6%</span>'],['PnL Per Trade','<span class="neg">-$26.94</span>','<span class="pos">+$18.56</span>'],['Win Rate','0.0%','66.7%'],['Profit Factor','<span class="neg">0.00</span>','<span class="pos">2.84</span>'],['Expectancy','<span class="neg">-$26.94</span>','<span class="pos">+$22.26</span>'],['Max Drawdown','0.0%','5.2%'],['Max Consecutive Losses','2','1'],['Longest Trade Duration','48.0h','120.0h'],...(isMonthly?[['Weeks Positive','2 / 4','2 / 4'],['Weeks With Zero Trades','2','1'],['Cumulative DD from Peak','0.0%','0.0%']]:[])] ;
-  const ethRows=[['Trades Fully Closed','3','2','2'],['Open Positions','0','1 (long)','1 (short)'],['Total Realized PnL','<span class="neg">-$57.08</span>','<span class="neg">-$36.15</span>','<span class="neg">-$2.58</span>',true],['Return %','<span class="neg">-5.7%</span>','<span class="neg">-3.6%</span>','<span class="neg">-0.3%</span>'],['Win Rate','33.3%','50.0%','50.0%'],['Profit Factor','<span class="neg">0.58</span>','<span class="neg">0.23</span>','<span class="neg">0.95</span>'],['Max Drawdown','13.7%','0.0%','5.2%']];
-
-  const cmpTable=(headers,rows)=>`<div class="rpt-scroll-table"><table class="cmp-table"><thead><tr>${headers.map((h,i)=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr class="${r[r.length-1]===true?'cmp-highlight':''}">${[r[0],...r.slice(1,r.length-(r[r.length-1]===true?1:0))].map((c,i)=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
-
-  const rankSection=isMonthly?`${sec('RANKING & RECOMMENDATION',`<div style="display:flex;flex-direction:column;gap:0.6rem"><div style="padding:0.9rem 1.1rem;border:1px solid var(--border);border-radius:6px"><div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem"><span style="font-family:'Oxanium',sans-serif;font-size:1.1rem;font-weight:800;color:var(--accent)">#1</span><strong style="font-family:'Oxanium',sans-serif">btc-biex-4h</strong><span class="badge" style="font-size:0.6rem">4H</span><span class="badge badge-paper">PAPER</span></div><div style="font-size:0.9rem;color:var(--sub);line-height:1.7">Leads on all metrics this month - 100% win rate, highest PnL, strongest trend performance. Promotion gap: needs 8 more trades or 37 more days before Gate 2 review.</div></div><div style="padding:0.9rem 1.1rem;border:1px solid var(--border);border-radius:6px"><div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.4rem"><span style="font-family:'Oxanium',sans-serif;font-size:1.1rem;font-weight:800;color:var(--sub)">#2</span><strong style="font-family:'Oxanium',sans-serif">btc-sqs-4h</strong><span class="badge" style="font-size:0.6rem">4H</span><span class="badge badge-paper">PAPER</span></div><div style="font-size:0.9rem;color:var(--sub);line-height:1.7">Lower win rate and profit factor this month. More data needed before a reliable assessment. Currently 7 trades toward 10-trade threshold.</div></div></div>`)}`:'';
-
-  return`<div class="report-inner">
-${sec('TLDR',`<div class="rpt-tldr">${isMonthly?`Monthly Strategy Review - March 2026. BTC: btc-biex-4h leads with <span class="pos">+$172.41</span> (100% WR, PF ∞). ETH: all 3 strategies lost in trending down conditions - eth-xg-4h least impacted at <span class="neg">-$2.58</span>. ADA: both strategies show identical results due to Blofin position sharing.`:`BTC: btc-surs-4h outperformed with <span class="pos">+$55.69</span> vs btc-sqs-4h at <span class="neg">-$53.88</span>. ETH: all 3 strategies lost in a trending down market - eth-xg-4h least impacted at <span class="neg">-$2.58</span>. ADA: both strategies show identical results due to Blofin position sharing.`}</div>`)}
-${monthlyHeader}
-${sec('BTC / USDT - 2 strategies',`<div class="rpt-ticker-hdr" style="--tc:${tc('BTC')};--tc-rgb:${hexRgb(tc('BTC'))};margin-bottom:0.8rem">${tBadge('BTC')} 2 strategies</div><span class="market-pill ranging">📊 Calm / Ranging · Price -2.6% · ADX 26.9 · ATR 0.7%</span><div class="rpt-para">2 BTC strategies traded in a calm/ranging market this week. btc-surs-4h outperformed with <span class="pos">+$55.69</span> while btc-sqs-4h lost <span class="neg">-$53.88</span>.</div>${cmpTable(['Metric','btc-sqs-4h','btc-surs-4h'],btcRows)}`+
-(isMonthly?`${sec('Performance by Market Condition',`<div class="rpt-scroll-table"><table class="rpt-table"><thead><tr><th>Condition</th><th>btc-biex-4h</th><th>btc-sqs-4h</th></tr></thead><tbody><tr><td>Calm / Ranging (2 weeks)</td><td class="pos">+$30.91</td><td class="zero">-</td></tr><tr><td>Trending Down (1 week)</td><td class="pos">+$141.50</td><td class="pos">+$82.30</td></tr><tr><td>Trending Up (1 week)</td><td class="zero">-</td><td class="zero">-</td></tr></tbody></table></div><div class="rpt-para" style="margin-top:0.7rem">btc-biex-4h performed best in trending conditions, generating 82% of its total return in just one trending week.</div>`)}`:'')
-)}
-${sec('ETH / USDT - 3 strategies',`<div class="rpt-ticker-hdr" style="--tc:${tc('ETH')};--tc-rgb:${hexRgb(tc('ETH'))};margin-bottom:0.8rem">${tBadge('ETH')} 3 strategies</div><span class="market-pill down">📉 Trending Down · Price -3.4% · ADX 26.5 · ATR 0.8%</span><div class="rpt-para">All 3 ETH strategies lost money this week in a trending down market. eth-xg-4h was the least impacted at <span class="neg">-$2.58</span>.</div>${cmpTable(['Metric','eth-etmi-4h','eth-sqs-4h','eth-xg-4h'],ethRows)}`)}
-${sec('ADA / USDT - 2 strategies',`<div class="rpt-ticker-hdr" style="--tc:${tc('ADA')};--tc-rgb:${hexRgb(tc('ADA'))};margin-bottom:0.8rem">${tBadge('ADA')} 2 strategies</div><span class="market-pill down">📉 Trending Down · Price -4.3% · ADX 35.0 · ATR 0.7%</span><div class="rpt-para">Both ADA strategies traded this week in a trending down market, each losing the same amount on 2 fully closed trades.</div><div class="rpt-note">ada-biex-4h and ada-iti-4h show identical results this week. Both strategies traded the same ADA position on Blofin, which only allows one position per direction - they received identical fills at the same prices.</div>`)}
-${sec('SUPPRESSED TICKERS','<div style="font-size:0.9rem;color:var(--dim)">SOL - only 1 eligible strategy (sol-ce-4h). Minimum 2 strategies required for comparison.</div>')}
-${rankSection}
-<div class="rpt-footnote">* ∞ indicates no losing trades recorded in this period. This reflects limited sample size, not a reliable assessment of strategy quality.<br>Return % is calculated on a notional $1,000 allocation per strategy and does not represent actual segregated capital.</div>
-<div class="rpt-footer">${isMonthly?'AutoBots Monthly Strategy Review · Next report: Sunday May 3, 2026':'AutoBots Strategy Comparison · Next report: Sunday Apr 5, 2026'}</div>
-</div>`;
-}
-
+/* buildMorning / buildEvening / buildWeekly / buildComparison have been
+   removed. Report content is now fetched directly from the published
+   reports/<subdir>/<file>.html files via an iframe built by
+   loadReportsFromIndex(). */
 /* ══════════════════════════════════
-   REPORT DATA
+   REPORT DATA - dynamic from reports-index.json
 ══════════════════════════════════ */
-function generateReports(){
-  const r=[];
-  const add=(id,type,date,time,tldr,contentFn,args=[])=>r.push({id,type,date,dateObj:new Date(date+'T12:00:00'),time,tldr,get content(){return contentFn(...args);}});
-  add('2026-04-05-monthly','comparison','2026-04-05','8:30 AM ET','Monthly Strategy Review - March 2026. BTC: btc-biex-4h leads with +$172.41. ETH: all 3 strategies lost in trending down conditions. ADA: identical results due to Blofin position sharing.',buildComparison,['March 2026',true]);
-  add('2026-04-05-weekly','weekly','2026-04-05','8:00 AM ET','Week of Mar 30–Apr 5 · 18 trades closed · +$128.92 combined. btc-biex-4h approaching 10-trade promotion threshold.',buildWeekly,['Mar 30 – Apr 5, 2026']);
-  add('2026-04-05-morning','morning','2026-04-05','9:00 AM ET','All 4 infrastructure bots online. 11 trades open (1 TP1 hit). 2 closed since last report (1W/1L) for +$35.24.',buildMorning,['2026-04-05']);
-  add('2026-04-05-evening','evening','2026-04-05','6:00 PM ET','All 4 infrastructure bots online. 2 trades opened. 1 closed (1W/0L) for +$64.18.',buildEvening,['2026-04-05']);
-  add('2026-04-04-morning','morning','2026-04-04','9:00 AM ET','All 4 infrastructure bots online. 13 trades open (2 TP1 hit). 2 closed (0W/2L) for -$104.72.',buildMorning,['2026-04-04']);
-  add('2026-04-04-evening','evening','2026-04-04','6:00 PM ET','All 4 infrastructure bots online. 4 new trades opened. 1 closed (1W/0L) for +$87.60.',buildEvening,['2026-04-04']);
-  add('2026-04-03-morning','morning','2026-04-03','9:00 AM ET','All 4 infrastructure bots online. 11 trades open (1 TP1 hit). 3 closed (2W/1L) for +$124.18.',buildMorning,['2026-04-03']);
-  add('2026-04-03-evening','evening','2026-04-03','6:00 PM ET','All 4 infrastructure bots online. 2 trades opened. 1 closed (1W/0L) for +$52.36.',buildEvening,['2026-04-03']);
-  add('2026-04-02-morning','morning','2026-04-02','9:00 AM ET','All 4 infrastructure bots online. 9 trades open. 4 closed (3W/1L) for +$218.44.',buildMorning,['2026-04-02']);
-  add('2026-04-02-evening','evening','2026-04-02','6:00 PM ET','3 infrastructure bots online - Strategy Builder offline for maintenance. 0 closed today.',buildEvening,['2026-04-02']);
-  add('2026-04-01-morning','morning','2026-04-01','9:00 AM ET','All 4 infrastructure bots online. 8 trades open (1 TP1 hit). 2 closed (1W/1L) for -$14.50.',buildMorning,['2026-04-01']);
-  add('2026-04-01-evening','evening','2026-04-01','6:00 PM ET','All 4 infrastructure bots online. 3 opened. 2 closed (2W/0L) for +$164.22.',buildEvening,['2026-04-01']);
-  add('2026-03-30-comparison','comparison','2026-03-30','8:30 AM ET','BTC: btc-surs-4h outperformed (+$55.69) vs btc-sqs-4h (-$53.88). ETH: all 3 strategies lost in trending down market. ADA: identical results.',buildComparison,['Mar 23 – Mar 29, 2026',false]);
-  add('2026-03-30-weekly','weekly','2026-03-30','8:00 AM ET','23 bots closed 18 trades this week for +$362.46. 2 bots approaching promotion threshold.',buildWeekly,['Mar 23 – Mar 29, 2026']);
-  add('2026-03-30-morning','morning','2026-03-30','9:00 AM ET','All 4 infrastructure bots online. 12 trades open. 5 closed (3W/2L) for +$87.14.',buildMorning,['2026-03-30']);
-  add('2026-03-30-evening','evening','2026-03-30','6:00 PM ET','All 4 infrastructure bots online. 2 opened. 1 closed (1W/0L) for +$43.18.',buildEvening,['2026-03-30']);
-  add('2026-03-29-morning','morning','2026-03-29','9:00 AM ET','All 4 infrastructure bots online. 10 trades open. 2 closed (2W/0L) for +$183.50.',buildMorning,['2026-03-29']);
-  add('2026-03-29-evening','evening','2026-03-29','6:00 PM ET','All 4 infrastructure bots online. 1 opened. 0 closed today.',buildEvening,['2026-03-29']);
-  add('2026-03-28-morning','morning','2026-03-28','9:00 AM ET','All 4 infrastructure bots online. 8 trades open. 3 closed (1W/2L) for -$62.44.',buildMorning,['2026-03-28']);
-  add('2026-03-28-evening','evening','2026-03-28','6:00 PM ET','All 4 infrastructure bots online. 2 opened. 1 closed (0W/1L) for -$52.36.',buildEvening,['2026-03-28']);
-  return r.sort((a,b)=>b.date.localeCompare(a.date)||['comparison','weekly','evening','morning'].indexOf(b.type)-['comparison','weekly','evening','morning'].indexOf(a.type));
+async function loadReportsFromIndex(){
+  try {
+    const res = await fetch('reports-index.json', {cache:'no-store'});
+    if(!res.ok) return [];
+    const data = await res.json();
+    const raw = Array.isArray(data && data.reports) ? data.reports : [];
+    const typeOrder = ['comparison','weekly','evening','morning'];
+    return raw.map(r => {
+      const title = r.title || (TYPE_META[r.type] && TYPE_META[r.type].label) || r.type;
+      const safeTitle = String(title).replace(/"/g,'&quot;');
+      const safeFile = String(r.file || '').replace(/"/g,'%22');
+      const id = (r.file || '').split('/').pop().replace(/\.html$/,'') || (r.date+'-'+r.type);
+      return {
+        id,
+        type: r.type,
+        date: r.date,
+        dateObj: new Date(r.date + 'T12:00:00'),
+        time: r.time || '',
+        tldr: '',
+        file: r.file,
+        get content(){
+          return `<iframe src="${safeFile}" title="${safeTitle}" style="width:100%;height:100%;border:0;background:transparent" loading="lazy"></iframe>`;
+        },
+      };
+    }).sort((a,b)=>
+      b.date.localeCompare(a.date) ||
+      typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type)
+    );
+  } catch(err) {
+    console.error('Failed to load reports-index.json:', err);
+    return [];
+  }
 }
+
+function generateReports(){
+  // allReports is populated by the async load below. Returning the current
+  // value keeps the existing sync call sites working.
+  return (typeof allReports !== 'undefined') ? allReports : [];
+}
+
+// Strip hardcoded placeholder "Last sent: ..." indicators. The report list
+// is driven entirely by reports-index.json now, and those spans showed
+// fabricated dates that no longer reflect reality.
+(function initDynamicReports(){
+  const cleanup = () => {
+    document.querySelectorAll('.sched-cnt, .rt-cnt, .mis-cnt').forEach(el => el.remove());
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cleanup, {once:true});
+  } else {
+    cleanup();
+  }
+  loadReportsFromIndex().then(list => {
+    // Runs in a microtask after script execution, so `allReports` is declared.
+    allReports = list;
+    if (typeof buildPickerList === 'function') { try { buildPickerList(); } catch(e){} }
+    if (typeof inApp !== 'undefined' && inApp && typeof deskGoTo === 'function') {
+      try { deskGoTo(0); } catch(e){}
+    }
+  });
+})();
 
 /* ══════════════════════════════════
    APP STATE
