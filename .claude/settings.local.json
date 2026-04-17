@@ -22,7 +22,17 @@
       "Bash(sed -n '172p' index.html)",
       "Bash(sed -n '613p' index.html)",
       "Bash(sed -n '614p' index.html)",
-      "Bash(claude --version)"
+      "Bash(claude --version)",
+      "Bash(npm install:*)",
+      "Bash(gitleaks version:*)",
+      "Bash(eslint --version)",
+      "Bash(stylelint --version)",
+      "Bash(htmlhint --version)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git check-ignore *)"
     ]
   }
 }
