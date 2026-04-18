@@ -1,6 +1,13 @@
 {
   "reports": [
     {
+      "type": "evening",
+      "title": "Evening Briefing",
+      "date": "2026-04-17",
+      "time": "8:00 PM ET",
+      "file": "reports/daily/2026-04-17-evening.html"
+    },
+    {
       "type": "morning",
       "title": "Morning Briefing",
       "date": "2026-04-17",
