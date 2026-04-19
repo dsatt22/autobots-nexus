@@ -15,6 +15,14 @@
       "file": "reports/daily/2026-04-19-morning.html"
     },
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-04-19",
+      "time": "3:27 PM ET",
+      "file": "reports/daily/morning_briefing_2026-04-19_1527.json",
+      "format": "json"
+    },
+    {
       "type": "weekly-comparison",
       "title": "Weekly Strategy Comparison",
       "date": "2026-04-19",
