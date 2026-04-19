@@ -8,6 +8,13 @@
       "file": "reports/weekly/2026-04-19-trading-review.html"
     },
     {
+      "type": "morning",
+      "title": "Morning Briefing",
+      "date": "2026-04-19",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/2026-04-19-morning.html"
+    },
+    {
       "type": "weekly-comparison",
       "title": "Weekly Strategy Comparison",
       "date": "2026-04-19",
