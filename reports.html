@@ -1319,11 +1319,15 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .jr-zero { color:#e8eaf0; }
 .jr-null { color:#8892a4; }
 
-/* Trading Activity — dynamic-column table */
-.jr-trade-table { width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Share Tech Mono',monospace; }
-.jr-trade-table th { font-size:0.7rem; letter-spacing:0.1em; color:var(--sub); text-transform:uppercase; padding:0.55rem 0.7rem; border:1px solid var(--border); background:var(--bg-card); text-align:left; font-weight:600; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--border); white-space:nowrap; }
+/* Report body — width is set to match the Trading Activity table (via JS post-render).
+   Falls back to fit-content if JS can't measure. Centered within its parent. */
+.jr-report-body { max-width:100%; margin:0 auto; padding:1.4rem 0 3rem; box-sizing:border-box; width:fit-content; }
+
+/* Trading Activity — content-driven column widths (no fixed layout) */
+.jr-trade-table { width:max-content; border-collapse:collapse; font-family:'Share Tech Mono',monospace; }
+.jr-trade-table th { font-size:0.7rem; letter-spacing:0.1em; color:var(--sub); text-transform:uppercase; padding:0.55rem 0.9rem; border:1px solid var(--border); background:var(--bg-card); text-align:left; font-weight:600; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--border); white-space:nowrap; }
 .jr-trade-table th.jr-col-pnl, .jr-trade-table td.jr-col-pnl { text-align:right; font-variant-numeric:tabular-nums; }
-.jr-trade-table td { padding:0.55rem 0.75rem; border:1px solid var(--border); font-size:0.85rem; vertical-align:middle; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.jr-trade-table td { padding:0.55rem 0.9rem; border:1px solid var(--border); font-size:0.85rem; vertical-align:middle; color:var(--text); white-space:nowrap; }
 .jr-trade-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
 .jr-trade-table tr:hover td { background:rgba(255,255,255,0.04); }
 .jr-trade-table tr.jr-ticker-row td {
@@ -2046,9 +2050,8 @@ function renderTradingActivity(ta){
   if (showFinal) cols.push({k:'final', w:90, th:'Final PnL', pnl:true});
   cols.push({k:'duration', w:90, th:'Duration'});
 
-  const colspan  = cols.length;
-  const colgroup = cols.map(c => `<col style="width:${c.w}px">`).join('');
-  const thead    = cols.map(c => `<th${c.pnl ? ' class="jr-col-pnl"' : ''}>${escHtml(c.th)}</th>`).join('');
+  const colspan = cols.length;
+  const thead   = cols.map(c => `<th${c.pnl ? ' class="jr-col-pnl"' : ''}>${escHtml(c.th)}</th>`).join('');
 
   const tbody = ta.tickers.map(group => {
     const ticker = group.ticker || '';
@@ -2074,7 +2077,6 @@ function renderTradingActivity(ta){
     <div class="rpt-sec-lbl">Trading Activity</div>
     <div class="rpt-trade-wrap">
       <table class="jr-trade-table">
-        <colgroup>${colgroup}</colgroup>
         <thead><tr>${thead}</tr></thead>
         <tbody>${tbody}</tbody>
       </table>
@@ -2196,8 +2198,7 @@ function renderBriefing(data){
   const isEvening = data.report_type === 'evening_briefing';
   const sinceLabel = (data.metadata && data.metadata.period && data.metadata.period.since_label) ||
                     (isEvening ? 'morning report' : 'last report');
-  return `<div class="report-inner">
-    ${renderMetaLine(data.metadata)}
+  return `<div class="jr-report-body">
     ${renderTLDR(s.tldr, `Summary · Since ${sinceLabel}`)}
     ${renderTradingActivity(s.trading_activity)}
     ${renderPartialCloses(s.partial_closes)}
@@ -2326,8 +2327,7 @@ function renderPartialClosesSummary(pcs){
 
 function renderWeekly(data){
   const s = data.sections || {};
-  return `<div class="report-inner">
-    ${renderMetaLine(data.metadata)}
+  return `<div class="jr-report-body">
     ${renderTLDR(s.tldr, 'Weekly Summary')}
     ${renderTradingPerformance(s.trading_performance)}
     ${renderTickerGroups(s.ticker_groups)}
@@ -2423,8 +2423,7 @@ function renderMonthlyDeepDive(m){
 
 function renderComparison(data){
   const s = data.sections || {};
-  return `<div class="report-inner">
-    ${renderMetaLine(data.metadata)}
+  return `<div class="jr-report-body">
     ${renderTLDR(s.tldr, 'Comparison Summary')}
     ${renderHeadToHead(s.head_to_head, s.rankings)}
     ${renderRankings(s.rankings)}
@@ -2441,6 +2440,24 @@ function renderReportData(data){
   if (rt === 'weekly_review')        return renderWeekly(data);
   if (rt === 'strategy_comparison')  return renderComparison(data);
   return `<div class="jr-error">Unknown report_type<span class="jr-error-detail">${escHtml(String(rt))}</span></div>`;
+}
+
+/* After rendering, resize the report body to match the Trading Activity (or similar)
+   table width. The table is the natural-width anchor; other sections fill that width.
+   Falls back gracefully when no anchor table exists. */
+function sizeJsonReportBody(containerEl){
+  if (!containerEl) return;
+  const body = containerEl.querySelector('.jr-report-body');
+  if (!body) return;
+  const anchor = body.querySelector('.jr-trade-table, .jr-perf-table, .jr-h2h-table');
+  if (!anchor) return;
+  requestAnimationFrame(() => {
+    const tableW  = Math.ceil(anchor.getBoundingClientRect().width);
+    const parent  = body.parentElement;
+    const parentW = parent ? Math.floor(parent.getBoundingClientRect().width) : Infinity;
+    if (tableW <= 0) return;
+    body.style.width = Math.min(tableW, parentW) + 'px';
+  });
 }
 
 async function hydrateJsonReports(rootEl){
@@ -2462,6 +2479,7 @@ async function hydrateJsonReports(rootEl){
         JSON_REPORT_CACHE.set(file, html);
       }
       el.innerHTML = html;
+      sizeJsonReportBody(el);
     } catch (err) {
       console.error('Failed to render JSON report', file, err);
       el.innerHTML = `<div class="jr-error">Failed to load report<span class="jr-error-detail">${escHtml(file)} — ${escHtml(err.message||String(err))}</span></div>`;
