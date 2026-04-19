@@ -1300,6 +1300,109 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
   opacity:0; transition:opacity 0.3s;
 }
 .auth-error.visible { opacity:1; }
+
+/* ══════════════════════════════════════
+   JSON REPORT RENDERER
+══════════════════════════════════════ */
+.jr-root { width:100%; }
+.jr-loading, .jr-error {
+  display:flex; align-items:center; justify-content:center;
+  min-height:240px; padding:2rem; flex-direction:column; gap:0.4rem;
+  font-family:'Share Tech Mono',monospace; color:var(--sub); font-size:0.9rem;
+}
+.jr-error { color:var(--red); }
+.jr-error-detail { color:var(--sub); font-size:0.72rem; }
+
+/* PnL colors — Trading Activity (exact spec values) */
+.jr-pos  { color:#00c896; }
+.jr-neg  { color:#e84142; }
+.jr-zero { color:#e8eaf0; }
+.jr-null { color:#8892a4; }
+
+/* Trading Activity — dynamic-column table */
+.jr-trade-table { width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Share Tech Mono',monospace; }
+.jr-trade-table th { font-size:0.7rem; letter-spacing:0.1em; color:var(--sub); text-transform:uppercase; padding:0.55rem 0.7rem; border:1px solid var(--border); background:var(--bg-card); text-align:left; font-weight:600; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--border); white-space:nowrap; }
+.jr-trade-table th.jr-col-pnl, .jr-trade-table td.jr-col-pnl { text-align:right; font-variant-numeric:tabular-nums; }
+.jr-trade-table td { padding:0.55rem 0.75rem; border:1px solid var(--border); font-size:0.85rem; vertical-align:middle; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.jr-trade-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.jr-trade-table tr:hover td { background:rgba(255,255,255,0.04); }
+.jr-trade-table tr.jr-ticker-row td {
+  background:rgba(var(--tc-rgb,100,180,255),0.08) !important;
+  border-left:3px solid var(--tc,var(--accent));
+  padding:0.4rem 0.75rem; white-space:nowrap;
+}
+.jr-ticker-chip { font-family:'Share Tech Mono',monospace; font-weight:700; letter-spacing:0.08em; color:var(--tc,var(--accent)); font-size:0.74rem; }
+
+/* TLDR stats grid */
+.jr-stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.6rem; margin-top:0.9rem; }
+.jr-stat { background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:4px; padding:0.55rem 0.75rem; }
+.jr-stat-k { font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; color:var(--dim); text-transform:uppercase; margin-bottom:0.25rem; }
+.jr-stat-v { font-family:'Oxanium',sans-serif; font-size:1.05rem; font-weight:700; color:var(--text); }
+
+/* Pipeline snapshot */
+.jr-pipe-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:0.7rem; margin-bottom:0.9rem; }
+.jr-pipe-card { background:rgba(255,255,255,0.025); border:1px solid var(--border); border-radius:6px; padding:0.7rem 0.9rem; }
+.jr-pipe-k { font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; color:var(--dim); text-transform:uppercase; margin-bottom:0.3rem; }
+.jr-pipe-v { font-family:'Oxanium',sans-serif; font-size:1.4rem; font-weight:800; color:var(--text); }
+.jr-pipe-sub { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--sub); margin-top:0.2rem; }
+
+/* Partial closes list */
+.jr-partial-list { display:flex; flex-direction:column; gap:0.5rem; }
+.jr-partial-row { display:flex; align-items:center; gap:0.7rem; padding:0.55rem 0.8rem; background:rgba(78,204,163,0.05); border:1px solid rgba(78,204,163,0.15); border-radius:5px; font-family:'Share Tech Mono',monospace; font-size:0.85rem; color:var(--sub); flex-wrap:wrap; }
+.jr-partial-row .bot { color:var(--text); font-weight:700; }
+.jr-partial-row .tp  { color:var(--teal); font-weight:700; }
+.jr-partial-row .time{ color:var(--dim); font-size:0.72rem; margin-left:auto; }
+
+/* Action items */
+.jr-actions { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.55rem; }
+.jr-action { padding:0.7rem 0.9rem; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:4px; font-family:'Share Tech Mono',monospace; font-size:0.88rem; color:var(--text); line-height:1.65; }
+
+/* Additional status badges */
+.badge-tp2          { background:rgba(78,204,163,0.16); color:var(--teal); border:1px solid rgba(78,204,163,0.35); }
+.badge-tp3          { background:rgba(78,204,163,0.2);  color:var(--teal); border:1px solid rgba(78,204,163,0.4); }
+.badge-be           { background:rgba(136,146,164,0.12); color:var(--gray); border:1px solid rgba(136,146,164,0.25); }
+.badge-stopped      { background:rgba(255,77,77,0.12); color:var(--red); border:1px solid rgba(255,77,77,0.3); }
+.badge-offline      { background:rgba(255,77,77,0.08); color:var(--red); border:1px solid rgba(255,77,77,0.25); }
+.badge-not-deployed { background:rgba(136,146,164,0.08); color:var(--dim); border:1px solid rgba(136,146,164,0.2); }
+.badge-degraded     { background:rgba(245,169,79,0.1); color:var(--comparison); border:1px solid rgba(245,169,79,0.3); }
+
+/* Weekly perf table */
+.jr-perf-table { width:100%; border-collapse:collapse; font-family:'Share Tech Mono',monospace; margin-bottom:1rem; }
+.jr-perf-table th { font-size:0.7rem; letter-spacing:0.08em; color:var(--sub); padding:0.5rem 0.7rem; border:1px solid var(--border); background:var(--bg-card); text-align:left; text-transform:uppercase; font-weight:600; }
+.jr-perf-table td { padding:0.55rem 0.75rem; border:1px solid var(--border); font-size:0.85rem; vertical-align:middle; color:var(--text); }
+.jr-perf-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.jr-perf-table td.num { text-align:right; font-variant-numeric:tabular-nums; }
+
+/* Ticker group summary cards */
+.jr-ticker-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.7rem; margin-bottom:1rem; }
+.jr-ticker-card { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-left:3px solid var(--tc,var(--accent)); border-radius:5px; padding:0.8rem 0.95rem; }
+.jr-ticker-card-hdr { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.35rem; }
+.jr-ticker-card-tick { font-family:'Share Tech Mono',monospace; font-weight:700; letter-spacing:0.08em; color:var(--tc,var(--accent)); }
+.jr-ticker-card-pnl { font-family:'Oxanium',sans-serif; font-weight:800; font-size:1rem; }
+.jr-ticker-card-row { font-family:'Share Tech Mono',monospace; font-size:0.78rem; color:var(--sub); margin-top:0.2rem; line-height:1.5; }
+.jr-ticker-card-row .k { color:var(--dim); margin-right:0.3rem; }
+
+/* Market condition regime pills */
+.jr-regime-pills { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; }
+.jr-regime-pill { display:inline-flex; align-items:center; gap:6px; font-family:'Share Tech Mono',monospace; font-size:0.78rem; padding:5px 14px; border-radius:100px; border:1px solid var(--border); color:var(--sub); }
+.jr-regime-pill .tk { color:var(--tc,var(--accent)); font-weight:700; }
+.jr-regime-pill.trending_up   { border-color:rgba(0,200,150,0.3); background:rgba(0,200,150,0.06); color:var(--green); }
+.jr-regime-pill.trending_down { border-color:rgba(255,77,77,0.3); background:rgba(255,77,77,0.06); color:var(--red); }
+.jr-regime-pill.choppy        { border-color:rgba(245,169,79,0.3); background:rgba(245,169,79,0.06); color:var(--comparison); }
+.jr-regime-pill.volatile      { border-color:rgba(168,85,247,0.3); background:rgba(168,85,247,0.06); color:var(--evening); }
+.jr-regime-pill.calm          { border-color:rgba(78,204,163,0.3); background:rgba(78,204,163,0.06); color:var(--teal); }
+
+/* Head-to-head comparison table */
+.jr-h2h-table { width:100%; border-collapse:collapse; font-family:'Share Tech Mono',monospace; margin-bottom:1rem; }
+.jr-h2h-table th { font-size:0.7rem; letter-spacing:0.08em; color:var(--sub); padding:0.5rem 0.7rem; border:1px solid var(--border); background:var(--bg-card); text-align:center; text-transform:uppercase; font-weight:600; }
+.jr-h2h-table th:first-child, .jr-h2h-table td:first-child { text-align:left; }
+.jr-h2h-table td { padding:0.55rem 0.75rem; border:1px solid var(--border); font-size:0.82rem; text-align:center; color:var(--text); vertical-align:middle; }
+.jr-h2h-table tr.jr-h2h-leader td { background:rgba(100,180,255,0.08); font-weight:700; }
+.jr-h2h-table tr:nth-child(even):not(.jr-h2h-leader) td { background:rgba(255,255,255,0.02); }
+
+/* Header strip inside a rendered report (date + time before sections) */
+.jr-meta-line { font-family:'Share Tech Mono',monospace; font-size:0.78rem; color:var(--sub); margin-bottom:1.3rem; letter-spacing:0.05em; }
+.jr-meta-line .dim { color:var(--dim); }
 </style>
 </head>
 <body>
@@ -1656,7 +1759,17 @@ function tBadge(ticker){const c=tc(ticker);return`<span class="badge" style="bac
 function sBadge(s){const l=s.toLowerCase();if(l.includes('open'))return'<span class="badge badge-open">Open</span>';if(l.includes('tp1'))return'<span class="badge badge-tp1">TP1 Hit - BE Stop</span>';if(l.includes('loss'))return'<span class="badge badge-loss">Closed - Loss</span>';if(l.includes('win')||l.includes('closed-w'))return'<span class="badge badge-win">Closed - Win</span>';return`<span class="badge badge-open">${s}</span>`;}
 function sideBadge(s){return s.toLowerCase()==='long'?'<span class="badge badge-long">LONG</span>':'<span class="badge badge-short">SHORT</span>';}
 
-const TYPE_META={morning:{icon:'🌅',label:'Morning Briefing',col:'var(--morning)'},evening:{icon:'🌆',label:'Evening Briefing',col:'var(--evening)'},weekly:{icon:'📊',label:'Weekly Review',col:'var(--weekly)'},comparison:{icon:'⚖️',label:'Strategy Comparison',col:'var(--comparison)'}};
+const TYPE_META={
+  morning:           {icon:'🌅',label:'Morning Briefing',    col:'var(--morning)'},
+  morning_briefing:  {icon:'🌅',label:'Morning Briefing',    col:'var(--morning)'},
+  evening:           {icon:'🌆',label:'Evening Briefing',    col:'var(--evening)'},
+  evening_briefing:  {icon:'🌆',label:'Evening Briefing',    col:'var(--evening)'},
+  weekly:            {icon:'📊',label:'Weekly Review',       col:'var(--weekly)'},
+  weekly_review:     {icon:'📊',label:'Weekly Review',       col:'var(--weekly)'},
+  comparison:        {icon:'⚖️',label:'Strategy Comparison', col:'var(--comparison)'},
+  'weekly-comparison':{icon:'⚖️',label:'Strategy Comparison',col:'var(--comparison)'},
+  strategy_comparison:{icon:'⚖️',label:'Strategy Comparison',col:'var(--comparison)'}
+};
 
 /* ══════════════════════════════════
    REPORT CONTENT BUILDERS
@@ -1716,12 +1829,22 @@ async function loadReportsFromIndex(){
     if(!res.ok) return [];
     const data = await res.json();
     const raw = Array.isArray(data && data.reports) ? data.reports : [];
-    const typeOrder = ['comparison','weekly','evening','morning'];
+    // Newest-first within each report type; morning -> evening -> weekly -> comparison within a date.
+    const typeRank = t => {
+      const m = {
+        morning:0, morning_briefing:0,
+        evening:1, evening_briefing:1,
+        weekly:2, weekly_review:2,
+        comparison:3, 'weekly-comparison':3, strategy_comparison:3
+      };
+      return m[t] !== undefined ? m[t] : 99;
+    };
     return raw.map(r => {
       const title = r.title || (TYPE_META[r.type] && TYPE_META[r.type].label) || r.type;
       const safeTitle = String(title).replace(/"/g,'&quot;');
-      const safeFile = String(r.file || '').replace(/"/g,'%22');
-      const id = (r.file || '').split('/').pop().replace(/\.html$/,'') || (r.date+'-'+r.type);
+      const safeFile  = String(r.file || '').replace(/"/g,'%22');
+      const id = (r.file || '').split('/').pop().replace(/\.(html|json)$/i,'') || (r.date+'-'+r.type);
+      const format = (r.format || '').toLowerCase() === 'json' ? 'json' : 'html';
       return {
         id,
         type: r.type,
@@ -1730,13 +1853,18 @@ async function loadReportsFromIndex(){
         time: r.time || '',
         tldr: '',
         file: r.file,
+        format,
+        title,
         get content(){
+          if (format === 'json') {
+            return `<div class="jr-root" data-report-id="${id}" data-report-file="${safeFile}" data-report-type="${r.type||''}"><div class="jr-loading">Loading report…</div></div>`;
+          }
           return `<iframe src="${safeFile}" title="${safeTitle}" style="width:100%;height:100%;border:0;background:transparent" loading="lazy"></iframe>`;
         },
       };
     }).sort((a,b)=>
       b.date.localeCompare(a.date) ||
-      typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type)
+      typeRank(a.type) - typeRank(b.type)
     );
   } catch(err) {
     console.error('Failed to load reports-index.json:', err);
@@ -1771,6 +1899,575 @@ function generateReports(){
     }
   });
 })();
+
+/* ══════════════════════════════════
+   JSON REPORT RENDERER
+══════════════════════════════════ */
+const JSON_REPORT_CACHE = new Map();
+
+function escHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtETTime(iso){
+  if(!iso) return '';
+  const d = new Date(iso);
+  if(isNaN(d)) return '';
+  return d.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true}) + ' ET';
+}
+function fmtETClock(iso){
+  if(!iso) return '';
+  const d = new Date(iso);
+  if(isNaN(d)) return '';
+  return d.toLocaleString('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true}) + ' ET';
+}
+function fmtUSD(v){
+  if (v === null || v === undefined || v === '') return '—';
+  const n = Number(v);
+  if (!isFinite(n)) return '—';
+  const abs = Math.abs(n).toFixed(2);
+  if (n > 0) return '+$' + abs;
+  if (n < 0) return '-$' + abs;
+  return '$0.00';
+}
+function jrPnl(v){
+  if (v === null || v === undefined) return '<span class="jr-null">—</span>';
+  const n = Number(v);
+  if (!isFinite(n)) return '<span class="jr-null">—</span>';
+  const cls = n > 0 ? 'jr-pos' : n < 0 ? 'jr-neg' : 'jr-zero';
+  const sign = n > 0 ? '+' : n < 0 ? '-' : '';
+  return `<span class="${cls}">${sign}$${Math.abs(n).toFixed(2)}</span>`;
+}
+function fmtEntryPrice(v){
+  if (v === null || v === undefined) return '';
+  const n = Number(v);
+  if (!isFinite(n)) return String(v);
+  if (n >= 1000) return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+  if (n >= 1) return '$' + n.toFixed(4);
+  return '$' + n.toFixed(6);
+}
+function sideBadgeJR(side){
+  const s = String(side||'').toUpperCase();
+  const cls = s === 'SHORT' ? 'badge-short' : 'badge-long';
+  return `<span class="badge ${cls}">${escHtml(s || '—')}</span>`;
+}
+function statusBadgeJR(code, label){
+  const c = String(code||'').toLowerCase();
+  let cls = 'badge-open';
+  if (c === 'open') cls = 'badge-open';
+  else if (c === 'tp1_hit' || c === 'tp1_hit_be_stop') cls = 'badge-tp1';
+  else if (c === 'tp2_hit') cls = 'badge-tp2';
+  else if (c === 'tp3_hit') cls = 'badge-tp3';
+  else if (c === 'closed_win') cls = 'badge-win';
+  else if (c === 'closed_loss') cls = 'badge-loss';
+  else if (c === 'closed_be') cls = 'badge-be';
+  else if (c === 'stopped_out') cls = 'badge-stopped';
+  return `<span class="badge ${cls}">${escHtml(label || code || '—')}</span>`;
+}
+function botStatusBadgeJR(status){
+  const s = String(status||'').toLowerCase();
+  const map = {
+    online:       {cls:'badge-online',      txt:'Online'},
+    offline:      {cls:'badge-offline',     txt:'Offline'},
+    not_deployed: {cls:'badge-not-deployed',txt:'Not Deployed'},
+    degraded:     {cls:'badge-degraded',    txt:'Degraded'}
+  };
+  const m = map[s] || {cls:'badge-inactive', txt:status || 'Unknown'};
+  return `<span class="badge ${m.cls}">${escHtml(m.txt)}</span>`;
+}
+function tickerStyleVars(ticker){
+  const hex = (typeof tc === 'function') ? tc(ticker || '') : '#64b4ff';
+  const rgb = (typeof hexRgb === 'function') ? hexRgb(hex) : '100,180,255';
+  return `--tc:${hex};--tc-rgb:${rgb}`;
+}
+function prettyStatKey(k){
+  return String(k).replace(/_usd$/,'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+}
+
+/* Shared sections */
+function renderMetaLine(meta){
+  if (!meta) return '';
+  const gen = fmtETTime(meta.generated_at_et || meta.generated_at);
+  let period = '';
+  if (meta.period && (meta.period.since_label || meta.period.start_et)) {
+    const label = meta.period.since_label || fmtETClock(meta.period.start_et);
+    period = ` <span class="dim">·</span> Since ${escHtml(label)}`;
+  }
+  if (!gen && !period) return '';
+  return `<div class="jr-meta-line">${escHtml(gen)}${period}</div>`;
+}
+
+function renderTLDR(tldr, headingLabel){
+  if (!tldr) return '';
+  const text = tldr.text ? `<div class="rpt-tldr">${escHtml(tldr.text)}</div>` : '';
+  let stats = '';
+  if (tldr.stats && typeof tldr.stats === 'object') {
+    const entries = Object.entries(tldr.stats).filter(([k,v]) => v !== null && v !== undefined);
+    if (entries.length) {
+      stats = `<div class="jr-stats-grid">` + entries.map(([k,v]) => {
+        const label = prettyStatKey(k);
+        let val = v;
+        if (typeof v === 'number' && /pnl/i.test(k)) val = fmtUSD(v);
+        else if (typeof v === 'number' && /pct$/i.test(k)) val = Number(v).toFixed(1) + '%';
+        return `<div class="jr-stat"><div class="jr-stat-k">${escHtml(label)}</div><div class="jr-stat-v">${escHtml(String(val))}</div></div>`;
+      }).join('') + `</div>`;
+    }
+  }
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">${escHtml(headingLabel || 'Summary')}</div>
+    ${text}${stats}
+  </div>`;
+}
+
+function renderTradingActivity(ta){
+  if (!ta || !Array.isArray(ta.tickers) || ta.tickers.length === 0) {
+    return `<div class="rpt-section">
+      <div class="rpt-sec-lbl">Trading Activity</div>
+      <div class="rpt-note">No trades in this period.</div>
+    </div>`;
+  }
+  // Determine which dynamic columns to render
+  const allTrades = ta.tickers.flatMap(t => Array.isArray(t.trades) ? t.trades : []);
+  const showTp1   = allTrades.some(t => t.tp1_pnl_usd   !== null && t.tp1_pnl_usd   !== undefined);
+  const showTp2   = allTrades.some(t => t.tp2_pnl_usd   !== null && t.tp2_pnl_usd   !== undefined);
+  const showTp3   = allTrades.some(t => t.tp3_pnl_usd   !== null && t.tp3_pnl_usd   !== undefined);
+  const showFinal = allTrades.some(t => t.final_pnl_usd !== null && t.final_pnl_usd !== undefined);
+
+  // Column spec widths
+  const cols = [
+    {k:'bot',      w:140, th:'Bot'},
+    {k:'tf',       w:50,  th:'TF'},
+    {k:'side',     w:60,  th:'Side'},
+    {k:'entry',    w:110, th:'Entry'},
+    {k:'status',   w:180, th:'Status'}
+  ];
+  if (showTp1)   cols.push({k:'tp1',   w:90, th:'TP1 PnL',   pnl:true});
+  if (showTp2)   cols.push({k:'tp2',   w:90, th:'TP2 PnL',   pnl:true});
+  if (showTp3)   cols.push({k:'tp3',   w:90, th:'TP3 PnL',   pnl:true});
+  if (showFinal) cols.push({k:'final', w:90, th:'Final PnL', pnl:true});
+  cols.push({k:'duration', w:90, th:'Duration'});
+
+  const colspan  = cols.length;
+  const colgroup = cols.map(c => `<col style="width:${c.w}px">`).join('');
+  const thead    = cols.map(c => `<th${c.pnl ? ' class="jr-col-pnl"' : ''}>${escHtml(c.th)}</th>`).join('');
+
+  const tbody = ta.tickers.map(group => {
+    const ticker = group.ticker || '';
+    const tickerRow = `<tr class="jr-ticker-row" style="${tickerStyleVars(ticker)}"><td colspan="${colspan}"><span class="jr-ticker-chip">${escHtml(ticker)}</span></td></tr>`;
+    const rows = (group.trades || []).map(t => {
+      const cells = [];
+      cells.push(`<td title="${escHtml(t.bot_name||'')}">${escHtml(t.bot_name||'')}</td>`);
+      cells.push(`<td>${escHtml(t.timeframe||'')}</td>`);
+      cells.push(`<td>${sideBadgeJR(t.side)}</td>`);
+      cells.push(`<td>${escHtml(fmtEntryPrice(t.entry_price))}</td>`);
+      cells.push(`<td>${statusBadgeJR(t.status_code, t.status_label)}</td>`);
+      if (showTp1)   cells.push(`<td class="jr-col-pnl">${jrPnl(t.tp1_pnl_usd)}</td>`);
+      if (showTp2)   cells.push(`<td class="jr-col-pnl">${jrPnl(t.tp2_pnl_usd)}</td>`);
+      if (showTp3)   cells.push(`<td class="jr-col-pnl">${jrPnl(t.tp3_pnl_usd)}</td>`);
+      if (showFinal) cells.push(`<td class="jr-col-pnl">${jrPnl(t.final_pnl_usd)}</td>`);
+      cells.push(`<td>${escHtml(t.duration||'')}</td>`);
+      return `<tr>${cells.join('')}</tr>`;
+    }).join('');
+    return tickerRow + rows;
+  }).join('');
+
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Trading Activity</div>
+    <div class="rpt-trade-wrap">
+      <table class="jr-trade-table">
+        <colgroup>${colgroup}</colgroup>
+        <thead><tr>${thead}</tr></thead>
+        <tbody>${tbody}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderPartialCloses(pc){
+  if (!pc) return '';
+  const has = pc.has_data && Array.isArray(pc.fills) && pc.fills.length > 0;
+  let body;
+  if (!has) {
+    body = `<div class="rpt-note">No partial closes in this period.</div>`;
+  } else {
+    const rows = pc.fills.map(f => `<div class="jr-partial-row">
+      <span class="bot">${escHtml(f.bot_name||'')}</span>
+      <span>${escHtml(f.ticker||'')} · ${escHtml(f.timeframe||'')} · ${escHtml(f.side||'')}</span>
+      <span class="tp">${escHtml(f.tp_level||'')}</span>
+      <span>${jrPnl(f.pnl_usd)}</span>
+      <span class="time">${escHtml(fmtETClock(f.hit_time))}</span>
+    </div>`).join('');
+    const summary = pc.summary
+      ? `<div class="rpt-partial" style="margin-top:0.6rem">${pc.summary.total_partial_fills} fill${pc.summary.total_partial_fills===1?'':'s'} · total ${jrPnl(pc.summary.total_partial_pnl_usd)}</div>`
+      : '';
+    body = `<div class="jr-partial-list">${rows}</div>${summary}`;
+  }
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Partial Closes</div>
+    ${body}
+  </div>`;
+}
+
+function renderPipelineSnapshot(ps){
+  if (!ps) return '';
+  const cards = [
+    {k:'Queued for Codegen',   v:ps.strategies_queued_for_codegen},
+    {k:'Actively Testing',     v:ps.strategies_actively_testing},
+    {k:'Passed Quality Gates', v:ps.strategies_passed_quality_gates}
+  ].map(c => `<div class="jr-pipe-card"><div class="jr-pipe-k">${escHtml(c.k)}</div><div class="jr-pipe-v">${escHtml(String(c.v ?? 0))}</div></div>`).join('');
+
+  const windowLine = (label, w) => {
+    if (!w) return '';
+    const ran   = w.ran_since_last_report ? 'Ran since last report' : 'Has not run since the last report';
+    const hours = w.hours_label ? ` · ${escHtml(w.hours_label)}` : '';
+    const last  = w.last_run_at ? ` · Last run ${escHtml(fmtETClock(w.last_run_at))}` : '';
+    return `<div class="window-box"><strong style="color:var(--text)">${escHtml(label)}</strong>${hours}<br>${ran}${last}</div>`;
+  };
+
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Pipeline Snapshot</div>
+    <div class="jr-pipe-grid">${cards}</div>
+    ${windowLine('Codegen window',      ps.codegen_window)}
+    ${windowLine('Optimization window', ps.optimization_window)}
+    ${windowLine('Whisper window',      ps.whisper_window)}
+  </div>`;
+}
+
+function renderBotStatus(bs){
+  if (!bs) return '';
+  const allGood = bs.all_operational ? `<div class="all-good">✅ All systems operational</div>` : '';
+  const bots = (bs.bots || []).map(b => {
+    const badge  = botStatusBadgeJR(b.status);
+    const hb     = b.last_checked_label ? `<div class="bot-block-hb">Last checked ${escHtml(b.last_checked_label)}</div>` : '';
+    const errs   = Array.isArray(b.errors_since_last_report) && b.errors_since_last_report.length
+      ? `<div class="rpt-partial" style="margin-top:0.55rem;background:rgba(255,77,77,0.06);border-color:rgba(255,77,77,0.2);color:var(--red)">${b.errors_since_last_report.map(e=>escHtml(String(e))).join('<br>')}</div>`
+      : '';
+    return `<div class="bot-block">
+      <div class="bot-block-hdr"><div class="bot-block-name">${escHtml(b.name||'')}</div>${badge}${hb}</div>
+      <div class="bot-block-detail">${escHtml(b.description||'')}</div>
+      ${errs}
+    </div>`;
+  }).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Bot Status</div>
+    ${allGood}${bots}
+  </div>`;
+}
+
+function renderErrors(err){
+  if (!err) return '';
+  if (!err.has_errors || !Array.isArray(err.entries) || !err.entries.length) {
+    return `<div class="rpt-section">
+      <div class="rpt-sec-lbl">Errors</div>
+      <div class="rpt-note">No errors since the last report.</div>
+    </div>`;
+  }
+  const rows = err.entries.map(e => `<div class="rpt-partial" style="background:rgba(255,77,77,0.06);border-color:rgba(255,77,77,0.2);color:var(--text)">
+    <strong>${escHtml(e.bot_name||'')}</strong> · ${escHtml(e.severity||'error')} · ${escHtml(fmtETClock(e.occurred_at))}<br>${escHtml(e.message||'')}${e.count && e.count>1 ? ` (×${e.count})` : ''}
+  </div>`).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Errors</div>${rows}
+  </div>`;
+}
+
+function renderActionItems(ai){
+  if (!ai) return '';
+  if (!ai.has_items || !Array.isArray(ai.items) || !ai.items.length) {
+    return `<div class="rpt-section">
+      <div class="rpt-sec-lbl">Action Items</div>
+      <div class="rpt-note">No action items. Everything looks good.</div>
+    </div>`;
+  }
+  const items = ai.items.map(it => `<li class="jr-action">${escHtml(it.text||'')}</li>`).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Action Items</div>
+    <ol class="jr-actions">${items}</ol>
+  </div>`;
+}
+
+function renderFooter(f){
+  if (!f) return '';
+  const label = f.next_report_time_label ? ` · Next report: ${escHtml(f.next_report_time_label)}` : '';
+  return `<div class="rpt-footer">Sent by <strong style="color:var(--text)">reporting_bot</strong>${label}</div>`;
+}
+
+/* Per-type briefing renderer */
+function renderBriefing(data){
+  const s = data.sections || {};
+  const isEvening = data.report_type === 'evening_briefing';
+  const sinceLabel = (data.metadata && data.metadata.period && data.metadata.period.since_label) ||
+                    (isEvening ? 'morning report' : 'last report');
+  return `<div class="report-inner">
+    ${renderMetaLine(data.metadata)}
+    ${renderTLDR(s.tldr, `Summary · Since ${sinceLabel}`)}
+    ${renderTradingActivity(s.trading_activity)}
+    ${renderPartialCloses(s.partial_closes)}
+    ${renderPipelineSnapshot(s.pipeline_snapshot)}
+    ${renderBotStatus(s.bot_status)}
+    ${renderErrors(s.errors)}
+    ${renderActionItems(s.action_items)}
+    ${renderFooter(data.footer)}
+  </div>`;
+}
+
+/* Weekly sections */
+function renderTradingPerformance(tp){
+  if (!tp || !Array.isArray(tp.bots) || !tp.bots.length) return '';
+  const rows = tp.bots.map(b => `<tr>
+    <td>${escHtml(b.bot_name||'')}</td>
+    <td>${escHtml(b.ticker||'')}</td>
+    <td>${escHtml(b.timeframe||'')}</td>
+    <td class="num">${escHtml(String(b.trades_count??0))}</td>
+    <td class="num">${b.win_rate_pct!=null?Number(b.win_rate_pct).toFixed(1)+'%':'—'}</td>
+    <td class="num">${jrPnl(b.pnl_week_usd)}</td>
+    <td class="num">${jrPnl(b.pnl_lifetime_usd)}</td>
+    <td class="num">${escHtml(String(b.days_active??0))}</td>
+    <td>${statusBadgeJR(b.status_code, b.status_label)}</td>
+  </tr>`).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Trading Performance</div>
+    <div class="rpt-trade-wrap">
+      <table class="jr-perf-table">
+        <thead><tr>
+          <th>Bot</th><th>Ticker</th><th>TF</th><th>Trades</th><th>Win%</th>
+          <th>PnL (Week)</th><th>PnL (Lifetime)</th><th>Days</th><th>Status</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderTickerGroups(tg){
+  if (!tg || !Array.isArray(tg.tickers) || !tg.tickers.length) return '';
+  const cards = tg.tickers.map(t => `<div class="jr-ticker-card" style="${tickerStyleVars(t.ticker)}">
+    <div class="jr-ticker-card-hdr">
+      <span class="jr-ticker-card-tick">${escHtml(t.ticker||'')}</span>
+      <span class="jr-ticker-card-pnl">${jrPnl(t.total_pnl_usd)}</span>
+    </div>
+    <div class="jr-ticker-card-row"><span class="k">Trades:</span>${escHtml(String(t.total_trades??0))}</div>
+    ${t.best_bot  ? `<div class="jr-ticker-card-row"><span class="k">Best:</span>${escHtml(t.best_bot.bot_name||'')} (${jrPnl(t.best_bot.pnl_usd)})</div>` : ''}
+    ${t.worst_bot ? `<div class="jr-ticker-card-row"><span class="k">Worst:</span>${escHtml(t.worst_bot.bot_name||'')} (${jrPnl(t.worst_bot.pnl_usd)})</div>` : ''}
+  </div>`).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Ticker Groups</div>
+    <div class="jr-ticker-grid">${cards}</div>
+  </div>`;
+}
+
+function renderMarketConditionsBlock(mc, headingLabel){
+  if (!mc || !Array.isArray(mc.tickers) || !mc.tickers.length) return '';
+  const pills = mc.tickers.map(t => {
+    const regime = (t.regime_code||'').toLowerCase();
+    return `<span class="jr-regime-pill ${escHtml(regime)}" style="${tickerStyleVars(t.ticker)}">
+      <span class="tk">${escHtml(t.ticker||'')}</span>${escHtml(t.regime_label || regime || '—')}
+    </span>`;
+  }).join('');
+  const descs = mc.tickers.filter(t => t.description).map(t =>
+    `<div class="rpt-para"><strong style="color:var(--text)">${escHtml(t.ticker)}:</strong> ${escHtml(t.description)}</div>`
+  ).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">${escHtml(headingLabel||'Market Conditions')}</div>
+    <div class="jr-regime-pills">${pills}</div>
+    ${descs}
+  </div>`;
+}
+
+function renderPromotionCandidates(pc){
+  if (!pc) return '';
+  if (!pc.has_candidates || !Array.isArray(pc.bots) || !pc.bots.length) {
+    return `<div class="rpt-section">
+      <div class="rpt-sec-lbl">Promotion Candidates</div>
+      <div class="rpt-note">No bots approaching promotion this period.</div>
+    </div>`;
+  }
+  const rows = pc.bots.map(b => `<tr>
+    <td>${escHtml(b.bot_name||'')}</td>
+    <td>${escHtml(b.ticker||'')}</td>
+    <td>${escHtml(b.timeframe||'')}</td>
+    <td class="num">${escHtml(String(b.trades_completed??0))} / ${escHtml(String(b.trades_needed??0))}</td>
+    <td class="num">${escHtml(String(b.days_active??0))} / ${escHtml(String(b.days_needed??0))}</td>
+    <td class="num">${b.current_pf!=null ? Number(b.current_pf).toFixed(2) : '—'}</td>
+    <td class="num">${b.current_win_rate_pct!=null ? Number(b.current_win_rate_pct).toFixed(1)+'%' : '—'}</td>
+    <td>${b.on_track ? '<span class="badge badge-online">On Track</span>' : '<span class="badge badge-inactive">Watch</span>'}</td>
+  </tr>`).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Promotion Candidates</div>
+    <div class="rpt-trade-wrap">
+      <table class="jr-perf-table">
+        <thead><tr><th>Bot</th><th>Ticker</th><th>TF</th><th>Trades</th><th>Days</th><th>PF</th><th>Win%</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderPartialClosesSummary(pcs){
+  if (!pcs) return '';
+  if (!pcs.has_data) {
+    return `<div class="rpt-section">
+      <div class="rpt-sec-lbl">Partial Closes Summary</div>
+      <div class="rpt-note">No partial closes this week.</div>
+    </div>`;
+  }
+  const stats = [
+    {k:'TP1 Hits',          v:pcs.tp1_hits ?? 0},
+    {k:'TP2 Hits',          v:pcs.tp2_hits ?? 0},
+    {k:'TP3 Hits',          v:pcs.tp3_hits ?? 0},
+    {k:'TP1 PnL',           v:fmtUSD(pcs.tp1_pnl_usd)},
+    {k:'TP2 PnL',           v:fmtUSD(pcs.tp2_pnl_usd)},
+    {k:'TP3 PnL',           v:fmtUSD(pcs.tp3_pnl_usd)},
+    {k:'Total Partial PnL', v:fmtUSD(pcs.total_partial_pnl_usd)}
+  ].map(s => `<div class="jr-stat"><div class="jr-stat-k">${escHtml(s.k)}</div><div class="jr-stat-v">${escHtml(String(s.v))}</div></div>`).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Partial Closes Summary</div>
+    <div class="jr-stats-grid">${stats}</div>
+  </div>`;
+}
+
+function renderWeekly(data){
+  const s = data.sections || {};
+  return `<div class="report-inner">
+    ${renderMetaLine(data.metadata)}
+    ${renderTLDR(s.tldr, 'Weekly Summary')}
+    ${renderTradingPerformance(s.trading_performance)}
+    ${renderTickerGroups(s.ticker_groups)}
+    ${renderMarketConditionsBlock(s.market_conditions, 'Market Conditions')}
+    ${renderPromotionCandidates(s.promotion_candidates)}
+    ${renderPartialClosesSummary(s.partial_closes_summary)}
+    ${renderBotStatus(s.bot_status)}
+    ${renderErrors(s.errors)}
+    ${renderActionItems(s.action_items)}
+    ${renderFooter(data.footer)}
+  </div>`;
+}
+
+/* Comparison sections */
+function renderHeadToHead(h2h, rankings){
+  if (!h2h || !Array.isArray(h2h.tickers) || !h2h.tickers.length) return '';
+  const leaderByTicker = {};
+  if (rankings && Array.isArray(rankings.tickers)) {
+    rankings.tickers.forEach(r => { leaderByTicker[r.ticker] = r.leading_strategy; });
+  }
+  const tables = h2h.tickers.map(group => {
+    const leader = leaderByTicker[group.ticker];
+    const rows = (group.strategies||[]).map(st => {
+      const isLeader = leader && st.bot_name === leader;
+      return `<tr class="${isLeader?'jr-h2h-leader':''}">
+        <td>${escHtml(st.bot_name||'')}</td>
+        <td>${escHtml(st.timeframe||'')}</td>
+        <td>${st.profit_factor!=null ? Number(st.profit_factor).toFixed(2) : '—'}</td>
+        <td>${st.sharpe_ratio!=null ? Number(st.sharpe_ratio).toFixed(2) : '—'}</td>
+        <td>${st.max_drawdown_pct!=null ? Number(st.max_drawdown_pct).toFixed(1)+'%' : '—'}</td>
+        <td>${st.win_rate_pct!=null ? Number(st.win_rate_pct).toFixed(1)+'%' : '—'}</td>
+        <td>${escHtml(String(st.total_trades??0))}</td>
+        <td>${jrPnl(st.total_pnl_usd)}</td>
+        <td>${st.recovery_factor!=null ? Number(st.recovery_factor).toFixed(2) : '—'}</td>
+        <td>${escHtml(st.recommendation_label || st.recommendation_code || '—')}</td>
+      </tr>`;
+    }).join('');
+    return `<div style="margin-bottom:1rem">
+      <div class="rpt-ticker-hdr" style="${tickerStyleVars(group.ticker)}"><span class="ticker-badge">${escHtml(group.ticker||'')}</span></div>
+      <div class="rpt-trade-wrap">
+        <table class="jr-h2h-table">
+          <thead><tr>
+            <th>Bot</th><th>TF</th><th>PF</th><th>Sharpe</th><th>Max DD</th>
+            <th>Win%</th><th>Trades</th><th>PnL</th><th>Recovery</th><th>Recommendation</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Head-to-Head Comparison</div>
+    ${tables}
+  </div>`;
+}
+
+function renderRankings(r){
+  if (!r || !Array.isArray(r.tickers) || !r.tickers.length) return '';
+  const rows = r.tickers.map(t => `<tr>
+    <td>${escHtml(t.ticker||'')}</td>
+    <td>${escHtml(t.current_live_slot||'—')}</td>
+    <td>${escHtml(t.leading_strategy||'—')}</td>
+    <td>${t.leadership_change ? '<span class="badge badge-tp1">Change</span>' : '<span class="badge badge-inactive">Hold</span>'}</td>
+  </tr>`).join('');
+  const method = r.composite_score_method ? `<div class="rpt-note">Scoring: ${escHtml(r.composite_score_method)}</div>` : '';
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Rankings</div>
+    <div class="rpt-trade-wrap">
+      <table class="jr-perf-table">
+        <thead><tr><th>Ticker</th><th>Current Live Slot</th><th>Leading Strategy</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${method}
+  </div>`;
+}
+
+function renderMonthlyDeepDive(m){
+  if (!m || !m.included) return '';
+  const ext = m.extended_comparisons || [];
+  const heading = `Monthly Deep Dive${m.window_label?` · ${escHtml(m.window_label)}`:''}`;
+  if (!ext.length) {
+    return `<div class="rpt-section">
+      <div class="rpt-sec-lbl">${heading}</div>
+      <div class="rpt-note">No data available.</div>
+    </div>`;
+  }
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">${heading}</div>
+    ${renderHeadToHead({tickers:ext}, null)}
+  </div>`;
+}
+
+function renderComparison(data){
+  const s = data.sections || {};
+  return `<div class="report-inner">
+    ${renderMetaLine(data.metadata)}
+    ${renderTLDR(s.tldr, 'Comparison Summary')}
+    ${renderHeadToHead(s.head_to_head, s.rankings)}
+    ${renderRankings(s.rankings)}
+    ${renderMarketConditionsBlock(s.market_condition_context, 'Market Condition Context')}
+    ${renderMonthlyDeepDive(s.monthly_deep_dive)}
+    ${renderFooter(data.footer)}
+  </div>`;
+}
+
+function renderReportData(data){
+  if (!data || typeof data !== 'object') return `<div class="jr-error">Empty report data.</div>`;
+  const rt = data.report_type;
+  if (rt === 'morning_briefing' || rt === 'evening_briefing') return renderBriefing(data);
+  if (rt === 'weekly_review')        return renderWeekly(data);
+  if (rt === 'strategy_comparison')  return renderComparison(data);
+  return `<div class="jr-error">Unknown report_type<span class="jr-error-detail">${escHtml(String(rt))}</span></div>`;
+}
+
+async function hydrateJsonReports(rootEl){
+  if (!rootEl) return;
+  const placeholders = rootEl.querySelectorAll('.jr-root[data-report-file]:not([data-hydrated])');
+  for (const el of placeholders) {
+    el.dataset.hydrated = 'true';
+    const file = el.dataset.reportFile;
+    if (!file) continue;
+    try {
+      let html;
+      if (JSON_REPORT_CACHE.has(file)) {
+        html = JSON_REPORT_CACHE.get(file);
+      } else {
+        const res = await fetch(file, {cache:'no-store'});
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        html = renderReportData(data);
+        JSON_REPORT_CACHE.set(file, html);
+      }
+      el.innerHTML = html;
+    } catch (err) {
+      console.error('Failed to render JSON report', file, err);
+      el.innerHTML = `<div class="jr-error">Failed to load report<span class="jr-error-detail">${escHtml(file)} — ${escHtml(err.message||String(err))}</span></div>`;
+    }
+  }
+}
 
 /* ══════════════════════════════════
    APP STATE
@@ -1869,7 +2566,7 @@ function deskGoTo(idx){
   if(pd) pd.textContent=dateStr;
   // Update body
   const body=document.getElementById('deskBody');
-  if(body){ body.innerHTML=r.content; body.scrollTop=0; initScrollFadeOn(body); }
+  if(body){ body.innerHTML=r.content; body.scrollTop=0; initScrollFadeOn(body); hydrateJsonReports(body); }
   deskUpdateNav();
 }
 function deskNavStep(dir){ deskGoTo(deskNavIdx+dir); }
@@ -2006,6 +2703,7 @@ function mvLoadReport(idx,r){
   mvPanels.push({idx,report:r,el:panel});
   mvPanels.sort((a,b)=>a.idx-b.idx);
   initScrollFadeOn(panel);
+  hydrateJsonReports(panel);
 }
 
 function mvRemovePanel(idx){
