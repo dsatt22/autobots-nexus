@@ -126,10 +126,10 @@ body { font-family:'Share Tech Mono',monospace; background:var(--bg); color:var(
 #sec-arch .title-word.accent, #sec-arch .title-word.accent.in { color:var(--accent) !important; }
 #sec-arch .sec-summary { font-size:1.05rem; color:var(--sub); line-height:1.8; max-width:680px; opacity:0; transform:translateY(16px); }
 #sec-arch .sec-summary.in { animation:fadeUp 0.4s var(--ease-out) forwards; }
-#sec-arch .sec-hint { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); letter-spacing:0.15em; color:var(--dim); text-transform:uppercase; opacity:0; position:absolute; top:12px; left:0; right:0; text-align:center; transform:translateY(14px); z-index:3; pointer-events:none; }
+#sec-arch .sec-hint { font-family:'Share Tech Mono',monospace; font-size:clamp(0.62rem,0.78vw,0.78rem); letter-spacing:0.15em; color:var(--dim); text-transform:uppercase; opacity:0; position:absolute; top:calc(clamp(48px,5.5vh,60px) + 18px); left:0; right:0; text-align:center; transform:translateY(14px); z-index:3; pointer-events:none; }
 #sec-arch .sec-hint.in { animation:fadeUp 0.6s var(--ease-out) forwards; }
 /* Screen 2 — Interactive Graph */
-#sec-arch .arch-screen2 { min-height:100vh; display:flex; justify-content:center; position:relative; z-index:1; }
+#sec-arch .arch-screen2 { min-height:100vh; display:flex; justify-content:center; position:relative; z-index:1; padding-top:clamp(72px,8vh,96px); box-sizing:border-box; }
 #sec-arch .arch-screen2-inner { max-width:1840px; width:100%; display:grid; grid-template-columns:65% 35%; padding:0 1.5rem; margin:0 auto; }
 #sec-arch .arch-graph-col { position:relative; display:flex; align-items:stretch; }
 #sec-arch .arch-graph-col .network-area { position:relative; width:100%; height:100%; overflow:hidden; }

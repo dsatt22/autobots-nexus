@@ -43,11 +43,11 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 #pipeline-fixed{position:sticky;top:0;height:100vh;overflow:hidden;opacity:0;transition:opacity 0.4s ease;}
 
 /* Progress bar */
-.pipeline-progress-track{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,0.06);z-index:10;}
+.pipeline-progress-track{position:fixed;top:clamp(48px,5.5vh,60px);left:0;right:0;height:2px;background:rgba(255,255,255,0.06);z-index:10;}
 .pipeline-progress-fill{height:100%;background:var(--accent);width:0%;transition:width 0.1s linear;}
 
 /* Step counter */
-.step-counter{position:absolute;top:1.2rem;right:2rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;z-index:10;}
+.step-counter{position:fixed;top:calc(clamp(48px,5.5vh,60px) + 1.2rem);right:2rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;z-index:10;}
 .step-counter span{color:var(--accent);font-size:0.68rem;}
 
 /* Side dot nav */
@@ -586,7 +586,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
   .side-dots{left:0.7rem;gap:10px;}
   .side-dot::before{width:4px;height:4px;}
   .side-dot.active::before{height:28px;}
-  .step-counter{top:0.8rem;right:1rem;font-size:0.5rem;}
+  .step-counter{top:calc(clamp(48px,5.5vh,60px) + 0.8rem);right:1rem;font-size:0.5rem;}
   .intro-sub{font-size:0.9rem;}
   .step-desc{max-width:100%;}
   .step-chips{gap:6px;}
