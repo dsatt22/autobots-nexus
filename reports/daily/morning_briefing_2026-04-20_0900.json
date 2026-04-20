@@ -1,0 +1,453 @@
+{
+  "schema_version": "1.0",
+  "report_type": "morning_briefing",
+  "metadata": {
+    "title": "AutoBots - Morning Briefing",
+    "report_type": "morning_briefing",
+    "generated_at_et": "2026-04-20T09:00:00.135286-04:00",
+    "date_et": "Apr 20, 2026",
+    "time_et": "9:00 AM ET",
+    "period": {
+      "since_label": "last report",
+      "start_et": "2026-04-19T20:00:00.132146-04:00",
+      "end_et": "2026-04-20T09:00:00.135253-04:00"
+    },
+    "next_report": {
+      "time_label": "8:00 PM Eastern",
+      "at_et": "2026-04-20T20:00:00-04:00"
+    }
+  },
+  "sections": {
+    "tldr": {
+      "text": "All 4 infrastructure bots are online. 9 trades are currently open. 1 new position opened since the last report. 2 trades closed since the last report (1W/1L) for $-45.86 since last report ($-19.86 total across those trades). Total realized PnL since last report: $-45.86.",
+      "stats": {
+        "infrastructure_bots_online": 4,
+        "infrastructure_bots_total": 4,
+        "open_trades": 9,
+        "open_trades_with_tp1_hit": 0,
+        "open_trades_with_tp2_hit": 0,
+        "open_trades_with_tp3_hit": 0,
+        "closed_trades_in_period": 2,
+        "wins": 1,
+        "losses": 1,
+        "breakevens": 0,
+        "total_realized_pnl_usd": -45.86,
+        "bots_approaching_promotion": 4
+      }
+    },
+    "trading_activity": {
+      "tickers": [
+        {
+          "ticker": "AVAX",
+          "trades": [
+            {
+              "trade_id": 30114,
+              "bot_name": "avax-iti-4h",
+              "ticker": "AVAX",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 9.185,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "16h 59m",
+              "entry_time": "2026-04-19T16:00:06.028766-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 30115,
+              "bot_name": "avax-svs-4h",
+              "ticker": "AVAX",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 9.185,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "16h 59m",
+              "entry_time": "2026-04-19T16:00:07.035073-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "trades": [
+            {
+              "trade_id": 30109,
+              "bot_name": "doge-iti-4h",
+              "ticker": "DOGE",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.09597,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "2d 0h",
+              "entry_time": "2026-04-18T08:00:06.274567-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "DOT",
+          "trades": [
+            {
+              "trade_id": 30108,
+              "bot_name": "dot-wete-2h",
+              "ticker": "DOT",
+              "timeframe": "2H",
+              "side": "LONG",
+              "entry_price": 1.306,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "3d 0h",
+              "entry_time": "2026-04-17T08:00:07.087827-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "trades": [
+            {
+              "trade_id": 20054,
+              "bot_name": "eth-xg-4h",
+              "ticker": "ETH",
+              "timeframe": "4H",
+              "side": "LONG",
+              "entry_price": 2130.08,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "19d 4h",
+              "entry_time": "2026-04-01T04:00:06.233198-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "LINK",
+          "trades": [
+            {
+              "trade_id": 30112,
+              "bot_name": "link-5-sc-4h",
+              "ticker": "LINK",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 9.219,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 8h",
+              "entry_time": "2026-04-19T00:00:06.185870-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 30116,
+              "bot_name": "link-15sc-4h",
+              "ticker": "LINK",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 9.054,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "12h 59m",
+              "entry_time": "2026-04-19T20:00:06.108128-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 30110,
+              "bot_name": "link-iti-4h",
+              "ticker": "LINK",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 9.396,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 26.0,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": 6.66,
+              "duration": "1d 20h",
+              "entry_time": "2026-04-18T08:00:06.344120-04:00",
+              "exit_time": "2026-04-20T04:00:06.913805-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "trades": [
+            {
+              "trade_id": 30111,
+              "bot_name": "sol-xg-4h",
+              "ticker": "SOL",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 86.1,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 16h",
+              "entry_time": "2026-04-18T16:00:06.117320-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 30113,
+              "bot_name": "sol-ce-4h",
+              "ticker": "SOL",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 85.53,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 8h",
+              "entry_time": "2026-04-19T00:00:06.194790-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 30107,
+              "bot_name": "sol-xg-2h",
+              "ticker": "SOL",
+              "timeframe": "2H",
+              "side": "LONG",
+              "entry_price": 89.05,
+              "status_code": "stopped_out",
+              "status_label": "Closed - Loss",
+              "is_open": false,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": -52.52,
+              "duration": "3d 0h",
+              "entry_time": "2026-04-16T20:00:06.804741-04:00",
+              "exit_time": "2026-04-19T20:00:06.824961-04:00"
+            }
+          ]
+        }
+      ]
+    },
+    "partial_closes": {
+      "has_data": false,
+      "summary": {
+        "total_partial_fills": 0,
+        "total_partial_pnl_usd": 0.0
+      },
+      "fills": []
+    },
+    "pipeline_snapshot": {
+      "strategies_queued_for_codegen": 2,
+      "strategies_actively_testing": 0,
+      "strategies_passed_quality_gates": 205,
+      "codegen_window": {
+        "ran_since_last_report": true,
+        "last_run_at": "2026-04-19T20:00:00-04:00",
+        "strategies_generated": 0,
+        "hours_label": "4 PM - 2 AM Eastern"
+      },
+      "optimization_window": {
+        "ran_since_last_report": true,
+        "last_run_at": "2026-04-19T20:00:00-04:00",
+        "strategies_optimized": 0,
+        "hours_label": "8 PM - 8 AM Eastern"
+      },
+      "whisper_window": {
+        "ran_since_last_report": true,
+        "last_run_at": "2026-04-19T20:00:00-04:00",
+        "videos_processed": 4,
+        "hours_label": "2 AM - 8 AM Eastern"
+      }
+    },
+    "bot_status": {
+      "all_operational": true,
+      "bots": [
+        {
+          "name": "Orchestrator",
+          "status": "not_deployed",
+          "description": "Not yet active - this bot has not been deployed yet.",
+          "last_checked_at": null,
+          "last_checked_label": null,
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Reporting Bot",
+          "status": "online",
+          "description": "This bot generated the report you are reading.",
+          "last_checked_at": "2026-04-20T08:57:09.755681-04:00",
+          "last_checked_label": "3 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Research Bot",
+          "status": "online",
+          "description": "Found 38 new pieces of content across its sources. 2 were successfully extracted into structured strategies. 2 new strategies were added to the database. 10 of 11 sources are active. The indicator registry tracks 592 known indicators.",
+          "last_checked_at": "2026-04-20T08:56:46.501829-04:00",
+          "last_checked_label": "3 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Strategy Builder",
+          "status": "online",
+          "description": "Pipeline snapshot: 2 waiting for codegen, 205 passed quality gates.",
+          "last_checked_at": "2026-04-20T08:57:36.346171-04:00",
+          "last_checked_label": "2 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "News Bot",
+          "status": "not_deployed",
+          "description": "Not yet active - this bot has not been deployed yet.",
+          "last_checked_at": null,
+          "last_checked_label": null,
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Performance Monitor",
+          "status": "online",
+          "description": "Performance Monitor is online.",
+          "last_checked_at": "2026-04-20T08:56:48.605455-04:00",
+          "last_checked_label": "3 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Site Updater",
+          "status": "online",
+          "description": "Site Updater is online.",
+          "last_checked_at": "2026-04-20T08:56:44.066586-04:00",
+          "last_checked_label": "3 minutes ago",
+          "errors_since_last_report": []
+        }
+      ]
+    },
+    "errors": {
+      "has_errors": false,
+      "entries": []
+    },
+    "action_items": {
+      "has_items": true,
+      "items": [
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "btc-sqs-4h",
+          "text": "btc-sqs-4h is approaching its promotion gate. It has completed 4 trades over 59 days of paper trading. It needs 10 trades or 60 days (whichever comes first) before it can be promoted to live.",
+          "details": {
+            "trades_completed": 4,
+            "trades_needed": 10,
+            "days_active": 59,
+            "days_needed": 60
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "eth-sqs-4h",
+          "text": "eth-sqs-4h is approaching its promotion gate. It has completed 3 trades over 59 days of paper trading. It needs 10 trades or 60 days (whichever comes first) before it can be promoted to live.",
+          "details": {
+            "trades_completed": 3,
+            "trades_needed": 10,
+            "days_active": 59,
+            "days_needed": 60
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "eth-pb-2h",
+          "text": "eth-pb-2h is approaching its promotion gate. It has completed 5 trades over 59 days of paper trading. It needs 10 trades or 60 days (whichever comes first) before it can be promoted to live.",
+          "details": {
+            "trades_completed": 5,
+            "trades_needed": 10,
+            "days_active": 59,
+            "days_needed": 60
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "sol-ce-4h",
+          "text": "sol-ce-4h is approaching its promotion gate. It has completed 3 trades over 59 days of paper trading. It needs 10 trades or 60 days (whichever comes first) before it can be promoted to live.",
+          "details": {
+            "trades_completed": 3,
+            "trades_needed": 10,
+            "days_active": 59,
+            "days_needed": 60
+          }
+        }
+      ]
+    }
+  },
+  "footer": {
+    "next_report_time_label": "8:00 PM Eastern",
+    "next_report_at_et": "2026-04-20T20:00:00-04:00"
+  }
+}
