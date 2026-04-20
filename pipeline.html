@@ -1181,20 +1181,74 @@ function advance(dir){
   setTimeout(()=>stepCooldown=false, 1400);
 }
 
-// Wheel: one meaningful scroll tick = one step
+// Wheel: mouse tick = one step; trackpad swipe (many small events) = one step
 let wheelAcc=0;
 let wheelTimer=null;
+let tpAcc=0;
+let tpIdleTimer=null;
+let tpLastFire=0;
+let tpLocked=false;
+const TP_THRESHOLD=60;    // px accumulated to trigger a step
+const TP_COOLDOWN=400;    // ms min between trackpad-driven fires
+const TP_IDLE_MS=150;     // ms of no events = swipe ended (releases lock, resets acc)
+
+// Heuristic: trackpad events fire in deltaMode 0 with small deltas that are
+// not multiples of 120. Mouse wheels fire with larger ticks (>= 50px) OR
+// wheelDeltaY multiples of 120 OR line-mode deltaMode != 0.
+function isTrackpadWheel(e){
+  if (e.deltaMode !== 0) return false;
+  if (Math.abs(e.deltaY) >= 50) return false;
+  if (typeof e.wheelDeltaY === 'number' && e.wheelDeltaY !== 0 && Math.abs(e.wheelDeltaY) % 120 === 0) return false;
+  return true;
+}
+
+function advanceTrackpad(dir){
+  // Bypass stepCooldown — trackpad has its own lock/cooldown (tpLocked, tpLastFire)
+  if (dir > 0 && currentStep === TOTAL_STEPS - 1){
+    if (!outroFired) fireOutro();
+    return;
+  }
+  if (dir < 0 && currentStep === 0){
+    restoreIntro();
+    return;
+  }
+  setStep(currentStep + dir);
+}
+
 window.addEventListener('wheel',(e)=>{
   if(!pipelineUnlocked)return;
   e.preventDefault();
-  wheelAcc+=e.deltaY;
-  clearTimeout(wheelTimer);
-  wheelTimer=setTimeout(()=>{
-    if(Math.abs(wheelAcc)>20){
-      advance(wheelAcc>0?1:-1);
+
+  if (isTrackpadWheel(e)) {
+    const now = Date.now();
+    // Inside a prior swipe's inertia trail — absorb
+    if (tpLocked) {
+      clearTimeout(tpIdleTimer);
+      tpIdleTimer = setTimeout(()=>{ tpLocked = false; tpAcc = 0; }, TP_IDLE_MS);
+      return;
     }
-    wheelAcc=0;
-  },40);
+    tpAcc += e.deltaY;
+    clearTimeout(tpIdleTimer);
+    tpIdleTimer = setTimeout(()=>{ tpAcc = 0; }, TP_IDLE_MS);
+    if (Math.abs(tpAcc) > TP_THRESHOLD && (now - tpLastFire) > TP_COOLDOWN) {
+      advanceTrackpad(tpAcc > 0 ? 1 : -1);
+      tpAcc = 0;
+      tpLastFire = now;
+      tpLocked = true;
+      clearTimeout(tpIdleTimer);
+      tpIdleTimer = setTimeout(()=>{ tpLocked = false; tpAcc = 0; }, TP_IDLE_MS);
+    }
+  } else {
+    // Mouse wheel — original behavior, unchanged
+    wheelAcc+=e.deltaY;
+    clearTimeout(wheelTimer);
+    wheelTimer=setTimeout(()=>{
+      if(Math.abs(wheelAcc)>20){
+        advance(wheelAcc>0?1:-1);
+      }
+      wheelAcc=0;
+    },40);
+  }
 },{passive:false});
 
 // Touch: swipe up/down = one step
