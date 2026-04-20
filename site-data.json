@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-20T14:51:44.072073-04:00",
+  "last_updated": "2026-04-20T17:25:06.998686-04:00",
   "hero": {
     "trading_bots_paper": 44,
     "strategies_discovered": 747,
@@ -118,11 +118,12 @@
           {
             "id": "site-updater",
             "name": "Site auto-updater",
-            "status": "in_progress",
+            "status": "complete",
             "display_date": "April 2026",
             "depends_on": [],
             "requires_funding": false,
-            "started_at": "2026-04-01T00:00:00"
+            "started_at": "2026-04-01T00:00:00",
+            "completed_at": "2026-04-20T21:23:53.008865"
           }
         ]
       },
