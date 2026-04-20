@@ -880,10 +880,10 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .rpt-nav-arrow:active { transform:translateY(-50%) scale(0.96); }
 .rpt-nav-arrow.visible { opacity:1; }
 .rpt-nav-arrow.hidden-arrow { opacity:0; pointer-events:none; }
-/* Position just outside the 1200px report-inner content area (half = 600px) */
+/* Position just outside the 1100px report body (half = 550px) */
 /* max() clamps to viewport edge on narrower screens so arrows stay visible */
-#rptNavPrev { left:  max(0.75rem, calc(50vw - 600px - 52px)); }
-#rptNavNext { right: max(0.75rem, calc(50vw - 600px - 52px)); }
+#rptNavPrev { left:  max(0.75rem, calc(50vw - 550px - 52px)); }
+#rptNavNext { right: max(0.75rem, calc(50vw - 550px - 52px)); }
 .rpt-nav-arrow svg { display:block; }
 
 /* Counter - in panel header via JS, styled here */
@@ -1319,15 +1319,16 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .jr-zero { color:#e8eaf0; }
 .jr-null { color:#8892a4; }
 
-/* Report body — width is set to match the Trading Activity table (via JS post-render).
-   Falls back to fit-content if JS can't measure. Centered within its parent. */
-.jr-report-body { max-width:100%; margin:0 auto; padding:1.4rem 0 3rem; box-sizing:border-box; width:fit-content; }
+/* Report body — fixed max-width, centered. Horizontal padding gives breathing room. */
+.jr-report-body { max-width:1100px; margin:0 auto; padding:1.4rem clamp(1rem,2vw,1.8rem) 3rem; box-sizing:border-box; font-family:'Share Tech Mono',monospace; }
+/* Never show a horizontal scrollbar on the trade wrap inside JSON reports — columns fit to container via table-layout:auto */
+.jr-report-body .rpt-trade-wrap { overflow-x:hidden; overflow-y:auto; }
 
-/* Trading Activity — content-driven column widths (no fixed layout) */
-.jr-trade-table { width:max-content; border-collapse:collapse; font-family:'Share Tech Mono',monospace; }
-.jr-trade-table th { font-size:0.7rem; letter-spacing:0.1em; color:var(--sub); text-transform:uppercase; padding:0.55rem 0.9rem; border:1px solid var(--border); background:var(--bg-card); text-align:left; font-weight:600; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--border); white-space:nowrap; }
+/* Trading Activity — fills the container; columns size to content under auto layout */
+.jr-trade-table { width:100%; border-collapse:collapse; table-layout:auto; font-family:'Share Tech Mono',monospace; }
+.jr-trade-table th { font-size:0.78rem; letter-spacing:0.1em; color:var(--sub); text-transform:uppercase; padding:0.6rem 0.85rem; border:1px solid var(--border); background:var(--bg-card); text-align:left; font-weight:600; position:sticky; top:0; z-index:2; box-shadow:0 1px 0 var(--border); white-space:nowrap; }
 .jr-trade-table th.jr-col-pnl, .jr-trade-table td.jr-col-pnl { text-align:right; font-variant-numeric:tabular-nums; }
-.jr-trade-table td { padding:0.55rem 0.9rem; border:1px solid var(--border); font-size:0.85rem; vertical-align:middle; color:var(--text); white-space:nowrap; }
+.jr-trade-table td { padding:0.6rem 0.85rem; border:1px solid var(--border); font-size:0.9rem; vertical-align:middle; color:var(--text); white-space:nowrap; }
 .jr-trade-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
 .jr-trade-table tr:hover td { background:rgba(255,255,255,0.04); }
 .jr-trade-table tr.jr-ticker-row td {
@@ -1407,6 +1408,33 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 /* Header strip inside a rendered report (date + time before sections) */
 .jr-meta-line { font-family:'Share Tech Mono',monospace; font-size:0.78rem; color:var(--sub); margin-bottom:1.3rem; letter-spacing:0.05em; }
 .jr-meta-line .dim { color:var(--dim); }
+
+/* ── Readability bumps inside JSON-rendered reports ── */
+.jr-report-body .rpt-sec-lbl    { font-size:clamp(0.82rem,0.95vw,0.95rem); }
+.jr-report-body .rpt-tldr       { font-size:clamp(0.92rem,1.1vw,1.1rem); font-family:'Share Tech Mono',monospace; line-height:1.75; }
+.jr-report-body .rpt-note       { font-size:clamp(0.85rem,1vw,1rem); font-family:'Share Tech Mono',monospace; }
+.jr-report-body .rpt-para       { font-size:clamp(0.9rem,1.05vw,1.05rem); font-family:'Share Tech Mono',monospace; }
+.jr-report-body .rpt-footer     { font-size:0.85rem; font-family:'Share Tech Mono',monospace; }
+.jr-report-body .bot-block-name   { font-family:'Oxanium',sans-serif; font-size:clamp(1rem,1.2vw,1.2rem); }
+.jr-report-body .bot-block-detail { font-family:'Share Tech Mono',monospace; font-size:clamp(0.88rem,1.05vw,1.05rem); }
+.jr-report-body .bot-block-hb     { font-family:'Share Tech Mono',monospace; font-size:clamp(0.72rem,0.85vw,0.85rem); }
+.jr-report-body .all-good       { font-size:clamp(0.88rem,1.05vw,1.05rem); font-family:'Share Tech Mono',monospace; }
+
+.jr-stat-k  { font-family:'Share Tech Mono',monospace; font-size:0.72rem; }
+.jr-stat-v  { font-family:'Oxanium',sans-serif; font-size:1.15rem; }
+.jr-pipe-k  { font-family:'Share Tech Mono',monospace; font-size:0.72rem; }
+.jr-pipe-v  { font-family:'Oxanium',sans-serif; font-size:1.5rem; }
+.jr-pipe-sub{ font-family:'Share Tech Mono',monospace; font-size:0.78rem; }
+.jr-perf-table th, .jr-h2h-table th { font-size:0.78rem; padding:0.6rem 0.85rem; }
+.jr-perf-table td, .jr-h2h-table td { font-size:0.9rem;  padding:0.6rem 0.85rem; }
+.jr-action         { font-family:'Share Tech Mono',monospace; font-size:0.94rem; line-height:1.7; }
+.jr-partial-row    { font-family:'Share Tech Mono',monospace; font-size:0.9rem; }
+.jr-partial-row .time { font-size:0.78rem; }
+.jr-regime-pill    { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
+.jr-ticker-chip    { font-family:'Share Tech Mono',monospace; font-size:0.82rem; }
+.jr-ticker-card-tick { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
+.jr-ticker-card-pnl  { font-family:'Oxanium',sans-serif; font-size:1.1rem; }
+.jr-ticker-card-row  { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
 </style>
 </head>
 <body>
@@ -1833,15 +1861,18 @@ async function loadReportsFromIndex(){
     if(!res.ok) return [];
     const data = await res.json();
     const raw = Array.isArray(data && data.reports) ? data.reports : [];
-    // Newest-first within each report type; morning -> evening -> weekly -> comparison within a date.
-    const typeRank = t => {
-      const m = {
-        morning:0, morning_briefing:0,
-        evening:1, evening_briefing:1,
-        weekly:2, weekly_review:2,
-        comparison:3, 'weekly-comparison':3, strategy_comparison:3
-      };
-      return m[t] !== undefined ? m[t] : 99;
+    // Build a sortable "YYYY-MM-DDTHH:MM" key from the index entry's date + human time string.
+    const toSortKey = (dateStr, timeStr) => {
+      const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)?/i.exec(timeStr || '');
+      let h = 0, mm = 0;
+      if (m) {
+        h = parseInt(m[1], 10);
+        mm = parseInt(m[2], 10);
+        const ap = (m[3] || '').toUpperCase();
+        if (ap === 'PM' && h < 12) h += 12;
+        if (ap === 'AM' && h === 12) h = 0;
+      }
+      return `${dateStr||''}T${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
     };
     return raw.map(r => {
       const title = r.title || (TYPE_META[r.type] && TYPE_META[r.type].label) || r.type;
@@ -1866,10 +1897,7 @@ async function loadReportsFromIndex(){
           return `<iframe src="${safeFile}" title="${safeTitle}" style="width:100%;height:100%;border:0;background:transparent" loading="lazy"></iframe>`;
         },
       };
-    }).sort((a,b)=>
-      b.date.localeCompare(a.date) ||
-      typeRank(a.type) - typeRank(b.type)
-    );
+    }).sort((a,b) => toSortKey(b.date, b.time).localeCompare(toSortKey(a.date, a.time)));
   } catch(err) {
     console.error('Failed to load reports-index.json:', err);
     return [];
@@ -2442,24 +2470,6 @@ function renderReportData(data){
   return `<div class="jr-error">Unknown report_type<span class="jr-error-detail">${escHtml(String(rt))}</span></div>`;
 }
 
-/* After rendering, resize the report body to match the Trading Activity (or similar)
-   table width. The table is the natural-width anchor; other sections fill that width.
-   Falls back gracefully when no anchor table exists. */
-function sizeJsonReportBody(containerEl){
-  if (!containerEl) return;
-  const body = containerEl.querySelector('.jr-report-body');
-  if (!body) return;
-  const anchor = body.querySelector('.jr-trade-table, .jr-perf-table, .jr-h2h-table');
-  if (!anchor) return;
-  requestAnimationFrame(() => {
-    const tableW  = Math.ceil(anchor.getBoundingClientRect().width);
-    const parent  = body.parentElement;
-    const parentW = parent ? Math.floor(parent.getBoundingClientRect().width) : Infinity;
-    if (tableW <= 0) return;
-    body.style.width = Math.min(tableW, parentW) + 'px';
-  });
-}
-
 async function hydrateJsonReports(rootEl){
   if (!rootEl) return;
   const placeholders = rootEl.querySelectorAll('.jr-root[data-report-file]:not([data-hydrated])');
@@ -2479,7 +2489,6 @@ async function hydrateJsonReports(rootEl){
         JSON_REPORT_CACHE.set(file, html);
       }
       el.innerHTML = html;
-      sizeJsonReportBody(el);
     } catch (err) {
       console.error('Failed to render JSON report', file, err);
       el.innerHTML = `<div class="jr-error">Failed to load report<span class="jr-error-detail">${escHtml(file)} — ${escHtml(err.message||String(err))}</span></div>`;
