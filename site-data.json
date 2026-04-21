@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-04-21T12:33:05.022011-04:00",
+  "last_updated": "2026-04-21T13:44:45.862435-04:00",
   "hero": {
     "trading_bots_paper": 44,
-    "strategies_discovered": 751,
+    "strategies_discovered": 752,
     "auto_deployed_bots": 40,
     "candles": "179M",
     "symbols": 129,
-    "indicators_mapped": 592,
+    "indicators_mapped": 595,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
@@ -255,5 +255,41 @@
         ]
       }
     ]
+  },
+  "playbook": {
+    "phases_complete": 5,
+    "phase1": {
+      "status": "done"
+    },
+    "phase2": {
+      "status": "live",
+      "pills": {
+        "active_sources": 14,
+        "indicators": 595,
+        "videos_transcribed": 1671
+      }
+    },
+    "phase3": {
+      "status": "live",
+      "pills": {
+        "bots_deployed": 40
+      }
+    },
+    "phase4": {
+      "status": "live",
+      "pills": {
+        "email_reports": 4,
+        "telegram_bots": 5
+      }
+    },
+    "phase5": {
+      "status": "live"
+    },
+    "phase6": {
+      "status": "next"
+    },
+    "phase7": {
+      "status": "planned"
+    }
   }
 }
