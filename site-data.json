@@ -63,7 +63,7 @@
     "medium_severity": 5,
     "low_severity": 165,
     "known_cves": 0,
-    "affected_packages": 0,
+    "packages_scanned": 127,
     "bots_scanned": 48,
     "tables_secured": 40,
     "security_migrations": 34,
