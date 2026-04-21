@@ -1238,7 +1238,7 @@ allSections.forEach(s=>sectionObs.observe(s));
 /* ══ 10. ROADMAP TIMELINE JS (IIFE) ══ */
 (function(){
   /* ---- Data ---- */
-  var RM_DATA={phases:[
+  var RM_DATA=window._rmData={phases:[
   {name:"Completed",color:"completed",items:[
   {name:"Performance monitor",description:"Compares strategies per ticker and ranks them weekly to determine which earns the live trading slot. Classifies market conditions and tracks performance across different environments.",timeframe:"Q1 2026",status:"complete"},
   {name:"Comparison reports",description:"Weekly and monthly side-by-side strategy comparison with market condition context. Shows which strategies perform best in trending, choppy, and volatile markets.",timeframe:"Q1 2026",status:"complete"},
@@ -1531,11 +1531,13 @@ allSections.forEach(s=>sectionObs.observe(s));
     setTimeout(function(){hint.classList.add('in');},2000);
   };
   /* ---- Timeline reveal (its own observer on the timeline panel) ---- */
+  var rmVisible=false,rmDataReady=false;
+  function rmMaybeStart(){if(rmVisible&&rmDataReady){rmBuild(RM_DATA);rmAnimateTimeline();}}
+  window._rmDataReady=function(){rmDataReady=true;rmMaybeStart();};
   var rmTlObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){
     if(!entry.isIntersecting)return;
     rmTlObs.unobserve(entry.target);
-    rmBuild(RM_DATA);
-    rmAnimateTimeline();
+    rmVisible=true;rmMaybeStart();
   });},{threshold:0.2});
   rmTlObs.observe(document.getElementById('rmTimelinePanel'));
 })();
@@ -1639,7 +1641,31 @@ allSections.forEach(s=>sectionObs.observe(s));
       h.types[0]=n.active_signal_bots+' active signal bots';
       h.types[1]=n.future_bots+' future bot (Phase 6)';
     }
-  }).catch(function(e){console.warn('site-data.json load failed, using fallback values',e);});
+    /* 5. Roadmap - rebuild phases from JSON, preserving local descriptions and notes */
+    if(d.roadmap&&d.roadmap.phases&&window._rmData){
+      var rm=window._rmData;
+      var descByName={},notesByColor={};
+      rm.phases.forEach(function(phase){
+        (phase.items||[]).forEach(function(it,idx){
+          if(it.type==='note'){(notesByColor[phase.color]=notesByColor[phase.color]||[]).push({note:it,pos:idx});}
+          else if(it.name){descByName[it.name]=it.description;}
+        });
+      });
+      rm.phases=d.roadmap.phases.map(function(jp){
+        var items=(jp.items||[]).map(function(ji){
+          var t={name:ji.name,description:descByName[ji.name]||'',timeframe:ji.display_date||'',status:ji.status};
+          if(ji.depends_on&&ji.depends_on.length)t.depends_on=ji.depends_on;
+          if(ji.requires_funding)t.funding='post-profitability';
+          return t;
+        });
+        if(notesByColor[jp.color]){
+          notesByColor[jp.color].forEach(function(n){items.splice(Math.min(n.pos,items.length),0,n.note);});
+        }
+        return {name:jp.name,color:jp.color,items:items};
+      });
+    }
+    if(window._rmDataReady)window._rmDataReady();
+  }).catch(function(e){console.warn('site-data.json load failed, using fallback values',e);if(window._rmDataReady)window._rmDataReady();});
 })();
 </script>
 </body>
