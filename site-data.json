@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-21T12:16:05.045201-04:00",
+  "last_updated": "2026-04-21T12:23:24.050451-04:00",
   "hero": {
     "trading_bots_paper": 44,
     "strategies_discovered": 751,
@@ -11,7 +11,7 @@
     "risk_per_trade": "5%",
     "bot_types": 7,
     "hierarchy_tiers": 5,
-    "engine_bots_live": 4,
+    "engine_bots_live": 0,
     "trading_bots": 44,
     "build_phases": 7
   },
@@ -64,7 +64,7 @@
     "low_severity": 165,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 48,
+    "bots_scanned": 44,
     "tables_secured": 40,
     "security_migrations": 34,
     "last_scan": "2026-04-21T08:00:29.906330-04:00",
@@ -255,5 +255,41 @@
         ]
       }
     ]
+  },
+  "playbook": {
+    "phases_complete": 5,
+    "phase1": {
+      "status": "done"
+    },
+    "phase2": {
+      "status": "done",
+      "pills": {
+        "active_sources": 14,
+        "indicators": 592,
+        "videos_transcribed": 1671
+      }
+    },
+    "phase3": {
+      "status": "done",
+      "pills": {
+        "bots_deployed": 40
+      }
+    },
+    "phase4": {
+      "status": "done",
+      "pills": {
+        "email_reports": 4,
+        "telegram_bots": 5
+      }
+    },
+    "phase5": {
+      "status": "done"
+    },
+    "phase6": {
+      "status": "next"
+    },
+    "phase7": {
+      "status": "planned"
+    }
   }
 }
