@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-04-21",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-04-21_0900.json",
+      "format": "json"
+    },
+    {
       "type": "evening_briefing",
       "title": "Evening Briefing",
       "date": "2026-04-20",
