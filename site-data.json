@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-21T12:23:24.050451-04:00",
+  "last_updated": "2026-04-21T12:32:37.345475-04:00",
   "hero": {
     "trading_bots_paper": 44,
     "strategies_discovered": 751,
@@ -22,8 +22,8 @@
     "postgresql_symbols": 129,
     "postgresql_size": "42 GB",
     "sql_schemas": 7,
-    "sql_tables": 40,
-    "sql_migrations": 34,
+    "sql_tables": 41,
+    "sql_migrations": 35,
     "hand_built_bots": 3,
     "pipeline_bots": 40,
     "pipeline_tickers": 9,
@@ -65,8 +65,8 @@
     "known_cves": 0,
     "affected_packages": 0,
     "bots_scanned": 44,
-    "tables_secured": 40,
-    "security_migrations": 34,
+    "tables_secured": 41,
+    "security_migrations": 35,
     "last_scan": "2026-04-21T08:00:29.906330-04:00",
     "packages_scanned": 127
   },
@@ -262,7 +262,7 @@
       "status": "done"
     },
     "phase2": {
-      "status": "done",
+      "status": "live",
       "pills": {
         "active_sources": 14,
         "indicators": 592,
@@ -270,20 +270,20 @@
       }
     },
     "phase3": {
-      "status": "done",
+      "status": "live",
       "pills": {
         "bots_deployed": 40
       }
     },
     "phase4": {
-      "status": "done",
+      "status": "live",
       "pills": {
         "email_reports": 4,
         "telegram_bots": 5
       }
     },
     "phase5": {
-      "status": "done"
+      "status": "live"
     },
     "phase6": {
       "status": "next"
