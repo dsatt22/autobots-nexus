@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-04-21T19:00:00.019994-04:00",
+  "last_updated": "2026-04-22T08:15:00.013848-04:00",
   "hero": {
     "trading_bots_paper": 44,
-    "strategies_discovered": 754,
+    "strategies_discovered": 757,
     "auto_deployed_bots": 40,
     "candles": "179M",
     "symbols": 129,
@@ -51,23 +51,23 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 52648,
-    "python_files": 211,
+    "lines_scanned": 50484,
+    "python_files": 207,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
-    "code_analysis_pct": 90,
-    "dependency_audit_pct": 100,
+    "code_analysis_pct": 82,
+    "dependency_audit_pct": 92,
     "bot_protections_pct": 100,
     "database_safety_pct": 100,
-    "medium_severity": 5,
-    "low_severity": 165,
-    "known_cves": 0,
-    "affected_packages": 0,
+    "medium_severity": 9,
+    "low_severity": 166,
+    "known_cves": 2,
+    "affected_packages": 2,
     "bots_scanned": 48,
     "tables_secured": 41,
     "security_migrations": 35,
-    "last_scan": "2026-04-21T18:50:05.578149-04:00",
+    "last_scan": "2026-04-22T07:30:44.297193-04:00",
     "packages_scanned": 127
   },
   "roadmap": {
@@ -266,7 +266,7 @@
       "pills": {
         "active_sources": 14,
         "indicators": 598,
-        "videos_transcribed": 1671
+        "videos_transcribed": 1704
       }
     },
     "phase3": {
