@@ -2150,7 +2150,14 @@ function renderPipelineSnapshot(ps){
     const ran   = w.ran_since_last_report ? 'Ran since last report' : 'Has not run since the last report';
     const hours = w.hours_label ? ` · ${escHtml(w.hours_label)}` : '';
     const last  = w.last_run_at ? ` · Last run ${escHtml(fmtETClock(w.last_run_at))}` : '';
-    return `<div class="window-box"><strong style="color:var(--text)">${escHtml(label)}</strong>${hours}<br>${ran}${last}</div>`;
+    const parts = [];
+    if (Number.isFinite(w.strategies_generated) && w.strategies_generated > 0) parts.push(`${w.strategies_generated} strategies processed`);
+    if (Number.isFinite(w.strategies_passed)    && w.strategies_passed    > 0) parts.push(`${w.strategies_passed} passed quality check`);
+    if (Number.isFinite(w.strategies_optimized) && w.strategies_optimized > 0) parts.push(`${w.strategies_optimized} combos optimized`);
+    if (Number.isFinite(w.videos_processed)     && w.videos_processed     > 0) parts.push(`${w.videos_processed} videos transcribed`);
+    if (Number.isFinite(w.videos_remaining)     && w.videos_remaining     > 0) parts.push(`${w.videos_remaining} remaining in backlog`);
+    const counts = parts.length ? `<br>${escHtml(parts.join(' · '))}` : '';
+    return `<div class="window-box"><strong style="color:var(--text)">${escHtml(label)}</strong>${hours}<br>${ran}${last}${counts}</div>`;
   };
 
   return `<div class="rpt-section">
