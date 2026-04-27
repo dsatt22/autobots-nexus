@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "weekly_review",
+      "title": "Weekly Trading Review",
+      "date": "2026-04-27",
+      "time": "11:08 AM ET",
+      "file": "reports/weekly/weekly_review_2026-04-27_1108.json",
+      "format": "json"
+    },
+    {
       "type": "morning_briefing",
       "title": "Morning Briefing",
       "date": "2026-04-27",
