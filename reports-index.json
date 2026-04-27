@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "strategy_comparison",
+      "title": "Weekly Strategy Comparison",
+      "date": "2026-04-27",
+      "time": "11:22 AM ET",
+      "file": "reports/comparison/strategy_comparison_2026-04-27_1122.json",
+      "format": "json"
+    },
+    {
       "type": "weekly_review",
       "title": "Weekly Trading Review",
       "date": "2026-04-27",
