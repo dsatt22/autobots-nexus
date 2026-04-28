@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-04-27T19:23:38.965405-04:00",
+  "last_updated": "2026-04-28T07:57:38.965030-04:00",
   "hero": {
     "trading_bots_paper": 44,
     "strategies_discovered": 800,
     "auto_deployed_bots": 40,
-    "candles": "179M",
-    "symbols": 129,
+    "candles": "189M",
+    "symbols": 143,
     "indicators_mapped": 615,
     "leverage": "10x",
     "risk_per_trade": "5%",
@@ -18,9 +18,9 @@
   "architecture": {
     "research_sources": 14,
     "builder_bots_deployed": 40,
-    "postgresql_candles": "179M",
-    "postgresql_symbols": 129,
-    "postgresql_size": "42 GB",
+    "postgresql_candles": "189M",
+    "postgresql_symbols": 143,
+    "postgresql_size": "44 GB",
     "sql_schemas": 7,
     "sql_tables": 42,
     "sql_migrations": 37,
@@ -51,23 +51,23 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 57534,
-    "python_files": 204,
+    "lines_scanned": 49495,
+    "python_files": 193,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
-    "code_analysis_pct": 100,
+    "code_analysis_pct": 94,
     "dependency_audit_pct": 96,
     "bot_protections_pct": 100,
     "database_safety_pct": 100,
-    "medium_severity": 0,
-    "low_severity": 166,
+    "medium_severity": 3,
+    "low_severity": 175,
     "known_cves": 1,
     "affected_packages": 1,
     "bots_scanned": 48,
     "tables_secured": 42,
     "security_migrations": 37,
-    "last_scan": "2026-04-27T18:50:05.906697-04:00",
+    "last_scan": "2026-04-28T07:30:29.498228-04:00",
     "packages_scanned": 127
   },
   "roadmap": {
@@ -266,7 +266,7 @@
       "pills": {
         "active_sources": 14,
         "indicators": 615,
-        "videos_transcribed": 1844
+        "videos_transcribed": 1848
       }
     },
     "phase3": {
