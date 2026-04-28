@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-04-28",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-04-28_0900.json",
+      "format": "json"
+    },
+    {
       "type": "strategy_comparison",
       "title": "Weekly Strategy Comparison",
       "date": "2026-04-27",
