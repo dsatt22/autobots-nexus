@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-04-30T19:00:00.014524-04:00",
+  "last_updated": "2026-05-01T08:15:00.026865-04:00",
   "hero": {
     "trading_bots_paper": 56,
-    "strategies_discovered": 807,
+    "strategies_discovered": 810,
     "auto_deployed_bots": 52,
     "candles": "167M",
     "symbols": 112,
-    "indicators_mapped": 617,
+    "indicators_mapped": 624,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 56927,
-    "python_files": 199,
+    "lines_scanned": 50469,
+    "python_files": 193,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
@@ -67,7 +67,7 @@
     "bots_scanned": 60,
     "tables_secured": 42,
     "security_migrations": 39,
-    "last_scan": "2026-04-30T18:50:05.214331-04:00",
+    "last_scan": "2026-05-01T07:30:31.005926-04:00",
     "packages_scanned": 127
   },
   "roadmap": {
@@ -265,8 +265,8 @@
       "status": "live",
       "pills": {
         "active_sources": 14,
-        "indicators": 617,
-        "videos_transcribed": 1852
+        "indicators": 624,
+        "videos_transcribed": 1862
       }
     },
     "phase3": {
