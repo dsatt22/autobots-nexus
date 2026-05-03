@@ -1,0 +1,392 @@
+{
+  "schema_version": "1.0",
+  "report_type": "strategy_comparison",
+  "metadata": {
+    "title": "AutoBots - Strategy Comparison",
+    "report_type": "strategy_comparison",
+    "generated_at_et": "2026-05-03T08:30:00.310177-04:00",
+    "date_et": "May 03, 2026",
+    "time_et": "8:30 AM ET",
+    "period": {
+      "since_label": "past 30 days",
+      "start_et": "2026-04-03T08:30:00.010310-04:00",
+      "end_et": "2026-05-03T08:30:00.010310-04:00"
+    },
+    "next_report": {
+      "time_label": "9:00 AM Eastern",
+      "at_et": "2026-05-03T09:00:00-04:00"
+    },
+    "cadence": "monthly",
+    "is_monthly_deep_dive": true,
+    "comparison_window_label": "Past 30 days"
+  },
+  "sections": {
+    "tldr": {
+      "text": "1 ticker compared. 3 live-slot changes recommended. average profit factor 0.09.",
+      "stats": {
+        "tickers_compared": 1,
+        "strategies_compared": 3,
+        "live_slot_changes_recommended": 3,
+        "avg_profit_factor": 0.09
+      }
+    },
+    "head_to_head": {
+      "tickers": [
+        {
+          "ticker": "LINK",
+          "strategies": [
+            {
+              "bot_name": "link-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.28,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 3,
+              "total_pnl_usd": -104.63,
+              "recovery_factor": null,
+              "expectancy_pct": -34.88,
+              "return_pct": -10.46,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "link-5-sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -156.97,
+              "recovery_factor": null,
+              "expectancy_pct": -52.32,
+              "return_pct": -15.7,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "link-15sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 4,
+              "total_pnl_usd": -209.92,
+              "recovery_factor": null,
+              "expectancy_pct": -52.48,
+              "return_pct": -20.99,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        }
+      ]
+    },
+    "rankings": {
+      "tickers": [
+        {
+          "ticker": "LINK",
+          "current_live_slot": null,
+          "leading_strategy": "link-svs-4h",
+          "leadership_change": true,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        }
+      ]
+    },
+    "market_condition_context": {
+      "tickers": [
+        {
+          "ticker": "LINK",
+          "regime_code": "calm_ranging",
+          "regime_label": "Calm / Ranging",
+          "description": "Low-volatility sideways action; mean-reversion favored."
+        }
+      ]
+    },
+    "monthly_deep_dive": {
+      "included": true,
+      "window_label": "Past 30 days",
+      "extended_comparisons": [
+        {
+          "ticker": "LINK",
+          "strategies": [
+            {
+              "bot_name": "link-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.28,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 3,
+              "total_pnl_usd": -104.63,
+              "recovery_factor": null,
+              "expectancy_pct": -34.88,
+              "return_pct": -10.46,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "link-5-sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -156.97,
+              "recovery_factor": null,
+              "expectancy_pct": -52.32,
+              "return_pct": -15.7,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "link-15sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 4,
+              "total_pnl_usd": -209.92,
+              "recovery_factor": null,
+              "expectancy_pct": -52.48,
+              "return_pct": -20.99,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        }
+      ]
+    },
+    "month_over_month": {
+      "has_data": true,
+      "tickers": [
+        {
+          "ticker": "LINK",
+          "strategies": [
+            {
+              "bot_name": "link-15sc-4h",
+              "prior_month_year": "2026-03",
+              "trades": {
+                "current": 4,
+                "prior": 1
+              },
+              "total_pnl_usd": {
+                "current": -209.92,
+                "prior": -52.36
+              },
+              "return_pct": {
+                "current": -20.99,
+                "prior": -5.24
+              },
+              "pnl_per_trade_usd": {
+                "current": -52.48,
+                "prior": -52.36
+              },
+              "win_rate_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.0,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -52.48,
+                "prior": -52.36
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL declined from $-52.36 to $-209.92 ($-157.56). Prior month conditions: 1 calm_ranging, 2 trend_up, 2 trend_down."
+            },
+            {
+              "bot_name": "link-5-sc-4h",
+              "prior_month_year": "2026-03",
+              "trades": {
+                "current": 3,
+                "prior": 1
+              },
+              "total_pnl_usd": {
+                "current": -156.97,
+                "prior": -52.36
+              },
+              "return_pct": {
+                "current": -15.7,
+                "prior": -5.24
+              },
+              "pnl_per_trade_usd": {
+                "current": -52.32,
+                "prior": -52.36
+              },
+              "win_rate_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.0,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -52.32,
+                "prior": -52.36
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL declined from $-52.36 to $-156.97 ($-104.61). Prior month conditions: 1 calm_ranging, 2 trend_up, 2 trend_down."
+            },
+            {
+              "bot_name": "link-svs-4h",
+              "prior_month_year": "2026-03",
+              "trades": {
+                "current": 3,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -104.63,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -10.46,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -34.88,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 33.33,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.28,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -34.88,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "Prior month conditions: 1 calm_ranging, 2 trend_up, 2 trend_down."
+            }
+          ]
+        }
+      ]
+    },
+    "performance_by_condition": {
+      "has_data": true,
+      "tickers": [
+        {
+          "ticker": "LINK",
+          "strategies": [
+            {
+              "bot_name": "link-15sc-4h",
+              "by_condition": [
+                {
+                  "regime_code": "calm_ranging",
+                  "regime_label": "Calm / Ranging",
+                  "weeks": 1,
+                  "pnl_usd": -52.4
+                },
+                {
+                  "regime_code": "unknown",
+                  "regime_label": "Unknown",
+                  "weeks": 2,
+                  "pnl_usd": -157.52
+                }
+              ]
+            },
+            {
+              "bot_name": "link-5-sc-4h",
+              "by_condition": [
+                {
+                  "regime_code": "calm_ranging",
+                  "regime_label": "Calm / Ranging",
+                  "weeks": 1,
+                  "pnl_usd": -156.97
+                },
+                {
+                  "regime_code": "unknown",
+                  "regime_label": "Unknown",
+                  "weeks": 2,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "link-svs-4h",
+              "by_condition": [
+                {
+                  "regime_code": "calm_ranging",
+                  "regime_label": "Calm / Ranging",
+                  "weeks": 1,
+                  "pnl_usd": -52.24
+                },
+                {
+                  "regime_code": "unknown",
+                  "regime_label": "Unknown",
+                  "weeks": 2,
+                  "pnl_usd": -52.39
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "correlations": {
+      "has_data": true,
+      "pairs": [
+        {
+          "ticker": "LINK",
+          "strategy_a": "link-15sc-4h",
+          "strategy_b": "link-iti-4h",
+          "correlation": -0.803
+        },
+        {
+          "ticker": "LINK",
+          "strategy_a": "link-15sc-4h",
+          "strategy_b": "link-svs-4h",
+          "correlation": 0.736
+        },
+        {
+          "ticker": "LINK",
+          "strategy_a": "link-iti-4h",
+          "strategy_b": "link-svs-4h",
+          "correlation": -0.614
+        },
+        {
+          "ticker": "LINK",
+          "strategy_a": "link-5-sc-4h",
+          "strategy_b": "link-svs-4h",
+          "correlation": 0.589
+        },
+        {
+          "ticker": "LINK",
+          "strategy_a": "link-15sc-4h",
+          "strategy_b": "link-5-sc-4h",
+          "correlation": 0.301
+        },
+        {
+          "ticker": "LINK",
+          "strategy_a": "link-iti-4h",
+          "strategy_b": "link-5-sc-4h",
+          "correlation": 0.206
+        }
+      ]
+    }
+  },
+  "footer": {
+    "next_report_time_label": "9:00 AM Eastern",
+    "next_report_at_et": "2026-05-03T09:00:00-04:00"
+  }
+}
