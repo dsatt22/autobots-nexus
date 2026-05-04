@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-03T21:30:45.568864-04:00",
+  "last_updated": "2026-05-03T22:38:45.555532-04:00",
   "hero": {
     "trading_bots_paper": 56,
     "strategies_discovered": 822,
@@ -23,7 +23,7 @@
     "postgresql_size": "47 GB",
     "sql_schemas": 7,
     "sql_tables": 65,
-    "sql_migrations": 45,
+    "sql_migrations": 46,
     "hand_built_bots": 3,
     "pipeline_bots": 52,
     "pipeline_tickers": 9,
@@ -66,7 +66,7 @@
     "affected_packages": 1,
     "bots_scanned": 60,
     "tables_secured": 65,
-    "security_migrations": 45,
+    "security_migrations": 46,
     "last_scan": "2026-05-03T18:50:05.118527-04:00",
     "packages_scanned": 131
   },
