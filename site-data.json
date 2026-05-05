@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-05-04T22:26:28.833318-04:00",
+  "last_updated": "2026-05-05T08:15:00.017723-04:00",
   "hero": {
-    "trading_bots_paper": 56,
-    "strategies_discovered": 824,
-    "auto_deployed_bots": 52,
+    "trading_bots_paper": 58,
+    "strategies_discovered": 825,
+    "auto_deployed_bots": 54,
     "candles": "168M",
     "symbols": 112,
     "indicators_mapped": 632,
@@ -12,12 +12,12 @@
     "bot_types": 7,
     "hierarchy_tiers": 5,
     "engine_bots_live": 4,
-    "trading_bots": 56,
+    "trading_bots": 58,
     "build_phases": 7
   },
   "architecture": {
     "research_sources": 14,
-    "builder_bots_deployed": 52,
+    "builder_bots_deployed": 54,
     "postgresql_candles": "168M",
     "postgresql_symbols": 112,
     "postgresql_size": "47 GB",
@@ -25,8 +25,8 @@
     "sql_tables": 66,
     "sql_migrations": 48,
     "hand_built_bots": 3,
-    "pipeline_bots": 52,
-    "pipeline_tickers": 9,
+    "pipeline_bots": 54,
+    "pipeline_tickers": 10,
     "telegram_bots": 5,
     "email_reports": 4
   },
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "95%",
+    "codegen_pass_rate": "94%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -51,23 +51,23 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 55098,
-    "python_files": 205,
+    "lines_scanned": 55786,
+    "python_files": 204,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
-    "code_analysis_pct": 98,
+    "code_analysis_pct": 96,
     "dependency_audit_pct": 96,
-    "bot_protections_pct": 100,
+    "bot_protections_pct": 83,
     "database_safety_pct": 100,
-    "medium_severity": 1,
-    "low_severity": 179,
+    "medium_severity": 2,
+    "low_severity": 185,
     "known_cves": 1,
     "affected_packages": 1,
-    "bots_scanned": 60,
+    "bots_scanned": 62,
     "tables_secured": 66,
     "security_migrations": 48,
-    "last_scan": "2026-05-04T18:50:05.098381-04:00",
+    "last_scan": "2026-05-05T07:30:33.742420-04:00",
     "packages_scanned": 131
   },
   "roadmap": {
@@ -276,13 +276,13 @@
       "pills": {
         "active_sources": 14,
         "indicators": 632,
-        "videos_transcribed": 1873
+        "videos_transcribed": 1884
       }
     },
     "phase3": {
       "status": "live",
       "pills": {
-        "bots_deployed": 52
+        "bots_deployed": 54
       }
     },
     "phase4": {
