@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-05-05T23:21:28.832559-04:00",
+  "last_updated": "2026-05-05T23:24:28.846635-04:00",
   "hero": {
     "trading_bots_paper": 62,
     "strategies_discovered": 826,
     "auto_deployed_bots": 58,
     "candles": "168M",
-    "symbols": 112,
+    "symbols": 113,
     "indicators_mapped": 633,
     "leverage": "10x",
     "risk_per_trade": "5%",
@@ -19,7 +19,7 @@
     "research_sources": 14,
     "builder_bots_deployed": 58,
     "postgresql_candles": "168M",
-    "postgresql_symbols": 112,
+    "postgresql_symbols": 113,
     "postgresql_size": "47 GB",
     "sql_schemas": 7,
     "sql_tables": 66,
