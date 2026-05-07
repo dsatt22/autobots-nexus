@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-05-06T23:54:28.842851-04:00",
+  "last_updated": "2026-05-07T07:16:28.838884-04:00",
   "hero": {
     "trading_bots_paper": 63,
-    "strategies_discovered": 827,
+    "strategies_discovered": 835,
     "auto_deployed_bots": 59,
-    "candles": "168M",
-    "symbols": 113,
-    "indicators_mapped": 633,
+    "candles": "0",
+    "symbols": 0,
+    "indicators_mapped": 635,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
@@ -18,8 +18,8 @@
   "architecture": {
     "research_sources": 14,
     "builder_bots_deployed": 59,
-    "postgresql_candles": "168M",
-    "postgresql_symbols": 113,
+    "postgresql_candles": "0",
+    "postgresql_symbols": 0,
     "postgresql_size": "47 GB",
     "sql_schemas": 7,
     "sql_tables": 68,
@@ -39,7 +39,7 @@
     "sources_scanned": 14,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "94%",
+    "codegen_pass_rate": "93%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -275,8 +275,8 @@
       "status": "live",
       "pills": {
         "active_sources": 14,
-        "indicators": 633,
-        "videos_transcribed": 1884
+        "indicators": 635,
+        "videos_transcribed": 1885
       }
     },
     "phase3": {
