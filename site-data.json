@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-05-08T19:00:00.014744-04:00",
+  "last_updated": "2026-05-08T20:16:04.728466-04:00",
   "hero": {
     "trading_bots_paper": 70,
-    "strategies_discovered": 843,
+    "strategies_discovered": 842,
     "auto_deployed_bots": 67,
     "candles": "168M",
     "symbols": 113,
@@ -23,7 +23,7 @@
     "postgresql_size": "47 GB",
     "sql_schemas": 7,
     "sql_tables": 70,
-    "sql_migrations": 54,
+    "sql_migrations": 58,
     "hand_built_bots": 3,
     "pipeline_bots": 67,
     "pipeline_tickers": 12,
@@ -66,7 +66,7 @@
     "affected_packages": 0,
     "bots_scanned": 74,
     "tables_secured": 70,
-    "security_migrations": 54,
+    "security_migrations": 58,
     "last_scan": "2026-05-08T18:50:05.292259-04:00",
     "packages_scanned": 131
   },
