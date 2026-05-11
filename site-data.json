@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-10T21:37:04.721011-04:00",
+  "last_updated": "2026-05-11T07:24:04.726840-04:00",
   "hero": {
     "trading_bots_paper": 70,
     "strategies_discovered": 854,
@@ -276,7 +276,7 @@
       "pills": {
         "active_sources": 14,
         "indicators": 642,
-        "videos_transcribed": 1902
+        "videos_transcribed": 1904
       }
     },
     "phase3": {
