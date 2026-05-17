@@ -1,0 +1,2349 @@
+{
+  "schema_version": "1.0",
+  "report_type": "weekly_review",
+  "metadata": {
+    "title": "AutoBots - Weekly Trading Review",
+    "report_type": "weekly_review",
+    "generated_at_et": "2026-05-17T08:00:00.319638-04:00",
+    "date_et": "May 17, 2026",
+    "time_et": "8:00 AM ET",
+    "period_start": "2026-05-10T08:00:00.025633-04:00",
+    "period_end": "2026-05-17T08:00:00.025633-04:00",
+    "period": {
+      "since_label": "start of week",
+      "start_et": "2026-05-10T08:00:00.025633-04:00",
+      "end_et": "2026-05-17T08:00:00.025633-04:00",
+      "since_et": "2026-05-10T08:00:00.025633-04:00",
+      "until_et": "2026-05-17T08:00:00.025633-04:00",
+      "since": "2026-05-10T12:00:00.025633+00:00",
+      "until": "2026-05-17T12:00:00.025633+00:00",
+      "recovery_window": false
+    },
+    "next_report": {
+      "time_label": "9:00 AM Eastern",
+      "at_et": "2026-05-17T09:00:00-04:00"
+    },
+    "week_number": 20,
+    "week_label": "Week 20, 2026"
+  },
+  "sections": {
+    "tldr": {
+      "text": "58 bots closed 61 trades this week for a combined loss of $1,921.10. 27 bots have now met the promotion threshold and are ready for review.",
+      "stats": {
+        "total_trades": 61,
+        "wins": 12,
+        "losses": 49,
+        "breakevens": 0,
+        "win_rate_pct": 19.7,
+        "total_pnl_usd": -1921.1,
+        "best_performer": {
+          "bot_name": "sol-crsc-4h",
+          "pnl_usd": 63.62
+        },
+        "worst_performer": {
+          "bot_name": "wif-bmrm-1h",
+          "pnl_usd": -156.99
+        },
+        "bots_approaching_promotion": 27
+      }
+    },
+    "trading_performance": {
+      "bots": [
+        {
+          "bot_name": "ada-biex-4h",
+          "ticker": "ADA",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 27.82,
+          "days_active": 1,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-15sc-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.27,
+          "pnl_lifetime_usd": -118.58,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-5-sc-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.27,
+          "pnl_lifetime_usd": -14.07,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-iti-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.27,
+          "pnl_lifetime_usd": -171.35,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-oas-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.27,
+          "pnl_lifetime_usd": -14.07,
+          "days_active": 50,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-sfzl-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 0.0,
+          "days_active": 12,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-st-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.27,
+          "pnl_lifetime_usd": -52.27,
+          "days_active": 48,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-svs-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -235.23,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "avax-wete-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.04,
+          "pnl_lifetime_usd": -156.11,
+          "days_active": 50,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "bnb-iti-4h",
+          "ticker": "BNB",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.74,
+          "pnl_lifetime_usd": -158.06,
+          "days_active": 60,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "btc-1ms-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.9,
+          "pnl_lifetime_usd": 24.37,
+          "days_active": 17,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "btc-atb-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.85,
+          "pnl_lifetime_usd": -105.73,
+          "days_active": 12,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "btc-sqs-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 39.03,
+          "days_active": 17,
+          "status_code": "paper",
+          "status_label": "Paper"
+        },
+        {
+          "bot_name": "btc-surs-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 1,
+          "losses": 0,
+          "win_rate_pct": 100.0,
+          "pnl_week_usd": 38.31,
+          "pnl_lifetime_usd": 376.84,
+          "days_active": 1,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-15sc-2h",
+          "ticker": "DOGE",
+          "timeframe": "2H",
+          "trades_count": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -105.5,
+          "pnl_lifetime_usd": 316.84,
+          "days_active": 59,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-5-sc-2h",
+          "ticker": "DOGE",
+          "timeframe": "2H",
+          "trades_count": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -105.5,
+          "pnl_lifetime_usd": 221.87,
+          "days_active": 59,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-8wrm-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_count": 3,
+          "wins": 0,
+          "losses": 3,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -132.25,
+          "pnl_lifetime_usd": -3.21,
+          "days_active": 19,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-de-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 60.99,
+          "days_active": 59,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-iti-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -24.15,
+          "days_active": 59,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-pat-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_count": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -50.36,
+          "pnl_lifetime_usd": 33.54,
+          "days_active": 17,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-scs-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_count": 3,
+          "wins": 1,
+          "losses": 2,
+          "win_rate_pct": 33.3,
+          "pnl_week_usd": -79.58,
+          "pnl_lifetime_usd": 165.41,
+          "days_active": 19,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "doge-svs-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 27.86,
+          "days_active": 58,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "dot-faim-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.23,
+          "pnl_lifetime_usd": -1.44,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "dot-oas-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.23,
+          "pnl_lifetime_usd": -1.44,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "dot-st-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.23,
+          "pnl_lifetime_usd": -1.44,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "dot-tr-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.23,
+          "pnl_lifetime_usd": -1.44,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "dot-vsf-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.23,
+          "pnl_lifetime_usd": -1.44,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "dot-wete-2h",
+          "ticker": "DOT",
+          "timeframe": "2H",
+          "trades_count": 5,
+          "wins": 2,
+          "losses": 3,
+          "win_rate_pct": 40.0,
+          "pnl_week_usd": -72.42,
+          "pnl_lifetime_usd": 133.81,
+          "days_active": 0,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-15sc-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 87.6,
+          "days_active": 6,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-atb-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_count": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -93.99,
+          "pnl_lifetime_usd": -201.94,
+          "days_active": 12,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-emfi-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -104.36,
+          "pnl_lifetime_usd": -32.54,
+          "days_active": 17,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-etmi-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -161.72,
+          "days_active": 6,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-faim-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -51.49,
+          "pnl_lifetime_usd": -209.73,
+          "days_active": 61,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-fgc-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 2,
+          "wins": 0,
+          "losses": 2,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -104.36,
+          "pnl_lifetime_usd": -32.54,
+          "days_active": 18,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-iti-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -51.49,
+          "pnl_lifetime_usd": -156.67,
+          "days_active": 9,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-mbc-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 1,
+          "losses": 0,
+          "win_rate_pct": 100.0,
+          "pnl_week_usd": 35.78,
+          "pnl_lifetime_usd": 5.94,
+          "days_active": 17,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-mtf-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 2,
+          "wins": 1,
+          "losses": 1,
+          "win_rate_pct": 50.0,
+          "pnl_week_usd": -13.71,
+          "pnl_lifetime_usd": 65.79,
+          "days_active": 17,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-pb-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -171.45,
+          "days_active": 17,
+          "status_code": "paper",
+          "status_label": "Paper"
+        },
+        {
+          "bot_name": "eth-sqs-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -20.55,
+          "pnl_lifetime_usd": -105.79,
+          "days_active": 17,
+          "status_code": "paper",
+          "status_label": "Paper"
+        },
+        {
+          "bot_name": "eth-tsmi-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 2,
+          "wins": 1,
+          "losses": 1,
+          "win_rate_pct": 50.0,
+          "pnl_week_usd": -18.85,
+          "pnl_lifetime_usd": 56.88,
+          "days_active": 17,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "eth-xg-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -86.52,
+          "days_active": 61,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "link-15sc-4h",
+          "ticker": "LINK",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -262.28,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "link-5-sc-4h",
+          "ticker": "LINK",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -261.34,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "link-iti-4h",
+          "ticker": "LINK",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 1,
+          "losses": 0,
+          "win_rate_pct": 100.0,
+          "pnl_week_usd": 25.41,
+          "pnl_lifetime_usd": 58.08,
+          "days_active": 51,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "sol-ce-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -265.46,
+          "days_active": 17,
+          "status_code": "paper",
+          "status_label": "Paper"
+        },
+        {
+          "bot_name": "sol-crsc-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 1,
+          "losses": 0,
+          "win_rate_pct": 100.0,
+          "pnl_week_usd": 63.62,
+          "pnl_lifetime_usd": 54.71,
+          "days_active": 27,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "sol-gbms-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 1,
+          "losses": 0,
+          "win_rate_pct": 100.0,
+          "pnl_week_usd": 63.62,
+          "pnl_lifetime_usd": -95.95,
+          "days_active": 46,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "sol-xg-2h",
+          "ticker": "SOL",
+          "timeframe": "2H",
+          "trades_count": 2,
+          "wins": 1,
+          "losses": 1,
+          "win_rate_pct": 50.0,
+          "pnl_week_usd": 34.39,
+          "pnl_lifetime_usd": -76.34,
+          "days_active": 61,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "sol-xg-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -51.9,
+          "pnl_lifetime_usd": -59.29,
+          "days_active": 63,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "sui-pps-4h",
+          "ticker": "SUI",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 1,
+          "losses": 0,
+          "win_rate_pct": 100.0,
+          "pnl_week_usd": 25.54,
+          "pnl_lifetime_usd": -26.7,
+          "days_active": 12,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "sui-svs-4h",
+          "ticker": "SUI",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": -52.24,
+          "days_active": 12,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "wif-15sc-4h",
+          "ticker": "WIF",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.01,
+          "pnl_lifetime_usd": -52.01,
+          "days_active": 10,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "wif-bbp-4h",
+          "ticker": "WIF",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.01,
+          "pnl_lifetime_usd": -52.01,
+          "days_active": 9,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "wif-bmrm-1h",
+          "ticker": "WIF",
+          "timeframe": "1H",
+          "trades_count": 3,
+          "wins": 0,
+          "losses": 3,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -156.99,
+          "pnl_lifetime_usd": -261.55,
+          "days_active": 11,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "wif-hwr-4h",
+          "ticker": "WIF",
+          "timeframe": "4H",
+          "trades_count": 0,
+          "wins": 0,
+          "losses": 0,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": 0.0,
+          "pnl_lifetime_usd": 0.0,
+          "days_active": 9,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "xrp-15sc-4h",
+          "ticker": "XRP",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.45,
+          "pnl_lifetime_usd": -52.45,
+          "days_active": 9,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "xrp-2etb-4h",
+          "ticker": "XRP",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.52,
+          "pnl_lifetime_usd": -52.52,
+          "days_active": 9,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        },
+        {
+          "bot_name": "xrp-svs-4h",
+          "ticker": "XRP",
+          "timeframe": "4H",
+          "trades_count": 1,
+          "wins": 0,
+          "losses": 1,
+          "win_rate_pct": 0.0,
+          "pnl_week_usd": -52.45,
+          "pnl_lifetime_usd": -52.45,
+          "days_active": 9,
+          "status_code": "paper_testing",
+          "status_label": "Paper Testing"
+        }
+      ]
+    },
+    "ticker_groups": {
+      "tickers": [
+        {
+          "ticker": "ADA",
+          "total_trades": 0,
+          "total_pnl_usd": 0.0,
+          "best_bot": {
+            "bot_name": "ada-biex-4h",
+            "pnl_usd": 0.0
+          },
+          "worst_bot": {
+            "bot_name": "ada-biex-4h",
+            "pnl_usd": 0.0
+          }
+        },
+        {
+          "ticker": "AVAX",
+          "total_trades": 6,
+          "total_pnl_usd": -313.39,
+          "best_bot": {
+            "bot_name": "avax-sfzl-4h",
+            "pnl_usd": 0.0
+          },
+          "worst_bot": {
+            "bot_name": "avax-15sc-4h",
+            "pnl_usd": -52.27
+          }
+        },
+        {
+          "ticker": "BNB",
+          "total_trades": 1,
+          "total_pnl_usd": -52.74,
+          "best_bot": {
+            "bot_name": "bnb-iti-4h",
+            "pnl_usd": -52.74
+          },
+          "worst_bot": {
+            "bot_name": "bnb-iti-4h",
+            "pnl_usd": -52.74
+          }
+        },
+        {
+          "ticker": "BTC",
+          "total_trades": 3,
+          "total_pnl_usd": -67.44,
+          "best_bot": {
+            "bot_name": "btc-surs-4h",
+            "pnl_usd": 38.31
+          },
+          "worst_bot": {
+            "bot_name": "btc-1ms-4h",
+            "pnl_usd": -52.9
+          }
+        },
+        {
+          "ticker": "DOGE",
+          "total_trades": 12,
+          "total_pnl_usd": -473.19,
+          "best_bot": {
+            "bot_name": "doge-de-4h",
+            "pnl_usd": 0.0
+          },
+          "worst_bot": {
+            "bot_name": "doge-8wrm-4h",
+            "pnl_usd": -132.25
+          }
+        },
+        {
+          "ticker": "DOT",
+          "total_trades": 10,
+          "total_pnl_usd": -333.57,
+          "best_bot": {
+            "bot_name": "dot-faim-4h",
+            "pnl_usd": -52.23
+          },
+          "worst_bot": {
+            "bot_name": "dot-wete-2h",
+            "pnl_usd": -72.42
+          }
+        },
+        {
+          "ticker": "ETH",
+          "total_trades": 14,
+          "total_pnl_usd": -423.02,
+          "best_bot": {
+            "bot_name": "eth-mbc-4h",
+            "pnl_usd": 35.78
+          },
+          "worst_bot": {
+            "bot_name": "eth-emfi-4h",
+            "pnl_usd": -104.36
+          }
+        },
+        {
+          "ticker": "LINK",
+          "total_trades": 1,
+          "total_pnl_usd": 25.41,
+          "best_bot": {
+            "bot_name": "link-iti-4h",
+            "pnl_usd": 25.41
+          },
+          "worst_bot": {
+            "bot_name": "link-15sc-4h",
+            "pnl_usd": 0.0
+          }
+        },
+        {
+          "ticker": "SOL",
+          "total_trades": 5,
+          "total_pnl_usd": 109.73,
+          "best_bot": {
+            "bot_name": "sol-crsc-4h",
+            "pnl_usd": 63.62
+          },
+          "worst_bot": {
+            "bot_name": "sol-xg-4h",
+            "pnl_usd": -51.9
+          }
+        },
+        {
+          "ticker": "SUI",
+          "total_trades": 1,
+          "total_pnl_usd": 25.54,
+          "best_bot": {
+            "bot_name": "sui-pps-4h",
+            "pnl_usd": 25.54
+          },
+          "worst_bot": {
+            "bot_name": "sui-svs-4h",
+            "pnl_usd": 0.0
+          }
+        },
+        {
+          "ticker": "WIF",
+          "total_trades": 5,
+          "total_pnl_usd": -261.01,
+          "best_bot": {
+            "bot_name": "wif-hwr-4h",
+            "pnl_usd": 0.0
+          },
+          "worst_bot": {
+            "bot_name": "wif-bmrm-1h",
+            "pnl_usd": -156.99
+          }
+        },
+        {
+          "ticker": "XRP",
+          "total_trades": 3,
+          "total_pnl_usd": -157.42,
+          "best_bot": {
+            "bot_name": "xrp-15sc-4h",
+            "pnl_usd": -52.45
+          },
+          "worst_bot": {
+            "bot_name": "xrp-2etb-4h",
+            "pnl_usd": -52.52
+          }
+        }
+      ]
+    },
+    "market_conditions": {
+      "tickers": [
+        {
+          "ticker": "ADA",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "AERO",
+          "regime_code": "fading_trend_down",
+          "regime_label": "Fading Trend Down",
+          "description": "Net negative close, but price troughed early in the week and rallied back before fading. Path was inefficient and not a clean breakdown."
+        },
+        {
+          "ticker": "ALT",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "AVAX",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "BERA",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "BIGTIME",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "BNB",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "BTC",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "DASH",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "DOGE",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "DOT",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "ETH",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "ETHFI",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "GMT",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "HYPE",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "INJ",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "IO",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "IP",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "LINK",
+          "regime_code": "trend_up",
+          "regime_label": "Trending Up",
+          "description": "Strong uptrend confirmed by directional path and ascending daily highs. Close held near the weekly peak."
+        },
+        {
+          "ticker": "LTC",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "MINA",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "MORPHO",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "PEPE",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "POL",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "SEI",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "SHIB",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "SOL",
+          "regime_code": "trend_up",
+          "regime_label": "Trending Up",
+          "description": "Strong uptrend confirmed by directional path and ascending daily highs. Close held near the weekly peak."
+        },
+        {
+          "ticker": "SUI",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "TIA",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "TON",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "TRUMP",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "TRX",
+          "regime_code": "slow_grind_up",
+          "regime_label": "Slow Grind Up",
+          "description": "Modest net gain with directionally consistent path. Less explosive than a strong trend but still genuinely directional."
+        },
+        {
+          "ticker": "UNI",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "WIF",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "XRP",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "ZEC",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        }
+      ]
+    },
+    "promotion_candidates": {
+      "has_candidates": true,
+      "bots": [
+        {
+          "bot_name": "ada-biex-4h",
+          "ticker": "ADA",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 1,
+          "days_needed": 60,
+          "current_pf": 1.53,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-15sc-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.24,
+          "current_win_rate_pct": 25.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-5-sc-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.73,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-iti-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.18,
+          "current_win_rate_pct": 20.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-oas-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 50,
+          "days_needed": 60,
+          "current_pf": 0.73,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-sfzl-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 0,
+          "trades_needed": 10,
+          "days_active": 12,
+          "days_needed": 60,
+          "current_pf": null,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "avax-st-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 48,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-svs-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 6,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.14,
+          "current_win_rate_pct": 16.7,
+          "on_track": true
+        },
+        {
+          "bot_name": "avax-wete-4h",
+          "ticker": "AVAX",
+          "timeframe": "4H",
+          "trades_completed": 3,
+          "trades_needed": 10,
+          "days_active": 50,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "bnb-iti-4h",
+          "ticker": "BNB",
+          "timeframe": "4H",
+          "trades_completed": 3,
+          "trades_needed": 10,
+          "days_active": 60,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "btc-1ms-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_completed": 3,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 1.46,
+          "current_win_rate_pct": 66.7,
+          "on_track": false
+        },
+        {
+          "bot_name": "btc-atb-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 12,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "btc-sqs-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 1.48,
+          "current_win_rate_pct": 40.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "btc-surs-4h",
+          "ticker": "BTC",
+          "timeframe": "4H",
+          "trades_completed": 10,
+          "trades_needed": 10,
+          "days_active": 1,
+          "days_needed": 60,
+          "current_pf": 2.54,
+          "current_win_rate_pct": 60.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-15sc-2h",
+          "ticker": "DOGE",
+          "timeframe": "2H",
+          "trades_completed": 7,
+          "trades_needed": 15,
+          "days_active": 59,
+          "days_needed": 60,
+          "current_pf": 4.0,
+          "current_win_rate_pct": 71.4,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-5-sc-2h",
+          "ticker": "DOGE",
+          "timeframe": "2H",
+          "trades_completed": 7,
+          "trades_needed": 15,
+          "days_active": 59,
+          "days_needed": 60,
+          "current_pf": 2.33,
+          "current_win_rate_pct": 57.1,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-8wrm-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 19,
+          "days_needed": 60,
+          "current_pf": 0.98,
+          "current_win_rate_pct": 40.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "doge-de-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 59,
+          "days_needed": 60,
+          "current_pf": 1.48,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-iti-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_completed": 3,
+          "trades_needed": 10,
+          "days_active": 59,
+          "days_needed": 60,
+          "current_pf": 0.77,
+          "current_win_rate_pct": 33.3,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-pat-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 1.67,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-scs-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_completed": 7,
+          "trades_needed": 10,
+          "days_active": 19,
+          "days_needed": 60,
+          "current_pf": 2.58,
+          "current_win_rate_pct": 71.4,
+          "on_track": true
+        },
+        {
+          "bot_name": "doge-svs-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 58,
+          "days_needed": 60,
+          "current_pf": 1.53,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "dot-faim-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.97,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "dot-oas-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.97,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "dot-st-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.97,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "dot-tr-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.97,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "dot-vsf-4h",
+          "ticker": "DOT",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.97,
+          "current_win_rate_pct": 50.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "dot-wete-2h",
+          "ticker": "DOT",
+          "timeframe": "2H",
+          "trades_completed": 15,
+          "trades_needed": 15,
+          "days_active": 0,
+          "days_needed": 60,
+          "current_pf": 1.28,
+          "current_win_rate_pct": 40.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "eth-15sc-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_completed": 1,
+          "trades_needed": 15,
+          "days_active": 6,
+          "days_needed": 60,
+          "current_pf": null,
+          "current_win_rate_pct": 100.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-atb-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_completed": 4,
+          "trades_needed": 15,
+          "days_active": 12,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-emfi-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 0.69,
+          "current_win_rate_pct": 50.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-etmi-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 6,
+          "days_needed": 60,
+          "current_pf": 0.33,
+          "current_win_rate_pct": 20.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-faim-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_completed": 4,
+          "trades_needed": 15,
+          "days_active": 61,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "eth-fgc-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 18,
+          "days_needed": 60,
+          "current_pf": 0.69,
+          "current_win_rate_pct": 50.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-iti-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_completed": 3,
+          "trades_needed": 15,
+          "days_active": 9,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-mbc-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 3,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 1.08,
+          "current_win_rate_pct": 66.7,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-mtf-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 2.23,
+          "current_win_rate_pct": 75.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "eth-pb-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "trades_completed": 5,
+          "trades_needed": 15,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-sqs-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 6,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 0.09,
+          "current_win_rate_pct": 16.7,
+          "on_track": false
+        },
+        {
+          "bot_name": "eth-tsmi-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 2.07,
+          "current_win_rate_pct": 75.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "eth-xg-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "trades_completed": 6,
+          "trades_needed": 10,
+          "days_active": 61,
+          "days_needed": 60,
+          "current_pf": 0.58,
+          "current_win_rate_pct": 33.3,
+          "on_track": true
+        },
+        {
+          "bot_name": "link-15sc-4h",
+          "ticker": "LINK",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "link-5-sc-4h",
+          "ticker": "LINK",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "link-iti-4h",
+          "ticker": "LINK",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 51,
+          "days_needed": 60,
+          "current_pf": null,
+          "current_win_rate_pct": 100.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "sol-ce-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_completed": 4,
+          "trades_needed": 10,
+          "days_active": 17,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "sol-crsc-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_completed": 5,
+          "trades_needed": 10,
+          "days_active": 27,
+          "days_needed": 60,
+          "current_pf": 1.52,
+          "current_win_rate_pct": 60.0,
+          "on_track": true
+        },
+        {
+          "bot_name": "sol-gbms-4h",
+          "ticker": "SOL",
+          "timeframe": "4H",
+          "trades_completed": 8,
+          "trades_needed": 10,
+          "days_active": 46,
+          "days_needed": 60,
+          "current_pf": 0.64,
+          "current_win_rate_pct": 37.5,
+          "on_track": true
+        },
+        {
+          "bot_name": "sol-xg-2h",
+          "ticker": "SOL",
+          "timeframe": "2H",
+          "trades_completed": 8,
+          "trades_needed": 15,
+          "days_active": 61,
+          "days_needed": 60,
+          "current_pf": 0.71,
+          "current_win_rate_pct": 37.5,
+          "on_track": true
+        },
+        {
+          "bot_name": "sui-pps-4h",
+          "ticker": "SUI",
+          "timeframe": "4H",
+          "trades_completed": 2,
+          "trades_needed": 10,
+          "days_active": 12,
+          "days_needed": 60,
+          "current_pf": 0.49,
+          "current_win_rate_pct": 50.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "sui-svs-4h",
+          "ticker": "SUI",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 12,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "wif-15sc-4h",
+          "ticker": "WIF",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 10,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "wif-bbp-4h",
+          "ticker": "WIF",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 9,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "wif-bmrm-1h",
+          "ticker": "WIF",
+          "timeframe": "1H",
+          "trades_completed": 5,
+          "trades_needed": 20,
+          "days_active": 11,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "wif-hwr-4h",
+          "ticker": "WIF",
+          "timeframe": "4H",
+          "trades_completed": 0,
+          "trades_needed": 10,
+          "days_active": 9,
+          "days_needed": 60,
+          "current_pf": null,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "xrp-15sc-4h",
+          "ticker": "XRP",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 9,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "xrp-2etb-4h",
+          "ticker": "XRP",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 9,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        },
+        {
+          "bot_name": "xrp-svs-4h",
+          "ticker": "XRP",
+          "timeframe": "4H",
+          "trades_completed": 1,
+          "trades_needed": 10,
+          "days_active": 9,
+          "days_needed": 60,
+          "current_pf": 0.0,
+          "current_win_rate_pct": 0.0,
+          "on_track": false
+        }
+      ]
+    },
+    "partial_closes_summary": {
+      "has_data": true,
+      "tp1_hits": 3,
+      "tp2_hits": 0,
+      "tp3_hits": 0,
+      "tp1_pnl_usd": 77.24,
+      "tp2_pnl_usd": 0.0,
+      "tp3_pnl_usd": 0.0,
+      "total_partial_pnl_usd": 77.24
+    },
+    "bot_status": {
+      "all_operational": true,
+      "bots": [
+        {
+          "name": "Orchestrator",
+          "status": "not_deployed",
+          "description": "Not yet active - this bot has not been deployed yet.",
+          "last_checked_at": null,
+          "last_checked_label": null,
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Reporting Bot",
+          "status": "online",
+          "description": "This bot generated the report you are reading.",
+          "last_checked_at": "2026-05-17T07:55:08.434406-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Research Bot",
+          "status": "online",
+          "description": "Found 514 new pieces of content across its sources. 16 were successfully extracted into structured strategies. 17 new strategies were added to the database. 10 of 11 sources are active. The indicator registry tracks 649 known indicators.",
+          "last_checked_at": "2026-05-17T07:55:12.120349-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Strategy Builder",
+          "status": "online",
+          "description": "Pipeline snapshot: 206 passed quality gates.",
+          "last_checked_at": "2026-05-17T07:55:29.976320-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "News Bot",
+          "status": "online",
+          "description": "News Bot is online.",
+          "last_checked_at": "2026-05-17T07:55:09.367625-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Performance Monitor",
+          "status": "online",
+          "description": "Performance Monitor is online.",
+          "last_checked_at": "2026-05-17T07:55:31.241486-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Site Updater",
+          "status": "online",
+          "description": "Site Updater is online.",
+          "last_checked_at": "2026-05-17T07:55:07.626545-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        }
+      ]
+    },
+    "errors": {
+      "has_errors": true,
+      "entries": [
+        {
+          "bot_name": "manual",
+          "severity": "warning",
+          "message": "The trading bot's computer froze and was automatically restarted. It then checked recent trades and made some adjustments.",
+          "occurred_at": "2026-05-15T08:53:25.041227-04:00",
+          "count": 1
+        },
+        {
+          "bot_name": "doge-5-sc-2h",
+          "severity": "warning",
+          "message": "The trading bot stopped a DOGE purchase because it lost too much money today.",
+          "occurred_at": "2026-05-11T14:00:05.760536-04:00",
+          "count": 1
+        },
+        {
+          "bot_name": "doge-15sc-2h",
+          "severity": "warning",
+          "message": "The trading bot stopped a DOGE purchase because it lost too much money today.",
+          "occurred_at": "2026-05-11T14:00:05.746673-04:00",
+          "count": 1
+        },
+        {
+          "bot_name": "wif-bmrm-1h",
+          "severity": "warning",
+          "message": "The trading bot stopped a USDT long trade because it lost more than the daily allowed limit.",
+          "occurred_at": "2026-05-10T17:00:05.880269-04:00",
+          "count": 1
+        }
+      ]
+    },
+    "action_items": {
+      "has_items": true,
+      "items": [
+        {
+          "type": "promotion_threshold_reached",
+          "bot_name": "eth-faim-2h",
+          "text": "🔔 eth-faim-2h has reached its promotion threshold (61 days / 4 trades). Check Telegram for the promotion review notification.",
+          "details": {
+            "trades_completed": 4,
+            "trades_needed": 15,
+            "days_active": 61,
+            "days_needed": 60,
+            "state": "threshold_reached"
+          }
+        },
+        {
+          "type": "promotion_threshold_reached",
+          "bot_name": "sol-xg-2h",
+          "text": "🔔 sol-xg-2h has reached its promotion threshold (61 days / 8 trades). Check Telegram for the promotion review notification.",
+          "details": {
+            "trades_completed": 8,
+            "trades_needed": 15,
+            "days_active": 61,
+            "days_needed": 60,
+            "state": "threshold_reached"
+          }
+        },
+        {
+          "type": "promotion_threshold_reached",
+          "bot_name": "eth-xg-4h",
+          "text": "🔔 eth-xg-4h has reached its promotion threshold (61 days / 6 trades). Check Telegram for the promotion review notification.",
+          "details": {
+            "trades_completed": 6,
+            "trades_needed": 10,
+            "days_active": 61,
+            "days_needed": 60,
+            "state": "threshold_reached"
+          }
+        },
+        {
+          "type": "promotion_threshold_reached",
+          "bot_name": "bnb-iti-4h",
+          "text": "🔔 bnb-iti-4h has reached its promotion threshold (60 days / 3 trades). Check Telegram for the promotion review notification.",
+          "details": {
+            "trades_completed": 3,
+            "trades_needed": 10,
+            "days_active": 60,
+            "days_needed": 60,
+            "state": "threshold_reached"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "doge-de-4h",
+          "text": "📈 doge-de-4h is approaching its promotion threshold: 59/60 days, 4/10 trades.",
+          "details": {
+            "trades_completed": 4,
+            "trades_needed": 10,
+            "days_active": 59,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "doge-iti-4h",
+          "text": "📈 doge-iti-4h is approaching its promotion threshold: 59/60 days, 3/10 trades.",
+          "details": {
+            "trades_completed": 3,
+            "trades_needed": 10,
+            "days_active": 59,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "doge-15sc-2h",
+          "text": "📈 doge-15sc-2h is approaching its promotion threshold: 59/60 days, 7/15 trades.",
+          "details": {
+            "trades_completed": 7,
+            "trades_needed": 15,
+            "days_active": 59,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "doge-5-sc-2h",
+          "text": "📈 doge-5-sc-2h is approaching its promotion threshold: 59/60 days, 7/15 trades.",
+          "details": {
+            "trades_completed": 7,
+            "trades_needed": 15,
+            "days_active": 59,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "doge-svs-4h",
+          "text": "📈 doge-svs-4h is approaching its promotion threshold: 58/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 58,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "dot-oas-4h",
+          "text": "📈 dot-oas-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "dot-st-4h",
+          "text": "📈 dot-st-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "dot-faim-4h",
+          "text": "📈 dot-faim-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "dot-tr-4h",
+          "text": "📈 dot-tr-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "dot-vsf-4h",
+          "text": "📈 dot-vsf-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "link-15sc-4h",
+          "text": "📈 link-15sc-4h is approaching its promotion threshold: 51/60 days, 5/10 trades.",
+          "details": {
+            "trades_completed": 5,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "link-iti-4h",
+          "text": "📈 link-iti-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "link-5-sc-4h",
+          "text": "📈 link-5-sc-4h is approaching its promotion threshold: 51/60 days, 5/10 trades.",
+          "details": {
+            "trades_completed": 5,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-15sc-4h",
+          "text": "📈 avax-15sc-4h is approaching its promotion threshold: 51/60 days, 4/10 trades.",
+          "details": {
+            "trades_completed": 4,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-iti-4h",
+          "text": "📈 avax-iti-4h is approaching its promotion threshold: 51/60 days, 5/10 trades.",
+          "details": {
+            "trades_completed": 5,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-5-sc-4h",
+          "text": "📈 avax-5-sc-4h is approaching its promotion threshold: 51/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-svs-4h",
+          "text": "📈 avax-svs-4h is approaching its promotion threshold: 51/60 days, 6/10 trades.",
+          "details": {
+            "trades_completed": 6,
+            "trades_needed": 10,
+            "days_active": 51,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-oas-4h",
+          "text": "📈 avax-oas-4h is approaching its promotion threshold: 50/60 days, 2/10 trades.",
+          "details": {
+            "trades_completed": 2,
+            "trades_needed": 10,
+            "days_active": 50,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-wete-4h",
+          "text": "📈 avax-wete-4h is approaching its promotion threshold: 50/60 days, 3/10 trades.",
+          "details": {
+            "trades_completed": 3,
+            "trades_needed": 10,
+            "days_active": 50,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "avax-st-4h",
+          "text": "📈 avax-st-4h is approaching its promotion threshold: 48/60 days, 1/10 trades.",
+          "details": {
+            "trades_completed": 1,
+            "trades_needed": 10,
+            "days_active": 48,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "sol-gbms-4h",
+          "text": "📈 sol-gbms-4h is approaching its promotion threshold: 46/60 days, 8/10 trades.",
+          "details": {
+            "trades_completed": 8,
+            "trades_needed": 10,
+            "days_active": 46,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        }
+      ]
+    }
+  },
+  "footer": {
+    "next_report_time_label": "9:00 AM Eastern",
+    "next_report_at_et": "2026-05-17T09:00:00-04:00"
+  }
+}
