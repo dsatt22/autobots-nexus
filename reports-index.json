@@ -17,6 +17,14 @@
       "format": "json"
     },
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-05-17",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-05-17_0900.json",
+      "format": "json"
+    },
+    {
       "type": "evening_briefing",
       "title": "Evening Briefing",
       "date": "2026-05-16",
@@ -530,20 +538,6 @@
       "date": "2026-04-18",
       "time": "11:44 AM ET",
       "file": "reports/daily/2026-04-18-morning.html"
-    },
-    {
-      "type": "evening",
-      "title": "Evening Briefing",
-      "date": "2026-04-17",
-      "time": "8:00 PM ET",
-      "file": "reports/daily/2026-04-17-evening.html"
-    },
-    {
-      "type": "morning",
-      "title": "Morning Briefing",
-      "date": "2026-04-17",
-      "time": "2:19 PM ET",
-      "file": "reports/daily/2026-04-17-morning.html"
     }
   ]
 }
