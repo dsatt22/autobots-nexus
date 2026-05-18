@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-05-18",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-05-18_0900.json",
+      "format": "json"
+    },
+    {
       "type": "strategy_comparison",
       "title": "Weekly Strategy Comparison",
       "date": "2026-05-17",
@@ -532,20 +540,6 @@
       "date": "2026-04-19",
       "time": "8:30 AM ET",
       "file": "reports/comparison/2026-04-19-weekly-comparison.html"
-    },
-    {
-      "type": "evening",
-      "title": "Evening Briefing",
-      "date": "2026-04-18",
-      "time": "8:00 PM ET",
-      "file": "reports/daily/2026-04-18-evening.html"
-    },
-    {
-      "type": "morning",
-      "title": "Morning Briefing",
-      "date": "2026-04-18",
-      "time": "11:44 AM ET",
-      "file": "reports/daily/2026-04-18-morning.html"
     }
   ]
 }
