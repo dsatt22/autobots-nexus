@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-05-19",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-05-19_0900.json",
+      "format": "json"
+    },
+    {
       "type": "evening_briefing",
       "title": "Evening Briefing",
       "date": "2026-05-18",
@@ -518,29 +526,6 @@
       "date": "2026-04-19",
       "time": "8:00 AM ET",
       "file": "reports/weekly/2026-04-19-trading-review.html"
-    },
-    {
-      "type": "evening_briefing",
-      "title": "Evening Briefing",
-      "date": "2026-04-19",
-      "time": "8:00 PM ET",
-      "file": "reports/daily/evening_briefing_2026-04-19_2000.json",
-      "format": "json"
-    },
-    {
-      "type": "morning",
-      "title": "Morning Briefing",
-      "date": "2026-04-19",
-      "time": "9:00 AM ET",
-      "file": "reports/daily/2026-04-19-morning.html"
-    },
-    {
-      "type": "morning_briefing",
-      "title": "Morning Briefing",
-      "date": "2026-04-19",
-      "time": "3:27 PM ET",
-      "file": "reports/daily/morning_briefing_2026-04-19_1527.json",
-      "format": "json"
     },
     {
       "type": "weekly-comparison",
