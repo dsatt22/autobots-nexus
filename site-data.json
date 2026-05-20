@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-05-19T22:46:14.892473-04:00",
+  "last_updated": "2026-05-20T08:07:55.358833-04:00",
   "hero": {
     "trading_bots_paper": 58,
-    "strategies_discovered": 873,
+    "strategies_discovered": 875,
     "auto_deployed_bots": 68,
     "candles": "243M",
     "symbols": 149,
@@ -51,23 +51,23 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 94713,
-    "python_files": 348,
+    "lines_scanned": 85480,
+    "python_files": 344,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
-    "code_analysis_pct": 100,
-    "dependency_audit_pct": 100,
+    "code_analysis_pct": 88,
+    "dependency_audit_pct": 40,
     "bot_protections_pct": 100,
     "database_safety_pct": 100,
-    "medium_severity": 0,
-    "low_severity": 1665,
-    "known_cves": 0,
-    "affected_packages": 0,
+    "medium_severity": 6,
+    "low_severity": 1737,
+    "known_cves": 15,
+    "affected_packages": 3,
     "bots_scanned": 62,
     "tables_secured": 72,
     "security_migrations": 87,
-    "last_scan": "2026-05-19T18:50:05.257975-04:00",
+    "last_scan": "2026-05-20T07:30:43.365485-04:00",
     "packages_scanned": 143
   },
   "roadmap": {
