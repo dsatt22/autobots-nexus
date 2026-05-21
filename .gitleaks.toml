@@ -1,0 +1,26 @@
+# Gitleaks config for autobots-nexus (GitHub Pages site + published reports).
+# Scanned in working-tree mode by trading-bot's site_updater/security_scanner.py.
+# Full git-history baselined 2026-05-21 (.gitleaks-baseline.json): 1 hit, a
+# 64-char SHA-256 hash in published report HTML — a false positive.
+
+title = "autobots-nexus gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "autobots-nexus allowlist (baseline reviewed 2026-05-21)"
+paths = [
+    '''reports\.html$''',                  # published report HTML — hashes/data, not secrets
+    '''^reports/''',                       # published report JSON
+    '''reports-index\.json$''',
+    '''site-data\.json$''',                # generated site data
+    '''(^|/)node_modules/''',
+    '''\.gitleaks-baseline\.json$''',      # scanner's own report files
+    '''\.gitleaks-results\.json$''',
+]
+regexes = [
+    # false-positive: 64-char hex (SHA-256 hash/fingerprint) in published
+    # report HTML, not a credential. 2026-05-21
+    '''\b[0-9a-f]{64}\b''',
+]
