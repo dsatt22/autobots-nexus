@@ -7,3 +7,7 @@ node_modules/
 .DS_Store
 *.log
 .claude/settings.local.json
+
+# Gitleaks reports — contain raw matched strings; never commit.
+.gitleaks-baseline.json
+.gitleaks-results.json
