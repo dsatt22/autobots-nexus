@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T17:55:45.722083-04:00",
+  "last_updated": "2026-05-21T19:00:00.020694-04:00",
   "hero": {
     "trading_bots_paper": 58,
     "strategies_discovered": 879,
@@ -56,18 +56,18 @@
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
-    "code_analysis_pct": 88,
-    "dependency_audit_pct": 40,
+    "code_analysis_pct": 100,
+    "dependency_audit_pct": 96,
     "bot_protections_pct": 100,
     "database_safety_pct": 100,
-    "medium_severity": 6,
-    "low_severity": 2166,
-    "known_cves": 15,
-    "affected_packages": 3,
+    "medium_severity": 0,
+    "low_severity": 0,
+    "known_cves": 1,
+    "affected_packages": 1,
     "bots_scanned": 61,
     "tables_secured": 73,
     "security_migrations": 89,
-    "last_scan": "2026-05-21T07:30:31.774508-04:00",
+    "last_scan": "2026-05-21T18:50:14.610512-04:00",
     "packages_scanned": 143
   },
   "roadmap": {
