@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-05-24T11:49:21.325092-04:00",
+  "last_updated": "2026-05-24T12:43:21.320942-04:00",
   "hero": {
-    "trading_bots_paper": 58,
+    "trading_bots_paper": 54,
     "strategies_discovered": 887,
     "auto_deployed_bots": 68,
     "candles": "243M",
@@ -12,7 +12,7 @@
     "bot_types": 7,
     "hierarchy_tiers": 5,
     "engine_bots_live": 4,
-    "trading_bots": 58,
+    "trading_bots": 54,
     "build_phases": 7
   },
   "architecture": {
@@ -64,7 +64,7 @@
     "low_severity": 0,
     "known_cves": 1,
     "affected_packages": 1,
-    "bots_scanned": 62,
+    "bots_scanned": 58,
     "tables_secured": 73,
     "security_migrations": 91,
     "last_scan": "2026-05-24T07:31:02.050471-04:00",
