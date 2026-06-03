@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T15:09:53.903966-04:00",
+  "last_updated": "2026-06-03T15:56:53.883844-04:00",
   "hero": {
     "trading_bots_paper": 69,
     "strategies_discovered": 897,
@@ -16,13 +16,13 @@
     "build_phases": 7
   },
   "architecture": {
-    "research_sources": 14,
+    "research_sources": 15,
     "builder_bots_deployed": 87,
     "postgresql_candles": "244M",
     "postgresql_symbols": 149,
     "postgresql_size": "59 GB",
     "sql_schemas": 7,
-    "sql_tables": 76,
+    "sql_tables": 78,
     "sql_migrations": 107,
     "hand_built_bots": 3,
     "pipeline_bots": 87,
@@ -36,7 +36,7 @@
   },
   "pipeline": {
     "total_steps": 11,
-    "sources_scanned": 14,
+    "sources_scanned": 15,
     "retry_attempts": 3,
     "dry_run_candles": 100,
     "codegen_pass_rate": "76%",
@@ -65,7 +65,7 @@
     "known_cves": 1,
     "affected_packages": 1,
     "bots_scanned": 73,
-    "tables_secured": 76,
+    "tables_secured": 78,
     "security_migrations": 107,
     "last_scan": "2026-06-03T07:31:06.006361-04:00",
     "packages_scanned": 144,
@@ -275,7 +275,7 @@
     "phase2": {
       "status": "live",
       "pills": {
-        "active_sources": 14,
+        "active_sources": 15,
         "indicators": 655,
         "videos_transcribed": 1953
       }
