@@ -1,0 +1,1008 @@
+{
+  "schema_version": "1.0",
+  "report_type": "morning_briefing",
+  "metadata": {
+    "title": "AutoBots - Morning Briefing",
+    "report_type": "morning_briefing",
+    "generated_at_et": "2026-06-05T09:00:00.359143-04:00",
+    "date_et": "Jun 05, 2026",
+    "time_et": "9:00 AM ET",
+    "period_start": "2026-06-04T20:01:00-04:00",
+    "period_end": "2026-06-05T08:01:00-04:00",
+    "period": {
+      "since_label": "last report",
+      "start_et": "2026-06-04T20:01:00-04:00",
+      "end_et": "2026-06-05T08:01:00-04:00",
+      "since_et": "2026-06-04T20:01:00-04:00",
+      "until_et": "2026-06-05T08:01:00-04:00",
+      "since": "2026-06-05T00:01:00+00:00",
+      "until": "2026-06-05T12:01:00+00:00",
+      "recovery_window": false
+    },
+    "next_report": {
+      "time_label": "8:30 PM Eastern",
+      "at_et": "2026-06-05T20:30:00-04:00"
+    }
+  },
+  "sections": {
+    "tldr": {
+      "text": "All 5 infrastructure bots are online. 16 trades are currently open (2 with TP2, 6 with TP1 hit). 3 new positions opened since 8 PM ET last night. 10 trades closed (8W/2L) for +$201.61 since 8 PM ET last night. 16 new TP hits since 8 PM ET last night (+$806.61 realized). Total realized PnL since 8 PM ET last night: +$1,008.22.",
+      "stats": {
+        "infrastructure_bots_online": 5,
+        "infrastructure_bots_total": 5,
+        "open_trades": 16,
+        "open_trades_with_tp1_hit": 6,
+        "open_trades_with_tp2_hit": 2,
+        "open_trades_with_tp3_hit": 0,
+        "closed_trades_in_period": 10,
+        "wins": 8,
+        "losses": 2,
+        "breakevens": 0,
+        "total_realized_pnl_usd": 1008.22,
+        "bots_approaching_promotion": 1
+      }
+    },
+    "trading_activity": {
+      "tickers": [
+        {
+          "ticker": "ADA",
+          "trades": [
+            {
+              "trade_id": 60447,
+              "bot_name": "ada-biex-4h",
+              "ticker": "ADA",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.2046,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": true,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": 56.25,
+              "final_pnl_usd": 150.0,
+              "duration": "1d 8h",
+              "entry_time": "2026-06-03T16:00:07.676049-04:00",
+              "exit_time": "2026-06-05T00:00:08.590048-04:00"
+            },
+            {
+              "trade_id": 60448,
+              "bot_name": "ada-iti-4h",
+              "ticker": "ADA",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.2044,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": true,
+              "tp1_pnl_usd": 25.72,
+              "tp2_pnl_usd": 12.53,
+              "tp3_pnl_usd": 57.92,
+              "final_pnl_usd": 152.84,
+              "duration": "1d 5h",
+              "entry_time": "2026-06-03T16:00:09.295362-04:00",
+              "exit_time": "2026-06-04T21:03:18.166102-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "BTC",
+          "trades": [
+            {
+              "trade_id": 60467,
+              "bot_name": "btc-smcr-4h",
+              "ticker": "BTC",
+              "timeframe": "4H",
+              "side": "LONG",
+              "entry_price": 63868.0,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "20h 59m",
+              "entry_time": "2026-06-04T12:00:06.173709-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60471,
+              "bot_name": "btc-atb-4h",
+              "ticker": "BTC",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 63597.3,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "16h 59m",
+              "entry_time": "2026-06-04T16:00:07.436855-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "trades": [
+            {
+              "trade_id": 60459,
+              "bot_name": "doge-15sc-2h",
+              "ticker": "DOGE",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 0.08787,
+              "status_code": "tp1_hit_be_stop",
+              "status_label": "TP1 Hit - BE Stop",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.66,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 2h",
+              "entry_time": "2026-06-04T06:00:05.903352-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60460,
+              "bot_name": "doge-5-sc-2h",
+              "ticker": "DOGE",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 0.08787,
+              "status_code": "tp1_hit_be_stop",
+              "status_label": "TP1 Hit - BE Stop",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 26.66,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 2h",
+              "entry_time": "2026-06-04T06:00:05.924877-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60463,
+              "bot_name": "doge-8wrm-4h",
+              "ticker": "DOGE",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.08784,
+              "status_code": "tp1_hit_be_stop",
+              "status_label": "TP1 Hit - BE Stop",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 0h",
+              "entry_time": "2026-06-04T08:00:07.816454-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60465,
+              "bot_name": "doge-scs-4h",
+              "ticker": "DOGE",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.08784,
+              "status_code": "tp1_hit_be_stop",
+              "status_label": "TP1 Hit - BE Stop",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 0h",
+              "entry_time": "2026-06-04T08:00:09.701696-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60468,
+              "bot_name": "doge-bmrm-4h",
+              "ticker": "DOGE",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.08949,
+              "status_code": "tp1_hit_be_stop",
+              "status_label": "TP1 Hit - BE Stop",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "20h 59m",
+              "entry_time": "2026-06-04T12:00:06.887860-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60464,
+              "bot_name": "doge-de-4h",
+              "ticker": "DOGE",
+              "timeframe": "4H",
+              "side": "LONG",
+              "entry_price": 0.08784,
+              "status_code": "stopped_out",
+              "status_label": "Closed - Loss",
+              "is_open": false,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": -50.0,
+              "duration": "20h 0m",
+              "entry_time": "2026-06-04T08:00:08.784469-04:00",
+              "exit_time": "2026-06-05T04:00:10.309438-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "DOT",
+          "trades": [
+            {
+              "trade_id": 60458,
+              "bot_name": "dot-wete-2h",
+              "ticker": "DOT",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 1.049,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": 56.28,
+              "duration": "1d 2h",
+              "entry_time": "2026-06-04T04:00:06.458172-04:00",
+              "exit_time": "2026-06-05T06:00:06.769049-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "trades": [
+            {
+              "trade_id": 60453,
+              "bot_name": "eth-iti-2h",
+              "ticker": "ETH",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 1758.35,
+              "status_code": "tp1_hit_be_stop",
+              "status_label": "TP1 Hit - BE Stop",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 10h",
+              "entry_time": "2026-06-03T22:00:07.303556-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60461,
+              "bot_name": "eth-faim-2h",
+              "ticker": "ETH",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 1750.4,
+              "status_code": "tp2_hit",
+              "status_label": "TP2 Hit - Trailing",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 0h",
+              "entry_time": "2026-06-04T08:00:06.443222-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60469,
+              "bot_name": "eth-atb-4h",
+              "ticker": "ETH",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 1776.15,
+              "status_code": "tp2_hit",
+              "status_label": "TP2 Hit - Trailing",
+              "is_open": true,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 75.35,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "20h 59m",
+              "entry_time": "2026-06-04T12:00:07.223126-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60371,
+              "bot_name": "eth-xg-4h",
+              "ticker": "ETH",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 1980.86,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": true,
+              "tp1_pnl_usd": 25.0,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": 56.25,
+              "final_pnl_usd": 150.0,
+              "duration": "8d 4h",
+              "entry_time": "2026-05-28T00:00:07.220338-04:00",
+              "exit_time": "2026-06-05T04:00:11.638415-04:00"
+            },
+            {
+              "trade_id": 60456,
+              "bot_name": "eth-atb-2h",
+              "ticker": "ETH",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 1776.65,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 69.78,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": 129.56,
+              "duration": "1d 2h",
+              "entry_time": "2026-06-04T04:00:05.916295-04:00",
+              "exit_time": "2026-06-05T06:00:08.404255-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "MORPHO",
+          "trades": [
+            {
+              "trade_id": 60400,
+              "bot_name": "morpho-15sc-4h",
+              "ticker": "MORPHO",
+              "timeframe": "4H",
+              "side": "LONG",
+              "entry_price": 2.1749,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "5d 16h",
+              "entry_time": "2026-05-30T16:00:06.381760-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "trades": [
+            {
+              "trade_id": 60451,
+              "bot_name": "sol-xg-4h",
+              "ticker": "SOL",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 71.59,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 12h",
+              "entry_time": "2026-06-03T20:00:06.855368-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60462,
+              "bot_name": "sol-xg-2h",
+              "ticker": "SOL",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 68.59,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "1d 0h",
+              "entry_time": "2026-06-04T08:00:07.553561-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60457,
+              "bot_name": "sol-atb-2h",
+              "ticker": "SOL",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 69.11,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 71.1,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": 110.8,
+              "duration": "1d 2h",
+              "entry_time": "2026-06-04T04:00:05.930814-04:00",
+              "exit_time": "2026-06-05T06:00:07.165632-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "SUI",
+          "trades": [
+            {
+              "trade_id": 60473,
+              "bot_name": "sui-mlg-4h",
+              "ticker": "SUI",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 0.73,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "8h 59m",
+              "entry_time": "2026-06-05T00:00:06.235142-04:00",
+              "exit_time": null
+            }
+          ]
+        },
+        {
+          "ticker": "TRUMP",
+          "trades": [
+            {
+              "trade_id": 60474,
+              "bot_name": "trump-atb-4h",
+              "ticker": "TRUMP",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 1.671,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "59m",
+              "entry_time": "2026-06-05T08:00:09.891479-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60455,
+              "bot_name": "trump-atb-4h",
+              "ticker": "TRUMP",
+              "timeframe": "4H",
+              "side": "SHORT",
+              "entry_price": 1.903,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 54.53,
+              "tp2_pnl_usd": 13.99,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": 67.7,
+              "duration": "22h 43m",
+              "entry_time": "2026-06-04T00:00:09.735368-04:00",
+              "exit_time": "2026-06-04T22:44:07.828790-04:00"
+            },
+            {
+              "trade_id": 60466,
+              "bot_name": "trump-atb-2h",
+              "ticker": "TRUMP",
+              "timeframe": "2H",
+              "side": "SHORT",
+              "entry_price": 1.836,
+              "status_code": "closed_win",
+              "status_label": "Closed - Win",
+              "is_open": false,
+              "tp1_hit": true,
+              "tp2_hit": true,
+              "tp3_hit": false,
+              "tp1_pnl_usd": 74.12,
+              "tp2_pnl_usd": 12.5,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": 126.62,
+              "duration": "20h 0m",
+              "entry_time": "2026-06-04T10:00:05.886018-04:00",
+              "exit_time": "2026-06-05T06:00:07.138054-04:00"
+            }
+          ]
+        },
+        {
+          "ticker": "WIF",
+          "trades": [
+            {
+              "trade_id": 60472,
+              "bot_name": "wif-bmrm-1h",
+              "ticker": "WIF",
+              "timeframe": "1H",
+              "side": "SHORT",
+              "entry_price": 0.1588,
+              "status_code": "open",
+              "status_label": "Open",
+              "is_open": true,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": null,
+              "duration": "9h 59m",
+              "entry_time": "2026-06-04T23:00:05.889893-04:00",
+              "exit_time": null
+            },
+            {
+              "trade_id": 60470,
+              "bot_name": "wif-bmrm-1h",
+              "ticker": "WIF",
+              "timeframe": "1H",
+              "side": "LONG",
+              "entry_price": 0.1737,
+              "status_code": "stopped_out",
+              "status_label": "Closed - Loss",
+              "is_open": false,
+              "tp1_hit": false,
+              "tp2_hit": false,
+              "tp3_hit": false,
+              "tp1_pnl_usd": null,
+              "tp2_pnl_usd": null,
+              "tp3_pnl_usd": null,
+              "final_pnl_usd": -50.0,
+              "duration": "6h 59m",
+              "entry_time": "2026-06-04T14:00:06.261128-04:00",
+              "exit_time": "2026-06-04T21:00:06.179193-04:00"
+            }
+          ]
+        }
+      ]
+    },
+    "partial_closes": {
+      "has_data": true,
+      "summary": {
+        "total_partial_fills": 23,
+        "total_partial_pnl_usd": 806.61
+      },
+      "fills": [
+        {
+          "trade_id": 60371,
+          "bot_name": "eth-xg-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP3",
+          "pnl_usd": 56.25,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60447,
+          "bot_name": "ada-biex-4h",
+          "ticker": "ADA",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP3",
+          "pnl_usd": 56.25,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60448,
+          "bot_name": "ada-iti-4h",
+          "ticker": "ADA",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP3",
+          "pnl_usd": 57.92,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60453,
+          "bot_name": "eth-iti-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.0,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60455,
+          "bot_name": "trump-atb-4h",
+          "ticker": "TRUMP",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 54.53,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60455,
+          "bot_name": "trump-atb-4h",
+          "ticker": "TRUMP",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 13.99,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60456,
+          "bot_name": "eth-atb-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 69.78,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60456,
+          "bot_name": "eth-atb-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 12.5,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60457,
+          "bot_name": "sol-atb-2h",
+          "ticker": "SOL",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 71.1,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60457,
+          "bot_name": "sol-atb-2h",
+          "ticker": "SOL",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 12.5,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60458,
+          "bot_name": "dot-wete-2h",
+          "ticker": "DOT",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.0,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60458,
+          "bot_name": "dot-wete-2h",
+          "ticker": "DOT",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 12.5,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60459,
+          "bot_name": "doge-15sc-2h",
+          "ticker": "DOGE",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.66,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60460,
+          "bot_name": "doge-5-sc-2h",
+          "ticker": "DOGE",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 26.66,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60461,
+          "bot_name": "eth-faim-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.0,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60461,
+          "bot_name": "eth-faim-2h",
+          "ticker": "ETH",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 12.5,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60463,
+          "bot_name": "doge-8wrm-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.0,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60465,
+          "bot_name": "doge-scs-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.0,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60466,
+          "bot_name": "trump-atb-2h",
+          "ticker": "TRUMP",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 74.12,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60466,
+          "bot_name": "trump-atb-2h",
+          "ticker": "TRUMP",
+          "timeframe": "2H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 12.5,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60468,
+          "bot_name": "doge-bmrm-4h",
+          "ticker": "DOGE",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 25.0,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60469,
+          "bot_name": "eth-atb-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP1",
+          "pnl_usd": 75.35,
+          "hit_time": null
+        },
+        {
+          "trade_id": 60469,
+          "bot_name": "eth-atb-4h",
+          "ticker": "ETH",
+          "timeframe": "4H",
+          "side": "SHORT",
+          "tp_level": "TP2",
+          "pnl_usd": 12.5,
+          "hit_time": null
+        }
+      ]
+    },
+    "pipeline_snapshot": {
+      "strategies_queued_for_codegen": 0,
+      "strategies_actively_testing": 0,
+      "strategies_passed_quality_gates": 63,
+      "codegen_window": {
+        "ran_since_last_report": false,
+        "last_run_at": null,
+        "strategies_generated": 0,
+        "hours_label": "4 PM - 2 AM Eastern",
+        "strategies_passed": 0
+      },
+      "optimization_window": {
+        "ran_since_last_report": true,
+        "last_run_at": "2026-06-04T20:00:00-04:00",
+        "strategies_optimized": 36,
+        "hours_label": "8 PM - 8 AM Eastern"
+      },
+      "whisper_window": {
+        "ran_since_last_report": false,
+        "last_run_at": null,
+        "videos_processed": 0,
+        "hours_label": "2 AM - 8 AM Eastern",
+        "videos_remaining": 0
+      }
+    },
+    "bot_status": {
+      "all_operational": true,
+      "bots": [
+        {
+          "name": "Orchestrator",
+          "status": "not_deployed",
+          "description": "Not yet active - this bot has not been deployed yet.",
+          "last_checked_at": null,
+          "last_checked_label": null,
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Reporting Bot",
+          "status": "online",
+          "description": "This bot generated the report you are reading.",
+          "last_checked_at": "2026-06-05T08:59:53.720478-04:00",
+          "last_checked_label": "just now",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Research Bot",
+          "status": "online",
+          "description": "Found 3 new pieces of content across its sources. 0 were successfully extracted into structured strategies. 10 of 11 sources are active. The indicator registry tracks 660 known indicators.",
+          "last_checked_at": "2026-06-05T08:59:32.290831-04:00",
+          "last_checked_label": "just now",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Strategy Builder",
+          "status": "online",
+          "description": "Pipeline snapshot: 63 passed quality gates. Pipeline activity recorded.",
+          "last_checked_at": "2026-06-05T08:58:41.642630-04:00",
+          "last_checked_label": "1 minute ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "News Bot",
+          "status": "online",
+          "description": "News Bot is online.",
+          "last_checked_at": "2026-06-05T08:59:55.252664-04:00",
+          "last_checked_label": "just now",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Performance Monitor",
+          "status": "online",
+          "description": "Performance Monitor is online.",
+          "last_checked_at": "2026-06-05T08:55:16.475757-04:00",
+          "last_checked_label": "5 minutes ago",
+          "errors_since_last_report": []
+        },
+        {
+          "name": "Site Updater",
+          "status": "online",
+          "description": "Site Updater is online.",
+          "last_checked_at": "2026-06-05T08:59:53.874503-04:00",
+          "last_checked_label": "just now",
+          "errors_since_last_report": []
+        }
+      ]
+    },
+    "errors": {
+      "has_errors": false,
+      "entries": []
+    },
+    "action_items": {
+      "has_items": true,
+      "items": [
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "sol-crsc-4h",
+          "text": "📈 sol-crsc-4h is approaching its promotion threshold: 46/60 days, 5/10 trades.",
+          "details": {
+            "trades_completed": 5,
+            "trades_needed": 10,
+            "days_active": 46,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        },
+        {
+          "type": "approaching_promotion_gate",
+          "bot_name": "doge-8wrm-4h",
+          "text": "📈 doge-8wrm-4h is approaching its promotion threshold: 38/60 days, 8/10 trades.",
+          "details": {
+            "trades_completed": 8,
+            "trades_needed": 10,
+            "days_active": 38,
+            "days_needed": 60,
+            "state": "approaching"
+          }
+        }
+      ]
+    }
+  },
+  "footer": {
+    "next_report_time_label": "8:30 PM Eastern",
+    "next_report_at_et": "2026-06-05T20:30:00-04:00"
+  }
+}
