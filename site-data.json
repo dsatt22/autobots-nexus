@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-05T14:55:11.895771-04:00",
+  "last_updated": "2026-06-05T15:10:11.885464-04:00",
   "hero": {
     "trading_bots_paper": 73,
     "strategies_discovered": 898,
@@ -20,7 +20,7 @@
     "builder_bots_deployed": 92,
     "postgresql_candles": "244M",
     "postgresql_symbols": 149,
-    "postgresql_size": "59 GB",
+    "postgresql_size": "60 GB",
     "sql_schemas": 7,
     "sql_tables": 79,
     "sql_migrations": 111,
