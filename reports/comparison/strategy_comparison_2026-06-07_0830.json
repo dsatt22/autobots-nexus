@@ -1,0 +1,2976 @@
+{
+  "schema_version": "1.0",
+  "report_type": "strategy_comparison",
+  "metadata": {
+    "title": "AutoBots - Strategy Comparison",
+    "report_type": "strategy_comparison",
+    "generated_at_et": "2026-06-07T08:30:00.285472-04:00",
+    "date_et": "Jun 07, 2026",
+    "time_et": "8:30 AM ET",
+    "period_start": "2026-05-08T08:30:00.020255-04:00",
+    "period_end": "2026-06-07T08:30:00.020255-04:00",
+    "period": {
+      "since_label": "past 30 days",
+      "start_et": "2026-05-08T08:30:00.020255-04:00",
+      "end_et": "2026-06-07T08:30:00.020255-04:00",
+      "since_et": "2026-05-08T08:30:00.020255-04:00",
+      "until_et": "2026-06-07T08:30:00.020255-04:00",
+      "since": "2026-05-08T12:30:00.020255+00:00",
+      "until": "2026-06-07T12:30:00.020255+00:00",
+      "recovery_window": false
+    },
+    "next_report": {
+      "time_label": "9:00 AM Eastern",
+      "at_et": "2026-06-07T09:00:00-04:00"
+    },
+    "cadence": "monthly",
+    "is_monthly_deep_dive": true,
+    "comparison_window_label": "Past 30 days"
+  },
+  "sections": {
+    "tldr": {
+      "text": "5 tickers compared. 18 live-slot changes recommended. average profit factor 233.60.",
+      "stats": {
+        "tickers_compared": 5,
+        "strategies_compared": 21,
+        "live_slot_changes_recommended": 18,
+        "avg_profit_factor": 233.6
+      }
+    },
+    "head_to_head": {
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "strategies": [
+            {
+              "bot_name": "btc-surs-4h",
+              "timeframe": "4H",
+              "profit_factor": 832.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 6,
+              "total_pnl_usd": 71.51,
+              "recovery_factor": null,
+              "expectancy_pct": 20.5,
+              "return_pct": 7.15,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "btc-1ms-4h",
+              "timeframe": "4H",
+              "profit_factor": 499.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 4,
+              "total_pnl_usd": -28.51,
+              "recovery_factor": null,
+              "expectancy_pct": -7.13,
+              "return_pct": -2.85,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "btc-smcr-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -100.0,
+              "recovery_factor": null,
+              "expectancy_pct": -50.0,
+              "return_pct": -10.0,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "strategies": [
+            {
+              "bot_name": "eth-mtf-4h",
+              "timeframe": "4H",
+              "profit_factor": 399.83,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 10.48,
+              "win_rate_pct": 60.0,
+              "total_trades": 5,
+              "total_pnl_usd": -37.2,
+              "recovery_factor": null,
+              "expectancy_pct": 2.86,
+              "return_pct": -3.72,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            },
+            {
+              "bot_name": "eth-tsmi-4h",
+              "timeframe": "4H",
+              "profit_factor": 285.57,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 10.45,
+              "win_rate_pct": 42.86,
+              "total_trades": 7,
+              "total_pnl_usd": -146.11,
+              "recovery_factor": null,
+              "expectancy_pct": -13.52,
+              "return_pct": -14.61,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-fgc-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 6,
+              "total_pnl_usd": -158.3,
+              "recovery_factor": null,
+              "expectancy_pct": -22.09,
+              "return_pct": -15.83,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-emfi-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 6,
+              "total_pnl_usd": -158.3,
+              "recovery_factor": null,
+              "expectancy_pct": -22.09,
+              "return_pct": -15.83,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-mbc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.63,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 7.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 4,
+              "total_pnl_usd": -97.05,
+              "recovery_factor": null,
+              "expectancy_pct": -11.39,
+              "return_pct": -9.71,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-xg-4h",
+              "timeframe": "4H",
+              "profit_factor": 166.78,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 6,
+              "total_pnl_usd": -97.86,
+              "recovery_factor": null,
+              "expectancy_pct": -16.31,
+              "return_pct": -9.79,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-otmt-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -100.3,
+              "recovery_factor": null,
+              "expectancy_pct": -50.15,
+              "return_pct": -10.03,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-atb-2h",
+              "timeframe": "2H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 7,
+              "total_pnl_usd": -304.26,
+              "recovery_factor": null,
+              "expectancy_pct": -43.47,
+              "return_pct": -30.43,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "strategies": [
+            {
+              "bot_name": "sol-crsc-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.81,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 49.6,
+              "recovery_factor": null,
+              "expectancy_pct": 25.12,
+              "return_pct": 4.96,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "sol-gbms-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.81,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 49.6,
+              "recovery_factor": null,
+              "expectancy_pct": 25.12,
+              "return_pct": 4.96,
+              "recommendation_code": "promote_to_live",
+              "recommendation_label": "Promote to live"
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "strategies": [
+            {
+              "bot_name": "doge-pat-4h",
+              "timeframe": "4H",
+              "profit_factor": 222.9,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 55.56,
+              "total_trades": 9,
+              "total_pnl_usd": 83.01,
+              "recovery_factor": null,
+              "expectancy_pct": 9.22,
+              "return_pct": 8.3,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "doge-scs-4h",
+              "timeframe": "4H",
+              "profit_factor": 230.94,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 53.85,
+              "total_trades": 13,
+              "total_pnl_usd": -6.46,
+              "recovery_factor": null,
+              "expectancy_pct": 1.48,
+              "return_pct": -0.65,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-8wrm-4h",
+              "timeframe": "4H",
+              "profit_factor": 399.6,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 40.0,
+              "total_trades": 5,
+              "total_pnl_usd": -34.52,
+              "recovery_factor": null,
+              "expectancy_pct": -6.9,
+              "return_pct": -3.45,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-bmrm-4h",
+              "timeframe": "4H",
+              "profit_factor": 200.3,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 40.0,
+              "total_trades": 5,
+              "total_pnl_usd": -74.18,
+              "recovery_factor": null,
+              "expectancy_pct": -9.69,
+              "return_pct": -7.42,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 3,
+              "total_pnl_usd": -69.94,
+              "recovery_factor": null,
+              "expectancy_pct": -23.31,
+              "return_pct": -6.99,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "AVAX",
+          "strategies": [
+            {
+              "bot_name": "avax-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -25.0,
+              "recovery_factor": null,
+              "expectancy_pct": -12.5,
+              "return_pct": -2.5,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-5-sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -152.27,
+              "recovery_factor": null,
+              "expectancy_pct": -50.76,
+              "return_pct": -15.23,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-iti-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -152.27,
+              "recovery_factor": null,
+              "expectancy_pct": -50.76,
+              "return_pct": -15.23,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        }
+      ]
+    },
+    "rankings": {
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "current_live_slot": null,
+          "leading_strategy": "btc-surs-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "ETH",
+          "current_live_slot": null,
+          "leading_strategy": "eth-mtf-4h",
+          "leadership_change": true,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "SOL",
+          "current_live_slot": null,
+          "leading_strategy": "sol-crsc-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "DOGE",
+          "current_live_slot": null,
+          "leading_strategy": "doge-pat-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "AVAX",
+          "current_live_slot": null,
+          "leading_strategy": "avax-svs-4h",
+          "leadership_change": true,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        }
+      ]
+    },
+    "market_condition_context": {
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "ETH",
+          "regime_code": "fading_trend_up",
+          "regime_label": "Fading Trend Up",
+          "description": "Net positive close, but price peaked early in the week and gave back substantial ground before recovering. Path was inefficient and not a clean trend."
+        },
+        {
+          "ticker": "SOL",
+          "regime_code": "trend_up",
+          "regime_label": "Trending Up",
+          "description": "Strong uptrend confirmed by directional path and ascending daily highs. Close held near the weekly peak."
+        },
+        {
+          "ticker": "DOGE",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "AVAX",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        }
+      ]
+    },
+    "monthly_deep_dive": {
+      "included": true,
+      "window_label": "Past 30 days",
+      "extended_comparisons": [
+        {
+          "ticker": "BTC",
+          "strategies": [
+            {
+              "bot_name": "btc-surs-4h",
+              "timeframe": "4H",
+              "profit_factor": 832.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 6,
+              "total_pnl_usd": 71.51,
+              "recovery_factor": null,
+              "expectancy_pct": 20.5,
+              "return_pct": 7.15,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "btc-1ms-4h",
+              "timeframe": "4H",
+              "profit_factor": 499.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 4,
+              "total_pnl_usd": -28.51,
+              "recovery_factor": null,
+              "expectancy_pct": -7.13,
+              "return_pct": -2.85,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "btc-smcr-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -100.0,
+              "recovery_factor": null,
+              "expectancy_pct": -50.0,
+              "return_pct": -10.0,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "strategies": [
+            {
+              "bot_name": "eth-mtf-4h",
+              "timeframe": "4H",
+              "profit_factor": 399.83,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 10.48,
+              "win_rate_pct": 60.0,
+              "total_trades": 5,
+              "total_pnl_usd": -37.2,
+              "recovery_factor": null,
+              "expectancy_pct": 2.86,
+              "return_pct": -3.72,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            },
+            {
+              "bot_name": "eth-tsmi-4h",
+              "timeframe": "4H",
+              "profit_factor": 285.57,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 10.45,
+              "win_rate_pct": 42.86,
+              "total_trades": 7,
+              "total_pnl_usd": -146.11,
+              "recovery_factor": null,
+              "expectancy_pct": -13.52,
+              "return_pct": -14.61,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-fgc-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 6,
+              "total_pnl_usd": -158.3,
+              "recovery_factor": null,
+              "expectancy_pct": -22.09,
+              "return_pct": -15.83,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-emfi-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 6,
+              "total_pnl_usd": -158.3,
+              "recovery_factor": null,
+              "expectancy_pct": -22.09,
+              "return_pct": -15.83,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-mbc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.63,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 7.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 4,
+              "total_pnl_usd": -97.05,
+              "recovery_factor": null,
+              "expectancy_pct": -11.39,
+              "return_pct": -9.71,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-xg-4h",
+              "timeframe": "4H",
+              "profit_factor": 166.78,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 6,
+              "total_pnl_usd": -97.86,
+              "recovery_factor": null,
+              "expectancy_pct": -16.31,
+              "return_pct": -9.79,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-otmt-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -100.3,
+              "recovery_factor": null,
+              "expectancy_pct": -50.15,
+              "return_pct": -10.03,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-atb-2h",
+              "timeframe": "2H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 7,
+              "total_pnl_usd": -304.26,
+              "recovery_factor": null,
+              "expectancy_pct": -43.47,
+              "return_pct": -30.43,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "strategies": [
+            {
+              "bot_name": "sol-crsc-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.81,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 49.6,
+              "recovery_factor": null,
+              "expectancy_pct": 25.12,
+              "return_pct": 4.96,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "sol-gbms-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.81,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 49.6,
+              "recovery_factor": null,
+              "expectancy_pct": 25.12,
+              "return_pct": 4.96,
+              "recommendation_code": "promote_to_live",
+              "recommendation_label": "Promote to live"
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "strategies": [
+            {
+              "bot_name": "doge-pat-4h",
+              "timeframe": "4H",
+              "profit_factor": 222.9,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 55.56,
+              "total_trades": 9,
+              "total_pnl_usd": 83.01,
+              "recovery_factor": null,
+              "expectancy_pct": 9.22,
+              "return_pct": 8.3,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "doge-scs-4h",
+              "timeframe": "4H",
+              "profit_factor": 230.94,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 53.85,
+              "total_trades": 13,
+              "total_pnl_usd": -6.46,
+              "recovery_factor": null,
+              "expectancy_pct": 1.48,
+              "return_pct": -0.65,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-8wrm-4h",
+              "timeframe": "4H",
+              "profit_factor": 399.6,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 40.0,
+              "total_trades": 5,
+              "total_pnl_usd": -34.52,
+              "recovery_factor": null,
+              "expectancy_pct": -6.9,
+              "return_pct": -3.45,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-bmrm-4h",
+              "timeframe": "4H",
+              "profit_factor": 200.3,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.0,
+              "win_rate_pct": 40.0,
+              "total_trades": 5,
+              "total_pnl_usd": -74.18,
+              "recovery_factor": null,
+              "expectancy_pct": -9.69,
+              "return_pct": -7.42,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 333.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 33.33,
+              "total_trades": 3,
+              "total_pnl_usd": -69.94,
+              "recovery_factor": null,
+              "expectancy_pct": -23.31,
+              "return_pct": -6.99,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "AVAX",
+          "strategies": [
+            {
+              "bot_name": "avax-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -25.0,
+              "recovery_factor": null,
+              "expectancy_pct": -12.5,
+              "return_pct": -2.5,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-5-sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -152.27,
+              "recovery_factor": null,
+              "expectancy_pct": -50.76,
+              "return_pct": -15.23,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-iti-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -152.27,
+              "recovery_factor": null,
+              "expectancy_pct": -50.76,
+              "return_pct": -15.23,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        }
+      ]
+    },
+    "month_over_month": {
+      "has_data": true,
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "strategies": [
+            {
+              "bot_name": "btc-1ms-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 4,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -28.51,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -2.85,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -7.13,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 50.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 499.5,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -7.13,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 fading_trend_up."
+            },
+            {
+              "bot_name": "btc-surs-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 6,
+                "prior": 3
+              },
+              "total_pnl_usd": {
+                "current": 71.51,
+                "prior": 228.29
+              },
+              "return_pct": {
+                "current": 7.15,
+                "prior": 22.83
+              },
+              "pnl_per_trade_usd": {
+                "current": 11.92,
+                "prior": 76.1
+              },
+              "win_rate_pct": {
+                "current": 66.67,
+                "prior": 33.33
+              },
+              "profit_factor": {
+                "current": 832.5,
+                "prior": 333.0
+              },
+              "expectancy": {
+                "current": 20.5,
+                "prior": 76.1
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL declined from $228.29 to $71.51 ($-156.78). Win rate improved from 33% to 67%. This month had 3 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 2 choppy, 1 fading_trend_up."
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "strategies": [
+            {
+              "bot_name": "eth-emfi-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 6,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -158.3,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -15.83,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -26.38,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 33.33,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 333.0,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -22.09,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 1 fading_trend_up."
+            },
+            {
+              "bot_name": "eth-fgc-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 6,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -158.3,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -15.83,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -26.38,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 33.33,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 333.0,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -22.09,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 1 fading_trend_up."
+            },
+            {
+              "bot_name": "eth-mbc-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 4,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -97.05,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -9.71,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -24.26,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 50.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.63,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -11.39,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 7.0,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 1 fading_trend_up."
+            },
+            {
+              "bot_name": "eth-mtf-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 5,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -37.2,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -3.72,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -7.44,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 60.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 399.83,
+                "prior": null
+              },
+              "expectancy": {
+                "current": 2.86,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 10.48,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 1 fading_trend_up."
+            },
+            {
+              "bot_name": "eth-tsmi-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 7,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -146.11,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -14.61,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -20.87,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 42.86,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 285.57,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -13.52,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 10.45,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 1 fading_trend_up."
+            },
+            {
+              "bot_name": "eth-xg-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 6,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -97.86,
+                "prior": 25.75
+              },
+              "return_pct": {
+                "current": -9.79,
+                "prior": 2.58
+              },
+              "pnl_per_trade_usd": {
+                "current": -16.31,
+                "prior": 25.75
+              },
+              "win_rate_pct": {
+                "current": 33.33,
+                "prior": 100.0
+              },
+              "profit_factor": {
+                "current": 166.78,
+                "prior": 999.0
+              },
+              "expectancy": {
+                "current": -16.31,
+                "prior": 25.75
+              },
+              "max_drawdown_pct": {
+                "current": 5.0,
+                "prior": null
+              },
+              "summary": "PnL declined from $25.75 to $-97.86 ($-123.61). Win rate declined from 100% to 33%. This month had 3 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 2 choppy, 1 fading_trend_up."
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "strategies": [
+            {
+              "bot_name": "sol-crsc-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 3,
+                "prior": 1
+              },
+              "total_pnl_usd": {
+                "current": 49.6,
+                "prior": 31.92
+              },
+              "return_pct": {
+                "current": 4.96,
+                "prior": 3.19
+              },
+              "pnl_per_trade_usd": {
+                "current": 16.53,
+                "prior": 31.92
+              },
+              "win_rate_pct": {
+                "current": 66.67,
+                "prior": 100.0
+              },
+              "profit_factor": {
+                "current": 333.81,
+                "prior": 999.0
+              },
+              "expectancy": {
+                "current": 25.12,
+                "prior": 31.92
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL improved from $31.92 to $49.60 (+$17.68). Win rate declined from 100% to 67%. This month had 2 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 1 choppy, 1 fading_trend_up."
+            },
+            {
+              "bot_name": "sol-gbms-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 3,
+                "prior": 4
+              },
+              "total_pnl_usd": {
+                "current": 49.6,
+                "prior": -114.84
+              },
+              "return_pct": {
+                "current": 4.96,
+                "prior": -11.48
+              },
+              "pnl_per_trade_usd": {
+                "current": 16.53,
+                "prior": -28.71
+              },
+              "win_rate_pct": {
+                "current": 66.67,
+                "prior": 25.0
+              },
+              "profit_factor": {
+                "current": 333.81,
+                "prior": 0.4
+              },
+              "expectancy": {
+                "current": 25.12,
+                "prior": -28.71
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL improved from $-114.84 to $49.60 (+$164.44). Win rate improved from 25% to 67%. This month had 2 adverse week(s) (choppy/high-vol) vs 1 trending week(s). Prior month conditions: 2 choppy, 1 fading_trend_up."
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "strategies": [
+            {
+              "bot_name": "doge-8wrm-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 5,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -34.52,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -3.45,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -6.9,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 40.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 399.6,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -6.9,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "This month had 4 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 choppy."
+            },
+            {
+              "bot_name": "doge-bmrm-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 5,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -74.18,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -7.42,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -14.84,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 40.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 200.3,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -9.69,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 5.0,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 choppy."
+            },
+            {
+              "bot_name": "doge-pat-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 9,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": 83.01,
+                "prior": null
+              },
+              "return_pct": {
+                "current": 8.3,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": 9.22,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 55.56,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 222.9,
+                "prior": null
+              },
+              "expectancy": {
+                "current": 9.22,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 5.0,
+                "prior": null
+              },
+              "summary": "This month had 4 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 choppy."
+            },
+            {
+              "bot_name": "doge-scs-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 13,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -6.46,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -0.65,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -0.5,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 53.85,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 230.94,
+                "prior": null
+              },
+              "expectancy": {
+                "current": 1.48,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 5.0,
+                "prior": null
+              },
+              "summary": "This month had 4 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 choppy."
+            },
+            {
+              "bot_name": "doge-svs-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 3,
+                "prior": 1
+              },
+              "total_pnl_usd": {
+                "current": -69.94,
+                "prior": 80.18
+              },
+              "return_pct": {
+                "current": -6.99,
+                "prior": 8.02
+              },
+              "pnl_per_trade_usd": {
+                "current": -23.31,
+                "prior": 80.18
+              },
+              "win_rate_pct": {
+                "current": 33.33,
+                "prior": 100.0
+              },
+              "profit_factor": {
+                "current": 333.0,
+                "prior": 999.0
+              },
+              "expectancy": {
+                "current": -23.31,
+                "prior": 80.18
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL declined from $80.18 to $-69.94 ($-150.12). Win rate declined from 100% to 33%. This month had 4 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 fading_trend_down, 2 choppy."
+            }
+          ]
+        },
+        {
+          "ticker": "AVAX",
+          "strategies": [
+            {
+              "bot_name": "avax-5-sc-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 3,
+                "prior": 0
+              },
+              "total_pnl_usd": {
+                "current": -152.27,
+                "prior": null
+              },
+              "return_pct": {
+                "current": -15.23,
+                "prior": null
+              },
+              "pnl_per_trade_usd": {
+                "current": -50.76,
+                "prior": null
+              },
+              "win_rate_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.0,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -50.76,
+                "prior": null
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "This month had 3 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 fading_trend_down, 1 choppy, 1 fading_trend_up."
+            },
+            {
+              "bot_name": "avax-iti-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 3,
+                "prior": 2
+              },
+              "total_pnl_usd": {
+                "current": -152.27,
+                "prior": -105.09
+              },
+              "return_pct": {
+                "current": -15.23,
+                "prior": -10.51
+              },
+              "pnl_per_trade_usd": {
+                "current": -50.76,
+                "prior": -52.55
+              },
+              "win_rate_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.0,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -50.76,
+                "prior": -52.55
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL declined from $-105.09 to $-152.27 ($-47.18). This month had 3 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 fading_trend_down, 1 choppy, 1 fading_trend_up."
+            },
+            {
+              "bot_name": "avax-svs-4h",
+              "prior_month_year": "2026-04",
+              "trades": {
+                "current": 2,
+                "prior": 4
+              },
+              "total_pnl_usd": {
+                "current": -25.0,
+                "prior": -221.24
+              },
+              "return_pct": {
+                "current": -2.5,
+                "prior": -22.12
+              },
+              "pnl_per_trade_usd": {
+                "current": -12.5,
+                "prior": -55.31
+              },
+              "win_rate_pct": {
+                "current": 50.0,
+                "prior": null
+              },
+              "profit_factor": {
+                "current": 0.5,
+                "prior": null
+              },
+              "expectancy": {
+                "current": -12.5,
+                "prior": -55.31
+              },
+              "max_drawdown_pct": {
+                "current": 0.0,
+                "prior": null
+              },
+              "summary": "PnL improved from $-221.24 to $-25.00 (+$196.24). This month had 3 adverse week(s) (choppy/high-vol) vs 0 trending week(s). Prior month conditions: 1 fading_trend_down, 1 choppy, 1 fading_trend_up."
+            }
+          ]
+        }
+      ]
+    },
+    "performance_by_condition": {
+      "has_data": true,
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "strategies": [
+            {
+              "bot_name": "btc-1ms-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 77.27
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": -105.78
+                },
+                {
+                  "regime_code": "slow_grind_down",
+                  "regime_label": "Slow Grind Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "btc-smcr-4h",
+              "by_condition": [
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "slow_grind_down",
+                  "regime_label": "Slow Grind Down",
+                  "weeks": 1,
+                  "pnl_usd": -100.0
+                }
+              ]
+            },
+            {
+              "bot_name": "btc-surs-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 48.27
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": -37.44
+                },
+                {
+                  "regime_code": "slow_grind_down",
+                  "regime_label": "Slow Grind Down",
+                  "weeks": 1,
+                  "pnl_usd": 60.68
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "strategies": [
+            {
+              "bot_name": "eth-atb-2h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": -147.62
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": -54.32
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": -102.32
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-emfi-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 46.06
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": -104.36
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-fgc-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 46.06
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": -104.36
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-mbc-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": -55.6
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": -41.45
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-mtf-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 53.74
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": -90.94
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-otmt-4h",
+              "by_condition": [
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -100.3
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-tsmi-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 49.97
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": -96.08
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                }
+              ]
+            },
+            {
+              "bot_name": "eth-xg-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": -104.52
+                },
+                {
+                  "regime_code": "trend_down",
+                  "regime_label": "Trending Down",
+                  "weeks": 1,
+                  "pnl_usd": 64.11
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": -7.45
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -50.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "strategies": [
+            {
+              "bot_name": "sol-crsc-4h",
+              "by_condition": [
+                {
+                  "regime_code": "trend_up",
+                  "regime_label": "Trending Up",
+                  "weeks": 1,
+                  "pnl_usd": 11.73
+                },
+                {
+                  "regime_code": "slow_grind_down",
+                  "regime_label": "Slow Grind Down",
+                  "weeks": 1,
+                  "pnl_usd": 37.87
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "sol-gbms-4h",
+              "by_condition": [
+                {
+                  "regime_code": "trend_up",
+                  "regime_label": "Trending Up",
+                  "weeks": 1,
+                  "pnl_usd": 11.73
+                },
+                {
+                  "regime_code": "slow_grind_down",
+                  "regime_label": "Slow Grind Down",
+                  "weeks": 1,
+                  "pnl_usd": 37.87
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "strategies": [
+            {
+              "bot_name": "doge-8wrm-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 45.72
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": -80.24
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                }
+              ]
+            },
+            {
+              "bot_name": "doge-bmrm-4h",
+              "by_condition": [
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": 25.82
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -100.0
+                }
+              ]
+            },
+            {
+              "bot_name": "doge-pat-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 83.9
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": 6.93
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -7.82
+                }
+              ]
+            },
+            {
+              "bot_name": "doge-scs-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 117.53
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": -116.83
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": -7.16
+                }
+              ]
+            },
+            {
+              "bot_name": "doge-svs-4h",
+              "by_condition": [
+                {
+                  "regime_code": "fading_trend_up",
+                  "regime_label": "Fading Trend Up",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 2,
+                  "pnl_usd": -102.24
+                },
+                {
+                  "regime_code": "fading_trend_down",
+                  "regime_label": "Fading Trend Down",
+                  "weeks": 1,
+                  "pnl_usd": 32.3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ticker": "AVAX",
+          "strategies": [
+            {
+              "bot_name": "avax-5-sc-4h",
+              "by_condition": [
+                {
+                  "regime_code": "slow_grind_up",
+                  "regime_label": "Slow Grind Up",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 3,
+                  "pnl_usd": -152.27
+                }
+              ]
+            },
+            {
+              "bot_name": "avax-iti-4h",
+              "by_condition": [
+                {
+                  "regime_code": "slow_grind_up",
+                  "regime_label": "Slow Grind Up",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 3,
+                  "pnl_usd": -152.27
+                }
+              ]
+            },
+            {
+              "bot_name": "avax-svs-4h",
+              "by_condition": [
+                {
+                  "regime_code": "slow_grind_up",
+                  "regime_label": "Slow Grind Up",
+                  "weeks": 1,
+                  "pnl_usd": 0.0
+                },
+                {
+                  "regime_code": "choppy",
+                  "regime_label": "Choppy",
+                  "weeks": 3,
+                  "pnl_usd": -25.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "correlations": {
+      "has_data": true,
+      "pairs": [
+        {
+          "ticker": "BTC",
+          "strategy_a": "btc-sqs-4h",
+          "strategy_b": "btc-1ms-4h",
+          "correlation": 0.689
+        },
+        {
+          "ticker": "BTC",
+          "strategy_a": "btc-sqs-4h",
+          "strategy_b": "btc-atb-4h",
+          "correlation": -0.613
+        },
+        {
+          "ticker": "BTC",
+          "strategy_a": "btc-surs-4h",
+          "strategy_b": "btc-atb-4h",
+          "correlation": -0.429
+        },
+        {
+          "ticker": "BTC",
+          "strategy_a": "btc-surs-4h",
+          "strategy_b": "btc-1ms-4h",
+          "correlation": 0.159
+        },
+        {
+          "ticker": "BTC",
+          "strategy_a": "btc-1ms-4h",
+          "strategy_b": "btc-atb-4h",
+          "correlation": 0.119
+        },
+        {
+          "ticker": "BTC",
+          "strategy_a": "btc-sqs-4h",
+          "strategy_b": "btc-surs-4h",
+          "correlation": 0.035
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-fgc-4h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 1.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-fgc-4h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.998
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-emfi-4h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.998
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-emfi-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.908
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-fgc-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.908
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-faim-2h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.898
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.898
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-tsmi-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.892
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-faim-2h",
+          "correlation": 0.821
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": -0.779
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-faim-2h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": 0.718
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-faim-2h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.718
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": 0.718
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.718
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-mbc-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": 0.71
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.68
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-faim-2h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.68
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-etmi-4h",
+          "correlation": -0.658
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": -0.597
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": -0.597
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": -0.595
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.589
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-etmi-4h",
+          "correlation": 0.556
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-iti-2h",
+          "correlation": 0.524
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.491
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-faim-2h",
+          "correlation": -0.48
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": 0.479
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-faim-2h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.476
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.476
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-15sc-2h",
+          "correlation": -0.445
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-faim-2h",
+          "correlation": 0.419
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-xg-4h",
+          "correlation": -0.378
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-faim-2h",
+          "correlation": 0.366
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": 0.359
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": 0.351
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-15sc-2h",
+          "correlation": -0.337
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-xg-4h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.314
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-faim-2h",
+          "correlation": -0.285
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-tsmi-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": -0.281
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.268
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-mtf-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": -0.263
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-fgc-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": -0.257
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-emfi-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": -0.257
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": 0.244
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.244
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-15sc-2h",
+          "correlation": -0.232
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": -0.191
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-etmi-4h",
+          "correlation": 0.191
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": 0.184
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.184
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-mbc-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.177
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.147
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-faim-2h",
+          "correlation": -0.108
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-etmi-4h",
+          "correlation": 0.105
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-fgc-4h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.1
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-mbc-4h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.1
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-xg-4h",
+          "correlation": -0.091
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-xg-4h",
+          "correlation": -0.082
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-iti-2h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": -0.057
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-faim-2h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": -0.057
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-mbc-4h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.052
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-pb-2h",
+          "correlation": -0.047
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-xg-4h",
+          "correlation": 0.046
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-iti-2h",
+          "correlation": -0.041
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-sqs-4h",
+          "strategy_b": "eth-xg-4h",
+          "correlation": 0.023
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-15sc-2h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": -0.019
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-etmi-4h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-fgc-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-mbc-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-emfi-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-tsmi-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-mtf-4h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "ETH",
+          "strategy_a": "eth-pb-2h",
+          "strategy_b": "eth-atb-2h",
+          "correlation": 0.0
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-gbms-4h",
+          "strategy_b": "sol-crsc-4h",
+          "correlation": 0.918
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-xg-4h",
+          "strategy_b": "sol-xg-2h",
+          "correlation": -0.517
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-xg-4h",
+          "strategy_b": "sol-crsc-4h",
+          "correlation": -0.436
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-ce-4h",
+          "strategy_b": "sol-xg-4h",
+          "correlation": -0.382
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-xg-4h",
+          "strategy_b": "sol-gbms-4h",
+          "correlation": -0.332
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-ce-4h",
+          "strategy_b": "sol-xg-2h",
+          "correlation": 0.224
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-xg-2h",
+          "strategy_b": "sol-crsc-4h",
+          "correlation": -0.198
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-ce-4h",
+          "strategy_b": "sol-crsc-4h",
+          "correlation": -0.176
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-ce-4h",
+          "strategy_b": "sol-gbms-4h",
+          "correlation": -0.106
+        },
+        {
+          "ticker": "SOL",
+          "strategy_a": "sol-xg-2h",
+          "strategy_b": "sol-gbms-4h",
+          "correlation": -0.048
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-5-sc-2h",
+          "correlation": 0.94
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-15sc-2h",
+          "strategy_b": "doge-5-sc-2h",
+          "correlation": 0.91
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-svs-4h",
+          "correlation": 0.858
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-bmrm-4h",
+          "correlation": -0.842
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-15sc-2h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": -0.837
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-5-sc-2h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": -0.837
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-15sc-2h",
+          "correlation": 0.774
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-8wrm-4h",
+          "strategy_b": "doge-scs-4h",
+          "correlation": 0.731
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-8wrm-4h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": 0.695
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": -0.66
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-5-sc-2h",
+          "strategy_b": "doge-svs-4h",
+          "correlation": 0.634
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-svs-4h",
+          "correlation": 0.634
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-scs-4h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": 0.553
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-8wrm-4h",
+          "correlation": -0.508
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-5-sc-2h",
+          "strategy_b": "doge-8wrm-4h",
+          "correlation": 0.499
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-15sc-2h",
+          "strategy_b": "doge-8wrm-4h",
+          "correlation": 0.499
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-bmrm-4h",
+          "correlation": 0.487
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-svs-4h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": -0.459
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-scs-4h",
+          "strategy_b": "doge-bmrm-4h",
+          "correlation": 0.436
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-15sc-2h",
+          "strategy_b": "doge-svs-4h",
+          "correlation": 0.383
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-iti-4h",
+          "correlation": 0.38
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-svs-4h",
+          "strategy_b": "doge-bmrm-4h",
+          "correlation": -0.321
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-svs-4h",
+          "strategy_b": "doge-8wrm-4h",
+          "correlation": -0.271
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": -0.269
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-5-sc-2h",
+          "correlation": 0.268
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-8wrm-4h",
+          "strategy_b": "doge-bmrm-4h",
+          "correlation": 0.265
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-svs-4h",
+          "strategy_b": "doge-scs-4h",
+          "correlation": 0.26
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-scs-4h",
+          "correlation": -0.198
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-bmrm-4h",
+          "strategy_b": "doge-pat-4h",
+          "correlation": 0.077
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-scs-4h",
+          "correlation": 0.076
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-15sc-2h",
+          "strategy_b": "doge-scs-4h",
+          "correlation": -0.07
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-5-sc-2h",
+          "strategy_b": "doge-scs-4h",
+          "correlation": -0.07
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-iti-4h",
+          "strategy_b": "doge-15sc-2h",
+          "correlation": 0.065
+        },
+        {
+          "ticker": "DOGE",
+          "strategy_a": "doge-de-4h",
+          "strategy_b": "doge-8wrm-4h",
+          "correlation": 0.045
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-svs-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": 1.0
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-5-sc-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": 0.864
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-iti-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": 0.864
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-oas-4h",
+          "strategy_b": "avax-st-4h",
+          "correlation": 0.823
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-iti-4h",
+          "strategy_b": "avax-5-sc-4h",
+          "correlation": 0.755
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-st-4h",
+          "correlation": 0.666
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-5-sc-4h",
+          "strategy_b": "avax-oas-4h",
+          "correlation": 0.548
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-oas-4h",
+          "correlation": 0.471
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-iti-4h",
+          "correlation": 0.429
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-5-sc-4h",
+          "strategy_b": "avax-st-4h",
+          "correlation": 0.398
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-wete-4h",
+          "correlation": 0.394
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-wete-4h",
+          "strategy_b": "avax-st-4h",
+          "correlation": 0.384
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-iti-4h",
+          "strategy_b": "avax-st-4h",
+          "correlation": 0.297
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-iti-4h",
+          "strategy_b": "avax-oas-4h",
+          "correlation": 0.259
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-oas-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": -0.25
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-st-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": -0.25
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": -0.25
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-iti-4h",
+          "strategy_b": "avax-svs-4h",
+          "correlation": 0.226
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-oas-4h",
+          "strategy_b": "avax-wete-4h",
+          "correlation": -0.181
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-5-sc-4h",
+          "strategy_b": "avax-wete-4h",
+          "correlation": -0.165
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-svs-4h",
+          "strategy_b": "avax-st-4h",
+          "correlation": -0.158
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-5-sc-4h",
+          "correlation": 0.157
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-iti-4h",
+          "strategy_b": "avax-wete-4h",
+          "correlation": 0.137
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-svs-4h",
+          "strategy_b": "avax-oas-4h",
+          "correlation": -0.101
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-15sc-4h",
+          "strategy_b": "avax-svs-4h",
+          "correlation": 0.087
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-wete-4h",
+          "strategy_b": "avax-sfzl-4h",
+          "correlation": -0.056
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-svs-4h",
+          "strategy_b": "avax-wete-4h",
+          "correlation": -0.053
+        },
+        {
+          "ticker": "AVAX",
+          "strategy_a": "avax-5-sc-4h",
+          "strategy_b": "avax-svs-4h",
+          "correlation": -0.011
+        }
+      ]
+    }
+  },
+  "footer": {
+    "next_report_time_label": "9:00 AM Eastern",
+    "next_report_at_et": "2026-06-07T09:00:00-04:00"
+  }
+}
