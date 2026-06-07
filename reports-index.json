@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "weekly_review",
+      "title": "Weekly Trading Review",
+      "date": "2026-06-07",
+      "time": "8:00 AM ET",
+      "file": "reports/weekly/weekly_review_2026-06-07_0800.json",
+      "format": "json"
+    },
+    {
       "type": "evening_briefing",
       "title": "Evening Briefing",
       "date": "2026-06-06",
