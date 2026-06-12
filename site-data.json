@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-06-12T08:15:00.017379-04:00",
+  "last_updated": "2026-06-12T09:53:11.236131-04:00",
   "hero": {
     "trading_bots_paper": 90,
     "strategies_discovered": 906,
-    "auto_deployed_bots": 116,
+    "auto_deployed_bots": 117,
     "candles": "244M",
     "symbols": 149,
     "indicators_mapped": 660,
@@ -17,7 +17,7 @@
   },
   "architecture": {
     "research_sources": 15,
-    "builder_bots_deployed": 116,
+    "builder_bots_deployed": 117,
     "postgresql_candles": "244M",
     "postgresql_symbols": 149,
     "postgresql_size": "60 GB",
@@ -25,7 +25,7 @@
     "sql_tables": 80,
     "sql_migrations": 117,
     "hand_built_bots": 3,
-    "pipeline_bots": 116,
+    "pipeline_bots": 117,
     "pipeline_tickers": 24,
     "telegram_bots": 5,
     "email_reports": 4
@@ -283,7 +283,7 @@
     "phase3": {
       "status": "live",
       "pills": {
-        "bots_deployed": 116
+        "bots_deployed": 117
       }
     },
     "phase4": {
