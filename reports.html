@@ -1405,6 +1405,42 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .jr-h2h-table tr.jr-h2h-leader td { background:rgba(100,180,255,0.08); font-weight:700; }
 .jr-h2h-table tr:nth-child(even):not(.jr-h2h-leader) td { background:rgba(255,255,255,0.02); }
 
+/* Bot role badges (LIVE / DEMO / PAPER) - sized like the LONG/SHORT side badges */
+.jr-role-live  { background:rgba(0,200,150,0.12);  color:#00c896; border:1px solid rgba(0,200,150,0.3); }
+.jr-role-demo  { background:rgba(96,165,250,0.12); color:#60a5fa; border:1px solid rgba(96,165,250,0.3); }
+.jr-role-paper { background:rgba(244,162,97,0.14); color:#f4a261; border:1px solid rgba(244,162,97,0.35); }
+
+/* Recommendation badges (champion-challenger update codes) */
+.jr-rec-muted      { background:rgba(136,146,164,0.1);  color:var(--gray); border:1px solid rgba(136,146,164,0.25); }
+.jr-rec-hold-champ { background:rgba(0,200,150,0.12);   color:#00c896; border:1px solid rgba(0,200,150,0.3); }
+.jr-rec-review     { background:rgba(245,169,79,0.12);  color:var(--comparison); border:1px solid rgba(245,169,79,0.32); }
+.jr-rec-monitor    { background:rgba(96,165,250,0.12);  color:#60a5fa; border:1px solid rgba(96,165,250,0.3); }
+.jr-rec-neutral    { background:rgba(136,146,164,0.12); color:var(--gray); border:1px solid rgba(136,146,164,0.25); }
+
+/* Champion vs Challengers section */
+.jr-cc-group { margin-bottom:1.4rem; }
+.jr-cc-table tr.jr-cc-champion td { background:rgba(245,185,66,0.07); }
+.jr-cc-table tr.jr-cc-champion td:first-child { border-left:3px solid #f5b942; }
+.jr-cc-table tr.jr-cc-unreliable td.jr-cc-metric { opacity:0.5; }
+.jr-cc-botcell { white-space:nowrap; }
+.jr-cc-botcell .jr-bot-name { font-weight:600; }
+.jr-cc-botcell .jr-bot-champ { font-weight:800; color:var(--text); }
+.jr-cc-star { color:var(--gray); cursor:help; margin-left:3px; font-weight:700; }
+.jr-cc-relevance { display:block; font-size:0.66rem; color:var(--dim); margin-top:2px; letter-spacing:0.02em; }
+.jr-cc-delta { margin-top:-0.4rem; }
+.jr-slot-open { background:rgba(245,169,79,0.12); color:var(--comparison); border:1px solid rgba(245,169,79,0.32); }
+.jr-pnl-src { font-size:0.66rem; color:var(--dim); cursor:help; }
+
+/* Alert status indicators */
+.jr-alert-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-left:6px; vertical-align:middle; cursor:help; }
+.jr-alert-1 { background:#60a5fa; }
+.jr-alert-2 { background:var(--comparison); }
+.jr-alert-3 { background:#ff8c42; }
+.jr-alert-4 { background:var(--red); }
+.jr-alert-lbl { font-size:0.62rem; font-weight:700; letter-spacing:0.04em; margin-left:4px; text-transform:uppercase; vertical-align:middle; }
+.jr-alert-3 + .jr-alert-lbl { color:#ff8c42; }
+.jr-alert-4 + .jr-alert-lbl { color:var(--red); }
+
 /* Header strip inside a rendered report (date + time before sections) */
 .jr-meta-line { font-family:'Share Tech Mono',monospace; font-size:0.78rem; color:var(--sub); margin-bottom:1.3rem; letter-spacing:0.05em; }
 .jr-meta-line .dim { color:var(--dim); }
@@ -2015,6 +2051,78 @@ function prettyStatKey(k){
   return String(k).replace(/_usd$/,'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 }
 
+/* ── Champion-Challenger update helpers (additive; all null-safe) ── */
+function jrDash(){ return '<span class="jr-null">-</span>'; }
+function jrFixed(v, digits, suffix){
+  if (v === null || v === undefined || v === '' || !isFinite(Number(v))) return jrDash();
+  return escHtml(Number(v).toFixed(digits) + (suffix || ''));
+}
+/* Bot role badge: LIVE (green) / DEMO (blue) / PAPER (orange). Missing badge -> '' */
+function roleBadgeJR(badge){
+  if (!badge || !badge.label) return '';
+  const label = String(badge.label).toUpperCase();
+  const byColor = { green:'jr-role-live', blue:'jr-role-demo', orange:'jr-role-paper' };
+  const byLabel = { LIVE:'jr-role-live', DEMO:'jr-role-demo', PAPER:'jr-role-paper' };
+  const cls = byColor[String(badge.color || '').toLowerCase()] || byLabel[label] || 'jr-role-demo';
+  return `<span class="badge ${cls}">${escHtml(label)}</span>`;
+}
+/* Bot name cell inner HTML: optional role badge + name */
+function botNameWithBadge(name, badge){
+  const b = roleBadgeJR(badge);
+  return (b ? b + ' ' : '') + escHtml(name || '');
+}
+/* Recommendation badge for the champion-challenger code set. Unknown codes -> label as-is, neutral. */
+function recBadgeJR(code, label){
+  const map = {
+    insufficient_data:    { cls:'jr-rec-muted',      txt:'Insufficient data' },
+    hold_champion:        { cls:'jr-rec-hold-champ', txt:'Hold as champion' },
+    review_challenger:    { cls:'jr-rec-review',      txt:'Review challenger' },
+    review_for_promotion: { cls:'jr-rec-review',      txt:'Review for promotion' },
+    monitor:              { cls:'jr-rec-monitor',     txt:'Monitor' },
+    hold:                 { cls:'jr-rec-neutral',     txt:'Hold' }
+  };
+  const m = map[String(code || '').toLowerCase()];
+  if (!m) {
+    const txt = label || code;
+    return txt ? `<span class="badge jr-rec-neutral">${escHtml(txt)}</span>` : jrDash();
+  }
+  return `<span class="badge ${m.cls}">${escHtml(label || m.txt)}</span>`;
+}
+/* Alert indicator dot + optional visible label, reasons as tooltip. level<=0 -> '' */
+function alertDotJR(level, reasons){
+  const lv = Number(level) || 0;
+  if (lv <= 0) return '';
+  const map = { 1:{cls:'jr-alert-1',lbl:''}, 2:{cls:'jr-alert-2',lbl:''}, 3:{cls:'jr-alert-3',lbl:'Paused'}, 4:{cls:'jr-alert-4',lbl:'Stopped'} };
+  const m = map[lv] || map[1];
+  const tip = Array.isArray(reasons) && reasons.length ? reasons.join('; ') : ('Alert level ' + lv);
+  const lbl = m.lbl ? `<span class="jr-alert-lbl">${escHtml(m.lbl)}</span>` : '';
+  return `<span class="jr-alert-dot ${m.cls}" title="${escHtml(tip)}"></span>${lbl}`;
+}
+/* PnL with friction-source indicator. real -> plain; adjusted -> (adj); unadjusted_fallback -> (raw) */
+function ccPnl(v, source){
+  if (v === null || v === undefined || !isFinite(Number(v))) return jrDash();
+  const base = jrPnl(v);
+  const s = String(source || '').toLowerCase();
+  if (s === 'adjusted')            return base + ` <span class="jr-pnl-src" title="Friction-adjusted PnL">(adj)</span>`;
+  if (s === 'unadjusted_fallback') return base + ` <span class="jr-pnl-src" title="Unadjusted PnL (fallback)">(raw)</span>`;
+  return base;
+}
+/* Extended per-bot metrics rolled into a single hover tooltip to avoid clutter */
+function ccExtraTooltip(bot){
+  const parts = [];
+  const add = (lbl, val, fmt) => { if (val !== null && val !== undefined && val !== '' && isFinite(Number(val))) parts.push(lbl + ': ' + fmt(Number(val))); };
+  add('Drawdown from HWM', bot.drawdown_from_hwm_pct, v => v.toFixed(1) + '%');
+  add('Min regime perf',   bot.min_regime_performance, v => v.toFixed(2));
+  add('Benchmark return',  bot.benchmark_return_pct, v => v.toFixed(1) + '%');
+  add('Funding PnL',       bot.funding_pnl, v => '$' + v.toFixed(2));
+  add('Viability ratio',   bot.viability_ratio, v => v.toFixed(2));
+  add('Realized slippage', bot.realized_slippage_pct, v => v.toFixed(3) + '%');
+  add('Rolling corr',      bot.rolling_correlation, v => v.toFixed(2));
+  add('High water mark',   bot.high_water_mark, v => '$' + v.toFixed(2));
+  add('Weeks underwater',  bot.weeks_underwater, v => String(v));
+  return parts.join(' | ');
+}
+
 /* Shared sections */
 function renderMetaLine(meta){
   if (!meta) return '';
@@ -2086,7 +2194,7 @@ function renderTradingActivity(ta){
     const tickerRow = `<tr class="jr-ticker-row" style="${tickerStyleVars(ticker)}"><td colspan="${colspan}"><span class="jr-ticker-chip">${escHtml(ticker)}</span></td></tr>`;
     const rows = (group.trades || []).map(t => {
       const cells = [];
-      cells.push(`<td title="${escHtml(t.bot_name||'')}">${escHtml(t.bot_name||'')}</td>`);
+      cells.push(`<td title="${escHtml(t.bot_name||'')}">${botNameWithBadge(t.bot_name, t.badge)}</td>`);
       cells.push(`<td>${escHtml(t.timeframe||'')}</td>`);
       cells.push(`<td>${sideBadgeJR(t.side)}</td>`);
       cells.push(`<td>${escHtml(fmtEntryPrice(t.entry_price))}</td>`);
@@ -2249,7 +2357,7 @@ function renderBriefing(data){
 function renderTradingPerformance(tp){
   if (!tp || !Array.isArray(tp.bots) || !tp.bots.length) return '';
   const rows = tp.bots.map(b => `<tr>
-    <td>${escHtml(b.bot_name||'')}</td>
+    <td>${botNameWithBadge(b.bot_name, b.badge)}</td>
     <td>${escHtml(b.ticker||'')}</td>
     <td>${escHtml(b.timeframe||'')}</td>
     <td class="num">${escHtml(String(b.trades_count??0))}</td>
@@ -2388,7 +2496,7 @@ function renderHeadToHead(h2h, rankings){
     const rows = (group.strategies||[]).map(st => {
       const isLeader = leader && st.bot_name === leader;
       return `<tr class="${isLeader?'jr-h2h-leader':''}">
-        <td>${escHtml(st.bot_name||'')}</td>
+        <td>${botNameWithBadge(st.bot_name, st.badge)}</td>
         <td>${escHtml(st.timeframe||'')}</td>
         <td>${st.profit_factor!=null ? Number(st.profit_factor).toFixed(2) : '—'}</td>
         <td>${st.sharpe_ratio!=null ? Number(st.sharpe_ratio).toFixed(2) : '—'}</td>
@@ -2397,7 +2505,7 @@ function renderHeadToHead(h2h, rankings){
         <td>${escHtml(String(st.total_trades??0))}</td>
         <td>${jrPnl(st.total_pnl_usd)}</td>
         <td>${st.recovery_factor!=null ? Number(st.recovery_factor).toFixed(2) : '—'}</td>
-        <td>${escHtml(st.recommendation_label || st.recommendation_code || '—')}</td>
+        <td>${recBadgeJR(st.recommendation_code, st.recommendation_label)}</td>
       </tr>`;
     }).join('');
     return `<div style="margin-bottom:1rem">
@@ -2425,7 +2533,7 @@ function renderRankings(r){
     <td>${escHtml(t.ticker||'')}</td>
     <td>${escHtml(t.current_live_slot||'—')}</td>
     <td>${escHtml(t.leading_strategy||'—')}</td>
-    <td>${t.leadership_change ? '<span class="badge badge-tp1">Change</span>' : '<span class="badge badge-inactive">Hold</span>'}</td>
+    <td>${t.leadership_change == null ? jrDash() : (t.leadership_change ? '<span class="badge badge-tp1">Change</span>' : '<span class="badge badge-inactive">Hold</span>')}</td>
   </tr>`).join('');
   const method = r.composite_score_method ? `<div class="rpt-note">Scoring: ${escHtml(r.composite_score_method)}</div>` : '';
   return `<div class="rpt-section">
@@ -2456,11 +2564,77 @@ function renderMonthlyDeepDive(m){
   </div>`;
 }
 
+/* Champion vs Challengers - new comparison section (additive; absent in old reports) */
+function ccTableHead(){
+  return `<tr>
+    <th>Bot</th><th>TF</th><th>PnL</th><th>Return</th><th>Win%</th>
+    <th>PF</th><th>Sharpe</th><th>Max DD</th><th>Trades</th><th>Recommendation</th>
+  </tr>`;
+}
+function ccBotRow(bot, isChampion){
+  if (!bot) return '';
+  const reliable = bot.statistically_reliable !== false; // default reliable when field absent
+  const rowCls = [isChampion ? 'jr-cc-champion' : '', reliable ? '' : 'jr-cc-unreliable'].filter(Boolean).join(' ');
+  const star = reliable ? '' : `<span class="jr-cc-star" title="Based on ${escHtml(String(bot.total_trades ?? 0))} trades - not yet statistically reliable">*</span>`;
+  const relevance = (bot.months_to_statistical_relevance !== null && bot.months_to_statistical_relevance !== undefined && isFinite(Number(bot.months_to_statistical_relevance)))
+    ? `<span class="jr-cc-relevance">~${escHtml(String(bot.months_to_statistical_relevance))} months to relevance</span>` : '';
+  const extraTip = ccExtraTooltip(bot);
+  const nameCell = `<td class="jr-cc-botcell"${extraTip ? ` title="${escHtml(extraTip)}"` : ''}>
+    ${roleBadgeJR(bot.badge)} <span class="jr-bot-name${isChampion ? ' jr-bot-champ' : ''}">${escHtml(bot.bot_name || '')}</span>${star}${alertDotJR(bot.alert_level, bot.alert_reasons)}${relevance}
+  </td>`;
+  const pf = (bot.profit_factor !== null && bot.profit_factor !== undefined && isFinite(Number(bot.profit_factor)))
+    ? escHtml(Number(bot.profit_factor).toFixed(2)) : jrDash();
+  const m = 'jr-cc-metric';
+  return `<tr class="${rowCls}">
+    ${nameCell}
+    <td class="${m}">${escHtml(bot.timeframe || '')}</td>
+    <td class="${m}">${ccPnl(bot.total_pnl_usd, bot.pnl_source)}</td>
+    <td class="${m}">${jrFixed(bot.return_pct, 1, '%')}</td>
+    <td class="${m}">${jrFixed(bot.win_rate_pct, 1, '%')}</td>
+    <td class="${m}">${pf}</td>
+    <td class="${m}">${jrFixed(bot.sharpe_ratio, 2)}</td>
+    <td class="${m}">${jrFixed(bot.max_drawdown_pct, 1, '%')}</td>
+    <td class="${m}">${escHtml(String(bot.total_trades ?? 0))}</td>
+    <td class="${m}">${recBadgeJR(bot.recommendation_code, bot.recommendation_label)}</td>
+  </tr>`;
+}
+function renderChampionChallenger(cc){
+  if (!cc || !Array.isArray(cc.tickers) || !cc.tickers.length) return '';
+  const blocks = cc.tickers.map(group => {
+    const ticker = group.ticker || '';
+    const hasChamp = group.has_champion && group.champion;
+    const slotOpen = !hasChamp ? `<span class="badge jr-slot-open">Live slot open</span>` : '';
+    const hdr = `<div class="rpt-ticker-hdr" style="${tickerStyleVars(ticker)}"><span class="ticker-badge">${escHtml(ticker)}</span>${slotOpen}</div>`;
+    const champRow = hasChamp ? ccBotRow(group.champion, true) : '';
+    const challengers = Array.isArray(group.challengers) ? group.challengers : [];
+    const challengerRows = challengers.map(c => ccBotRow(c, false)).join('');
+    let delta = '';
+    if (group.champion_challenger_delta !== null && group.champion_challenger_delta !== undefined && isFinite(Number(group.champion_challenger_delta))) {
+      delta = `<div class="rpt-note jr-cc-delta">Gap to best challenger: ${Number(group.champion_challenger_delta).toFixed(1)}%</div>`;
+    }
+    return `<div class="jr-cc-group">
+      ${hdr}
+      <div class="rpt-trade-wrap">
+        <table class="jr-h2h-table jr-cc-table">
+          <thead>${ccTableHead()}</thead>
+          <tbody>${champRow}${challengerRows}</tbody>
+        </table>
+      </div>
+      ${delta}
+    </div>`;
+  }).join('');
+  return `<div class="rpt-section">
+    <div class="rpt-sec-lbl">Champion vs Challengers</div>
+    ${blocks}
+  </div>`;
+}
+
 function renderComparison(data){
   const s = data.sections || {};
   return `<div class="jr-report-body">
     ${renderTLDR(s.tldr, 'Comparison Summary')}
     ${renderHeadToHead(s.head_to_head, s.rankings)}
+    ${renderChampionChallenger(s.champion_challenger)}
     ${renderRankings(s.rankings)}
     ${renderMarketConditionsBlock(s.market_condition_context, 'Market Condition Context')}
     ${renderMonthlyDeepDive(s.monthly_deep_dive)}
