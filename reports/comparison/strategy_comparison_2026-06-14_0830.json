@@ -1,0 +1,806 @@
+{
+  "schema_version": "1.0",
+  "report_type": "strategy_comparison",
+  "metadata": {
+    "title": "AutoBots - Strategy Comparison",
+    "report_type": "strategy_comparison",
+    "generated_at_et": "2026-06-14T08:30:00.045687-04:00",
+    "date_et": "Jun 14, 2026",
+    "time_et": "8:30 AM ET",
+    "period_start": "2026-06-07T08:30:00.014274-04:00",
+    "period_end": "2026-06-14T08:30:00.014274-04:00",
+    "period": {
+      "since_label": "past 7 days",
+      "start_et": "2026-06-07T08:30:00.014274-04:00",
+      "end_et": "2026-06-14T08:30:00.014274-04:00",
+      "since_et": "2026-06-07T08:30:00.014274-04:00",
+      "until_et": "2026-06-14T08:30:00.014274-04:00",
+      "since": "2026-06-07T12:30:00.014274+00:00",
+      "until": "2026-06-14T12:30:00.014274+00:00",
+      "recovery_window": false
+    },
+    "next_report": {
+      "time_label": "9:00 AM Eastern",
+      "at_et": "2026-06-14T09:00:00-04:00"
+    },
+    "cadence": "weekly",
+    "is_monthly_deep_dive": false,
+    "comparison_window_label": "Past 7 days"
+  },
+  "sections": {
+    "tldr": {
+      "text": "8 tickers compared. 35 live-slot changes recommended. average profit factor 150.56.",
+      "stats": {
+        "tickers_compared": 8,
+        "strategies_compared": 40,
+        "live_slot_changes_recommended": 35,
+        "avg_profit_factor": 150.56
+      }
+    },
+    "head_to_head": {
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "strategies": [
+            {
+              "bot_name": "btc-biex-4h",
+              "timeframe": "4H",
+              "profit_factor": 999.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 100.0,
+              "total_trades": 2,
+              "total_pnl_usd": 141.5,
+              "recovery_factor": null,
+              "expectancy_pct": 70.75,
+              "return_pct": 14.15,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "btc-surs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.12,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 25.31,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -222.08,
+              "recovery_factor": null,
+              "expectancy_pct": -111.04,
+              "return_pct": -22.21,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "btc-1ms-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -113.32,
+              "recovery_factor": null,
+              "expectancy_pct": -56.66,
+              "return_pct": -11.33,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "btc-smcr-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 3,
+              "total_pnl_usd": -160.06,
+              "recovery_factor": null,
+              "expectancy_pct": -53.35,
+              "return_pct": -16.01,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "ETH",
+          "strategies": [
+            {
+              "bot_name": "eth-1ms-4h",
+              "timeframe": "4H",
+              "profit_factor": 999.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 100.0,
+              "total_trades": 2,
+              "total_pnl_usd": 88.34,
+              "recovery_factor": null,
+              "expectancy_pct": 44.17,
+              "return_pct": 8.83,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "eth-atb-2h",
+              "timeframe": "2H",
+              "profit_factor": 8.8,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.35,
+              "win_rate_pct": 80.0,
+              "total_trades": 5,
+              "total_pnl_usd": 417.05,
+              "recovery_factor": null,
+              "expectancy_pct": 83.41,
+              "return_pct": 41.7,
+              "recommendation_code": "promote_to_live",
+              "recommendation_label": "Promote to live"
+            },
+            {
+              "bot_name": "eth-atb-4h",
+              "timeframe": "4H",
+              "profit_factor": 3.5,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 9.06,
+              "win_rate_pct": 66.67,
+              "total_trades": 6,
+              "total_pnl_usd": 360.12,
+              "recovery_factor": null,
+              "expectancy_pct": 60.02,
+              "return_pct": 36.01,
+              "recommendation_code": "promote_to_live",
+              "recommendation_label": "Promote to live"
+            },
+            {
+              "bot_name": "eth-iti-2h",
+              "timeframe": "2H",
+              "profit_factor": 1.22,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 12.49,
+              "recovery_factor": null,
+              "expectancy_pct": 4.16,
+              "return_pct": 1.25,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            },
+            {
+              "bot_name": "eth-xg-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.8,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.24,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -10.26,
+              "recovery_factor": null,
+              "expectancy_pct": -5.13,
+              "return_pct": -1.03,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-ebts-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.68,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 11.23,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -35.77,
+              "recovery_factor": null,
+              "expectancy_pct": -17.89,
+              "return_pct": -3.58,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-faim-2h",
+              "timeframe": "2H",
+              "profit_factor": 0.65,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 4,
+              "total_pnl_usd": -38.83,
+              "recovery_factor": null,
+              "expectancy_pct": -9.71,
+              "return_pct": -3.88,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-mbc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.52,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.59,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -26.58,
+              "recovery_factor": null,
+              "expectancy_pct": -13.29,
+              "return_pct": -2.66,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-mtf-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.26,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 11.8,
+              "win_rate_pct": 33.33,
+              "total_trades": 3,
+              "total_pnl_usd": -87.39,
+              "recovery_factor": null,
+              "expectancy_pct": -29.13,
+              "return_pct": -8.74,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-tsmi-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.24,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 11.59,
+              "win_rate_pct": 33.33,
+              "total_trades": 3,
+              "total_pnl_usd": -88.69,
+              "recovery_factor": null,
+              "expectancy_pct": -29.56,
+              "return_pct": -8.87,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-emfi-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -115.99,
+              "recovery_factor": null,
+              "expectancy_pct": -57.99,
+              "return_pct": -11.6,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-fgc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -115.99,
+              "recovery_factor": null,
+              "expectancy_pct": -57.99,
+              "return_pct": -11.6,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-otmt-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -116.3,
+              "recovery_factor": null,
+              "expectancy_pct": -58.15,
+              "return_pct": -11.63,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "eth-srm-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -113.46,
+              "recovery_factor": null,
+              "expectancy_pct": -56.73,
+              "return_pct": -11.35,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "SOL",
+          "strategies": [
+            {
+              "bot_name": "sol-xg-2h",
+              "timeframe": "2H",
+              "profit_factor": 999.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 100.0,
+              "total_trades": 3,
+              "total_pnl_usd": 135.56,
+              "recovery_factor": null,
+              "expectancy_pct": 45.19,
+              "return_pct": 13.56,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "sol-xg-4h",
+              "timeframe": "4H",
+              "profit_factor": 999.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 100.0,
+              "total_trades": 3,
+              "total_pnl_usd": 125.63,
+              "recovery_factor": null,
+              "expectancy_pct": 41.88,
+              "return_pct": 12.56,
+              "recommendation_code": "promote_to_live",
+              "recommendation_label": "Promote to live"
+            }
+          ]
+        },
+        {
+          "ticker": "ADA",
+          "strategies": [
+            {
+              "bot_name": "ada-iti-4h",
+              "timeframe": "4H",
+              "profit_factor": 999.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 100.0,
+              "total_trades": 2,
+              "total_pnl_usd": 77.56,
+              "recovery_factor": null,
+              "expectancy_pct": 99.79,
+              "return_pct": 7.76,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "ada-biex-4h",
+              "timeframe": "4H",
+              "profit_factor": 1.42,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.58,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": 23.34,
+              "recovery_factor": null,
+              "expectancy_pct": 11.67,
+              "return_pct": 2.33,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            }
+          ]
+        },
+        {
+          "ticker": "DOGE",
+          "strategies": [
+            {
+              "bot_name": "doge-8wrm-4h",
+              "timeframe": "4H",
+              "profit_factor": 999.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 100.0,
+              "total_trades": 3,
+              "total_pnl_usd": 158.09,
+              "recovery_factor": null,
+              "expectancy_pct": 52.7,
+              "return_pct": 15.81,
+              "recommendation_code": "hold_live",
+              "recommendation_label": "Hold as live slot"
+            },
+            {
+              "bot_name": "doge-5-sc-2h",
+              "timeframe": "2H",
+              "profit_factor": 2.05,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 6.53,
+              "recovery_factor": null,
+              "expectancy_pct": 19.63,
+              "return_pct": 0.65,
+              "recommendation_code": "promote_to_live",
+              "recommendation_label": "Promote to live"
+            },
+            {
+              "bot_name": "doge-bmrm-4h",
+              "timeframe": "4H",
+              "profit_factor": 1.33,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 66.67,
+              "total_trades": 3,
+              "total_pnl_usd": 18.47,
+              "recovery_factor": null,
+              "expectancy_pct": 6.16,
+              "return_pct": 1.85,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            },
+            {
+              "bot_name": "doge-iti-4h",
+              "timeframe": "4H",
+              "profit_factor": 1.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": 0.23,
+              "recovery_factor": null,
+              "expectancy_pct": 0.11,
+              "return_pct": 0.02,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            },
+            {
+              "bot_name": "doge-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 1.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": 0.23,
+              "recovery_factor": null,
+              "expectancy_pct": 0.11,
+              "return_pct": 0.02,
+              "recommendation_code": "demote_to_paper",
+              "recommendation_label": "Demote to paper"
+            },
+            {
+              "bot_name": "doge-scs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.56,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 4,
+              "total_pnl_usd": -48.54,
+              "recovery_factor": null,
+              "expectancy_pct": -12.14,
+              "return_pct": -4.85,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-de-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 4,
+              "total_pnl_usd": -216.01,
+              "recovery_factor": null,
+              "expectancy_pct": -54.0,
+              "return_pct": -21.6,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "doge-pat-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -101.62,
+              "recovery_factor": null,
+              "expectancy_pct": -50.81,
+              "return_pct": -10.16,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "LINK",
+          "strategies": [
+            {
+              "bot_name": "link-5-sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.97,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -1.68,
+              "recovery_factor": null,
+              "expectancy_pct": -0.84,
+              "return_pct": -0.17,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "link-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.41,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -52.39,
+              "recovery_factor": null,
+              "expectancy_pct": -26.19,
+              "return_pct": -5.24,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "link-15sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.41,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -32.61,
+              "recovery_factor": null,
+              "expectancy_pct": -16.31,
+              "return_pct": -3.26,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "AVAX",
+          "strategies": [
+            {
+              "bot_name": "avax-15sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.58,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 5.44,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -22.66,
+              "recovery_factor": null,
+              "expectancy_pct": -11.33,
+              "return_pct": -2.27,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-svs-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.38,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 50.0,
+              "total_trades": 2,
+              "total_pnl_usd": -35.32,
+              "recovery_factor": null,
+              "expectancy_pct": -17.66,
+              "return_pct": -3.53,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-5-sc-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -108.3,
+              "recovery_factor": null,
+              "expectancy_pct": -54.15,
+              "return_pct": -10.83,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-iti-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -108.3,
+              "recovery_factor": null,
+              "expectancy_pct": -54.15,
+              "return_pct": -10.83,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "avax-wete-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.0,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 0.0,
+              "total_trades": 2,
+              "total_pnl_usd": -107.44,
+              "recovery_factor": null,
+              "expectancy_pct": -53.72,
+              "return_pct": -10.74,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        },
+        {
+          "ticker": "TRUMP",
+          "strategies": [
+            {
+              "bot_name": "trump-atb-4h",
+              "timeframe": "4H",
+              "profit_factor": 0.98,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 40.0,
+              "total_trades": 5,
+              "total_pnl_usd": -143.29,
+              "recovery_factor": null,
+              "expectancy_pct": -0.67,
+              "return_pct": -14.33,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            },
+            {
+              "bot_name": "trump-atb-2h",
+              "timeframe": "2H",
+              "profit_factor": 0.61,
+              "sharpe_ratio": null,
+              "max_drawdown_pct": 0.0,
+              "win_rate_pct": 20.0,
+              "total_trades": 5,
+              "total_pnl_usd": -184.28,
+              "recovery_factor": null,
+              "expectancy_pct": -36.86,
+              "return_pct": -18.43,
+              "recommendation_code": "retire",
+              "recommendation_label": "Retire"
+            }
+          ]
+        }
+      ]
+    },
+    "rankings": {
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "current_live_slot": null,
+          "leading_strategy": "btc-biex-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "ETH",
+          "current_live_slot": null,
+          "leading_strategy": "eth-1ms-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "SOL",
+          "current_live_slot": null,
+          "leading_strategy": "sol-xg-2h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "ADA",
+          "current_live_slot": null,
+          "leading_strategy": "ada-iti-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "DOGE",
+          "current_live_slot": null,
+          "leading_strategy": "doge-8wrm-4h",
+          "leadership_change": false,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "LINK",
+          "current_live_slot": null,
+          "leading_strategy": "link-5-sc-4h",
+          "leadership_change": true,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "AVAX",
+          "current_live_slot": null,
+          "leading_strategy": "avax-15sc-4h",
+          "leadership_change": true,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        },
+        {
+          "ticker": "TRUMP",
+          "current_live_slot": null,
+          "leading_strategy": "trump-atb-4h",
+          "leadership_change": true,
+          "composite_score_method": "0.4*PF + 0.3*Sharpe + 0.2*WinRate + 0.1*RecoveryFactor (Sharpe/RF fall back to PF+WR when unavailable)"
+        }
+      ]
+    },
+    "market_condition_context": {
+      "tickers": [
+        {
+          "ticker": "BTC",
+          "regime_code": "trend_down",
+          "regime_label": "Trending Down",
+          "description": "Sustained downtrend confirmed by directional path and descending daily lows. Close held near the weekly trough."
+        },
+        {
+          "ticker": "ETH",
+          "regime_code": "trend_down",
+          "regime_label": "Trending Down",
+          "description": "Sustained downtrend confirmed by directional path and descending daily lows. Close held near the weekly trough."
+        },
+        {
+          "ticker": "SOL",
+          "regime_code": "trend_down",
+          "regime_label": "Trending Down",
+          "description": "Sustained downtrend confirmed by directional path and descending daily lows. Close held near the weekly trough."
+        },
+        {
+          "ticker": "ADA",
+          "regime_code": "trend_down",
+          "regime_label": "Trending Down",
+          "description": "Sustained downtrend confirmed by directional path and descending daily lows. Close held near the weekly trough."
+        },
+        {
+          "ticker": "DOGE",
+          "regime_code": "trend_down",
+          "regime_label": "Trending Down",
+          "description": "Sustained downtrend confirmed by directional path and descending daily lows. Close held near the weekly trough."
+        },
+        {
+          "ticker": "LINK",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        },
+        {
+          "ticker": "AVAX",
+          "regime_code": "trend_down",
+          "regime_label": "Trending Down",
+          "description": "Sustained downtrend confirmed by directional path and descending daily lows. Close held near the weekly trough."
+        },
+        {
+          "ticker": "TRUMP",
+          "regime_code": "choppy",
+          "regime_label": "Choppy",
+          "description": "Mixed price action without a dominant signature; neither directional nor calm-ranging nor explicitly volatile."
+        }
+      ]
+    },
+    "monthly_deep_dive": {
+      "included": false,
+      "window_label": null,
+      "extended_comparisons": []
+    }
+  },
+  "footer": {
+    "next_report_time_label": "9:00 AM Eastern",
+    "next_report_at_et": "2026-06-14T09:00:00-04:00"
+  }
+}
