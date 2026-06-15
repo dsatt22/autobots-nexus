@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-06-15T16:20:45.773581-04:00",
+  "last_updated": "2026-06-15T16:48:45.755002-04:00",
   "hero": {
     "trading_bots_paper": 90,
-    "strategies_discovered": 911,
+    "strategies_discovered": 912,
     "auto_deployed_bots": 117,
     "candles": "245M",
     "symbols": 149,
