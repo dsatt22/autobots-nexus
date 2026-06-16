@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-16T10:14:53.808961-04:00",
+  "last_updated": "2026-06-16T19:00:00.017854-04:00",
   "hero": {
     "trading_bots_paper": 91,
     "strategies_discovered": 912,
@@ -57,17 +57,17 @@
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
     "code_analysis_pct": 100,
-    "dependency_audit_pct": 76,
+    "dependency_audit_pct": 60,
     "bot_protections_pct": 100,
     "database_safety_pct": 100,
     "medium_severity": 0,
     "low_severity": 0,
-    "known_cves": 6,
-    "affected_packages": 1,
+    "known_cves": 10,
+    "affected_packages": 2,
     "bots_scanned": 95,
     "tables_secured": 84,
     "security_migrations": 123,
-    "last_scan": "2026-06-16T07:31:14.396635-04:00",
+    "last_scan": "2026-06-16T18:50:18.143255-04:00",
     "packages_scanned": 144,
     "gitleaks_findings_count": 0
   },
