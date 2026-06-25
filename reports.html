@@ -2631,11 +2631,12 @@ function renderChampionChallenger(cc){
 
 function renderComparison(data){
   const s = data.sections || {};
+  // head_to_head and rankings are intentionally no longer rendered; champion-challenger
+  // is the sole comparison view. The JSON may still carry head_to_head/rankings (ignored)
+  // or omit them entirely (also fine) - neither path is read here.
   return `<div class="jr-report-body">
     ${renderTLDR(s.tldr, 'Comparison Summary')}
-    ${renderHeadToHead(s.head_to_head, s.rankings)}
     ${renderChampionChallenger(s.champion_challenger)}
-    ${renderRankings(s.rankings)}
     ${renderMarketConditionsBlock(s.market_condition_context, 'Market Condition Context')}
     ${renderMonthlyDeepDive(s.monthly_deep_dive)}
     ${renderFooter(data.footer)}
