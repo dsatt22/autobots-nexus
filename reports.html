@@ -2484,87 +2484,12 @@ function renderWeekly(data){
   </div>`;
 }
 
-/* Comparison sections */
-function renderHeadToHead(h2h, rankings){
-  if (!h2h || !Array.isArray(h2h.tickers) || !h2h.tickers.length) return '';
-  const leaderByTicker = {};
-  if (rankings && Array.isArray(rankings.tickers)) {
-    rankings.tickers.forEach(r => { leaderByTicker[r.ticker] = r.leading_strategy; });
-  }
-  const tables = h2h.tickers.map(group => {
-    const leader = leaderByTicker[group.ticker];
-    const rows = (group.strategies||[]).map(st => {
-      const isLeader = leader && st.bot_name === leader;
-      return `<tr class="${isLeader?'jr-h2h-leader':''}">
-        <td>${botNameWithBadge(st.bot_name, st.badge)}</td>
-        <td>${escHtml(st.timeframe||'')}</td>
-        <td>${st.profit_factor!=null ? Number(st.profit_factor).toFixed(2) : '—'}</td>
-        <td>${st.sharpe_ratio!=null ? Number(st.sharpe_ratio).toFixed(2) : '—'}</td>
-        <td>${st.max_drawdown_pct!=null ? Number(st.max_drawdown_pct).toFixed(1)+'%' : '—'}</td>
-        <td>${st.win_rate_pct!=null ? Number(st.win_rate_pct).toFixed(1)+'%' : '—'}</td>
-        <td>${escHtml(String(st.total_trades??0))}</td>
-        <td>${jrPnl(st.total_pnl_usd)}</td>
-        <td>${st.recovery_factor!=null ? Number(st.recovery_factor).toFixed(2) : '—'}</td>
-        <td>${recBadgeJR(st.recommendation_code, st.recommendation_label)}</td>
-      </tr>`;
-    }).join('');
-    return `<div style="margin-bottom:1rem">
-      <div class="rpt-ticker-hdr" style="${tickerStyleVars(group.ticker)}"><span class="ticker-badge">${escHtml(group.ticker||'')}</span></div>
-      <div class="rpt-trade-wrap">
-        <table class="jr-h2h-table">
-          <thead><tr>
-            <th>Bot</th><th>TF</th><th>PF</th><th>Sharpe</th><th>Max DD</th>
-            <th>Win%</th><th>Trades</th><th>PnL</th><th>Recovery</th><th>Recommendation</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>`;
-  }).join('');
-  return `<div class="rpt-section">
-    <div class="rpt-sec-lbl">Head-to-Head Comparison</div>
-    ${tables}
-  </div>`;
-}
+/* Comparison sections - head_to_head, rankings, and monthly_deep_dive rendering removed
+   (cleanup). Champion-challenger is the sole comparison view. The JSON may still carry
+   head_to_head / rankings / monthly_deep_dive; those fields are intentionally not read.
+   A real month-over-month deep dive will be redesigned in the future reports page rebuild. */
 
-function renderRankings(r){
-  if (!r || !Array.isArray(r.tickers) || !r.tickers.length) return '';
-  const rows = r.tickers.map(t => `<tr>
-    <td>${escHtml(t.ticker||'')}</td>
-    <td>${escHtml(t.current_live_slot||'—')}</td>
-    <td>${escHtml(t.leading_strategy||'—')}</td>
-    <td>${t.leadership_change == null ? jrDash() : (t.leadership_change ? '<span class="badge badge-tp1">Change</span>' : '<span class="badge badge-inactive">Hold</span>')}</td>
-  </tr>`).join('');
-  const method = r.composite_score_method ? `<div class="rpt-note">Scoring: ${escHtml(r.composite_score_method)}</div>` : '';
-  return `<div class="rpt-section">
-    <div class="rpt-sec-lbl">Rankings</div>
-    <div class="rpt-trade-wrap">
-      <table class="jr-perf-table">
-        <thead><tr><th>Ticker</th><th>Current Live Slot</th><th>Leading Strategy</th><th>Status</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-    ${method}
-  </div>`;
-}
-
-function renderMonthlyDeepDive(m){
-  if (!m || !m.included) return '';
-  const ext = m.extended_comparisons || [];
-  const heading = `Monthly Deep Dive${m.window_label?` · ${escHtml(m.window_label)}`:''}`;
-  if (!ext.length) {
-    return `<div class="rpt-section">
-      <div class="rpt-sec-lbl">${heading}</div>
-      <div class="rpt-note">No data available.</div>
-    </div>`;
-  }
-  return `<div class="rpt-section">
-    <div class="rpt-sec-lbl">${heading}</div>
-    ${renderHeadToHead({tickers:ext}, null)}
-  </div>`;
-}
-
-/* Champion vs Challengers - new comparison section (additive; absent in old reports) */
+/* Champion vs Challengers - the sole comparison view (additive; absent in old reports) */
 function ccTableHead(){
   return `<tr>
     <th>Bot</th><th>TF</th><th>PnL</th><th>Return</th><th>Win%</th>
@@ -2631,14 +2556,13 @@ function renderChampionChallenger(cc){
 
 function renderComparison(data){
   const s = data.sections || {};
-  // head_to_head and rankings are intentionally no longer rendered; champion-challenger
-  // is the sole comparison view. The JSON may still carry head_to_head/rankings (ignored)
-  // or omit them entirely (also fine) - neither path is read here.
+  // head_to_head, rankings, and monthly_deep_dive are intentionally no longer rendered;
+  // champion-challenger is the sole comparison view. The JSON may still carry those
+  // fields (ignored) or omit them entirely (also fine) - none are read here.
   return `<div class="jr-report-body">
     ${renderTLDR(s.tldr, 'Comparison Summary')}
     ${renderChampionChallenger(s.champion_challenger)}
     ${renderMarketConditionsBlock(s.market_condition_context, 'Market Condition Context')}
-    ${renderMonthlyDeepDive(s.monthly_deep_dive)}
     ${renderFooter(data.footer)}
   </div>`;
 }
