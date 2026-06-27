@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-06-26T20:03:53.808033-04:00",
+  "last_updated": "2026-06-27T08:15:00.022622-04:00",
   "hero": {
     "trading_bots_paper": 98,
-    "strategies_discovered": 925,
+    "strategies_discovered": 926,
     "auto_deployed_bots": 132,
     "candles": "245M",
     "symbols": 149,
@@ -51,15 +51,15 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 132992,
-    "python_files": 527,
+    "lines_scanned": 133689,
+    "python_files": 537,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
     "code_analysis_pct": 100,
     "dependency_audit_pct": 76,
     "bot_protections_pct": 100,
-    "database_safety_pct": 100,
+    "database_safety_pct": 97,
     "medium_severity": 0,
     "low_severity": 0,
     "known_cves": 6,
@@ -67,7 +67,7 @@
     "bots_scanned": 102,
     "tables_secured": 90,
     "security_migrations": 140,
-    "last_scan": "2026-06-26T18:50:13.722193-04:00",
+    "last_scan": "2026-06-27T07:31:32.636565-04:00",
     "packages_scanned": 144,
     "gitleaks_findings_count": 0
   },
