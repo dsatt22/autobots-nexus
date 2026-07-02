@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-02T17:34:03.669047-04:00",
+  "last_updated": "2026-07-02T19:00:00.028909-04:00",
   "hero": {
     "trading_bots_paper": 95,
     "strategies_discovered": 929,
@@ -67,7 +67,7 @@
     "bots_scanned": 99,
     "tables_secured": 96,
     "security_migrations": 158,
-    "last_scan": "2026-07-02T07:31:34.956897-04:00",
+    "last_scan": "2026-07-02T18:50:13.382399-04:00",
     "packages_scanned": 146,
     "gitleaks_findings_count": 0
   },
