@@ -121,7 +121,7 @@
             "id": "site-updater",
             "name": "Site auto-updater",
             "status": "complete",
-            "display_date": "April 2026",
+            "display_date": "Q2 2026",
             "depends_on": [],
             "requires_funding": false,
             "started_at": "2026-04-01T00:00:00",
@@ -140,30 +140,44 @@
         ]
       },
       {
+        "name": "In Progress",
+        "color": "in_progress",
+        "items": [
+          {
+            "id": "news-bot",
+            "name": "News Bot",
+            "status": "in_progress",
+            "display_date": "Ongoing",
+            "depends_on": [],
+            "requires_funding": false
+          },
+          {
+            "id": "onchain-data",
+            "name": "On-chain data integration",
+            "status": "in_progress",
+            "display_date": "In progress",
+            "depends_on": [],
+            "requires_funding": false
+          },
+          {
+            "id": "dashboards-mobile",
+            "name": "Dashboards & Mobile",
+            "status": "in_progress",
+            "display_date": "End of month",
+            "depends_on": [],
+            "requires_funding": false
+          }
+        ]
+      },
+      {
         "name": "Short-term",
         "color": "short_term",
         "items": [
           {
-            "id": "risk-sizing",
-            "name": "Per-ticker risk sizing",
-            "status": "ready",
-            "display_date": "April 2026",
-            "depends_on": [],
-            "requires_funding": false
-          },
-          {
-            "id": "cross-correlation",
-            "name": "Cross-ticker correlation",
-            "status": "ready",
-            "display_date": "May 2026",
-            "depends_on": [],
-            "requires_funding": false
-          },
-          {
             "id": "regime-switching",
             "name": "Market regime switching",
             "status": "ready",
-            "display_date": "May - June 2026",
+            "display_date": "TBD",
             "depends_on": [],
             "requires_funding": false
           }
@@ -174,28 +188,10 @@
         "color": "mid_term",
         "items": [
           {
-            "id": "mobile-responsive",
-            "name": "Mobile responsiveness",
+            "id": "cross-correlation",
+            "name": "Cross-ticker correlation",
             "status": "planned",
-            "display_date": "June - July 2026",
-            "depends_on": [],
-            "requires_funding": false
-          },
-          {
-            "id": "regime-pipeline",
-            "name": "Regime-aware pipeline",
-            "status": "planned",
-            "display_date": "July 2026",
-            "depends_on": [
-              "regime-switching"
-            ],
-            "requires_funding": false
-          },
-          {
-            "id": "onchain-data",
-            "name": "On-chain data integration",
-            "status": "planned",
-            "display_date": "July - August 2026",
+            "display_date": "Q1 2027",
             "depends_on": [],
             "requires_funding": false
           }
@@ -209,7 +205,7 @@
             "id": "retirement",
             "name": "Strategy retirement automation",
             "status": "future",
-            "display_date": "Q3 2026",
+            "display_date": "2027",
             "depends_on": [
               "orchestrator"
             ],
@@ -219,7 +215,7 @@
             "id": "sub-accounts",
             "name": "Sub-accounts",
             "status": "future",
-            "display_date": "Q2-Q3 2027",
+            "display_date": "Q4 2027 - Q1 2028",
             "depends_on": [],
             "requires_funding": true
           },
@@ -227,7 +223,7 @@
             "id": "disaster-recovery",
             "name": "Disaster recovery",
             "status": "future",
-            "display_date": "Q1 2027",
+            "display_date": "Q3 2027",
             "depends_on": [],
             "requires_funding": true
           },
@@ -235,7 +231,7 @@
             "id": "cloud-deploy",
             "name": "Cloud deployment",
             "status": "future",
-            "display_date": "Q3 2027+",
+            "display_date": "Q1 2028+",
             "depends_on": [],
             "requires_funding": true
           },
@@ -243,7 +239,7 @@
             "id": "multi-exchange",
             "name": "Multi-exchange support",
             "status": "future",
-            "display_date": "Q3-Q4 2027",
+            "display_date": "Q1-Q2 2028",
             "depends_on": [],
             "requires_funding": true
           },
@@ -251,7 +247,7 @@
             "id": "multi-asset",
             "name": "Multi-asset expansion",
             "status": "future",
-            "display_date": "Q4 2027+",
+            "display_date": "Q2 2028+",
             "depends_on": [],
             "requires_funding": true
           },
@@ -259,7 +255,7 @@
             "id": "marketplace",
             "name": "Strategy marketplace",
             "status": "future",
-            "display_date": "Q4 2027+",
+            "display_date": "Q2 2028+",
             "depends_on": [],
             "requires_funding": true
           }
