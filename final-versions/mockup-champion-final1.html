@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Champion vs Challenger - AutoBots Nexus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#080c14; --bg-card:rgba(20,30,50,0.72); --bg-card2:rgba(15,26,48,0.55);
+  --bg-raised:rgba(8,12,20,0.5); --bg-surface:#1a2a50;
+  --accent:#64b4ff; --accent2:#4a9aee; --accent3:#a78bfa;
+  --text:#e8f4ff; --sub:#9fb0c8; --dim:rgba(232,244,255,0.4);
+  --green:#00ff64; --pos:#00c896; --red:#ff4a36; --neg:#e84142; --amber:#f5a94f;
+  --purple:#a855f7; --orange:#ff8c42; --gray:#8892a4; --teal:#4ecca3;
+  --live:#00c896; --demo:#64b4ff; --paper:#f5a94f;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.14);
+  --sidebar-w:clamp(272px,18.5vw,348px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(16.5px,0.42vw + 13.5px,27px);background:var(--bg)}
+body{
+  font-family:'Share Tech Mono',monospace;color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;
+}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(60vw 55vh at 12% 6%,rgba(100,180,255,0.14),transparent 60%),
+  radial-gradient(55vw 45vh at 92% 8%,rgba(74,154,238,0.10),transparent 60%),
+  radial-gradient(70vw 60vh at 78% 96%,rgba(167,139,250,0.10),transparent 65%),
+  radial-gradient(52vw 50vh at 16% 96%,rgba(0,200,150,0.06),transparent 60%);
+  animation:aur 26s ease-in-out infinite alternate}
+@keyframes aur{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(0,-2%,0) scale(1.05)}}
+h1,h2,h3,h4,.ox{font-family:'Oxanium',sans-serif}
+button{font-family:inherit;cursor:pointer;color:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:rgba(100,180,255,0.22);border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ============ SHELL ============ */
+.shell{display:flex;min-height:100vh;width:100%}
+
+/* ============ SIDEBAR ============ */
+.sidebar{
+  width:var(--sidebar-w);flex:0 0 var(--sidebar-w);
+  position:sticky;top:0;align-self:flex-start;height:100vh;
+  background:rgba(8,12,20,0.92);border-right:1px solid var(--border2);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;flex-direction:column;padding:1.4rem 1.05rem;gap:1rem;overflow:hidden;z-index:60;
+  transition:width .2s,flex-basis .2s;
+}
+.sidebar>*{min-width:0;max-width:100%}
+.side-top{display:flex;align-items:center;gap:.55rem;padding:.1rem .15rem;min-width:0;flex:0 0 auto}
+.side-sec{flex:0 0 auto}
+.brand{display:flex;align-items:center;gap:.55rem;min-width:0;text-decoration:none;color:inherit;flex:1 1 auto;cursor:pointer}
+/* collapse toggle (desktop/laptop, min-width 1025px incl. high-DPI 2880px+) - double-chevron affordance in the header */
+.side-toggle{display:none;flex:0 0 auto;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;
+  width:1.85rem;height:1.85rem;place-items:center;font-size:1.05rem;line-height:1;color:var(--sub)}
+.side-toggle:hover{border-color:var(--accent);color:var(--text)}
+/* in-sidebar back to the dashboards overview (only shown when embedded in reports.html) */
+.side-back{display:none;flex:0 0 auto;align-items:center;gap:.4rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
+  border-radius:8px;padding:.42rem .6rem;font-family:'Oxanium',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.03em;width:100%;text-align:left}
+.side-back .ico{width:1.05rem;text-align:center;flex:0 0 auto}
+.side-back:hover{border-color:var(--accent);color:var(--text)}
+/* collapsed sidebar (laptop) */
+.shell.sb-collapsed .sidebar{width:78px;flex-basis:78px;padding:1.1rem .55rem;align-items:center;gap:1rem}
+.shell.sb-collapsed .brand-txt,
+.shell.sb-collapsed .nav a .lbl,
+.shell.sb-collapsed .nav a .soon-tag,
+.shell.sb-collapsed .nav-label,
+.shell.sb-collapsed .filters,
+.shell.sb-collapsed .side-foot,
+.shell.sb-collapsed .side-back .lbl{display:none}
+/* back button collapses to just its icon, matching the nav items */
+.shell.sb-collapsed .side-back{width:auto;justify-content:center;padding:.5rem;gap:0}
+.shell.sb-collapsed .side-top{flex-direction:column;gap:.6rem;justify-content:center;padding:0}
+.shell.sb-collapsed .brand{justify-content:center}
+.shell.sb-collapsed .brand-mark{margin:0}
+.shell.sb-collapsed .nav{align-items:stretch}
+.shell.sb-collapsed .nav a{justify-content:center;padding:.6rem 0}
+.brand-mark{width:2rem;height:2rem;border-radius:8px;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  display:grid;place-items:center;font-family:'Oxanium';font-weight:800;color:#06101f;font-size:1.05rem;
+  box-shadow:0 0 18px rgba(100,180,255,0.4)}
+.brand-txt{min-width:0;overflow:visible}
+.brand-name{font-family:'Oxanium';font-weight:800;letter-spacing:.05em;font-size:clamp(.98rem,1vw,1.15rem);white-space:nowrap}
+.brand-name span{color:var(--accent)}
+.brand-sub{font-size:.58rem;letter-spacing:.26em;color:var(--sub);margin-top:.1rem;white-space:nowrap}
+.nav-label{font-size:.62rem;letter-spacing:.26em;color:var(--dim);padding:0 .35rem .35rem;text-transform:uppercase}
+.nav{display:flex;flex-direction:column;gap:.28rem}
+.nav a{display:flex;align-items:center;gap:.65rem;padding:.62rem .7rem;border-radius:9px;text-decoration:none;
+  color:var(--sub);font-size:.88rem;border:1px solid transparent;transition:all .15s}
+.nav a .ico{width:1.05rem;text-align:center;opacity:.85}
+.nav a .soon-tag{margin-left:auto;font-size:.54rem;letter-spacing:.12em;color:var(--dim);border:1px solid var(--border2);border-radius:5px;padding:.08rem .3rem}
+.nav a:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+.nav a.active{background:linear-gradient(90deg,rgba(100,180,255,0.16),rgba(100,180,255,0.02));
+  color:var(--text);border-color:rgba(100,180,255,0.35);box-shadow:inset 2px 0 0 var(--accent)}
+/* filters grow to fill on tall screens; the ONLY region that scrolls internally on very short screens */
+.filters{margin-top:.1rem;display:flex;flex-direction:column;gap:.8rem;border-top:1px solid var(--border);padding-top:1.05rem;
+  flex:1 1 auto;min-height:0;overflow-y:auto}
+.ff{display:flex;flex-direction:column;gap:.32rem}
+.ff label{font-size:.64rem;letter-spacing:.16em;color:var(--sub);text-transform:uppercase}
+.selw{position:relative}
+.selw::after{content:"\25BE";position:absolute;right:.7rem;top:50%;transform:translateY(-50%);color:var(--accent);pointer-events:none;font-size:.7rem}
+select{width:100%;appearance:none;background:rgba(8,12,20,0.6);color:var(--text);border:1px solid var(--border2);
+  border-radius:8px;padding:.6rem 1.8rem .6rem .7rem;font-family:inherit;font-size:.84rem}
+select:focus{outline:none;border-color:var(--accent)}
+.freset{margin-top:.1rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
+  border-radius:8px;padding:.5rem;font-size:.76rem;letter-spacing:.08em}
+.freset:hover{border-color:var(--accent);color:var(--text)}
+.side-foot{flex:0 0 auto;font-size:.68rem;color:var(--dim);line-height:1.6;padding:.4rem}
+.hamb{display:none;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;width:2.5rem;height:2.5rem;font-size:1.15rem;flex:0 0 auto}
+
+/* ============ MAIN ============ */
+.main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
+  padding:clamp(1rem,1.5vw,2.1rem);gap:clamp(1rem,1.3vw,1.5rem);width:100%}
+.topbar{display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.tb-left{display:flex;align-items:center;gap:.9rem;min-width:0}
+.tb-titleblock{min-width:0}
+.ptitle{font-family:'Oxanium';font-weight:800;font-size:clamp(1.3rem,2vw,1.9rem);letter-spacing:.01em}
+.ptitle span{color:var(--accent3)}
+.psub{font-size:.82rem;color:var(--sub);margin-top:.15rem}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.synced{font-size:.72rem;color:var(--sub);display:flex;flex-direction:column;gap:.15rem;text-align:right}
+.synced .led{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;background:var(--pos);box-shadow:0 0 8px var(--pos);margin-right:.35rem}
+.synced b{color:var(--text);font-weight:400}
+
+/* ===== summary bar ===== */
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.7rem,1vw,1.1rem)}
+.sum-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;
+  display:flex;flex-direction:column;gap:.3rem;min-width:0}
+.sum-card .sc-k{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);display:flex;align-items:center;gap:.4rem}
+.sum-card .sc-v{font-family:'Oxanium';font-weight:800;font-size:clamp(1.5rem,2.4vw,2.1rem);font-variant-numeric:tabular-nums}
+.sum-card .sc-sub{font-size:.68rem;color:var(--dim)}
+.sum-card.attn{border-color:rgba(245,169,79,0.4);box-shadow:0 0 0 1px rgba(245,169,79,0.12)}
+.sum-card.attn .sc-v{color:var(--amber)}
+.sum-card.open .sc-v{color:var(--sub)}
+.sum-card.promo .sc-v{color:var(--pos)}
+.sc-dot{width:.55rem;height:.55rem;border-radius:50%;flex:0 0 auto}
+
+/* ===== desktop master-detail ===== */
+.cc-layout{display:grid;grid-template-columns:minmax(300px,30%) minmax(0,1fr);gap:clamp(1rem,1.4vw,1.5rem);align-items:start}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;min-width:0}
+.card-head{display:flex;align-items:center;gap:.6rem;padding:1rem 1.1rem .7rem}
+.card-head h2{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.card-head .ci{font-size:1.1rem}
+.card-head .tag{font-family:'Share Tech Mono';font-weight:400;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sub);border:1px solid var(--border2);border-radius:6px;padding:.12rem .45rem}
+
+/* arena list (left) */
+.arena-panel{position:sticky;top:1rem;display:flex;flex-direction:column;max-height:calc(100vh - 2rem)}
+.arena-search{margin:0 1.1rem .7rem;position:relative}
+.arena-search input{width:100%;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:9px;
+  color:var(--text);font-family:inherit;font-size:.82rem;padding:.55rem .7rem .55rem 2rem}
+.arena-search input:focus{outline:none;border-color:var(--accent)}
+.arena-search .si{position:absolute;left:.65rem;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.85rem}
+.arena-list{overflow-y:auto;padding:0 .7rem 1rem;display:flex;flex-direction:column;gap:.5rem;flex:1 1 auto;min-height:0}
+.arena-item{text-align:left;width:100%;background:rgba(8,12,20,0.45);border:1px solid var(--border2);border-radius:12px;
+  padding:.7rem .8rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .15s,box-shadow .15s;position:relative}
+.arena-item:hover{border-color:var(--accent2)}
+.arena-item.sel{border-color:var(--accent);box-shadow:inset 2px 0 0 var(--accent),0 0 0 1px rgba(100,180,255,0.25)}
+.arena-item.leading{border-color:rgba(245,169,79,0.55);box-shadow:0 0 14px rgba(245,169,79,0.18)}
+.arena-item.leading.sel{box-shadow:inset 2px 0 0 var(--amber),0 0 14px rgba(245,169,79,0.22)}
+.ai-top{display:flex;align-items:center;gap:.5rem}
+.ai-tk{font-family:'Oxanium';font-weight:800;font-size:.98rem;display:inline-flex;align-items:center;gap:.42rem}
+.ai-tk .dot{width:.72rem;height:.72rem;border-radius:50%;flex:0 0 auto}
+.ai-cnt{margin-left:auto;font-size:.66rem;color:var(--sub)}
+.ai-champ{font-size:.78rem;color:var(--text);display:flex;align-items:center;gap:.4rem;min-width:0}
+.ai-champ .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-champ.open{color:var(--sub);font-style:italic}
+.ai-status{display:flex;align-items:center;gap:.4rem;font-size:.7rem}
+.ai-status .st-ind{font-family:'Oxanium';font-weight:700;letter-spacing:.02em}
+.ai-status .st-ind.lead{color:var(--amber)}
+.ai-status .st-ind.hold{color:var(--pos)}
+.ai-status .st-ind.openslot{color:var(--sub)}
+.ai-status .delta{margin-left:auto;font-variant-numeric:tabular-nums;font-family:'Oxanium';font-weight:700}
+.delta.up{color:var(--amber)} .delta.down{color:var(--sub)}
+
+/* arena detail (right) */
+.detail-head{padding:1.1rem 1.2rem .4rem;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.detail-head .dh-tk{font-family:'Oxanium';font-weight:800;font-size:1.4rem;display:inline-flex;align-items:center;gap:.5rem}
+.detail-head .dh-tk .dot{width:1rem;height:1rem;border-radius:50%}
+.detail-head .dh-arena{font-size:.78rem;color:var(--sub)}
+.detail-head .dh-badge{margin-left:auto;font-family:'Oxanium';font-weight:700;font-size:.7rem;letter-spacing:.04em;
+  padding:.28rem .6rem;border-radius:100px}
+.dh-badge.lead{color:var(--amber);background:rgba(245,169,79,0.12);border:1px solid rgba(245,169,79,0.4)}
+.dh-badge.hold{color:var(--pos);background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.35)}
+.dh-badge.openslot{color:var(--sub);background:rgba(136,146,164,0.12);border:1px solid var(--border2)}
+.cc-chart-wrap{position:relative;height:clamp(230px,26vh,340px);width:100%;padding:.4rem 1.2rem 0}
+.clegend{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;padding:.7rem 1.2rem 0;font-size:.72rem;color:var(--sub)}
+.clegend span{display:inline-flex;align-items:center;gap:.4rem;min-width:0}
+.clegend i{width:1.1rem;height:0;border-top-width:2.6px;border-top-style:solid;flex:0 0 auto}
+.clegend i.dash{border-top-style:dashed}
+.clegend .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:12rem}
+
+/* metrics table */
+.cc-table-wrap{overflow-x:auto;padding:1rem 1.2rem 1.3rem}
+table.cc{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap}
+table.cc th{font-family:'Oxanium';font-weight:700;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sub);text-align:right;padding:.5rem .55rem;border-bottom:1px solid var(--border2);position:sticky;top:0}
+table.cc th.l,table.cc td.l{text-align:left}
+table.cc td{padding:.6rem .55rem;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;text-align:right}
+table.cc tr.champ td{background:rgba(245,185,66,0.06)}
+table.cc tr.champ td.l:first-child{box-shadow:inset 3px 0 0 #f5b942}
+table.cc tr.unreliable td{color:var(--gray)}
+table.cc tr.unreliable .botname{opacity:.85}
+.role-ic{font-size:.95rem}
+.botname{display:inline-flex;align-items:center;gap:.45rem;font-family:'Oxanium';font-weight:600;color:var(--text)}
+tr.unreliable .botname{color:var(--gray)}
+.badge{font-family:'Oxanium';font-weight:700;font-size:.56rem;letter-spacing:.06em;padding:.1rem .38rem;border-radius:5px;flex:0 0 auto}
+.badge.live{color:#06101f;background:var(--live)}
+.badge.demo{color:#06101f;background:var(--demo)}
+.badge.paper{color:#06101f;background:var(--paper)}
+.mtc.win{color:var(--pos);font-weight:700}
+.mtc.win::after{content:" \2605";color:var(--pos);font-size:.7em}
+.mtc.dd0{color:var(--sub)} .mtc.dd1{color:var(--amber)} .mtc.dd2{color:var(--neg)}
+.mtc.null{color:var(--gray)}
+.mtc.pos{color:var(--pos)} .mtc.neg{color:var(--neg)}
+.alertdot{display:inline-block;width:.62rem;height:.62rem;border-radius:50%;vertical-align:middle}
+.a0{background:transparent;border:1px solid var(--border2)} .a1{background:var(--accent)}
+.a2{background:var(--amber)} .a3{background:var(--orange)} .a4{background:var(--neg)}
+.reclab{font-family:'Oxanium';font-weight:700;font-size:.62rem;letter-spacing:.03em;padding:.18rem .5rem;border-radius:100px;border:1px solid var(--border2);color:var(--sub)}
+.reclab.promote{color:var(--pos);border-color:rgba(0,200,150,0.4);background:rgba(0,200,150,0.08)}
+.reclab.monitor{color:var(--accent);border-color:rgba(100,180,255,0.4);background:rgba(100,180,255,0.08)}
+.reclab.hold{color:var(--amber);border-color:rgba(245,169,79,0.4);background:rgba(245,169,79,0.08)}
+.reclab.demote{color:var(--neg);border-color:rgba(232,65,66,0.4);background:rgba(232,65,66,0.08)}
+.unrel-star{color:var(--amber);cursor:help}
+
+.empty{padding:2.5rem 1.2rem;text-align:center;color:var(--sub);font-size:.86rem}
+
+/* ===== Mobile components (ticker selector + arena cards) ===== */
+.cc-mobile{display:none}
+.mb-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:1rem}
+.mb-summary .sum-card{padding:.7rem .8rem}
+.mb-summary .sum-card .sc-v{font-size:1.4rem}
+.ticker-select{display:flex;flex-direction:column;gap:.9rem}
+.ts-head{font-family:'Oxanium';font-weight:700;font-size:1rem}
+.ts-sub{font-size:.78rem;color:var(--sub);margin-top:-.5rem}
+.ts-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.ts-chip{display:inline-flex;align-items:center;gap:.4rem;font-family:'Oxanium';font-weight:700;font-size:.82rem;
+  padding:.5rem .8rem;border-radius:100px;border:1px solid var(--border2);background:rgba(8,12,20,0.5);color:var(--text)}
+.ts-chip .dot{width:.7rem;height:.7rem;border-radius:50%;flex:0 0 auto}
+.ts-chip .cnt{color:var(--sub);font-size:.72rem}
+.ts-chip.sel{border-color:var(--accent);background:rgba(100,180,255,0.16);box-shadow:inset 0 0 0 1px var(--accent)}
+.ts-chip.lead{border-color:rgba(245,169,79,0.55);box-shadow:0 0 10px rgba(245,169,79,0.2)}
+.ts-chip.lead.sel{border-color:var(--amber)}
+.ts-chip.all{border-style:dashed}
+.cards-bar{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap}
+.back-btn{font-family:'Oxanium';font-weight:700;font-size:.8rem;color:var(--accent);background:rgba(100,180,255,0.1);
+  border:1px solid rgba(100,180,255,0.35);border-radius:8px;padding:.45rem .8rem}
+.arena-cards{display:flex;flex-direction:column;gap:1rem}
+.acard{background:rgba(8,12,20,0.5);border:1px solid var(--border2);border-radius:14px;padding:1rem .9rem;display:flex;flex-direction:column;gap:.8rem}
+.acard.leading{border-color:rgba(245,169,79,0.5);box-shadow:0 0 14px rgba(245,169,79,0.15)}
+.ac-head{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.ac-head .tk{font-family:'Oxanium';font-weight:800;font-size:1.1rem;display:inline-flex;align-items:center;gap:.42rem}
+.ac-head .tk .dot{width:.8rem;height:.8rem;border-radius:50%}
+.ac-head .st{margin-left:auto;font-family:'Oxanium';font-weight:700;font-size:.66rem;padding:.22rem .5rem;border-radius:100px}
+.ac-champ{background:rgba(245,185,66,0.07);border:1px solid rgba(245,185,66,0.28);border-radius:11px;padding:.7rem .8rem;display:flex;flex-direction:column;gap:.5rem}
+.ac-champ.openslot{background:rgba(136,146,164,0.08);border-color:var(--border2)}
+.ac-crown{display:flex;align-items:center;gap:.5rem}
+.ac-crown .role-ic{font-size:1.05rem}
+.ac-crown .nm{font-family:'Oxanium';font-weight:700;font-size:.95rem}
+.ac-chart-wrap{position:relative;height:170px;width:100%}
+.ac-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem}
+.ac-metrics>div{display:flex;flex-direction:column;gap:.12rem}
+.ac-metrics .k{font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)}
+.ac-metrics .v{font-family:'Oxanium';font-weight:700;font-size:.86rem;font-variant-numeric:tabular-nums}
+.ac-metrics .v.pos{color:var(--pos)} .ac-metrics .v.neg{color:var(--neg)} .ac-metrics .v.null{color:var(--gray)}
+.ac-sub{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:.2rem}
+.chcard{background:rgba(8,12,20,0.4);border:1px solid var(--border2);border-radius:11px;padding:.7rem .8rem;cursor:pointer}
+.chcard-top{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.chcard-top .role-ic{font-size:.9rem}
+.chcard-top .nm{font-family:'Oxanium';font-weight:600;font-size:.85rem}
+.chcard-top .ret{margin-left:auto;font-family:'Oxanium';font-weight:800;font-variant-numeric:tabular-nums}
+.chcard-top .ret.pos{color:var(--pos)} .chcard-top .ret.neg{color:var(--neg)}
+.chcard-top .exp{color:var(--accent);font-weight:700;font-size:1rem;margin-left:.3rem}
+.chcard-more{display:none;margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.chcard.open .chcard-more{display:block}
+
+/* ===== responsive ===== */
+.scrim{display:none}
+/* desktop/laptop: show the collapse toggle at any width above the mobile drawer breakpoint (incl. high-DPI 2880px+/4K laptops) */
+@media(min-width:1025px){.side-toggle{display:grid}}
+@media(max-width:1280px){.cc-layout{grid-template-columns:minmax(270px,34%) minmax(0,1fr)}}
+@media(max-width:1024px){
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-105%);transition:transform .25s;width:min(82vw,330px);flex-basis:auto}
+  .sidebar.open{transform:translateX(0)}
+  .hamb{display:grid;place-items:center}
+  .scrim.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:55}
+  .shell.sb-collapsed .sidebar{width:min(82vw,330px);flex-basis:auto;padding:1.4rem 1.05rem;align-items:stretch}
+  .shell.sb-collapsed .side-top{flex-direction:row;gap:.55rem}
+  .shell.sb-collapsed .brand-txt,.shell.sb-collapsed .nav a .lbl,.shell.sb-collapsed .nav a .soon-tag,
+  .shell.sb-collapsed .nav-label,.shell.sb-collapsed .filters,.shell.sb-collapsed .side-foot{display:revert}
+  .shell.sb-collapsed .nav a{justify-content:flex-start;padding:.62rem .7rem}
+  .cc-layout{grid-template-columns:1fr}
+  .arena-panel{position:static;max-height:none}
+  .arena-list{max-height:44vh}
+}
+@media(max-width:768px){
+  .cc-desktop{display:none}
+  .cc-mobile{display:block}
+  .sum-grid{grid-template-columns:repeat(2,1fr)}
+  .tb-right{width:100%}
+}
+@media(max-width:420px){
+  .ac-metrics{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:359px){
+  .mb-summary{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+<div class="shell" id="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-top">
+      <div class="brand" id="dpBrand" title="Back to all dashboards">
+        <div class="brand-mark">A</div>
+        <div class="brand-txt"><div class="brand-name">AUTO<span>BOTS</span></div><div class="brand-sub">NEXUS</div></div>
+      </div>
+      <button class="side-toggle" id="sideToggle" aria-label="Collapse sidebar" title="Collapse sidebar">&#171;</button>
+    </div>
+    <div class="side-sec">
+      <div class="nav-label">Dashboards</div>
+      <nav class="nav">
+        <a href="#" data-dash="pulse"><span class="ico">&#9889;</span> <span class="lbl">Daily Pulse</span></a>
+        <a href="#" data-dash="trading"><span class="ico">&#128202;</span> <span class="lbl">Trading Activity</span></a>
+        <a class="active" href="#" data-dash="champion"><span class="ico">&#127942;</span> <span class="lbl">Champion vs Challenger</span></a>
+        <a href="#" class="soon" data-dash="health"><span class="ico">&#128293;</span> <span class="lbl">System Health</span><span class="soon-tag">SOON</span></a>
+      </nav>
+    </div>
+    <div class="filters">
+      <div class="nav-label" style="padding-left:.35rem">Filters</div>
+      <div class="ff"><label for="fTicker">Ticker</label>
+        <div class="selw"><select id="fTicker"><option value="all">All tickers</option></select></div></div>
+      <div class="ff"><label for="fEnv">Environment</label>
+        <div class="selw"><select id="fEnv">
+          <option value="all">All environments</option><option value="live">Live</option>
+          <option value="demo">Demo</option><option value="paper">Paper</option>
+        </select></div></div>
+      <div class="ff"><label for="fRange">Comparison period</label>
+        <div class="selw"><select id="fRange"></select></div></div>
+      <button class="freset" id="fReset">Reset filters</button>
+    </div>
+    <button class="side-back" id="sideBack" title="Back to all dashboards"><span class="ico">&#8592;</span><span class="lbl">All dashboards</span></button>
+    <div class="side-foot">Champion is the live slot holder per ticker. Challengers are shadow demo/paper bots competing for promotion. PnL for demo/paper is slippage-adjusted.</div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <button class="hamb" id="hamb" aria-label="Menu">&#9776;</button>
+        <div class="tb-titleblock">
+          <div class="ptitle">Champion <span>vs Challenger</span></div>
+          <div class="psub" id="pSub">Past 7 days - Jun 28, 2026</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="synced"><span><span class="led"></span>Last synced</span><b id="syncedTime">Jun 28, 2026 &middot; 8:30 AM ET</b></div>
+      </div>
+    </div>
+
+    <!-- ===== DESKTOP ===== -->
+    <div class="cc-desktop">
+      <div class="sum-grid" id="sumGrid"></div>
+
+      <div class="cc-layout">
+        <!-- LEFT: arena list -->
+        <section class="card arena-panel">
+          <div class="card-head"><span class="ci">&#127937;</span><h2>Arenas <span class="tag" id="arenaCount">0</span></h2></div>
+          <div class="arena-search"><span class="si">&#128269;</span><input id="arenaSearch" type="text" placeholder="Search ticker or bot..." autocomplete="off" /></div>
+          <div class="arena-list" id="arenaList"></div>
+        </section>
+
+        <!-- RIGHT: arena detail -->
+        <section class="card" id="detailCard">
+          <div class="detail-head" id="detailHead"></div>
+          <div class="cc-chart-wrap"><canvas id="ccChart"></canvas></div>
+          <div class="clegend" id="ccLegend"></div>
+          <div class="cc-table-wrap"><table class="cc" id="ccTable"></table></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ===== MOBILE ===== -->
+    <div class="cc-mobile">
+      <div class="mb-summary" id="mbSummary"></div>
+      <div id="tickerSelect" class="ticker-select"></div>
+      <div id="arenaCards" class="arena-cards" style="display:none"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   Champion vs Challenger dashboard
+   Data: real strategy_comparison JSON (champion_challenger section),
+   extracted compact for the two reports that carry the section.
+   ============================================================ */
+const DATA = {"order":["2026-06-28","2026-06-21"],"reports":{"2026-06-28":{"label":"Latest","date":"Jun 28, 2026","window":"Past 7 days","synced":"Jun 28, 2026 · 8:30 AM ET","period_start":"2026-06-21","period_end":"2026-06-28","tickers":[{"ticker":"BTC","has_champion":true,"live_slot_status":"filled","champion_challenger_delta":null,"champion":{"bot_name":"btc-biex-4h","timeframe":"4H","trading_mode":"live","bot_role":"champion","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":1,"total_pnl_usd":38.28,"recovery_factor":null,"return_pct":3.83,"expectancy_pct":67.93,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":307.73,"badge":{"label":"LIVE","color":"green"}},"challengers":[{"bot_name":"btc-surs-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":2,"total_pnl_usd":178.73,"recovery_factor":null,"return_pct":17.87,"expectancy_pct":89.36,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":566.9,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"btc-1ms-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-113.32,"recovery_factor":null,"return_pct":-11.33,"expectancy_pct":-56.66,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":70.43,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"btc-smcr-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":3,"total_pnl_usd":-160.06,"recovery_factor":null,"return_pct":-16.01,"expectancy_pct":-53.35,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"btc-atb-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-174.19,"recovery_factor":null,"return_pct":-17.42,"expectancy_pct":-87.09,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":45.49,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"btc-acti-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":37.61,"win_rate_pct":25.0,"total_trades":4,"total_pnl_usd":-281.37,"recovery_factor":null,"return_pct":-28.14,"expectancy_pct":-35.74,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"ETH","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"eth-srm-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.8,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":73.31,"recovery_factor":null,"return_pct":7.33,"expectancy_pct":36.66,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-bsb-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.65,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":44.46,"recovery_factor":null,"return_pct":4.45,"expectancy_pct":14.82,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-tsmi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.58,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":41.99,"recovery_factor":null,"return_pct":4.2,"expectancy_pct":14.0,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":67.59,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-iti-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":12.49,"recovery_factor":null,"return_pct":1.25,"expectancy_pct":4.16,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-atb-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":36.01,"win_rate_pct":25.0,"total_trades":4,"total_pnl_usd":-6.49,"recovery_factor":null,"return_pct":-0.65,"expectancy_pct":-1.62,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":199.34,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-mbc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.59,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-26.58,"recovery_factor":null,"return_pct":-2.66,"expectancy_pct":-13.29,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-ebts-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":24.4,"win_rate_pct":33.33,"total_trades":3,"total_pnl_usd":-28.99,"recovery_factor":null,"return_pct":-2.9,"expectancy_pct":-9.66,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-otmt-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":23.9,"win_rate_pct":33.33,"total_trades":3,"total_pnl_usd":-30.52,"recovery_factor":null,"return_pct":-3.05,"expectancy_pct":-10.17,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-faim-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":4,"total_pnl_usd":-38.83,"recovery_factor":null,"return_pct":-3.88,"expectancy_pct":-9.71,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-emfi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.61,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-66.26,"recovery_factor":null,"return_pct":-6.63,"expectancy_pct":-33.13,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":65.02,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-fgc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.61,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-66.26,"recovery_factor":null,"return_pct":-6.63,"expectancy_pct":-33.13,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":65.02,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-atb-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-66.74,"recovery_factor":null,"return_pct":-6.67,"expectancy_pct":-33.37,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":360.12,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"eth-mac-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-70.96,"recovery_factor":null,"return_pct":-7.1,"expectancy_pct":-35.48,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-mtf-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.8,"win_rate_pct":33.33,"total_trades":3,"total_pnl_usd":-87.39,"recovery_factor":null,"return_pct":-8.74,"expectancy_pct":-29.13,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":70.13,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"SOL","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"sol-xg-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":280.64,"recovery_factor":null,"return_pct":28.06,"expectancy_pct":93.55,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":256.14,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"sol-mtf-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":2,"total_pnl_usd":164.12,"recovery_factor":null,"return_pct":16.41,"expectancy_pct":82.06,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":246.88,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"sol-xg-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":125.63,"recovery_factor":null,"return_pct":12.56,"expectancy_pct":41.88,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":61.63,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"sol-etmi-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":29.22,"win_rate_pct":50.0,"total_trades":6,"total_pnl_usd":-22.34,"recovery_factor":null,"return_pct":-2.23,"expectancy_pct":-3.72,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"sol-atb-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":36.11,"win_rate_pct":25.0,"total_trades":4,"total_pnl_usd":-156.78,"recovery_factor":null,"return_pct":-15.68,"expectancy_pct":-39.2,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":198.27,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"ADA","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"ada-iti-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":2,"total_pnl_usd":77.56,"recovery_factor":null,"return_pct":7.76,"expectancy_pct":99.79,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":43.89,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"ada-biex-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.58,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":23.34,"recovery_factor":null,"return_pct":2.33,"expectancy_pct":11.67,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":23.34,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"ada-tsmi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.46,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-17.08,"recovery_factor":null,"return_pct":-1.71,"expectancy_pct":-8.54,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"BNB","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"bnb-iti-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":2,"total_pnl_usd":42.39,"recovery_factor":null,"return_pct":4.24,"expectancy_pct":21.19,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"bnb-etmi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-238.69,"recovery_factor":null,"return_pct":-23.87,"expectancy_pct":-119.35,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"DOGE","has_champion":true,"live_slot_status":"filled","champion_challenger_delta":null,"champion":{"bot_name":"doge-15sc-2h","timeframe":"2H","trading_mode":"live","bot_role":"champion","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":1,"total_pnl_usd":17.87,"recovery_factor":null,"return_pct":1.79,"expectancy_pct":67.02,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":391.68,"badge":{"label":"LIVE","color":"green"}},"challengers":[{"bot_name":"doge-bmrm-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":18.47,"recovery_factor":null,"return_pct":1.85,"expectancy_pct":6.16,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":221.35,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-5-sc-2h","timeframe":"2H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":6.53,"recovery_factor":null,"return_pct":0.65,"expectancy_pct":19.63,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":294.67,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"doge-8wrm-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":0.75,"recovery_factor":null,"return_pct":0.07,"expectancy_pct":0.37,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":235.13,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-svs-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":0.23,"recovery_factor":null,"return_pct":0.02,"expectancy_pct":0.11,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":5.35,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-scs-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":4,"total_pnl_usd":-48.54,"recovery_factor":null,"return_pct":-4.85,"expectancy_pct":-12.14,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":231.17,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-pat-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-101.62,"recovery_factor":null,"return_pct":-10.16,"expectancy_pct":-50.81,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":247.76,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"DOT","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"dot-wete-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":4,"total_pnl_usd":186.93,"recovery_factor":null,"return_pct":18.69,"expectancy_pct":46.73,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":277.02,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"dot-svs-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-107.11,"recovery_factor":null,"return_pct":-10.71,"expectancy_pct":-53.55,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":43.6,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"AVAX","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"avax-15sc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.44,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-22.66,"recovery_factor":null,"return_pct":-2.27,"expectancy_pct":-11.33,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"avax-wete-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-107.44,"recovery_factor":null,"return_pct":-10.74,"expectancy_pct":-53.72,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"avax-5-sc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-108.3,"recovery_factor":null,"return_pct":-10.83,"expectancy_pct":-54.15,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":31.71,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"WIF","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"wif-bmrm-1h","timeframe":"1H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":0.8,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":10,"total_pnl_usd":-525.14,"recovery_factor":null,"return_pct":-52.51,"expectancy_pct":-12.4,"statistically_reliable":true,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":1,"alert_reasons":["realized slippage -0.2412% exceeds 150% of tier baseline 0.1200% over 26 legs"],"recommendation_code":"monitor","recommendation_label":"Monitor","high_water_mark":76.88,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"TRUMP","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"trump-atb-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":22.7,"win_rate_pct":25.0,"total_trades":8,"total_pnl_usd":-133.58,"recovery_factor":null,"return_pct":-13.36,"expectancy_pct":-16.7,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":120.66,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"trump-atb-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-246.61,"recovery_factor":null,"return_pct":-24.66,"expectancy_pct":-123.31,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"SUI","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"sui-mlg-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":120.73,"recovery_factor":null,"return_pct":12.07,"expectancy_pct":40.24,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":120.73,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"sui-surs-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.41,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":4.78,"recovery_factor":null,"return_pct":0.48,"expectancy_pct":2.39,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":4.78,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"XRP","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"xrp-pps-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-58.34,"recovery_factor":null,"return_pct":-5.83,"expectancy_pct":-29.17,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"AERO","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"aero-etmi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.11,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":197.58,"recovery_factor":null,"return_pct":19.76,"expectancy_pct":65.86,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":197.58,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"TRX","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"trx-ebts-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":8.84,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-27.31,"recovery_factor":null,"return_pct":-2.73,"expectancy_pct":45.71,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"trx-ca-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":13.66,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":-50.04,"recovery_factor":null,"return_pct":-5.0,"expectancy_pct":-16.68,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}}]}]},"2026-06-21":{"label":"Previous week","date":"Jun 21, 2026","window":"Past 7 days","synced":"Jun 21, 2026 · 8:30 AM ET","period_start":"2026-06-14","period_end":"2026-06-21","tickers":[{"ticker":"BTC","has_champion":true,"live_slot_status":"filled","champion_challenger_delta":null,"champion":{"bot_name":"btc-biex-4h","timeframe":"4H","trading_mode":"live","bot_role":"champion","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":0,"total_pnl_usd":0.0,"recovery_factor":null,"return_pct":0.0,"expectancy_pct":0.0,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":269.45,"badge":{"label":"LIVE","color":"green"}},"challengers":[{"bot_name":"btc-surs-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":1.35,"recovery_factor":null,"return_pct":0.13,"expectancy_pct":0.67,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":440.03,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"btc-1ms-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-113.32,"recovery_factor":null,"return_pct":-11.33,"expectancy_pct":-56.66,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":70.43,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"btc-smcr-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":3,"total_pnl_usd":-160.06,"recovery_factor":null,"return_pct":-16.01,"expectancy_pct":-53.35,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"ETH","has_champion":true,"live_slot_status":"filled","champion_challenger_delta":null,"champion":{"bot_name":"eth-atb-2h","timeframe":"2H","trading_mode":"live","bot_role":"champion","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":0,"total_pnl_usd":0.0,"recovery_factor":null,"return_pct":0.0,"expectancy_pct":0.0,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":199.34,"badge":{"label":"LIVE","color":"green"}},"challengers":[{"bot_name":"eth-atb-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":9.06,"win_rate_pct":66.67,"total_trades":6,"total_pnl_usd":360.12,"recovery_factor":null,"return_pct":36.01,"expectancy_pct":60.02,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":360.12,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"eth-iti-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":12.49,"recovery_factor":null,"return_pct":1.25,"expectancy_pct":4.16,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-mbc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.59,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-26.58,"recovery_factor":null,"return_pct":-2.66,"expectancy_pct":-13.29,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-ebts-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.23,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-35.77,"recovery_factor":null,"return_pct":-3.58,"expectancy_pct":-17.89,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-faim-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":4,"total_pnl_usd":-38.83,"recovery_factor":null,"return_pct":-3.88,"expectancy_pct":-9.71,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-mtf-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.8,"win_rate_pct":33.33,"total_trades":3,"total_pnl_usd":-87.39,"recovery_factor":null,"return_pct":-8.74,"expectancy_pct":-29.13,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":70.13,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-tsmi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":11.59,"win_rate_pct":33.33,"total_trades":3,"total_pnl_usd":-88.69,"recovery_factor":null,"return_pct":-8.87,"expectancy_pct":-29.56,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":67.59,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-srm-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-113.46,"recovery_factor":null,"return_pct":-11.35,"expectancy_pct":-56.73,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-emfi-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-115.99,"recovery_factor":null,"return_pct":-11.6,"expectancy_pct":-57.99,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":65.02,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-fgc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-115.99,"recovery_factor":null,"return_pct":-11.6,"expectancy_pct":-57.99,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":65.02,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"eth-otmt-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-116.3,"recovery_factor":null,"return_pct":-11.63,"expectancy_pct":-58.15,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"SOL","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"sol-xg-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":135.56,"recovery_factor":null,"return_pct":13.56,"expectancy_pct":45.19,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":53.59,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"sol-xg-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":125.63,"recovery_factor":null,"return_pct":12.56,"expectancy_pct":41.88,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":61.63,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"ADA","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"ada-iti-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":2,"total_pnl_usd":77.56,"recovery_factor":null,"return_pct":7.76,"expectancy_pct":99.79,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":43.89,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"ada-biex-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.58,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":23.34,"recovery_factor":null,"return_pct":2.33,"expectancy_pct":11.67,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":23.34,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"BNB","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"bnb-iti-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":2,"total_pnl_usd":42.39,"recovery_factor":null,"return_pct":4.24,"expectancy_pct":21.19,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"DOGE","has_champion":true,"live_slot_status":"filled","champion_challenger_delta":null,"champion":{"bot_name":"doge-15sc-2h","timeframe":"2H","trading_mode":"live","bot_role":"champion","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":10.57,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-98.21,"recovery_factor":null,"return_pct":-9.82,"expectancy_pct":-34.83,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":391.68,"badge":{"label":"LIVE","color":"green"}},"challengers":[{"bot_name":"doge-8wrm-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":158.09,"recovery_factor":null,"return_pct":15.81,"expectancy_pct":52.7,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":235.13,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-bmrm-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":18.47,"recovery_factor":null,"return_pct":1.85,"expectancy_pct":6.16,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":221.35,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-5-sc-2h","timeframe":"2H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":66.67,"total_trades":3,"total_pnl_usd":6.53,"recovery_factor":null,"return_pct":0.65,"expectancy_pct":19.63,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":294.67,"badge":{"label":"DEMO","color":"blue"}},{"bot_name":"doge-svs-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":0.23,"recovery_factor":null,"return_pct":0.02,"expectancy_pct":0.11,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":5.35,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-scs-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":50.0,"total_trades":4,"total_pnl_usd":-48.54,"recovery_factor":null,"return_pct":-4.85,"expectancy_pct":-12.14,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":231.17,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"doge-pat-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-101.62,"recovery_factor":null,"return_pct":-10.16,"expectancy_pct":-50.81,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":247.76,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"DOT","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"dot-wete-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":4,"total_pnl_usd":186.93,"recovery_factor":null,"return_pct":18.69,"expectancy_pct":46.73,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":277.02,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"AVAX","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"avax-15sc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":5.44,"win_rate_pct":50.0,"total_trades":2,"total_pnl_usd":-22.66,"recovery_factor":null,"return_pct":-2.27,"expectancy_pct":-11.33,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"avax-wete-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-107.44,"recovery_factor":null,"return_pct":-10.74,"expectancy_pct":-53.72,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"avax-5-sc-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":0.0,"total_trades":2,"total_pnl_usd":-108.3,"recovery_factor":null,"return_pct":-10.83,"expectancy_pct":-54.15,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":31.71,"badge":{"label":"PAPER","color":"orange"}}]},{"ticker":"TRUMP","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"trump-atb-2h","timeframe":"2H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":22.7,"win_rate_pct":25.0,"total_trades":8,"total_pnl_usd":-133.58,"recovery_factor":null,"return_pct":-13.36,"expectancy_pct":-16.7,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":120.66,"badge":{"label":"PAPER","color":"orange"}},{"bot_name":"trump-atb-4h","timeframe":"4H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":25.0,"total_trades":4,"total_pnl_usd":-245.77,"recovery_factor":null,"return_pct":-24.58,"expectancy_pct":-34.31,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":1,"alert_reasons":["realized slippage -0.2238% exceeds 150% of tier baseline 0.1200% over 3 legs"],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":0.0,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"WIF","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"wif-bmrm-1h","timeframe":"1H","trading_mode":"demo","bot_role":"shadow_demo","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":44.44,"total_trades":9,"total_pnl_usd":-313.36,"recovery_factor":null,"return_pct":-31.34,"expectancy_pct":-17.69,"statistically_reliable":false,"pnl_source":"real","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":76.88,"badge":{"label":"DEMO","color":"blue"}}]},{"ticker":"SUI","has_champion":false,"live_slot_status":"open","champion_challenger_delta":null,"champion":null,"challengers":[{"bot_name":"sui-mlg-4h","timeframe":"4H","trading_mode":"paper","bot_role":"shadow_paper","profit_factor":null,"sharpe_ratio":null,"max_drawdown_pct":0.0,"win_rate_pct":100.0,"total_trades":3,"total_pnl_usd":120.73,"recovery_factor":null,"return_pct":12.07,"expectancy_pct":40.24,"statistically_reliable":false,"pnl_source":"adjusted","months_to_statistical_relevance":null,"alert_level":0,"alert_reasons":[],"recommendation_code":"insufficient_data","recommendation_label":"Insufficient data","high_water_mark":120.73,"badge":{"label":"PAPER","color":"orange"}}]}]}}};
+
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+Chart.defaults.color='#9fb0c8';Chart.defaults.font.family="'Share Tech Mono', monospace";
+
+/* ---- ticker colors (site palette + supplementary for tickers without a brand token) ---- */
+const TC={BTC:'#f7931a',ETH:'#627eea',SOL:'#9945ff',BNB:'#f3ba2f',ADA:'#3cc8c8',DOGE:'#ba8f1a',
+  DOT:'#e6007a',AVAX:'#e84142',LINK:'#2a5ada',XRP:'#00aae4',
+  WIF:'#c5a3ff',TRUMP:'#e8b923',SUI:'#4da2ff',AERO:'#1a73ff',TRX:'#ff3b3b',
+  SEI:'#9e1f19',SUS:'#00c896',SUSHI:'#fa52a0',INJ:'#00c1d4'};
+function tc(t){return TC[t]||'#7fa8d0';}
+/* challenger line palette (champion always uses its ticker color, solid) */
+const CH_COLORS=['#a78bfa','#4ecca3','#f5a94f','#ff8c42','#64b4ff','#f739f7','#3cc8c8','#e6007a','#00aae4','#ba8f1a'];
+
+/* ---- deterministic seed (curves are synthesized: the comparison JSON has no per-period equity) ---- */
+function seed(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return ((h>>>0)%100000)/100000;}
+/* build an N-point cumulative-return path that lands exactly on return_pct */
+function curve(bot,n){
+  const end=Number(bot.return_pct)||0;
+  const s=seed(bot.bot_name);
+  const pts=[0];
+  for(let i=1;i<n;i++){
+    const base=end*(i/(n-1));
+    const wobble=(seed(bot.bot_name+'_'+i)-0.5)*Math.abs(end||4)*0.55*(1-i/n);
+    pts.push(base+wobble);
+  }
+  pts[n-1]=end;              // anchor endpoint to the real number
+  return pts;
+}
+
+/* ---- helpers ---- */
+const N_PTS=8;
+const WEEK_LABELS=['','','','','','','',''].map((_,i)=>'D'+(i+1));
+function fmtPct(v){return v===null||v===undefined||!isFinite(v)?'-':(v>=0?'+':'')+Number(v).toFixed(1)+'%';}
+function fmtUsd(v){if(v===null||v===undefined||!isFinite(v))return '-';const s=v<0?'-':'';return s+'$'+Math.abs(Number(v)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtNum(v,d){return v===null||v===undefined||!isFinite(v)?null:Number(v).toFixed(d===undefined?2:d);}
+function envOf(bot){return (bot.trading_mode||'').toLowerCase();}
+function roleIcon(isChamp){return isChamp?'<span class="role-ic" title="Champion">&#128081;</span>':'<span class="role-ic" title="Challenger">&#9876;&#65039;</span>';}
+function badgeHtml(bot){const c=(bot.badge&&bot.badge.color)||'gray';const l=(bot.badge&&bot.badge.label)||envOf(bot).toUpperCase();
+  const cls=l==='LIVE'?'live':l==='DEMO'?'demo':'paper';return `<span class="badge ${cls}">${l}</span>`;}
+/* is the arena's best challenger beating the champion? (return_pct is the populated comparator) */
+function bestChallenger(g){if(!g.challengers.length)return null;return g.challengers.reduce((a,b)=>((Number(b.return_pct)||-1e9)>(Number(a.return_pct)||-1e9)?b:a));}
+function arenaStatus(g){
+  if(!g.has_champion||!g.champion)return {code:'open',label:'Slot open',cls:'openslot'};
+  const bc=bestChallenger(g);
+  if(bc&&Number(bc.return_pct)>Number(g.champion.return_pct)){
+    const d=Number(bc.return_pct)-Number(g.champion.return_pct);
+    return {code:'lead',label:'Challenger leading',cls:'lead',delta:d};
+  }
+  return {code:'hold',label:'Champion holds slot',cls:'hold',
+    delta:g.champion&&bc?Number(g.champion.return_pct)-Number(bc.return_pct):null};
+}
+const PROMOTE_CODES=['promote','promote_challenger','ready_to_promote','graduate'];
+function recClass(code){code=code||'';if(PROMOTE_CODES.includes(code))return 'promote';
+  if(code==='monitor')return 'monitor';if(code.startsWith('hold'))return 'hold';
+  if(code.includes('demote')||code.includes('retire')||code.includes('stop'))return 'demote';return '';}
+function ddClass(v){if(v===null||v===undefined)return 'null';v=Number(v);return v<10?'dd0':v<25?'dd1':'dd2';}
+const ALERT_LABEL={0:'No alerts',1:'Info',2:'Warning',3:'Paused',4:'Stopped'};
+
+/* ---- state ---- */
+const state={rk:DATA.order[0],ticker:'all',env:'all',sel:null,search:'',
+  mobileView:'select',mobileSel:null};
+let ccChart=null, acCharts=[];
+
+function rep(){return DATA.reports[state.rk];}
+/* arenas after ticker+env filters */
+function arenas(){
+  let list=rep().tickers.slice();
+  if(state.ticker!=='all')list=list.filter(g=>g.ticker===state.ticker);
+  if(state.env!=='all')list=list.filter(g=>{
+    const bots=(g.champion?[g.champion]:[]).concat(g.challengers);
+    return bots.some(b=>envOf(b)===state.env);
+  });
+  return list;
+}
+
+/* ================= SUMMARY BAR ================= */
+function computeSummary(){
+  const list=rep().tickers;
+  let total=list.length,leading=0,open=0,promo=0;
+  list.forEach(g=>{
+    const st=arenaStatus(g);
+    if(st.code==='lead')leading++;
+    if(st.code==='open')open++;
+    (g.challengers||[]).forEach(c=>{if(PROMOTE_CODES.includes(c.recommendation_code))promo++;});
+  });
+  return {total,leading,open,promo};
+}
+function renderSummary(){
+  const s=computeSummary();
+  const cards=[
+    {k:'Total arenas',v:s.total,sub:'tickers tracked',cls:''},
+    {k:'Challenger leading',v:s.leading,sub:'need attention',cls:'attn',dot:'var(--amber)'},
+    {k:'Open slots',v:s.open,sub:'no live champion',cls:'open'},
+    {k:'Approaching promotion',v:s.promo,sub:'challengers ready',cls:'promo'},
+  ];
+  const html=cards.map(c=>`<div class="sum-card ${c.cls}">
+    <div class="sc-k">${c.dot?`<span class="sc-dot" style="background:${c.dot}"></span>`:''}${c.k}</div>
+    <div class="sc-v">${c.v}</div><div class="sc-sub">${c.sub}</div></div>`).join('');
+  $('#sumGrid').innerHTML=html;
+  $('#mbSummary').innerHTML=html;
+}
+
+/* ================= ARENA LIST (desktop left) ================= */
+function renderList(){
+  const list=arenas().filter(g=>{
+    if(!state.search)return true;
+    const q=state.search.toLowerCase();
+    if(g.ticker.toLowerCase().includes(q))return true;
+    const bots=(g.champion?[g.champion]:[]).concat(g.challengers);
+    return bots.some(b=>b.bot_name.toLowerCase().includes(q));
+  });
+  $('#arenaCount').textContent=list.length;
+  if(!list.length){$('#arenaList').innerHTML='<div class="empty">No arenas match the current filters.</div>';return;}
+  // keep selection valid
+  if(!state.sel||!list.some(g=>g.ticker===state.sel))state.sel=list[0].ticker;
+  $('#arenaList').innerHTML=list.map(g=>{
+    const st=arenaStatus(g);
+    const champTxt=g.champion?`${roleIcon(true)}<span class="nm">${g.champion.bot_name}</span> ${badgeHtml(g.champion)}`
+      :'<span>No live champion assigned</span>';
+    const deltaHtml=st.delta!==null&&st.delta!==undefined&&isFinite(st.delta)
+      ? `<span class="delta ${st.code==='lead'?'up':'down'}">${st.code==='lead'?'&#9650; ':'&#9660; '}${Math.abs(st.delta).toFixed(1)}%</span>`:'';
+    return `<button class="arena-item ${st.code==='lead'?'leading':''} ${g.ticker===state.sel?'sel':''}" data-ticker="${g.ticker}">
+      <div class="ai-top"><span class="ai-tk"><span class="dot" style="background:${tc(g.ticker)}"></span>${g.ticker}</span>
+        <span class="ai-cnt">${g.challengers.length} challenger${g.challengers.length===1?'':'s'}</span></div>
+      <div class="ai-champ ${g.champion?'':'open'}">${champTxt}</div>
+      <div class="ai-status"><span class="st-ind ${st.cls}">${st.label}</span>${deltaHtml}</div>
+    </button>`;
+  }).join('');
+}
+
+/* ================= ARENA DETAIL (desktop right) ================= */
+function metricCell(bot,champ,key,fmt,higherBetter){
+  const v=bot[key];
+  if(v===null||v===undefined)return `<td class="mtc null">-</td>`;
+  let cls='';
+  if(!bot.__isChamp&&champ){
+    const cv=champ[key];
+    if(cv!==null&&cv!==undefined){
+      if((higherBetter&&Number(v)>Number(cv))||(!higherBetter&&Number(v)<Number(cv)))cls='win';
+    }
+  }
+  return `<td class="mtc ${cls}">${fmt(v)}</td>`;
+}
+function pnlCell(bot,champ){
+  const v=bot.total_pnl_usd;
+  if(v===null||v===undefined)return `<td class="mtc null">-</td>`;
+  let cls=Number(v)>=0?'pos':'neg';
+  if(!bot.__isChamp&&champ&&champ.total_pnl_usd!==null&&Number(v)>Number(champ.total_pnl_usd))cls='win';
+  const adj=bot.pnl_source==='adjusted'?' <span class="unrel-star" title="Slippage-adjusted (demo/paper)">&#8225;</span>':'';
+  return `<td class="mtc ${cls}">${fmtUsd(v)}${adj}</td>`;
+}
+function ddCell(bot){const v=bot.max_drawdown_pct;if(v===null||v===undefined)return `<td class="mtc null">-</td>`;
+  return `<td class="mtc ${ddClass(v)}">${Number(v).toFixed(1)}%</td>`;}
+function pfCell(bot,champ){
+  const v=bot.profit_factor;
+  if(v===null||v===undefined){
+    const tip=`Based on ${bot.total_trades} trade${bot.total_trades===1?'':'s'} - not yet statistically reliable`;
+    return `<td class="mtc null"><span class="unrel-star" title="${tip}">&#42;</span></td>`;
+  }
+  let cls='';if(!bot.__isChamp&&champ&&champ.profit_factor!==null&&Number(v)>Number(champ.profit_factor))cls='win';
+  return `<td class="mtc ${cls}">${Number(v).toFixed(2)}</td>`;
+}
+function botRow(bot,champ,isChamp){
+  bot.__isChamp=isChamp;
+  const rel=bot.statistically_reliable;
+  const al=bot.alert_level||0;
+  const alTip=al?`${ALERT_LABEL[al]}${(bot.alert_reasons&&bot.alert_reasons.length)?': '+bot.alert_reasons.join('; '):''}`:'No alerts';
+  const relMark=rel?'':`<span class="unrel-star" title="Based on ${bot.total_trades} trade${bot.total_trades===1?'':'s'} - not yet statistically reliable">&#42;</span>`;
+  const rc=recClass(bot.recommendation_code);
+  return `<tr class="${isChamp?'champ':''} ${rel?'':'unreliable'}">
+    <td class="l">${roleIcon(isChamp)}</td>
+    <td class="l"><span class="botname">${bot.bot_name}${relMark} ${badgeHtml(bot)}</span></td>
+    <td>${bot.timeframe||'-'}</td>
+    <td>${bot.total_trades!=null?bot.total_trades:'-'}</td>
+    ${metricCell(bot,champ,'win_rate_pct',v=>Number(v).toFixed(0)+'%',true)}
+    ${pfCell(bot,champ)}
+    ${metricCell(bot,champ,'sharpe_ratio',v=>Number(v).toFixed(2),true)}
+    ${ddCell(bot)}
+    ${pnlCell(bot,champ)}
+    ${metricCell(bot,champ,'recovery_factor',v=>Number(v).toFixed(2),true)}
+    <td class="l"><span class="reclab ${rc}">${bot.recommendation_label||'-'}</span></td>
+    <td><span class="alertdot a${al}" title="${alTip}"></span></td>
+  </tr>`;
+}
+function renderDetail(){
+  const g=arenas().find(x=>x.ticker===state.sel)||arenas()[0];
+  if(!g){$('#detailHead').innerHTML='';$('#ccLegend').innerHTML='';$('#ccTable').innerHTML='<tbody><tr><td class="empty">No arena selected.</td></tr></tbody>';
+    if(ccChart){ccChart.destroy();ccChart=null;}return;}
+  const st=arenaStatus(g);
+  const champ=g.champion;
+  const bots=(champ?[champ]:[]).concat(g.challengers);
+  $('#detailHead').innerHTML=`
+    <span class="dh-tk"><span class="dot" style="background:${tc(g.ticker)}"></span>${g.ticker}</span>
+    <span class="dh-arena">${champ?'Live champion vs '+g.challengers.length+' shadow challenger'+(g.challengers.length===1?'':'s'):g.challengers.length+' challenger'+(g.challengers.length===1?'':'s')+', slot open'}</span>
+    <span class="dh-badge ${st.cls}">${st.label}${st.delta!=null&&isFinite(st.delta)?' &middot; '+(st.code==='lead'?'+':'')+st.delta.toFixed(1)+'%':''}</span>`;
+
+  // chart: champion solid (ticker color), challengers dashed
+  const datasets=[];const legend=[];
+  bots.forEach((b,i)=>{
+    const isC=(b===champ);
+    const color=isC?tc(g.ticker):CH_COLORS[i%CH_COLORS.length];
+    datasets.push({label:b.bot_name,data:curve(b,N_PTS),borderColor:color,borderWidth:isC?2.8:2,
+      borderDash:isC?[]:[6,4],tension:.32,pointRadius:0,pointHoverRadius:5,fill:false});
+    legend.push({name:b.bot_name,color,dash:!isC,role:isC?'Champion':'Challenger'});
+  });
+  const cfg={type:'line',
+    data:{labels:Array.from({length:N_PTS},(_,i)=>i===0?'Start':i===N_PTS-1?'Now':'D'+i),datasets},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtPct(c.parsed.y)}}},
+      scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11}}},
+        y:{grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.28)':'rgba(255,255,255,0.04)'},
+          ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11},callback:v=>(v>0?'+':'')+v+'%'}}}}};
+  if(ccChart){ccChart.data=cfg.data;ccChart.options=cfg.options;ccChart.update();}
+  else ccChart=new Chart($('#ccChart'),cfg);
+  $('#ccLegend').innerHTML=legend.map(l=>`<span><i class="${l.dash?'dash':''}" style="border-top-color:${l.color}"></i><span class="nm">${l.name}</span> <span style="color:var(--dim)">${l.role}</span></span>`).join('');
+
+  // table
+  const head=`<thead><tr>
+    <th class="l"></th><th class="l">Bot</th><th>TF</th><th>Trades</th><th>Win %</th><th>PF</th><th>Sharpe</th>
+    <th>Max DD</th><th>Total PnL</th><th>Recovery</th><th class="l">Recommendation</th><th>Alert</th></tr></thead>`;
+  const rows=(champ?botRow(champ,null,true):'')+g.challengers.map(c=>botRow(c,champ,false)).join('');
+  $('#ccTable').innerHTML=head+'<tbody>'+(rows||'<tr><td class="empty" colspan="12">No bots in this arena.</td></tr>')+'</tbody>';
+}
+
+/* ================= MOBILE ================= */
+function renderMobile(){
+  const list=arenas();
+  if(state.mobileView==='select'||!state.mobileSel){
+    $('#tickerSelect').style.display='';$('#arenaCards').style.display='none';
+    const chips=list.map(g=>{
+      const st=arenaStatus(g);
+      return `<button class="ts-chip ${st.code==='lead'?'lead':''} ${state.mobileSel===g.ticker?'sel':''}" data-ticker="${g.ticker}">
+        <span class="dot" style="background:${tc(g.ticker)}"></span>${g.ticker}<span class="cnt">${g.challengers.length}</span></button>`;
+    }).join('');
+    $('#tickerSelect').innerHTML=`
+      <div class="ts-head">Pick an arena</div>
+      <div class="ts-sub">${list.length} tickers - amber ring means a challenger is leading</div>
+      <div class="ts-chips">${chips||'<span class="ts-sub">No arenas match filters.</span>'}</div>`;
+    return;
+  }
+  // detail (cards) view for the selected ticker
+  const g=list.find(x=>x.ticker===state.mobileSel)||list[0];
+  $('#tickerSelect').style.display='none';$('#arenaCards').style.display='';
+  const st=arenaStatus(g);const champ=g.champion;
+  acCharts.forEach(c=>c&&c.destroy());acCharts=[];
+  const champBlock=champ?`
+    <div class="ac-champ">
+      <div class="ac-crown">${roleIcon(true)}<span class="nm">${champ.bot_name}</span> ${badgeHtml(champ)}</div>
+      <div class="ac-metrics">
+        <div><span class="k">Return</span><span class="v ${Number(champ.return_pct)>=0?'pos':'neg'}">${fmtPct(champ.return_pct)}</span></div>
+        <div><span class="k">Win %</span><span class="v">${champ.win_rate_pct!=null?Number(champ.win_rate_pct).toFixed(0)+'%':'-'}</span></div>
+        <div><span class="k">Trades</span><span class="v">${champ.total_trades}</span></div>
+        <div><span class="k">PF</span><span class="v ${champ.profit_factor==null?'null':''}">${champ.profit_factor!=null?Number(champ.profit_factor).toFixed(2):'*'}</span></div>
+        <div><span class="k">Max DD</span><span class="v">${champ.max_drawdown_pct!=null?Number(champ.max_drawdown_pct).toFixed(1)+'%':'-'}</span></div>
+        <div><span class="k">PnL</span><span class="v ${Number(champ.total_pnl_usd)>=0?'pos':'neg'}">${fmtUsd(champ.total_pnl_usd)}</span></div>
+      </div>
+    </div>`:`
+    <div class="ac-champ openslot"><div class="ac-crown"><span class="role-ic">&#9898;</span><span class="nm">No live champion assigned</span></div>
+      <div class="ts-sub" style="margin:0">This ticker's live slot is open - challengers below are competing to fill it.</div></div>`;
+  const chCards=g.challengers.map((c,i)=>`
+    <div class="chcard" data-ci="${i}">
+      <div class="chcard-top">${roleIcon(false)}<span class="nm">${c.bot_name}</span> ${badgeHtml(c)}
+        <span class="ret ${Number(c.return_pct)>=0?'pos':'neg'}">${fmtPct(c.return_pct)}</span><span class="exp">+</span></div>
+      <div class="chcard-more">
+        <div class="ac-metrics">
+          <div><span class="k">Win %</span><span class="v">${c.win_rate_pct!=null?Number(c.win_rate_pct).toFixed(0)+'%':'-'}</span></div>
+          <div><span class="k">Trades</span><span class="v">${c.total_trades}</span></div>
+          <div><span class="k">PF</span><span class="v ${c.profit_factor==null?'null':''}">${c.profit_factor!=null?Number(c.profit_factor).toFixed(2):'*'}</span></div>
+          <div><span class="k">Sharpe</span><span class="v ${c.sharpe_ratio==null?'null':''}">${c.sharpe_ratio!=null?Number(c.sharpe_ratio).toFixed(2):'-'}</span></div>
+          <div><span class="k">Max DD</span><span class="v">${c.max_drawdown_pct!=null?Number(c.max_drawdown_pct).toFixed(1)+'%':'-'}</span></div>
+          <div><span class="k">PnL</span><span class="v ${Number(c.total_pnl_usd)>=0?'pos':'neg'}">${fmtUsd(c.total_pnl_usd)}</span></div>
+        </div>
+        <div class="ac-sub">${c.recommendation_label||''}</div>
+      </div>
+    </div>`).join('');
+  $('#arenaCards').innerHTML=`
+    <div class="cards-bar"><button class="back-btn" id="mbBack">&#8592; All arenas</button>
+      <span class="ac-head st ${st.cls==='lead'?'':''}" style="color:${st.code==='lead'?'var(--amber)':st.code==='hold'?'var(--pos)':'var(--sub)'}">${st.label}</span></div>
+    <div class="acard ${st.code==='lead'?'leading':''}">
+      <div class="ac-head"><span class="tk"><span class="dot" style="background:${tc(g.ticker)}"></span>${g.ticker}</span></div>
+      <div class="ac-chart-wrap"><canvas id="acChart"></canvas></div>
+      ${champBlock}
+      <div class="ac-sub">Challengers (${g.challengers.length})</div>
+      ${chCards||'<div class="ts-sub">No challengers this period.</div>'}
+    </div>`;
+  // small overlay chart
+  const bots=(champ?[champ]:[]).concat(g.challengers);
+  const ds=bots.map((b,i)=>{const isC=(b===champ);const color=isC?tc(g.ticker):CH_COLORS[i%CH_COLORS.length];
+    return {label:b.bot_name,data:curve(b,N_PTS),borderColor:color,borderWidth:isC?2.6:1.8,borderDash:isC?[]:[5,4],tension:.32,pointRadius:0,fill:false};});
+  acCharts.push(new Chart($('#acChart'),{type:'line',
+    data:{labels:Array.from({length:N_PTS},(_,i)=>i===0?'Start':i===N_PTS-1?'Now':''),datasets:ds},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtPct(c.parsed.y)}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#9fb0c8',font:{size:9}}},
+        y:{grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.22)':'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{size:9},callback:v=>v+'%'}}}}}));
+}
+
+/* ================= FILTERS + WIRING ================= */
+function populateFilters(){
+  // tickers across the whole (current-report) set
+  const set=[...new Set(rep().tickers.map(g=>g.ticker))];
+  const cur=$('#fTicker').value;
+  $('#fTicker').innerHTML='<option value="all">All tickers</option>'+set.map(t=>`<option value="${t}">${t}</option>`).join('');
+  $('#fTicker').value=[...set,'all'].includes(cur)?cur:'all';
+  // comparison period dropdown
+  $('#fRange').innerHTML=DATA.order.map(k=>{const r=DATA.reports[k];return `<option value="${k}">${r.label} (${r.date})</option>`;}).join('');
+  $('#fRange').value=state.rk;
+}
+function refreshHeader(){
+  const r=rep();
+  $('#pSub').textContent=`${r.window} - ${r.date}`;
+  $('#syncedTime').innerHTML=r.synced.replace(' · ',' &middot; ');
+}
+function renderAll(){refreshHeader();renderSummary();renderList();renderDetail();renderMobile();}
+
+function wire(){
+  $('#fTicker').addEventListener('change',e=>{state.ticker=e.target.value;state.sel=null;state.mobileSel=null;state.mobileView='select';renderAll();});
+  $('#fEnv').addEventListener('change',e=>{state.env=e.target.value;state.sel=null;renderAll();});
+  $('#fRange').addEventListener('change',e=>{state.rk=e.target.value;state.sel=null;state.mobileSel=null;state.mobileView='select';populateFilters();renderAll();});
+  $('#fReset').addEventListener('click',()=>{state.ticker='all';state.env='all';state.rk=DATA.order[0];state.sel=null;state.search='';state.mobileSel=null;state.mobileView='select';
+    $('#arenaSearch').value='';populateFilters();renderAll();});
+  $('#arenaSearch').addEventListener('input',e=>{state.search=e.target.value;renderList();});
+  // arena list selection (delegation)
+  $('#arenaList').addEventListener('click',e=>{const b=e.target.closest('.arena-item');if(!b)return;state.sel=b.dataset.ticker;renderList();renderDetail();});
+  // mobile: chip select
+  $('#tickerSelect').addEventListener('click',e=>{const c=e.target.closest('.ts-chip');if(!c)return;
+    state.mobileSel=c.dataset.ticker;state.mobileView='cards';renderMobile();window.scrollTo(0,0);});
+  // mobile: back + card expand (delegation)
+  $('#arenaCards').addEventListener('click',e=>{
+    if(e.target.closest('#mbBack')){state.mobileView='select';renderMobile();return;}
+    const cc=e.target.closest('.chcard');if(cc){cc.classList.toggle('open');const ex=cc.querySelector('.exp');if(ex)ex.textContent=cc.classList.contains('open')?'−':'+';}
+  });
+  // mobile sidebar
+  const sb=$('#sidebar'),sc=$('#scrim');
+  $('#hamb').addEventListener('click',()=>{sb.classList.add('open');sc.classList.add('show');});
+  sc.addEventListener('click',()=>{sb.classList.remove('open');sc.classList.remove('show');});
+}
+
+/* ---- chart sizing race hooks (fonts/layout) ---- */
+function resizeCharts(){ccChart&&ccChart.resize();acCharts.forEach(c=>c&&c.resize());}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(resizeCharts);
+window.addEventListener('load',resizeCharts);
+
+populateFilters();wire();renderAll();
+
+/* cross-dashboard navigation + sidebar collapse when embedded in reports.html */
+(function(){
+  function post(t){if(window.parent&&window.parent!==window)window.parent.postMessage({type:'dashboard-nav',target:t},'*');}
+  document.querySelectorAll('.nav a[data-dash]').forEach(a=>a.addEventListener('click',function(e){
+    e.preventDefault();var t=a.dataset.dash;if(t==='champion')return;post(t);}));
+  var b=document.getElementById('dpBrand');
+  if(b){b.style.cursor='pointer';b.addEventListener('click',function(){post('overview');});}
+  var back=document.getElementById('sideBack');
+  if(back){if(window.parent&&window.parent!==window)back.style.display='flex';back.addEventListener('click',function(){post('overview');});}
+  var shell=document.getElementById('shell'),tog=document.getElementById('sideToggle');
+  if(tog&&shell){tog.addEventListener('click',function(){
+    var c=shell.classList.toggle('sb-collapsed');
+    tog.innerHTML=c?'&#187;':'&#171;';tog.title=c?'Expand sidebar':'Collapse sidebar';tog.setAttribute('aria-label',tog.title);
+    setTimeout(function(){resizeCharts();},220);
+  });}
+})();
+</script>
+</body>
+</html>
