@@ -49,9 +49,33 @@ button{font-family:inherit;cursor:pointer;color:inherit}
   background:rgba(8,12,20,0.92);border-right:1px solid var(--border2);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   display:flex;flex-direction:column;padding:1.4rem 1.05rem;gap:1.3rem;overflow-y:auto;overflow-x:hidden;z-index:60;
+  transition:width .2s,flex-basis .2s;
 }
 .sidebar>*{min-width:0;max-width:100%}
-.brand{display:flex;align-items:center;gap:.55rem;padding:.1rem .15rem;min-width:0}
+.side-top{display:flex;align-items:center;gap:.55rem;padding:.1rem .15rem;min-width:0}
+.brand{display:flex;align-items:center;gap:.55rem;min-width:0;text-decoration:none;color:inherit;flex:1 1 auto;cursor:pointer}
+/* collapse toggle (laptop only, 1025-2559px) - double-chevron affordance in the header */
+.side-toggle{display:none;flex:0 0 auto;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;
+  width:1.85rem;height:1.85rem;place-items:center;font-size:1.05rem;line-height:1;color:var(--sub)}
+.side-toggle:hover{border-color:var(--accent);color:var(--text)}
+/* in-sidebar back to the dashboards overview (only shown when embedded in reports.html) */
+.side-back{display:none;align-items:center;gap:.4rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
+  border-radius:8px;padding:.42rem .6rem;font-family:'Oxanium',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.03em;width:100%;text-align:left}
+.side-back:hover{border-color:var(--accent);color:var(--text)}
+/* collapsed sidebar (laptop) */
+.shell.sb-collapsed .sidebar{width:64px;flex-basis:64px;padding:1.1rem .45rem;align-items:center;gap:1rem}
+.shell.sb-collapsed .brand-txt,
+.shell.sb-collapsed .nav a .lbl,
+.shell.sb-collapsed .nav a .soon-tag,
+.shell.sb-collapsed .nav-label,
+.shell.sb-collapsed .filters,
+.shell.sb-collapsed .side-foot,
+.shell.sb-collapsed .side-back{display:none}
+.shell.sb-collapsed .side-top{flex-direction:column;gap:.6rem;justify-content:center;padding:0}
+.shell.sb-collapsed .brand{justify-content:center}
+.shell.sb-collapsed .brand-mark{margin:0}
+.shell.sb-collapsed .nav{align-items:stretch}
+.shell.sb-collapsed .nav a{justify-content:center;padding:.6rem 0}
 .brand-mark{width:2rem;height:2rem;border-radius:8px;flex:0 0 auto;
   background:linear-gradient(135deg,var(--accent),var(--accent3));
   display:grid;place-items:center;font-family:'Oxanium';font-weight:800;color:#06101f;font-size:1.05rem;
@@ -105,9 +129,9 @@ select:focus{outline:none;border-color:var(--accent)}
 @keyframes pulse{50%{opacity:.35}}
 
 /* ============ KPI PILLS ============ */
-/* laptop default: 2 rows of 4 | 1600px+: single row of 8 | <768px: hidden (summary bar instead) */
+/* laptop (768-1919px): 2 rows of 4 | ultrawide 1920px+: single row of 8 | <768px: hidden (summary bar instead) */
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem}
-@media(min-width:1600px){.kpis{grid-template-columns:repeat(8,1fr)}}
+@media(min-width:1920px){.kpis{grid-template-columns:repeat(8,1fr)}}
 /* compact summary bar (mobile only, <768px) */
 .kpibar{display:none;background:var(--bg-card);border:1px solid var(--border);border-radius:13px;
   padding:.8rem .9rem;flex-direction:column;gap:.6rem}
@@ -328,11 +352,19 @@ table.pos tbody tr:hover td.stick{background:#101a2c}
 
 /* ============ RESPONSIVE SIDEBAR ============ */
 .scrim{display:none}
+/* laptop range: show the collapse toggle */
+@media(min-width:1025px) and (max-width:2559px){.side-toggle{display:grid}}
 @media(max-width:1024px){
   .sidebar{position:fixed;left:0;top:0;transform:translateX(-105%);transition:transform .25s;width:min(82vw,330px);flex-basis:auto}
   .sidebar.open{transform:translateX(0)}
   .hamb{display:grid;place-items:center}
   .scrim.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:55}
+  /* collapse does not apply on mobile (hamburger is used) - revert any collapsed state */
+  .shell.sb-collapsed .sidebar{width:min(82vw,330px);flex-basis:auto;padding:1.4rem 1.05rem;align-items:stretch}
+  .shell.sb-collapsed .side-top{flex-direction:row;gap:.55rem}
+  .shell.sb-collapsed .brand-txt,.shell.sb-collapsed .nav a .lbl,
+  .shell.sb-collapsed .nav-label,.shell.sb-collapsed .filters,.shell.sb-collapsed .side-foot{display:revert}
+  .shell.sb-collapsed .nav a{justify-content:flex-start;padding:.62rem .7rem}
 }
 /* mobile topbar: Last synced pinned top-right across from the title; subtitle wraps to 2 lines */
 @media(max-width:768px){
@@ -414,21 +446,25 @@ table.pos.allcols .c-cur,table.pos.allcols .c-sl{display:table-cell !important}
 </head>
 <body>
 <div class="scrim" id="scrim"></div>
-<div class="shell">
+<div class="shell" id="shell">
 
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar" id="sidebar">
-    <div class="brand" id="dpBrand" title="Back to overview">
-      <div class="brand-mark">A</div>
-      <div class="brand-txt"><div class="brand-name">AUTO<span>BOTS</span></div><div class="brand-sub">NEXUS</div></div>
+    <div class="side-top">
+      <div class="brand" id="dpBrand" title="Back to all dashboards">
+        <div class="brand-mark">A</div>
+        <div class="brand-txt"><div class="brand-name">AUTO<span>BOTS</span></div><div class="brand-sub">NEXUS</div></div>
+      </div>
+      <button class="side-toggle" id="sideToggle" aria-label="Collapse sidebar" title="Collapse sidebar">&#171;</button>
     </div>
+    <button class="side-back" id="sideBack" title="Back to all dashboards"><span>&#8592;</span> All dashboards</button>
     <div>
       <div class="nav-label">Dashboards</div>
       <nav class="nav">
-        <a class="active" href="#" data-dash="pulse"><span class="ico">&#9889;</span> Daily Pulse</a>
-        <a href="#" data-dash="trading"><span class="ico">&#128202;</span> Trading Activity</a>
-        <a href="#" data-dash="champion"><span class="ico">&#127942;</span> Champion vs Challenger</a>
-        <a href="#" data-dash="health"><span class="ico">&#128293;</span> System Health</a>
+        <a class="active" href="#" data-dash="pulse"><span class="ico">&#9889;</span> <span class="lbl">Daily Pulse</span></a>
+        <a href="#" data-dash="trading"><span class="ico">&#128202;</span> <span class="lbl">Trading Activity</span></a>
+        <a href="#" data-dash="champion"><span class="ico">&#127942;</span> <span class="lbl">Champion vs Challenger</span></a>
+        <a href="#" data-dash="health"><span class="ico">&#128293;</span> <span class="lbl">System Health</span></a>
       </nav>
     </div>
     <div class="filters">
@@ -1000,6 +1036,17 @@ function renderDonut(){
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed} open`}}}}};
   if(donutChart){donutChart.data=cfg.data;donutChart.update();}else donutChart=new Chart($('#donutChart'),cfg);
   $('#donutLegend').innerHTML=entries.map((e,i)=>`<div class="dleg-row"><span class="sw" style="background:${colors[i]}"></span><span class="nm">${e[0]}</span><span class="ct">${e[1]}</span></div>`).join('');
+  requestAnimationFrame(syncPosHeights);
+}
+/* Match the Open Positions table height to the donut column so the two sit balanced
+   side by side; the table body scrolls internally when there are more rows than fit. */
+function syncPosHeights(){
+  const col=document.querySelector('.donut-col'),scroll=document.querySelector('.tscroll'),
+    tools=document.querySelector('.pos-toptools');
+  if(!col||!scroll)return;
+  if(window.innerWidth<=1024){scroll.style.maxHeight='';return;}   // stacked layout on mobile/tablet
+  const h=col.offsetHeight-(tools?tools.offsetHeight:0)-8;
+  scroll.style.maxHeight=Math.max(260,h)+'px';
 }
 
 /* ============= PIPELINE FUNNEL ============= */
@@ -1060,8 +1107,9 @@ function wire(){
   document.addEventListener('click',ev=>{
     const h=ev.target.closest('[data-toggle]');if(!h)return;
     const card=h.closest('.card');card.classList.toggle('collapsed');
-    setTimeout(()=>{perfChart&&perfChart.resize();donutChart&&donutChart.resize();},260);
+    setTimeout(()=>{perfChart&&perfChart.resize();donutChart&&donutChart.resize();syncPosHeights();},260);
   });
+  window.addEventListener('resize',()=>{clearTimeout(window.__ph);window.__ph=setTimeout(syncPosHeights,160);});
   /* --- expandable position rows (mobile): tap a row to reveal hidden columns --- */
   $('#posBody').addEventListener('click',ev=>{
     const row=ev.target.closest('.posrow');if(!row)return;
@@ -1118,13 +1166,21 @@ populateTickers();renderPromoBanner();renderAlerts();renderPipe();renderPromo();
 applyMode(state.mode);            // morning by default; sets header + renders kpis/perf/positions/donut
 paintPerfTabs();paintPosTabs();wire();
 
-/* cross-dashboard navigation when embedded in reports.html (postMessage to parent) */
+/* cross-dashboard navigation + sidebar collapse when embedded in reports.html */
 (function(){
   function post(t){if(window.parent&&window.parent!==window)window.parent.postMessage({type:'dashboard-nav',target:t},'*');}
   document.querySelectorAll('.nav a[data-dash]').forEach(a=>a.addEventListener('click',function(e){
     e.preventDefault();var t=a.dataset.dash;if(t==='pulse')return;post(t);}));
   var b=document.getElementById('dpBrand');
   if(b){b.style.cursor='pointer';b.addEventListener('click',function(){post('overview');});}
+  var back=document.getElementById('sideBack');
+  if(back){if(window.parent&&window.parent!==window)back.style.display='flex';back.addEventListener('click',function(){post('overview');});}
+  var shell=document.getElementById('shell'),tog=document.getElementById('sideToggle');
+  if(tog&&shell){tog.addEventListener('click',function(){
+    var c=shell.classList.toggle('sb-collapsed');
+    tog.innerHTML=c?'&#187;':'&#171;';tog.title=c?'Expand sidebar':'Collapse sidebar';tog.setAttribute('aria-label',tog.title);
+    setTimeout(function(){perfChart&&perfChart.resize();donutChart&&donutChart.resize();},220);
+  });}
 })();
 </script>
 </body>

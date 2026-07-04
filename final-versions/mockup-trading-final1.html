@@ -62,10 +62,14 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .brand-name{font-family:'Oxanium';font-weight:800;letter-spacing:.05em;font-size:clamp(.98rem,1vw,1.15rem);white-space:nowrap}
 .brand-name span{color:var(--accent)}
 .brand-sub{font-size:.58rem;letter-spacing:.26em;color:var(--sub);margin-top:.1rem;white-space:nowrap}
-/* collapse toggle (laptop only, 1025-2559px) */
+/* collapse toggle (laptop only, 1025-2559px) - double-chevron affordance in the header */
 .side-toggle{display:none;flex:0 0 auto;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;
-  width:1.9rem;height:1.9rem;place-items:center;font-size:1rem;color:var(--sub)}
+  width:1.85rem;height:1.85rem;place-items:center;font-size:1.05rem;line-height:1;color:var(--sub)}
 .side-toggle:hover{border-color:var(--accent);color:var(--text)}
+/* in-sidebar back to the dashboards overview (only shown when embedded in reports.html) */
+.side-back{display:none;align-items:center;gap:.4rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
+  border-radius:8px;padding:.42rem .6rem;font-family:'Oxanium',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.03em;width:100%;text-align:left}
+.side-back:hover{border-color:var(--accent);color:var(--text)}
 .nav-label{font-size:.62rem;letter-spacing:.26em;color:var(--dim);padding:0 .35rem .35rem;text-transform:uppercase}
 .nav{display:flex;flex-direction:column;gap:.28rem}
 .nav a{display:flex;align-items:center;gap:.6rem;padding:.62rem .7rem;border-radius:9px;text-decoration:none;
@@ -90,16 +94,19 @@ select:focus{outline:none;border-color:var(--accent)}
 .side-foot{margin-top:auto;font-size:.68rem;color:var(--dim);line-height:1.6;padding:.4rem}
 
 /* ---- collapsed sidebar (laptop) ---- */
-.shell.sb-collapsed .sidebar{width:66px;flex-basis:66px;padding:1.4rem .5rem;align-items:stretch}
+.shell.sb-collapsed .sidebar{width:64px;flex-basis:64px;padding:1.1rem .45rem;align-items:center;gap:1rem}
 .shell.sb-collapsed .brand-txt,
 .shell.sb-collapsed .nav a .lbl,
 .shell.sb-collapsed .nav a .soon-tag,
 .shell.sb-collapsed .nav-label,
 .shell.sb-collapsed .filters,
-.shell.sb-collapsed .side-foot{display:none}
-.shell.sb-collapsed .nav a{justify-content:center;padding:.62rem 0}
-.shell.sb-collapsed .side-top{justify-content:center}
+.shell.sb-collapsed .side-foot,
+.shell.sb-collapsed .side-back{display:none}
+.shell.sb-collapsed .side-top{flex-direction:column;gap:.6rem;justify-content:center;padding:0}
 .shell.sb-collapsed .brand{justify-content:center}
+.shell.sb-collapsed .brand-mark{margin:0}
+.shell.sb-collapsed .nav{align-items:stretch}
+.shell.sb-collapsed .nav a{justify-content:center;padding:.6rem 0}
 
 /* ============ MAIN ============ */
 .main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
@@ -116,7 +123,17 @@ select:focus{outline:none;border-color:var(--accent)}
 .tb-right{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .period-sel{display:flex;flex-direction:column;gap:.2rem}
 .period-sel label{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
-.period-sel .selw select{min-width:220px;font-size:.82rem}
+.period-sel .selw select{min-width:200px;font-size:.82rem}
+/* Weekly/Monthly toggle (same treatment as Daily Pulse Morning/Evening) */
+.wm-wrap{display:flex;align-items:flex-end;gap:.9rem;flex-wrap:wrap}
+.wm-toggle{display:inline-flex;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:10px;padding:.22rem;gap:.2rem}
+.wm-toggle button{border:none;background:transparent;color:var(--sub);padding:.5rem 1.05rem;border-radius:8px;font-family:'Oxanium',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.04em}
+.wm-toggle button.on{background:linear-gradient(135deg,rgba(100,180,255,0.28),rgba(167,139,250,0.2));color:var(--text);box-shadow:0 0 12px rgba(100,180,255,0.25)}
+/* rows-per-page control in the leaderboard footer */
+.pg-controls{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.pg-per{display:flex;align-items:center;gap:.45rem;font-size:.72rem;color:var(--sub)}
+.pg-per .selw select{padding:.3rem 1.5rem .3rem .55rem;font-size:.72rem}
+.pg-per .selw::after{right:.5rem;font-size:.6rem}
 .synced{display:flex;flex-direction:column;align-items:flex-end;font-size:.74rem;color:var(--sub);line-height:1.4}
 .synced b{color:var(--text);font-weight:400}
 .synced .led{display:inline-block;width:.52rem;height:.52rem;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);margin-right:.35rem;animation:pulse 2.4s infinite}
@@ -318,9 +335,11 @@ table.lb.allcols .c-streak,table.lb.allcols .c-dur,table.lb.allcols .c-best,tabl
 @media(max-width:1024px){
   .sidebar{position:fixed;left:0;top:0;transform:translateX(-105%);transition:transform .25s;width:min(82vw,330px);flex-basis:auto}
   .sidebar.open{transform:translateX(0)}
-  .shell.sb-collapsed .sidebar{width:min(82vw,330px);flex-basis:auto;padding:1.4rem 1.05rem}
+  .shell.sb-collapsed .sidebar{width:min(82vw,330px);flex-basis:auto;padding:1.4rem 1.05rem;align-items:stretch}
+  .shell.sb-collapsed .side-top{flex-direction:row;gap:.55rem}
   .shell.sb-collapsed .brand-txt,.shell.sb-collapsed .nav a .lbl,.shell.sb-collapsed .nav a .soon-tag,
   .shell.sb-collapsed .nav-label,.shell.sb-collapsed .filters,.shell.sb-collapsed .side-foot{display:revert}
+  .shell.sb-collapsed .nav a{justify-content:flex-start;padding:.62rem .7rem}
   .hamb{display:grid;place-items:center}
   .scrim.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:55}
 }
@@ -347,8 +366,9 @@ table.lb.allcols .c-streak,table.lb.allcols .c-dur,table.lb.allcols .c-best,tabl
         <div class="brand-mark">A</div>
         <div class="brand-txt"><div class="brand-name">AUTO<span>BOTS</span></div><div class="brand-sub">NEXUS</div></div>
       </a>
-      <button class="side-toggle" id="sideToggle" aria-label="Collapse sidebar" title="Collapse sidebar">&#9664;</button>
+      <button class="side-toggle" id="sideToggle" aria-label="Collapse sidebar" title="Collapse sidebar">&#171;</button>
     </div>
+    <button class="side-back" id="sideBack" title="Back to all dashboards"><span>&#8592;</span> All dashboards</button>
     <div>
       <div class="nav-label">Dashboards</div>
       <nav class="nav">
@@ -391,9 +411,15 @@ table.lb.allcols .c-streak,table.lb.allcols .c-dur,table.lb.allcols .c-best,tabl
         </div>
       </div>
       <div class="tb-right">
-        <div class="period-sel">
-          <label id="periodLabel">Week</label>
-          <div class="selw"><select id="fPeriod"></select></div>
+        <div class="wm-wrap">
+          <div class="wm-toggle" id="wmToggle">
+            <button data-wm="week" class="on">Weekly</button>
+            <button data-wm="month">Monthly</button>
+          </div>
+          <div class="period-sel" id="weekSelWrap">
+            <label id="periodLabel">Week</label>
+            <div class="selw"><select id="fPeriod"></select></div>
+          </div>
         </div>
         <div class="synced"><span><span class="led"></span>Last synced</span><b id="syncedTime">Jun 28, 2026 &middot; 8:00 AM ET</b></div>
       </div>
@@ -474,7 +500,8 @@ table.lb.allcols .c-streak,table.lb.allcols .c-dur,table.lb.allcols .c-best,tabl
               <th class="stick st-3">Ticker</th>
               <th class="stick st-4">Env</th>
               <th class="r sortable" data-k="trades">Trades <span class="ar"></span></th>
-              <th class="r sortable" data-k="wr">W/L &middot; Win% <span class="ar"></span></th>
+              <th class="r">W / L</th>
+              <th class="r sortable" data-k="wr">Win % <span class="ar"></span></th>
               <th class="r sortable" data-k="pnl">Adj PnL <span class="ar">&#9660;</span></th>
               <th class="r sortable" data-k="pf">PF <span class="ar"></span></th>
               <th class="r sortable c-dd" data-k="dd">Max DD <span class="ar"></span></th>
@@ -494,7 +521,18 @@ table.lb.allcols .c-streak,table.lb.allcols .c-dur,table.lb.allcols .c-best,tabl
           <div id="lbCards" class="lb-cards" style="display:none"></div>
         </div>
 
-        <div class="pagi"><span id="lbCount"></span><div class="pg" id="lbPag"></div></div>
+        <div class="pagi">
+          <span id="lbCount"></span>
+          <div class="pg-controls">
+            <label class="pg-per">Rows
+              <div class="selw"><select id="lbPer">
+                <option value="10" selected>10</option><option value="25">25</option>
+                <option value="50">50</option><option value="100">100</option><option value="1000">1000</option>
+              </select></div>
+            </label>
+            <div class="pg" id="lbPag"></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -662,7 +700,7 @@ function scopeRows(){
 
 /* ================= STATE ================= */
 const state={fTicker:'all',fEnv:'all',mkey:'jun',viewType:'week',weekId:'jun-w4',
-  lbTab:'all',q:'',sort:'pnl',dir:-1,page:1,per:12,
+  lbTab:'all',q:'',sort:'pnl',dir:-1,page:1,per:10,
   mobileView:'select',mobileSel:[]};
 let eqChart,donutChart;
 
@@ -899,7 +937,8 @@ function renderLeaderboard(agg){
       <td class="stick st-3"><span class="tk"><span class="dot" style="background:${tcol(r.ticker)}"></span>${r.ticker}</span></td>
       <td class="stick st-4"><span class="badge ${r.env}">${r.env.toUpperCase()}</span></td>
       <td class="r">${r.trades}</td>
-      <td class="r wl"><span class="w">${r.wins}</span>/<span class="l">${r.losses}</span> &middot; ${r.wr.toFixed(0)}%</td>
+      <td class="r wl"><span class="w">${r.wins}</span>/<span class="l">${r.losses}</span></td>
+      <td class="r">${r.wr.toFixed(0)}%</td>
       <td class="r"><span class="pnlbar"><i style="width:${w.toFixed(1)}%;background:${up?'var(--pos)':'var(--neg)'}"></i><span class="${pcls(r.pnl)}">${fmtUsd(r.pnl)}</span></span></td>
       <td class="r">${r.pf>=99?'∞':r.pf.toFixed(2)}</td>
       <td class="r c-dd" style="color:${ddColor(r.dd)}">${r.dd.toFixed(1)}%</td>
@@ -909,7 +948,7 @@ function renderLeaderboard(agg){
       <td class="c c-streak">${r.streak}</td>
       <td class="c c-spark">${spark(r.trend,up?'#00c896':'#e84142')}</td>
     </tr>`;
-  }).join('')||`<tr><td colspan="14" style="text-align:center;color:var(--sub);padding:2rem">No bots match these filters.</td></tr>`;
+  }).join('')||`<tr><td colspan="15" style="text-align:center;color:var(--sub);padding:2rem">No bots match these filters.</td></tr>`;
   const s2=all.length?start+1:0, e2=Math.min(start+state.per,all.length);
   $('#lbCount').textContent=`Showing ${s2}-${e2} of ${all.length} bots`;
   let pg=`<button ${state.page<=1?'disabled':''} data-p="prev">Prev</button>`;
@@ -960,12 +999,20 @@ function renderLbMobile(all){
   }
 }
 
-/* ================= PERIOD DROPDOWN ================= */
+/* ================= WEEKLY/MONTHLY VIEW ================= */
+// Weeks dropdown lists the weeks of the sidebar-selected month. In Monthly mode the
+// dropdown is hidden entirely and the view is the full-month rollup of that month.
 function buildPeriodDropdown(){
   const m=monthByKey(state.mkey);
-  let opts=`<option value="rollup" ${state.viewType==='month'?'selected':''}>Full Month Rollup</option>`;
-  m.weeks.forEach(w=>{opts+=`<option value="${w.id}" ${(state.viewType==='week'&&state.weekId===w.id)?'selected':''}>Week ${w.n} - ${w.range}</option>`;});
-  $('#fPeriod').innerHTML=opts;
+  $('#fPeriod').innerHTML=m.weeks.map(w=>`<option value="${w.id}" ${state.weekId===w.id?'selected':''}>Week ${w.n} - ${w.range}</option>`).join('');
+}
+function lastWeekOf(mkey){const w=monthByKey(mkey).weeks;return w[w.length-1].id;}
+// keep the same week number when the month changes; fall back to the last week
+function weekInMonth(mkey,n){const wks=monthByKey(mkey).weeks;return (wks.find(w=>w.n===n)||wks[wks.length-1]).id;}
+function applyViewType(){
+  const wk=state.viewType==='week';
+  document.querySelectorAll('#wmToggle button').forEach(b=>b.classList.toggle('on',b.dataset.wm===state.viewType));
+  $('#weekSelWrap').style.display=wk?'':'none';
 }
 
 /* ================= FILTER WIRING ================= */
@@ -978,22 +1025,33 @@ function resetPageAndRender(){state.page=1;render();}
 function wire(){
   $('#fTicker').addEventListener('change',e=>{state.fTicker=e.target.value;resetPageAndRender();});
   $('#fEnv').addEventListener('change',e=>{state.fEnv=e.target.value;resetPageAndRender();});
+  /* Weekly/Monthly toggle: sets the view type; weeks dropdown only matters in Weekly */
+  document.querySelectorAll('#wmToggle button').forEach(b=>b.addEventListener('click',()=>{
+    state.viewType=b.dataset.wm;
+    if(state.viewType==='week'){
+      if(!state.weekId||!weekById(state.weekId)||weekById(state.weekId).mkey!==state.mkey)state.weekId=lastWeekOf(state.mkey);
+      buildPeriodDropdown();
+    }
+    applyViewType();resetPageAndRender();
+  }));
+  /* Sidebar Date Range selects the month (does not change Weekly/Monthly) */
   $('#fRange').addEventListener('change',e=>{
     state.mkey=e.target.value;
-    if(state.mkey==='jun'){state.viewType='week';state.weekId='jun-w4';}   // current month -> current week
-    else{state.viewType='month';state.weekId=null;}                        // past month -> rollup
-    buildPeriodDropdown();resetPageAndRender();
-  });
-  $('#fPeriod').addEventListener('change',e=>{
-    if(e.target.value==='rollup'){state.viewType='month';state.weekId=null;}
-    else{state.viewType='week';state.weekId=e.target.value;}
+    if(state.viewType==='week'){
+      const n=(state.weekId&&weekById(state.weekId))?weekById(state.weekId).n:monthByKey(state.mkey).weeks.length;
+      state.weekId=weekInMonth(state.mkey,n);buildPeriodDropdown();
+    }
     resetPageAndRender();
   });
+  /* Weeks dropdown (Weekly mode only) */
+  $('#fPeriod').addEventListener('change',e=>{state.weekId=e.target.value;resetPageAndRender();});
   $('#fReset').addEventListener('click',()=>{
-    state.fTicker='all';state.fEnv='all';state.mkey='jun';state.viewType='week';state.weekId='jun-w4';state.lbTab='all';state.q='';
-    $('#fTicker').value='all';$('#fEnv').value='all';$('#fRange').value='jun';$('#lbSearch').value='';
-    buildPeriodDropdown();resetPageAndRender();
+    state.fTicker='all';state.fEnv='all';state.mkey='jun';state.viewType='week';state.weekId='jun-w4';state.lbTab='all';state.q='';state.per=10;
+    $('#fTicker').value='all';$('#fEnv').value='all';$('#fRange').value='jun';$('#lbSearch').value='';if($('#lbPer'))$('#lbPer').value='10';
+    buildPeriodDropdown();applyViewType();resetPageAndRender();
   });
+  /* Rows per page */
+  $('#lbPer').addEventListener('change',e=>{state.per=+e.target.value;state.page=1;render();});
 
   /* leaderboard controls */
   $('#lbTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-e]');if(!b)return;state.lbTab=b.dataset.e;resetPageAndRender();});
@@ -1024,14 +1082,19 @@ function wire(){
     if(ev.target.closest('#mbarToggle')){const bar=$('#mbar');bar.classList.toggle('open');const l=bar.querySelector('.lbl');if(l)l.textContent=bar.classList.contains('open')?'Less':'More';return;}
   });
 
-  /* sidebar: mobile hamburger + laptop collapse + brand back-to-overview */
+  /* sidebar: mobile hamburger + laptop collapse + brand/back to overview */
   const sb=$('#sidebar'),sc=$('#scrim'),shell=$('#shell');
   $('#hamb').addEventListener('click',()=>{sb.classList.add('open');sc.classList.add('show');});
   sc.addEventListener('click',()=>{sb.classList.remove('open');sc.classList.remove('show');});
-  $('#sideToggle').addEventListener('click',()=>{shell.classList.toggle('sb-collapsed');
+  $('#sideToggle').addEventListener('click',()=>{
+    const collapsed=shell.classList.toggle('sb-collapsed');
+    const btn=$('#sideToggle');btn.innerHTML=collapsed?'&#187;':'&#171;';
+    btn.title=collapsed?'Expand sidebar':'Collapse sidebar';btn.setAttribute('aria-label',btn.title);
     setTimeout(()=>{eqChart&&eqChart.resize();donutChart&&donutChart.resize();},220);});
-  $('#brandLink').addEventListener('click',e=>{e.preventDefault();
-    if(window.parent&&window.parent!==window){window.parent.postMessage({type:'dashboard-nav',target:'overview'},'*');}});
+  function backToOverview(){if(window.parent&&window.parent!==window)window.parent.postMessage({type:'dashboard-nav',target:'overview'},'*');}
+  $('#brandLink').addEventListener('click',e=>{e.preventDefault();backToOverview();});
+  const sideBack=$('#sideBack');
+  if(sideBack){if(window.parent&&window.parent!==window)sideBack.style.display='flex';sideBack.addEventListener('click',backToOverview);}
 
   /* cross-dashboard nav (works standalone and when embedded in reports.html) */
   document.querySelectorAll('.nav a[data-dash]').forEach(a=>a.addEventListener('click',e=>{
@@ -1050,7 +1113,7 @@ function paintSortArrows(){
 
 /* ================= INIT ================= */
 Chart.defaults.color='#9fb0c8';Chart.defaults.font.family="'Share Tech Mono', monospace";
-populateTickers();buildPeriodDropdown();paintSortArrows();wire();render();
+populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
 function resizeCharts(){eqChart&&eqChart.resize();donutChart&&donutChart.resize();}
 window.addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(resizeCharts,160);});
 // charts can be created before grid layout/fonts settle -> force a resize once both are ready

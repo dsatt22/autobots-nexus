@@ -1504,12 +1504,13 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .dt-soon-badge{position:absolute;top:1rem;right:1rem;font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.12em;
   color:#f5a94f;border:1px solid rgba(245,169,79,0.4);background:rgba(245,169,79,0.12);padding:0.2rem 0.55rem;border-radius:100px}
 
-#dashFrameWrap{position:fixed;left:0;right:0;bottom:0;top:clamp(48px,5.5vh,60px);z-index:150;background:var(--bg);display:flex;flex-direction:column}
-#dashFrameBar{display:flex;align-items:center;gap:1rem;padding:0.5rem clamp(0.8rem,2vw,1.4rem);border-bottom:1px solid var(--border-b);background:rgba(8,12,20,0.9);flex:0 0 auto}
+/* full-viewport overlay: the dashboard fills the screen (it has its own sidebar nav +
+   in-sidebar back-to-overview) so no parent nav bar is injected above the iframe -
+   that bar stole vertical space and forced the dashboard sidebar/filters to scroll */
+#dashFrameWrap{position:fixed;inset:0;z-index:300;background:var(--bg);display:flex;flex-direction:column}
 .dash-back{font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.8rem;color:var(--accent);background:rgba(100,180,255,0.1);
   border:1px solid rgba(100,180,255,0.35);border-radius:8px;padding:0.45rem 0.85rem;cursor:pointer}
 .dash-back:hover{background:rgba(100,180,255,0.2)}
-#dashFrameTitle{font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.95rem;color:var(--text)}
 #dashFrame{flex:1 1 auto;width:100%;border:none;background:var(--bg)}
 #dashSoon{flex:1 1 auto;display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;text-align:center;padding:2rem}
 #dashSoon .ds-ico{font-size:3rem}
@@ -1602,10 +1603,6 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 
   <!-- Full dashboard frame (opened when a tile or in-dashboard nav is used) -->
   <div id="dashFrameWrap" style="display:none">
-    <div id="dashFrameBar">
-      <button class="dash-back" onclick="closeDashboard()">&#8592; All dashboards</button>
-      <span id="dashFrameTitle">-</span>
-    </div>
     <iframe id="dashFrame" title="Dashboard" src="about:blank"></iframe>
     <div id="dashSoon">
       <div class="ds-ico">&#128736;</div>
@@ -3221,8 +3218,7 @@ window.addEventListener('load',()=>{
     const d=DASHES[key];if(!d)return;
     el('dashLanding').style.display='none';
     el('dashFrameWrap').style.display='flex';
-    el('viewSwitch').style.display='none';               // dashboard has its own nav + back button
-    el('dashFrameTitle').textContent=d.title;
+    el('viewSwitch').style.display='none';               // dashboard fills the screen; back-nav lives in its own sidebar
     const frame=el('dashFrame'),soon=el('dashSoon');
     if(d.src){soon.style.display='none';frame.style.display='';
       if(frame.getAttribute('src')!==d.src)frame.setAttribute('src',d.src);}
