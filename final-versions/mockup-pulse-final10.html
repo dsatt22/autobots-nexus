@@ -48,19 +48,21 @@ button{font-family:inherit;cursor:pointer;color:inherit}
   position:sticky;top:0;align-self:flex-start;height:100vh;
   background:rgba(8,12,20,0.92);border-right:1px solid var(--border2);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  display:flex;flex-direction:column;padding:1.4rem 1.05rem;gap:1.3rem;overflow-y:auto;overflow-x:hidden;z-index:60;
+  display:flex;flex-direction:column;padding:1.4rem 1.05rem;gap:1rem;overflow:hidden;z-index:60;
   transition:width .2s,flex-basis .2s;
 }
 .sidebar>*{min-width:0;max-width:100%}
-.side-top{display:flex;align-items:center;gap:.55rem;padding:.1rem .15rem;min-width:0}
+.side-top{display:flex;align-items:center;gap:.55rem;padding:.1rem .15rem;min-width:0;flex:0 0 auto}
+.side-sec{flex:0 0 auto}
 .brand{display:flex;align-items:center;gap:.55rem;min-width:0;text-decoration:none;color:inherit;flex:1 1 auto;cursor:pointer}
 /* collapse toggle (laptop only, 1025-2559px) - double-chevron affordance in the header */
 .side-toggle{display:none;flex:0 0 auto;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;
   width:1.85rem;height:1.85rem;place-items:center;font-size:1.05rem;line-height:1;color:var(--sub)}
 .side-toggle:hover{border-color:var(--accent);color:var(--text)}
 /* in-sidebar back to the dashboards overview (only shown when embedded in reports.html) */
-.side-back{display:none;align-items:center;gap:.4rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
+.side-back{display:none;flex:0 0 auto;align-items:center;gap:.4rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
   border-radius:8px;padding:.42rem .6rem;font-family:'Oxanium',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.03em;width:100%;text-align:left}
+.side-back .ico{width:1.05rem;text-align:center;flex:0 0 auto}
 .side-back:hover{border-color:var(--accent);color:var(--text)}
 /* collapsed sidebar (laptop) */
 .shell.sb-collapsed .sidebar{width:64px;flex-basis:64px;padding:1.1rem .45rem;align-items:center;gap:1rem}
@@ -70,7 +72,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .shell.sb-collapsed .nav-label,
 .shell.sb-collapsed .filters,
 .shell.sb-collapsed .side-foot,
-.shell.sb-collapsed .side-back{display:none}
+.shell.sb-collapsed .side-back .lbl{display:none}
+/* back button collapses to just its icon, matching the nav items */
+.shell.sb-collapsed .side-back{width:auto;justify-content:center;padding:.5rem;gap:0}
 .shell.sb-collapsed .side-top{flex-direction:column;gap:.6rem;justify-content:center;padding:0}
 .shell.sb-collapsed .brand{justify-content:center}
 .shell.sb-collapsed .brand-mark{margin:0}
@@ -92,7 +96,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .nav a:hover{background:rgba(255,255,255,0.05);color:var(--text)}
 .nav a.active{background:linear-gradient(90deg,rgba(100,180,255,0.16),rgba(100,180,255,0.02));
   color:var(--text);border-color:rgba(100,180,255,0.35);box-shadow:inset 2px 0 0 var(--accent)}
-.filters{margin-top:.1rem;display:flex;flex-direction:column;gap:.8rem;border-top:1px solid var(--border);padding-top:1.05rem}
+/* filters grow to fill on tall screens; the ONLY region that scrolls internally on very short screens */
+.filters{margin-top:.1rem;display:flex;flex-direction:column;gap:.8rem;border-top:1px solid var(--border);padding-top:1.05rem;
+  flex:1 1 auto;min-height:0;overflow-y:auto}
 .ff{display:flex;flex-direction:column;gap:.32rem}
 .ff label{font-size:.64rem;letter-spacing:.16em;color:var(--sub);text-transform:uppercase}
 .selw{position:relative}
@@ -103,7 +109,7 @@ select:focus{outline:none;border-color:var(--accent)}
 .freset{margin-top:.1rem;background:transparent;border:1px solid var(--border2);color:var(--sub);
   border-radius:8px;padding:.5rem;font-size:.76rem;letter-spacing:.08em}
 .freset:hover{border-color:var(--accent);color:var(--text)}
-.side-foot{margin-top:auto;font-size:.68rem;color:var(--dim);line-height:1.6;padding:.4rem}
+.side-foot{flex:0 0 auto;font-size:.68rem;color:var(--dim);line-height:1.6;padding:.4rem}
 
 /* ============ MAIN ============ */
 .main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
@@ -457,8 +463,7 @@ table.pos.allcols .c-cur,table.pos.allcols .c-sl{display:table-cell !important}
       </div>
       <button class="side-toggle" id="sideToggle" aria-label="Collapse sidebar" title="Collapse sidebar">&#171;</button>
     </div>
-    <button class="side-back" id="sideBack" title="Back to all dashboards"><span>&#8592;</span> All dashboards</button>
-    <div>
+    <div class="side-sec">
       <div class="nav-label">Dashboards</div>
       <nav class="nav">
         <a class="active" href="#" data-dash="pulse"><span class="ico">&#9889;</span> <span class="lbl">Daily Pulse</span></a>
@@ -484,6 +489,7 @@ table.pos.allcols .c-cur,table.pos.allcols .c-sl{display:table-cell !important}
         </select></div></div>
       <button class="freset" id="fReset">Reset filters</button>
     </div>
+    <button class="side-back" id="sideBack" title="Back to all dashboards"><span class="ico">&#8592;</span><span class="lbl">All dashboards</span></button>
     <div class="side-foot">Filters drive the Performance chart, Open Positions table and the donut together.</div>
   </aside>
 
