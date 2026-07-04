@@ -1471,6 +1471,50 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .jr-ticker-card-tick { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
 .jr-ticker-card-pnl  { font-family:'Oxanium',sans-serif; font-size:1.1rem; }
 .jr-ticker-card-row  { font-family:'Share Tech Mono',monospace; font-size:0.85rem; }
+
+/* ===== Reports / Dashboards view toggle + dashboards landing ===== */
+.view-switch{position:fixed;top:calc(clamp(48px,5.5vh,60px) + 10px);left:50%;transform:translateX(-50%);
+  z-index:190;display:inline-flex;background:rgba(8,12,20,0.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--border-b);border-radius:100px;padding:4px;gap:2px;box-shadow:0 6px 24px rgba(0,0,0,0.35)}
+.vs-btn{font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.04em;color:var(--sub);
+  background:transparent;border:none;cursor:pointer;padding:0.5rem 1.25rem;border-radius:100px;transition:all .15s}
+.vs-btn:hover{color:var(--text)}
+.vs-btn.on{background:linear-gradient(135deg,rgba(100,180,255,0.28),rgba(167,139,250,0.2));color:var(--text);box-shadow:0 0 12px rgba(100,180,255,0.25)}
+
+#dashWrap{min-height:100vh;padding-top:calc(clamp(48px,5.5vh,60px) + 4.5rem)}
+#dashLanding{max-width:1200px;margin:0 auto;padding:1rem clamp(1rem,3vw,2.5rem) 4rem}
+.dash-head{text-align:center;margin-bottom:2.2rem}
+.dash-eye{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem}
+.dash-title{font-family:'Oxanium',sans-serif;font-weight:800;font-size:clamp(1.9rem,4vw,3rem);letter-spacing:0.01em;color:var(--text)}
+.dash-title .ac{color:var(--accent)}
+.dash-sub{color:var(--sub);font-size:0.9rem;margin-top:0.6rem}
+.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1rem,2vw,1.6rem)}
+@media(max-width:760px){.dash-grid{grid-template-columns:1fr}}
+.dash-tile{position:relative;text-align:left;background:var(--bg-card);border:1px solid var(--border-b);border-radius:16px;
+  padding:1.5rem 1.6rem;cursor:pointer;transition:all .18s;overflow:hidden;color:var(--text);font-family:inherit;
+  display:flex;flex-direction:column;gap:0.5rem;min-height:180px}
+.dash-tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tileclr,var(--accent))}
+.dash-tile:not(.soon):hover{transform:translateY(-3px);border-color:var(--tileclr,var(--accent));box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+.dash-tile .dt-ico{font-size:1.9rem}
+.dash-tile .dt-name{font-family:'Oxanium',sans-serif;font-weight:700;font-size:1.2rem}
+.dash-tile .dt-desc{color:var(--sub);font-size:0.82rem;line-height:1.5}
+.dash-tile .dt-go{margin-top:auto;font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.78rem;color:var(--tileclr,var(--accent));display:flex;align-items:center;gap:0.4rem}
+.dash-tile.soon{cursor:default;opacity:0.62}
+.dash-tile.soon:hover{transform:none}
+.dt-soon-badge{position:absolute;top:1rem;right:1rem;font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.6rem;letter-spacing:0.12em;
+  color:#f5a94f;border:1px solid rgba(245,169,79,0.4);background:rgba(245,169,79,0.12);padding:0.2rem 0.55rem;border-radius:100px}
+
+#dashFrameWrap{position:fixed;left:0;right:0;bottom:0;top:clamp(48px,5.5vh,60px);z-index:150;background:var(--bg);display:flex;flex-direction:column}
+#dashFrameBar{display:flex;align-items:center;gap:1rem;padding:0.5rem clamp(0.8rem,2vw,1.4rem);border-bottom:1px solid var(--border-b);background:rgba(8,12,20,0.9);flex:0 0 auto}
+.dash-back{font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.8rem;color:var(--accent);background:rgba(100,180,255,0.1);
+  border:1px solid rgba(100,180,255,0.35);border-radius:8px;padding:0.45rem 0.85rem;cursor:pointer}
+.dash-back:hover{background:rgba(100,180,255,0.2)}
+#dashFrameTitle{font-family:'Oxanium',sans-serif;font-weight:700;font-size:0.95rem;color:var(--text)}
+#dashFrame{flex:1 1 auto;width:100%;border:none;background:var(--bg)}
+#dashSoon{flex:1 1 auto;display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;text-align:center;padding:2rem}
+#dashSoon .ds-ico{font-size:3rem}
+#dashSoon h2{font-family:'Oxanium',sans-serif;font-weight:800;font-size:1.6rem;color:var(--text)}
+#dashSoon p{color:var(--sub);max-width:440px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -1517,6 +1561,60 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
     </ul>
   </div>
 </nav>
+
+<!-- Reports / Dashboards view toggle -->
+<div class="view-switch" id="viewSwitch">
+  <button class="vs-btn on" data-view="reports" onclick="setView('reports')">Reports</button>
+  <button class="vs-btn" data-view="dashboards" onclick="setView('dashboards')">Dashboards</button>
+</div>
+
+<!-- Dashboards view (hidden until toggled) -->
+<div id="dashWrap" style="display:none">
+  <section id="dashLanding">
+    <div class="dash-head">
+      <div class="dash-eye">Operator Dashboards</div>
+      <h1 class="dash-title">Live <span class="ac">Dashboards</span></h1>
+      <p class="dash-sub">Interactive views of the trading system - same data, richer lens. Behind the same access as the reports.</p>
+    </div>
+    <div class="dash-grid">
+      <button class="dash-tile" style="--tileclr:#64b4ff" data-dash="pulse" onclick="openDashboard('pulse')">
+        <div class="dt-ico">&#9889;</div><div class="dt-name">Daily Pulse</div>
+        <div class="dt-desc">Morning and evening snapshot - open positions, unrealized PnL, the promotion gate and pipeline activity.</div>
+        <div class="dt-go">Open dashboard &#8594;</div>
+      </button>
+      <button class="dash-tile" style="--tileclr:#00c896" data-dash="trading" onclick="openDashboard('trading')">
+        <div class="dt-ico">&#128202;</div><div class="dt-name">Trading Activity</div>
+        <div class="dt-desc">Weekly and monthly performance - net adjusted PnL, equity build, asset treemap and the bot leaderboard.</div>
+        <div class="dt-go">Open dashboard &#8594;</div>
+      </button>
+      <div class="dash-tile soon" style="--tileclr:#a855f7">
+        <span class="dt-soon-badge">COMING SOON</span>
+        <div class="dt-ico">&#127942;</div><div class="dt-name">Champion vs Challenger</div>
+        <div class="dt-desc">Head-to-head of the live champion against its shadow challengers per ticker.</div>
+      </div>
+      <div class="dash-tile soon" style="--tileclr:#ff8c42">
+        <span class="dt-soon-badge">COMING SOON</span>
+        <div class="dt-ico">&#128293;</div><div class="dt-name">System Health</div>
+        <div class="dt-desc">Infrastructure, bot uptime, data freshness and error monitoring across the ecosystem.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full dashboard frame (opened when a tile or in-dashboard nav is used) -->
+  <div id="dashFrameWrap" style="display:none">
+    <div id="dashFrameBar">
+      <button class="dash-back" onclick="closeDashboard()">&#8592; All dashboards</button>
+      <span id="dashFrameTitle">-</span>
+    </div>
+    <iframe id="dashFrame" title="Dashboard" src="about:blank"></iframe>
+    <div id="dashSoon">
+      <div class="ds-ico">&#128736;</div>
+      <h2 id="dashSoonName">Coming soon</h2>
+      <p id="dashSoonDesc">This dashboard is not built yet. Check back soon.</p>
+      <button class="dash-back" onclick="closeDashboard()">&#8592; All dashboards</button>
+    </div>
+  </div>
+</div>
 
 <div id="pageWrap">
 
@@ -3099,6 +3197,54 @@ window.addEventListener('load',()=>{
 });
 </script>
 </div><!-- /appContent -->
+
+<script>
+/* ══════════════════════════════════
+   REPORTS / DASHBOARDS VIEWS
+══════════════════════════════════ */
+(function(){
+  const DASHES={
+    pulse:{title:'Daily Pulse',src:'final-versions/mockup-pulse-final10.html'},
+    trading:{title:'Trading Activity',src:'final-versions/mockup-trading-final1.html'},
+    champion:{title:'Champion vs Challenger',desc:'A head-to-head of the live champion against its shadow challengers per ticker is on the roadmap. Not built yet.'},
+    health:{title:'System Health',desc:'Infrastructure, bot uptime, data freshness and error monitoring is on the roadmap. Not built yet.'}
+  };
+  const el=id=>document.getElementById(id);
+  window.setView=function(v){
+    document.querySelectorAll('#viewSwitch .vs-btn').forEach(b=>b.classList.toggle('on',b.dataset.view===v));
+    if(v==='dashboards'){el('pageWrap').style.display='none';el('dashWrap').style.display='';closeDashboard();}
+    else{el('dashWrap').style.display='none';el('pageWrap').style.display='';}
+    el('viewSwitch').style.display='';
+    window.scrollTo(0,0);
+  };
+  window.openDashboard=function(key){
+    const d=DASHES[key];if(!d)return;
+    el('dashLanding').style.display='none';
+    el('dashFrameWrap').style.display='flex';
+    el('viewSwitch').style.display='none';               // dashboard has its own nav + back button
+    el('dashFrameTitle').textContent=d.title;
+    const frame=el('dashFrame'),soon=el('dashSoon');
+    if(d.src){soon.style.display='none';frame.style.display='';
+      if(frame.getAttribute('src')!==d.src)frame.setAttribute('src',d.src);}
+    else{frame.style.display='none';frame.setAttribute('src','about:blank');
+      soon.style.display='flex';el('dashSoonName').textContent=d.title;el('dashSoonDesc').textContent=d.desc||'';}
+    window.scrollTo(0,0);
+  };
+  window.closeDashboard=function(){
+    el('dashFrameWrap').style.display='none';
+    el('dashFrame').setAttribute('src','about:blank');
+    el('dashLanding').style.display='';
+    el('viewSwitch').style.display='';
+  };
+  /* cross-dashboard navigation posted from inside the iframes */
+  window.addEventListener('message',function(ev){
+    const m=ev.data;if(!m||m.type!=='dashboard-nav')return;
+    if(m.target==='overview'){el('dashLanding').style.display='';el('dashFrameWrap').style.display='none';
+      el('dashFrame').setAttribute('src','about:blank');el('viewSwitch').style.display='';return;}
+    if(DASHES[m.target])openDashboard(m.target);
+  });
+})();
+</script>
 
 <script>
 /* ══════════════════════════════════
