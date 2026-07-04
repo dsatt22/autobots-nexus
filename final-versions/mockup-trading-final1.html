@@ -63,7 +63,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .brand-name{font-family:'Oxanium';font-weight:800;letter-spacing:.05em;font-size:clamp(.98rem,1vw,1.15rem);white-space:nowrap}
 .brand-name span{color:var(--accent)}
 .brand-sub{font-size:.58rem;letter-spacing:.26em;color:var(--sub);margin-top:.1rem;white-space:nowrap}
-/* collapse toggle (laptop only, 1025-2559px) - double-chevron affordance in the header */
+/* collapse toggle (desktop/laptop, min-width 1025px incl. high-DPI 2880px+) - double-chevron affordance in the header */
 .side-toggle{display:none;flex:0 0 auto;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;
   width:1.85rem;height:1.85rem;place-items:center;font-size:1.05rem;line-height:1;color:var(--sub)}
 .side-toggle:hover{border-color:var(--accent);color:var(--text)}
@@ -337,8 +337,8 @@ table.lb.allcols .c-streak,table.lb.allcols .c-dur,table.lb.allcols .c-best,tabl
 
 /* ============ RESPONSIVE SIDEBAR (mobile) ============ */
 .scrim{display:none}
-/* laptop range: show the collapse toggle */
-@media(min-width:1025px) and (max-width:2559px){.side-toggle{display:grid}}
+/* desktop/laptop: show the collapse toggle at any width above the mobile drawer breakpoint (incl. high-DPI 2880px+/4K laptops) */
+@media(min-width:1025px){.side-toggle{display:grid}}
 @media(max-width:1024px){
   .sidebar{position:fixed;left:0;top:0;transform:translateX(-105%);transition:transform .25s;width:min(82vw,330px);flex-basis:auto}
   .sidebar.open{transform:translateX(0)}
