@@ -55,7 +55,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .side-top{display:flex;align-items:center;gap:.55rem;padding:.1rem .15rem;min-width:0;flex:0 0 auto}
 .side-sec{flex:0 0 auto}
 .brand{display:flex;align-items:center;gap:.55rem;min-width:0;text-decoration:none;color:inherit;flex:1 1 auto;cursor:pointer}
-/* collapse toggle (laptop only, 1025-2559px) - double-chevron affordance in the header */
+/* collapse toggle (desktop/laptop, min-width 1025px incl. high-DPI 2880px+) - double-chevron affordance in the header */
 .side-toggle{display:none;flex:0 0 auto;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:8px;
   width:1.85rem;height:1.85rem;place-items:center;font-size:1.05rem;line-height:1;color:var(--sub)}
 .side-toggle:hover{border-color:var(--accent);color:var(--text)}
@@ -358,8 +358,8 @@ table.pos tbody tr:hover td.stick{background:#101a2c}
 
 /* ============ RESPONSIVE SIDEBAR ============ */
 .scrim{display:none}
-/* laptop range: show the collapse toggle */
-@media(min-width:1025px) and (max-width:2559px){.side-toggle{display:grid}}
+/* desktop/laptop: show the collapse toggle at any width above the mobile drawer breakpoint (incl. high-DPI 2880px+/4K laptops) */
+@media(min-width:1025px){.side-toggle{display:grid}}
 @media(max-width:1024px){
   .sidebar{position:fixed;left:0;top:0;transform:translateX(-105%);transition:transform .25s;width:min(82vw,330px);flex-basis:auto}
   .sidebar.open{transform:translateX(0)}
