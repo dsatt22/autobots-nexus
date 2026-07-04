@@ -99,7 +99,7 @@ select:focus{outline:none;border-color:var(--accent)}
 .side-foot{flex:0 0 auto;font-size:.68rem;color:var(--dim);line-height:1.6;padding:.4rem}
 
 /* ---- collapsed sidebar (laptop) ---- */
-.shell.sb-collapsed .sidebar{width:64px;flex-basis:64px;padding:1.1rem .45rem;align-items:center;gap:1rem}
+.shell.sb-collapsed .sidebar{width:78px;flex-basis:78px;padding:1.1rem .55rem;align-items:center;gap:1rem}
 .shell.sb-collapsed .brand-txt,
 .shell.sb-collapsed .nav a .lbl,
 .shell.sb-collapsed .nav a .soon-tag,
@@ -1014,6 +1014,7 @@ function buildPeriodDropdown(){
   $('#fPeriod').innerHTML=m.weeks.map(w=>`<option value="${w.id}" ${state.weekId===w.id?'selected':''}>Week ${w.n} - ${w.range}</option>`).join('');
 }
 function lastWeekOf(mkey){const w=monthByKey(mkey).weeks;return w[w.length-1].id;}
+function firstWeekOf(mkey){return monthByKey(mkey).weeks[0].id;}
 // keep the same week number when the month changes; fall back to the last week
 function weekInMonth(mkey,n){const wks=monthByKey(mkey).weeks;return (wks.find(w=>w.n===n)||wks[wks.length-1]).id;}
 function applyViewType(){
@@ -1036,7 +1037,7 @@ function wire(){
   document.querySelectorAll('#wmToggle button').forEach(b=>b.addEventListener('click',()=>{
     state.viewType=b.dataset.wm;
     if(state.viewType==='week'){
-      if(!state.weekId||!weekById(state.weekId)||weekById(state.weekId).mkey!==state.mkey)state.weekId=lastWeekOf(state.mkey);
+      state.weekId=firstWeekOf(state.mkey);   // toggling to Weekly defaults to the first week of the selected month
       buildPeriodDropdown();
     }
     applyViewType();resetPageAndRender();
@@ -1044,11 +1045,8 @@ function wire(){
   /* Sidebar Date Range selects the month (does not change Weekly/Monthly) */
   $('#fRange').addEventListener('change',e=>{
     state.mkey=e.target.value;
-    if(state.viewType==='week'){
-      const n=(state.weekId&&weekById(state.weekId))?weekById(state.weekId).n:monthByKey(state.mkey).weeks.length;
-      state.weekId=weekInMonth(state.mkey,n);buildPeriodDropdown();
-    }
-    resetPageAndRender();
+    state.viewType='month';state.weekId=null;   // changing month forces the Monthly rollup (user can toggle to Weekly)
+    applyViewType();resetPageAndRender();
   });
   /* Weeks dropdown (Weekly mode only) */
   $('#fPeriod').addEventListener('change',e=>{state.weekId=e.target.value;resetPageAndRender();});
