@@ -565,6 +565,145 @@ function seed(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i)
 function ddColor(dd){const a=Math.abs(dd);return a>=12?'var(--neg)':a>=6?'var(--amber)':'var(--sub)';}
 function durStr(min){if(min>=1440){const d=min/1440;return d.toFixed(d>=10?0:1)+'d';}if(min>=60)return (min/60).toFixed(min>=600?0:1)+'h';return Math.round(min)+'m';}
 
+/* ============================================================
+   LIVE DATA (Phase 4) - fetch Trading Activity from the dashboard API instead of
+   the embedded BASE/generators. Feature-flagged so both modes coexist and rollback
+   is instant: ?live=0 forces static, ?live=1 / default is live, ?base= overrides the
+   API base for local testing. DECISION (option B): the CURRENT week + CURRENT month
+   are live (they overlay the newest static slots jun-w4 / jun); PAST periods keep the
+   frozen embedded static snapshot. The bearer token is intentionally shipped in this
+   public file (read-only, non-sensitive stats). Only the DATA SOURCE changes - every
+   render function below is untouched apart from minimal null-guards for legitimate
+   data-absence gaps (pf below floor, best/worst/avg-duration have no stored column).
+   ============================================================ */
+const LIVE={enabled:true, base:'https://api.autobotsnexus.com',
+  token:'G3lbXH5ndXybBeGAb5l7Zzwhmgo9UOzv3spjVNaXeVI', refreshMs:60000};
+const _q=new URLSearchParams(location.search); if(_q.get('base'))LIVE.base=_q.get('base');
+const USE_LIVE=LIVE.enabled && _q.get('live')!=='0';
+const LIVE_CUR_WEEK='jun-w4', LIVE_CUR_MONTH='jun';   // API current completed period aligns with these static slots
+let LIVE_ROWS={week:null,month:null}, LIVE_PRIOR={week:null,month:null};
+let LIVE_EQUITY={week:null,month:null};   // real period-scoped curves from /trading/equity
+
+/* Reshape the /trading/equity response into the chart's {labels,data} shape. The
+   endpoint returns the REAL period-scoped cumulative curve (builds from ~0 to the
+   period net). Weekly = per-trade points -> 7 chronological day buckets (end-of-day
+   cumulative, forward-filled, weekday-labelled from the window start); monthly =
+   daily points -> week-of-month buckets. Date math uses the date portion only, so
+   it is timezone-robust. */
+function _eqDayOffset(startISO, tISO){
+  return Math.round((Date.parse(tISO.slice(0,10)+'T00:00:00Z') - Date.parse(startISO.slice(0,10)+'T00:00:00Z'))/86400000);
+}
+function _reshapeWeekEquity(resp){
+  const start=resp&&resp.scope&&resp.scope.start, pts=(resp&&resp.points)||[];
+  if(!start||!pts.length) return {labels:DAY_LABELS.slice(), data:new Array(7).fill(0)};
+  const end=new Array(7).fill(null);
+  pts.forEach(p=>{const off=_eqDayOffset(start,p.exit_time); if(off>=0&&off<7&&p.cumulative_pnl!=null) end[off]=p.cumulative_pnl;});
+  const base=Date.parse(start.slice(0,10)+'T00:00:00Z'), labels=[], data=[]; let last=0;
+  for(let i=0;i<7;i++){
+    labels.push(['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(base+i*86400000).getUTCDay()]);
+    if(end[i]!=null) last=end[i];
+    data.push(+Number(last).toFixed(2));
+  }
+  return {labels,data};
+}
+function _reshapeMonthEquity(resp){
+  const pts=(resp&&resp.points)||[];
+  if(!pts.length) return {labels:[],data:[]};
+  const buckets={};
+  pts.forEach(p=>{const dom=parseInt(String(p.bucket||'').slice(8,10),10)||1; const wk=Math.floor((dom-1)/7)+1; if(p.cumulative_pnl!=null) buckets[wk]=p.cumulative_pnl;});
+  const wks=Object.keys(buckets).map(Number).sort((a,b)=>a-b);
+  return {labels:wks.map(w=>'W'+w), data:wks.map(w=>+Number(buckets[w]).toFixed(2))};
+}
+async function _fetchEquity(scope){
+  const t=state.fTicker!=='all'?'&ticker='+encodeURIComponent(state.fTicker):'';
+  const e=state.fEnv!=='all'?'&env='+encodeURIComponent(state.fEnv):'';
+  const resp=await _fetch('/trading/equity?scope='+scope+t+e);
+  return scope==='month'?_reshapeMonthEquity(resp):_reshapeWeekEquity(resp);
+}
+
+function _syncedET(){
+  try{const d=new Date(),tz='America/New_York';
+    const day=d.toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',year:'numeric'});
+    const tm=d.toLocaleString('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:true});
+    return `${day} &middot; ${tm} ET`;   // "Jul 6, 2026 &middot; 11:09 AM ET" (matches static format)
+  }catch(e){return 'just now';}
+}
+function _setStatus(kind,msg){
+  const led=document.querySelector('.synced .led');
+  if(led){const c=kind==='ok'?'var(--pos)':kind==='stale'?'var(--amber)':'var(--neg)';
+    led.style.background=c;led.style.boxShadow='0 0 8px '+c;}
+  if(msg){const el=$('#syncedTime');if(el)el.innerHTML=msg;}
+}
+async function _fetch(path){
+  const r=await fetch(`${LIVE.base}${path}`,{headers:{'Authorization':'Bearer '+LIVE.token},cache:'no-store'});
+  if(r.status===401||r.status===403){const e=new Error('auth');e.kind='auth';e.status=r.status;throw e;}
+  if(!r.ok){const e=new Error('http');e.kind='http';e.status=r.status;throw e;}
+  return r.json();
+}
+/* Map an API /trading/leaderboard row to the render-shape the dashboard consumes.
+   best/worst/durMin are GAPs (no stored column) -> null -> dash; pf may be null below
+   the reliability floor -> dash; dd negated to match the static negative convention;
+   trend is now REAL (per-bot 7-pt array). */
+function adaptRow(r){
+  return {bot:r.bot_name, ticker:r.ticker, tf:r.timeframe, env:r.trading_mode,
+    trades:r.total_trades, wins:r.wins, losses:r.losses, wr:r.win_rate_pct, pnl:r.total_pnl_usd,
+    pf:(r.profit_factor==null?null:r.profit_factor),
+    dd:(r.max_drawdown_pct==null?null:-Math.abs(r.max_drawdown_pct)),
+    best:null, worst:null, durMin:null,
+    streak:(r.current_win_streak!=null?r.current_win_streak:null),
+    trend:(Array.isArray(r.trend)?r.trend:[])};
+}
+function _adaptRows(rows){return (rows||[]).map(adaptRow);}
+function _liveScopeActive(){
+  return !!(USE_LIVE && ((state.viewType==='week' && state.weekId===LIVE_CUR_WEEK && LIVE_ROWS.week)
+    || (state.viewType==='month' && state.mkey===LIVE_CUR_MONTH && LIVE_ROWS.month)));
+}
+function _handleErr(err){_setStatus('err', err&&err.kind==='auth'?'Live data auth failed ('+(err.status||401)+')':'Unable to reach live data');}
+
+async function _loadCurrent(){
+  const [wLb,mLb,wSum,mSum]=await Promise.all([
+    _fetch('/trading/leaderboard?scope=week'),
+    _fetch('/trading/leaderboard?scope=month'),
+    _fetch('/trading/summary?scope=week').catch(()=>null),
+    _fetch('/trading/summary?scope=month').catch(()=>null),
+  ]);
+  LIVE_ROWS.week=_adaptRows(wLb.rows); LIVE_ROWS.month=_adaptRows(mLb.rows);
+  // Real period-scoped equity curves (best-effort; equitySeries falls back to the
+  // synthetic shape if a fetch fails). Honours the current ticker/env filters.
+  try{const [wEq,mEq]=await Promise.all([_fetchEquity('week'),_fetchEquity('month')]);
+    LIVE_EQUITY.week=wEq; LIVE_EQUITY.month=mEq;}catch(e){}
+  // prior-period rows -> real deltas (best-effort; deltaHtml already handles null prev)
+  try{const pw=wSum&&wSum.prior&&wSum.prior.period_key;
+    if(pw){const p=await _fetch('/trading/leaderboard?scope=week&period='+encodeURIComponent(pw));LIVE_PRIOR.week=_adaptRows(p.rows);}}catch(e){}
+  try{const pm=mSum&&mSum.prior&&mSum.prior.period_key;
+    if(pm){const p=await _fetch('/trading/leaderboard?scope=month&period='+encodeURIComponent(pm));LIVE_PRIOR.month=_adaptRows(p.rows);}}catch(e){}
+}
+
+async function init(){
+  if(!USE_LIVE){populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();return;}
+  _setStatus('stale','Loading live data&hellip;');
+  try{await _loadCurrent();}
+  catch(err){
+    // Never leave the page blank: fall back to the embedded static snapshot.
+    _handleErr(err);
+    populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
+    _setStatus('err',(err&&err.kind==='auth'?'Auth failed':'Live data unavailable')+' &middot; showing static snapshot');
+    return;
+  }
+  populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
+  _setStatus('ok',_syncedET());
+  // Equity chart honours ticker/env: refetch the period-scoped curve when they change
+  // (an aggregate series can't be filtered client-side like the rows). Added alongside
+  // wire()'s handlers, not replacing them.
+  ['#fTicker','#fEnv'].forEach(id=>{const el=$(id); if(el) el.addEventListener('change',async()=>{
+    try{const [w,m]=await Promise.all([_fetchEquity('week'),_fetchEquity('month')]); LIVE_EQUITY.week=w; LIVE_EQUITY.month=m; render();}catch(e){}
+  });});
+  setInterval(async()=>{
+    try{await _loadCurrent();render();_setStatus('ok',_syncedET());}
+    catch(err){_setStatus('stale','Live refresh failed &middot; showing last good');}
+  },LIVE.refreshMs);
+}
+
 /* ================= BASE ROSTER =================
    Base = real per-bot weekly stats from weekly_review_2026-06-28 (Week of Jun 22-28).
    [bot, ticker, tf, env, winRate, weeklyPnL, trades]
@@ -701,6 +840,8 @@ function botMonth(base,mkey){
 
 /* rows for the active scope (unfiltered) */
 function scopeRows(){
+  // Live current period overlays the newest static slot; past periods stay static.
+  if(_liveScopeActive())return state.viewType==='week'?LIVE_ROWS.week:LIVE_ROWS.month;
   if(state.viewType==='week')return BASE.map(b=>botWeek(b,state.weekId)).filter(Boolean);
   return BASE.map(b=>botMonth(b,state.mkey)).filter(Boolean);
 }
@@ -731,6 +872,11 @@ function aggregate(rows){
 
 /* previous-scope aggregate for deltas */
 function prevAggregate(){
+  // Live current period -> real prior-period rows for the deltas.
+  if(_liveScopeActive()){
+    const pr=state.viewType==='week'?LIVE_PRIOR.week:LIVE_PRIOR.month;
+    return (pr&&pr.length)?aggregate(filtRows(pr)):null;
+  }
   let rows=[];
   if(state.viewType==='week'){
     const idx=ALL_WEEKS.findIndex(w=>w.id===state.weekId);
@@ -760,6 +906,11 @@ function deltaPts(cur,prev){
 
 /* ================= EQUITY SERIES ================= */
 function equitySeries(net){
+  // Live current period: the REAL period-scoped curve from /trading/equity (builds
+  // from ~0 to the trade-level period net). Past/static periods + any fetch miss
+  // fall through to the seeded shape scaled to `net`.
+  if(_liveScopeActive() && LIVE_EQUITY[state.viewType] && LIVE_EQUITY[state.viewType].data.length)
+    return LIVE_EQUITY[state.viewType];
   // week -> 7 daily points; month -> N weekly points. Shape seeded, scaled to `net`.
   let labels,steps;
   if(state.viewType==='week'){
@@ -842,8 +993,12 @@ function renderMetrics(agg){
 
 function renderEquity(agg){
   const s=equitySeries(agg.net);
+  // The note annotates the CURVE, so it states the curve's own ending. Static: the
+  // curve ends at `net` (identical to before). Live: the real trade-level period net,
+  // which by design sits a few percent off the metrics-box net (accepted).
+  const _eqEnd=(s.data&&s.data.length)?s.data[s.data.length-1]:agg.net;
   $('#eqNote').textContent=(state.fTicker==='all'?'All tickers':state.fTicker)+' · '+
-    (state.fEnv==='all'?'all envs':state.fEnv)+' · ends '+fmtUsd(agg.net);
+    (state.fEnv==='all'?'all envs':state.fEnv)+' · ends '+fmtUsd(_eqEnd);
   const cfg={type:'line',
     data:{labels:s.labels,datasets:[{data:s.data,borderWidth:2.4,tension:.32,pointRadius:s.labels.length<=7?3:0,pointHoverRadius:5,
       borderColor:'#00c896',segment:{borderColor:c=>(c.p1.parsed.y>=0?'#00c896':'#e84142')},
@@ -870,7 +1025,7 @@ function renderTopBottom(agg){
         <span class="tk"><span class="dot" style="background:${tcol(r.ticker)}"></span>${r.ticker}</span>
         <span class="badge ${r.env}">${r.env.toUpperCase()}</span></div>
       <div class="pc-pnl ${pcls(r.pnl)}">${fmtUsd(r.pnl)}</div>
-      <div class="pc-stats"><span>Win rate <b>${r.wr.toFixed(0)}%</b></span><span>PF <b>${r.pf>=99?'∞':r.pf.toFixed(2)}</b></span><span>Trades <b>${r.trades}</b></span></div>
+      <div class="pc-stats"><span>Win rate <b>${r.wr.toFixed(0)}%</b></span><span>PF <b>${r.pf==null?'-':(r.pf>=99?'∞':r.pf.toFixed(2))}</b></span><span>Trades <b>${r.trades}</b></span></div>
     </div>`;
   $('#tbStack').innerHTML=card(best,'best','▲ Best performer')+card(worst,'worst','▼ Worst performer');
 }
@@ -912,14 +1067,14 @@ function renderDonut(agg){
 }
 
 /* ---------- leaderboard ---------- */
-function spark(trend,color){const w=90,h=24,min=Math.min(...trend),max=Math.max(...trend),rng=(max-min)||1;
+function spark(trend,color){if(!trend||trend.length<2)return '<span class="dim">-</span>';const w=90,h=24,min=Math.min(...trend),max=Math.max(...trend),rng=(max-min)||1;
   const pts=trend.map((v,i)=>{const x=(i/(trend.length-1))*w;const y=h-((v-min)/rng)*(h-5)-2.5;return x.toFixed(1)+','+y.toFixed(1);}).join(' ');
   return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6"/></svg>`;}
 
 function lbFiltered(agg){
   let rows=agg.rows.filter(r=>state.lbTab==='all'||r.env===state.lbTab);
   if(state.q){const q=state.q.toLowerCase();rows=rows.filter(r=>r.bot.toLowerCase().includes(q)||r.ticker.toLowerCase().includes(q));}
-  rows.sort((a,b)=>state.dir*((a[state.sort])-(b[state.sort])));
+  rows.sort((a,b)=>state.dir*(((a[state.sort]??-Infinity))-((b[state.sort]??-Infinity))));
   return rows;
 }
 function renderLbTabs(agg){
@@ -947,12 +1102,12 @@ function renderLeaderboard(agg){
       <td class="r wl"><span class="w">${r.wins}</span>/<span class="l">${r.losses}</span></td>
       <td class="r">${r.wr.toFixed(0)}%</td>
       <td class="r"><span class="pnlbar"><i style="width:${w.toFixed(1)}%;background:${up?'var(--pos)':'var(--neg)'}"></i><span class="${pcls(r.pnl)}">${fmtUsd(r.pnl)}</span></span></td>
-      <td class="r">${r.pf>=99?'∞':r.pf.toFixed(2)}</td>
-      <td class="r c-dd" style="color:${ddColor(r.dd)}">${r.dd.toFixed(1)}%</td>
-      <td class="r c-best pos">${fmtUsd(r.best)}</td>
-      <td class="r c-worst neg">${fmtUsd(r.worst)}</td>
-      <td class="r c-dur" style="color:var(--sub)">${durStr(r.durMin)}</td>
-      <td class="c c-streak">${r.streak}</td>
+      <td class="r">${r.pf==null?'-':(r.pf>=99?'∞':r.pf.toFixed(2))}</td>
+      <td class="r c-dd" style="color:${r.dd==null?'var(--sub)':ddColor(r.dd)}">${r.dd==null?'-':r.dd.toFixed(1)+'%'}</td>
+      <td class="r c-best pos">${r.best==null?'-':fmtUsd(r.best)}</td>
+      <td class="r c-worst neg">${r.worst==null?'-':fmtUsd(r.worst)}</td>
+      <td class="r c-dur" style="color:var(--sub)">${r.durMin==null?'-':durStr(r.durMin)}</td>
+      <td class="c c-streak">${r.streak==null?'-':r.streak}</td>
       <td class="c c-spark">${spark(r.trend,up?'#00c896':'#e84142')}</td>
     </tr>`;
   }).join('')||`<tr><td colspan="15" style="text-align:center;color:var(--sub);padding:2rem">No bots match these filters.</td></tr>`;
@@ -993,14 +1148,14 @@ function renderLbMobile(all){
         <div class="lcard-grid">
           <div><span class="k">Trades</span><span class="v">${r.trades}</span></div>
           <div><span class="k">W / L &middot; Win%</span><span class="v">${r.wins}/${r.losses} &middot; ${r.wr.toFixed(0)}%</span></div>
-          <div><span class="k">PF</span><span class="v">${r.pf>=99?'∞':r.pf.toFixed(2)}</span></div>
+          <div><span class="k">PF</span><span class="v">${r.pf==null?'-':(r.pf>=99?'∞':r.pf.toFixed(2))}</span></div>
         </div>
         <div class="lcard-more"><div class="lm-grid">
-          <div><span class="k">Max DD</span><span class="v" style="color:${ddColor(r.dd)}">${r.dd.toFixed(1)}%</span></div>
-          <div><span class="k">Best Trade</span><span class="v pos">${fmtUsd(r.best)}</span></div>
-          <div><span class="k">Worst Trade</span><span class="v neg">${fmtUsd(r.worst)}</span></div>
-          <div><span class="k">Avg Dur</span><span class="v">${durStr(r.durMin)}</span></div>
-          <div><span class="k">Win Streak</span><span class="v">${r.streak}</span></div>
+          <div><span class="k">Max DD</span><span class="v" style="color:${r.dd==null?'var(--sub)':ddColor(r.dd)}">${r.dd==null?'-':r.dd.toFixed(1)+'%'}</span></div>
+          <div><span class="k">Best Trade</span><span class="v pos">${r.best==null?'-':fmtUsd(r.best)}</span></div>
+          <div><span class="k">Worst Trade</span><span class="v neg">${r.worst==null?'-':fmtUsd(r.worst)}</span></div>
+          <div><span class="k">Avg Dur</span><span class="v">${r.durMin==null?'-':durStr(r.durMin)}</span></div>
+          <div><span class="k">Win Streak</span><span class="v">${r.streak==null?'-':r.streak}</span></div>
           <div><span class="k">7D Trend</span><span class="v">${spark(r.trend,r.pnl>=0?'#00c896':'#e84142')}</span></div>
         </div></div></div>`).join('')||`<div class="dim" style="padding:1rem 0">No bots for the selected tickers.</div>`);
   }
@@ -1025,7 +1180,11 @@ function applyViewType(){
 
 /* ================= FILTER WIRING ================= */
 function populateTickers(){
-  const set=[...new Set(BASE.map(b=>b[1]))].sort();
+  // In live mode source the ticker list from the live current-week rows (superset of
+  // what is trading now); fall back to the static BASE roster.
+  const set=(USE_LIVE && LIVE_ROWS.week && LIVE_ROWS.week.length)
+    ? [...new Set(LIVE_ROWS.week.map(r=>r.ticker))].sort()
+    : [...new Set(BASE.map(b=>b[1]))].sort();
   const sel=$('#fTicker');set.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
 }
 function resetPageAndRender(){state.page=1;render();}
@@ -1118,7 +1277,7 @@ function paintSortArrows(){
 
 /* ================= INIT ================= */
 Chart.defaults.color='#9fb0c8';Chart.defaults.font.family="'Share Tech Mono', monospace";
-populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
+init();
 function resizeCharts(){eqChart&&eqChart.resize();donutChart&&donutChart.resize();}
 window.addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(resizeCharts,160);});
 // charts can be created before grid layout/fonts settle -> force a resize once both are ready
