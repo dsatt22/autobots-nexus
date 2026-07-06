@@ -728,7 +728,7 @@ const RAW_MORNING=[
  ['XRP','xrp-2etb-4h','4H','LONG',1.0585,'paper','2026-06-27T00:00','8h 59m']
 ];
 // per-mode "now" for duration/date-range math (report generation times)
-const NOW_BY_MODE={evening:new Date('2026-06-27T20:30:00-04:00').getTime(),
+let NOW_BY_MODE={evening:new Date('2026-06-27T20:30:00-04:00').getTime(),
                    morning:new Date('2026-06-27T09:00:00-04:00').getTime()};
 function NOWv(){return NOW_BY_MODE[state.mode];}
 function seed(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return ((h>>>0)%100000)/100000;}
@@ -744,11 +744,11 @@ function buildPos(RAW){return RAW.map((r,i)=>{
     sl:long?entry*0.97:entry*1.03, tp1:long?entry*1.02:entry*0.98,
     tp2:long?entry*1.035:entry*0.965, tp3:long?entry*1.05:entry*0.95, idx:i};
 });}
-const POS_EVENING=buildPos(RAW_EVENING), POS_MORNING=buildPos(RAW_MORNING);
+let POS_EVENING=buildPos(RAW_EVENING), POS_MORNING=buildPos(RAW_MORNING);
 function activePOS(){return state.mode==='morning'?POS_MORNING:POS_EVENING;}
 
 // promotion candidates (approaching) [bot,ticker,days,daysNeed,trades,tradesNeed]
-const CAND=[
+let CAND=[
  ['eth-mbc-4h','ETH',59,60,4,10],['eth-mtf-4h','ETH',59,60,5,10],['btc-1ms-4h','BTC',59,60,4,10],
  ['eth-emfi-4h','ETH',59,60,9,10],['avax-sfzl-4h','AVAX',54,60,3,10],['btc-atb-4h','BTC',54,60,6,10],
  ['sui-svs-4h','SUI',54,60,4,10],['sui-pps-4h','SUI',54,60,6,10],['wif-15sc-4h','WIF',52,60,5,10],
@@ -758,10 +758,10 @@ const CAND=[
  ['doge-scs-4h','DOGE',34,60,8,10],['trump-atb-2h','TRUMP',24,60,12,15]
 ].map(c=>({bot:c[0],ticker:c[1],days:c[2],daysNeed:c[3],trades:c[4],tradesNeed:c[5],ready:false}));
 
-const PROMO_EVENT={bot:'eth-fgc-4h',ticker:'ETH',trades:9,tradesNeed:10,days:60,daysNeed:60};
+let PROMO_EVENT={bot:'eth-fgc-4h',ticker:'ETH',trades:9,tradesNeed:10,days:60,daysNeed:60};
 
 // pipeline funnel: [label,count,desc,color]
-const PIPE=[
+let PIPE=[
  ['Queued',1,'awaiting codegen','#64b4ff'],
  ['Codegen',0,'generated this window','#a78bfa'],
  ['Testing',0,'actively backtesting','#f5a94f'],
@@ -770,14 +770,14 @@ const PIPE=[
 ];
 
 // KPI summary + morning/evening variants
-const MODES={
+let MODES={
   evening:{newPos:16,wins:8,losses:7,realized:-142.17,partials:78.91,infra:'5/5',approaching:20,
     synced:'Jun 27, 2026 &middot; 8:30 PM ET', psub1:'Evening sync - Jun 27, 2026', psub2:'since 8 AM ET this morning', tag:'Cumulative PnL'},
   morning:{newPos:9,wins:3,losses:2,realized:96.70,partials:115.19,infra:'5/5',approaching:20,
     synced:'Jun 27, 2026 &middot; 9:00 AM ET', psub1:'Morning sync - Jun 27, 2026', psub2:'since 8 PM ET last night', tag:'Overnight PnL'}
 };
 // errors: report has none -> empty array hides the section
-const ALERTS=[];
+let ALERTS=[];
 
 /* ============= STATE =============
    Two independent filter systems:
@@ -791,6 +791,9 @@ const $=s=>document.querySelector(s);
 const fmtUsd=(v,d=2)=>(v<0?'-$':'$')+Math.abs(v).toFixed(d);
 function fmtPrice(p){if(p>=1000)return p.toLocaleString('en-US',{maximumFractionDigits:1});
   if(p>=1)return p.toFixed(p>=100?2:3);if(p>=0.001)return p.toFixed(4);return p.toExponential(2);}
+// graceful-gap helpers: live/demo positions have no SL/TP/tf/duration -> muted dash
+function _pxMut(v){return v==null?'<span style="color:var(--sub)">-</span>':fmtPrice(v);}
+function _txtMut(v){return (v==null||v==='')?'<span style="color:var(--sub)">-</span>':v;}
 // 'none' = no date filter applied (default); 999 = all time; otherwise last N days
 function inRange(ts){if(state.range==='none'||state.range>=999)return true;return (NOWv()-ts)<=state.range*86400000+36e5;}
 // base sidebar pool (on the active morning/evening dataset), then narrowed by a section's local env tab
@@ -876,10 +879,11 @@ function renderAlerts(){
 }
 
 /* ============= PERFORMANCE CHART ============= */
-const ALL_TICKERS=[...new Set([...POS_EVENING,...POS_MORNING].map(p=>p.ticker))].sort();
+let ALL_TICKERS=[...new Set([...POS_EVENING,...POS_MORNING].map(p=>p.ticker))].sort();
 function dayPnl(d,t,e){let v=(seed(t+e+d+state.mode)-0.46)*26;
   if(d===13)v+=(MODES[state.mode].realized<0?-4:4);return v;}   // last day leans to the report's realized sign
 function buildSeries(){
+  if(USE_LIVE)return _PERF||{labels:[],data:[],hasData:false};   // live: server-side filtered series
   const days=14,labels=[],data=[];let cum=0;
   const tickers=state.fTicker==='all'?ALL_TICKERS:[state.fTicker];
   const envs=effEnvs(state.perfTab);                 // sidebar env AND perf tab
@@ -920,6 +924,13 @@ function renderPerf(){
 
 /* ============= POSITIONS TABLE ============= */
 function trajBar(p){
+  // live/demo positions carry no SL/TP (exchange poller) -> graceful bar: entry + current only, no NaN
+  if(p.sl==null||p.tp1==null||p.tp2==null||p.tp3==null){
+    const cx=(p.cur!=null&&p.entry!=null)?(p.cur>=p.entry?60:40):50;
+    return `<div class="traj"><div class="track"></div>`+
+      `<div class="mk" style="left:50%"></div><div class="lbl" style="left:50%;color:var(--sub)">E</div>`+
+      `<div class="cur" style="left:${cx}%" title="Current ${p.cur!=null?fmtPrice(p.cur):'-'}"></div></div>`;
+  }
   // map levels into profit-direction space: SL=0 (left), TP3=1 (right)
   const lo=p.sl, hi=p.tp3, span=(hi-lo)||1;
   const prog=v=>{let x=p.long?(v-lo)/span:(lo-v)/(lo-p.tp3);return Math.max(0,Math.min(1,x))*100;};
@@ -940,25 +951,25 @@ function renderPositions(){
     const up=p.upnl,upc=up>=0?'pos':'neg';
     // detail row reveals the columns hidden on mobile
     const detail=`<tr class="pos-detail"><td colspan="13"><div class="pd-grid">
-      <span class="pd-k">TF</span><span class="pd-v">${p.tf}</span>
+      <span class="pd-k">TF</span><span class="pd-v">${_txtMut(p.tf)}</span>
       <span class="pd-k">Current</span><span class="pd-v">${fmtPrice(p.cur)}</span>
-      <span class="pd-k">SL</span><span class="pd-v" style="color:var(--neg)">${fmtPrice(p.sl)}</span>
-      <span class="pd-k">TP1</span><span class="pd-v" style="color:var(--pos)">${fmtPrice(p.tp1)}</span>
-      <span class="pd-k">TP2</span><span class="pd-v" style="color:var(--pos)">${fmtPrice(p.tp2)}</span>
-      <span class="pd-k">TP3</span><span class="pd-v" style="color:var(--pos)">${fmtPrice(p.tp3)}</span>
+      <span class="pd-k">SL</span><span class="pd-v" style="color:var(--neg)">${_pxMut(p.sl)}</span>
+      <span class="pd-k">TP1</span><span class="pd-v" style="color:var(--pos)">${_pxMut(p.tp1)}</span>
+      <span class="pd-k">TP2</span><span class="pd-v" style="color:var(--pos)">${_pxMut(p.tp2)}</span>
+      <span class="pd-k">TP3</span><span class="pd-v" style="color:var(--pos)">${_pxMut(p.tp3)}</span>
       <div class="pd-traj">${trajBar(p)}</div>
     </div></td></tr>`;
     return `<tr class="posrow">
       <td class="stick stick-1"><span class="tk"><span class="dot" style="background:${tcol(p.ticker)}"></span>${p.ticker}</span><span class="exp-ind">+</span></td>
       <td class="stick stick-2"><span class="bot">${p.bot}</span> <span class="badge ${p.env}">${p.env.toUpperCase()}</span></td>
-      <td class="stick stick-3 c-tf">${p.tf}</td><td class="stick stick-4"><span class="side ${p.long?'long':'short'}">${p.side}</span></td>
+      <td class="stick stick-3 c-tf">${_txtMut(p.tf)}</td><td class="stick stick-4"><span class="side ${p.long?'long':'short'}">${p.side}</span></td>
       <td class="r num c-entry">${fmtPrice(p.entry)}</td><td class="r num c-cur">${fmtPrice(p.cur)}</td>
       <td class="r num upnl ${upc}">${fmtUsd(up)}</td>
-      <td class="r num c-sl" style="color:var(--neg)">${fmtPrice(p.sl)}</td>
-      <td class="r num c-tp1" style="color:var(--pos)">${fmtPrice(p.tp1)}</td>
-      <td class="r num c-tp2" style="color:var(--pos)">${fmtPrice(p.tp2)}</td>
-      <td class="r num c-tp3" style="color:var(--pos)">${fmtPrice(p.tp3)}</td>
-      <td class="c-dur" style="color:var(--sub)">${p.duration}</td>
+      <td class="r num c-sl" style="color:var(--neg)">${_pxMut(p.sl)}</td>
+      <td class="r num c-tp1" style="color:var(--pos)">${_pxMut(p.tp1)}</td>
+      <td class="r num c-tp2" style="color:var(--pos)">${_pxMut(p.tp2)}</td>
+      <td class="r num c-tp3" style="color:var(--pos)">${_pxMut(p.tp3)}</td>
+      <td class="c-dur" style="color:var(--sub)">${_txtMut(p.duration)}</td>
       <td class="c-traj">${trajBar(p)}</td></tr>${detail}`;
   }).join('')||`<tr><td colspan="13" style="text-align:center;color:var(--sub);padding:2rem">No open positions match these filters.</td></tr>`;
   renderMobile(list);
@@ -1004,13 +1015,13 @@ function renderMobile(list){
             <div><span class="k">Entry</span><span class="v">${fmtPrice(p.entry)}</span></div>
             <div><span class="k">Current</span><span class="v">${fmtPrice(p.cur)}</span></div>
             <div><span class="k">UPNL</span><span class="v ${upc}">${fmtUsd(up)}</span></div>
-            <div><span class="k">Duration</span><span class="v">${p.duration}</span></div>
+            <div><span class="k">Duration</span><span class="v">${_txtMut(p.duration)}</span></div>
           </div>
           <div class="pcard-more"><div class="pcm-grid">
-            <div><span class="k">SL</span><span class="v" style="color:var(--neg)">${fmtPrice(p.sl)}</span></div>
-            <div><span class="k">TP1</span><span class="v" style="color:var(--pos)">${fmtPrice(p.tp1)}</span></div>
-            <div><span class="k">TP2</span><span class="v" style="color:var(--pos)">${fmtPrice(p.tp2)}</span></div>
-            <div><span class="k">TP3</span><span class="v" style="color:var(--pos)">${fmtPrice(p.tp3)}</span></div>
+            <div><span class="k">SL</span><span class="v" style="color:var(--neg)">${_pxMut(p.sl)}</span></div>
+            <div><span class="k">TP1</span><span class="v" style="color:var(--pos)">${_pxMut(p.tp1)}</span></div>
+            <div><span class="k">TP2</span><span class="v" style="color:var(--pos)">${_pxMut(p.tp2)}</span></div>
+            <div><span class="k">TP3</span><span class="v" style="color:var(--pos)">${_pxMut(p.tp3)}</span></div>
           </div><div class="pcm-traj">${trajBar(p)}</div></div>
         </div>`;
       }).join('')||`<div class="note" style="padding:1rem 0">No positions for the selected tickers.</div>`);
@@ -1071,6 +1082,7 @@ function renderPipe(){
 
 /* ============= PROMOTION CANDIDATES ============= */
 function renderPromo(){
+  const _ct=$('#candTag'); if(_ct)_ct.textContent=CAND.length+' approaching';
   $('#promoList').innerHTML=CAND.map(c=>{
     const tp=Math.min(100,c.trades/c.tradesNeed*100),dp=Math.min(100,c.days/c.daysNeed*100);
     const tdone=c.trades>=c.tradesNeed, ddone=c.days>=c.daysNeed;
@@ -1166,11 +1178,192 @@ function applyMode(mode){
   renderKpis();renderPerf();renderPositions();renderDonut();
 }
 
+/* ============================================================
+   LIVE DATA (Phase 4) - fetch Daily Pulse from the dashboard API instead of the
+   embedded static snapshot. Feature-flagged for instant rollback:
+     ?live=0 -> static snapshot;  ?live=1 / default -> live;  ?base= -> API base override.
+   The embedded static data stays as the always-available fallback. ONLY the data
+   source changes - every render function's output is unchanged on the static path.
+   ============================================================ */
+const LIVE = { enabled:true, base:'https://api.autobotsnexus.com',
+  token:'G3lbXH5ndXybBeGAb5l7Zzwhmgo9UOzv3spjVNaXeVI', posMs:15000, medMs:60000 };
+const _q=new URLSearchParams(location.search); if(_q.get('base'))LIVE.base=_q.get('base');
+const USE_LIVE = LIVE.enabled && _q.get('live')!=='0';
+let _PERF=null, _posTimer=null, _medTimer=null;
+
+function _syncedET(){
+  try{ const d=new Date(), tz='America/New_York';
+    const day=d.toLocaleString('en-US',{timeZone:tz,month:'short',day:'numeric',year:'numeric'});
+    const tm=d.toLocaleString('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:true});
+    return `${day} &middot; ${tm} ET`; }catch(e){ return 'just now'; }
+}
+function _setStatus(kind,msg){
+  const led=document.querySelector('.synced .led');
+  if(led){ const c=kind==='ok'?'var(--green)':kind==='stale'?'var(--amber)':'var(--neg)';
+    led.style.background=c; led.style.boxShadow='0 0 8px '+c; }
+  if(msg)$('#syncedTime').innerHTML=msg;
+}
+async function _fetch(path){
+  const r=await fetch(`${LIVE.base}${path}`,{headers:{'Authorization':'Bearer '+LIVE.token},cache:'no-store'});
+  if(r.status===401||r.status===403){const e=new Error('auth');e.kind='auth';e.status=r.status;throw e;}
+  if(!r.ok){const e=new Error('http');e.kind='http';e.status=r.status;throw e;}
+  return r.json();
+}
+function _tkFromName(n){const t=String(n||'').split('-')[0].toUpperCase();return t||'?';}
+function _fmtDur(min){ if(min==null)return null; const m=Math.max(0,Math.round(min));
+  const d=Math.floor(m/1440), h=Math.floor((m%1440)/60), mm=m%60;
+  if(d>0)return `${d}d ${h}h`; if(h>0)return `${h}h ${mm}m`; return `${mm}m`; }
+function _rangeTok(r){ if(r==='none')return '30d'; const n=+r; return n>=999?'all':n<=7?'7d':n<=30?'30d':'90d'; }
+
+/* ---- adapters: API shape -> the render-expected shape ---- */
+function adaptPositions(list){
+  return (list||[]).map((p,i)=>{
+    const paper=Array.isArray(p.take_profit);   // only paper carries SL/TP/tf/duration
+    return { ticker:p.ticker, bot:(p.bot||p.symbol||p.ticker), tf:(p.tf||''),
+      side:(p.side||'').toUpperCase(), long:(p.side==='long'),
+      entry:p.entry_price, env:p.account,
+      entryISO:(p.entry_time||null), entryTs:(p.entry_time?Date.parse(p.entry_time):null),
+      duration:(p.duration_minutes!=null?_fmtDur(p.duration_minutes):null),
+      cur:p.mark_price, upnl:p.unrealized_pnl,
+      sl:(p.stop_loss!=null?p.stop_loss:null),
+      tp1:(paper?(p.take_profit[0]??null):null),
+      tp2:(paper?(p.take_profit[1]??null):null),
+      tp3:(paper?(p.take_profit[2]??null):null), idx:i };
+  });
+}
+// Operational bot count from the real per-bot health statuses. The API's
+// infra.online field only counts online/ok/healthy and misses 'running' (the
+// normal operational status), so we count the real statuses ourselves for an
+// accurate x/total. (Flagged for API-side consistency; dashboard uses real data.)
+function _infraStr(inf){
+  const bots=(inf&&inf.bots)||null;
+  const total=(inf&&inf.total!=null)?inf.total:(bots?bots.length:null);
+  if(total==null) return '-';
+  const OK=['online','ok','healthy','running','active','up'];
+  const up = bots ? bots.filter(b=>OK.includes(String((b&&b.status)||'').toLowerCase())).length
+                  : ((inf&&inf.online!=null)?inf.online:0);
+  return `${up}/${total}`;
+}
+function adaptSummary(s,mode){
+  const k=(s&&s.kpis)||{}, inf=(s&&s.infra)||{}, promo=(s&&s.promotion)||{};
+  return { newPos:k.new_opens, wins:k.wins, losses:k.losses, realized:k.realized_pnl_usd,
+    partials:(k.partials_captured_usd!=null?k.partials_captured_usd:0),
+    infra:_infraStr(inf),
+    approaching:(promo.count!=null?promo.count:0),
+    synced:_syncedET(),
+    psub1:`${mode==='morning'?'Morning':'Evening'} sync - ${_syncedET().split(' &middot; ')[0]}`,
+    psub2:'live data', tag:'Cumulative PnL' };
+}
+function adaptCandidates(bots){
+  // daysNeed=60 (paper->live promotion window), tradesNeed=10 (reliability floor) - real system constants
+  return (bots||[]).map(b=>({ bot:b.name, ticker:_tkFromName(b.name),
+    days:(b.days_elapsed!=null?b.days_elapsed:0), daysNeed:60,
+    trades:(b.trades_since_reset!=null?b.trades_since_reset:0), tradesNeed:10,
+    ready:!!b.promotion_gate_hit }));
+}
+function derivePromoEvent(bots){
+  const g=(bots||[]).find(b=>b.promotion_gate_hit);
+  return g?{bot:g.name,ticker:_tkFromName(g.name),trades:(g.trades_since_reset||0),tradesNeed:10,
+    days:(g.days_elapsed||0),daysNeed:60}:null;
+}
+function adaptPipe(pl){
+  pl=pl||{}; const ss=pl.status_snapshot||{}, cg=pl.codegen||{}, wfv=pl.wfv||{}, opt=pl.optimization||{};
+  const n=v=>(v!=null?v:0);
+  // same 5 static stage labels/descs/colors; real counts from the pipeline block
+  return [
+    ['Queued', n(wfv.still_queued), 'awaiting codegen','#64b4ff'],
+    ['Codegen', n(cg.started), 'generated this window','#a78bfa'],
+    ['Testing', n(wfv.started), 'actively backtesting','#f5a94f'],
+    ['Passed Gates', n(wfv.completed), 'score >= 80','#00c896'],
+    ['Optimized', n(opt.completed), 'tuned this window','#4ecca3'] ];
+}
+function adaptAlerts(al){
+  return (al||[]).map(a=>({ level:(a.level||'warn'),
+    text:(a.text||a.message||(typeof a==='string'?a:JSON.stringify(a))) }));
+}
+function adaptPerf(perf){
+  const pts=(perf&&perf.points)||[]; const byDay=new Map();
+  pts.forEach(p=>{ const day=(p.exit_time||'').slice(0,10); if(day)byDay.set(day,p.cumulative_pnl); });
+  const days=[...byDay.keys()].sort();
+  const labels=days.map(d=>new Date(d+'T00:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}));
+  const data=days.map(d=>+(+byDay.get(d)).toFixed(2));
+  return {labels,data,hasData:data.length>0};
+}
+async function loadPerf(){
+  try{ const env=state.perfTab==='all'?'':state.perfTab, tk=state.fTicker==='all'?'':state.fTicker;
+    const perf=await _fetch(`/pulse/performance?env=${env}&ticker=${encodeURIComponent(tk)}&range=${_rangeTok(state.range)}`);
+    _PERF=adaptPerf(perf); renderPerf();
+  }catch(e){ /* keep last-good perf series */ }
+}
+
+/* original static bootstrap sequence, unchanged order */
+function _bootstrap(){
+  populateTickers();renderPromoBanner();renderAlerts();renderPipe();renderPromo();
+  applyMode(state.mode);
+  paintPerfTabs();paintPosTabs();wire();
+}
+function _recomputeTickers(){ ALL_TICKERS=[...new Set([...POS_EVENING,...POS_MORNING].map(p=>p.ticker))].sort(); }
+
+async function init(){
+  if(!USE_LIVE){ _bootstrap(); return; }
+  _setStatus('stale','Loading live data&hellip;');
+  try{
+    const [sM,sE,pos,cand,perf]=await Promise.all([
+      _fetch('/pulse/summary?report=morning'),
+      _fetch('/pulse/summary?report=evening'),
+      _fetch('/pulse/positions'),
+      _fetch('/pulse/promotion-candidates').catch(()=>({bots:[]})),
+      _fetch('/pulse/performance?range=30d').catch(()=>({points:[]}))
+    ]);
+    MODES={ morning:adaptSummary(sM,'morning'), evening:adaptSummary(sE,'evening') };
+    const P=adaptPositions(pos.positions); POS_MORNING=P; POS_EVENING=P;
+    NOW_BY_MODE={morning:Date.now(),evening:Date.now()};   // live date-range math uses real now
+    const cbots=(cand&&cand.bots)||[];
+    CAND=adaptCandidates(cbots); PROMO_EVENT=derivePromoEvent(cbots);
+    PIPE=adaptPipe((sM&&sM.pipeline)||{}); ALERTS=adaptAlerts((sM&&sM.alerts)||[]);
+    _PERF=adaptPerf(perf); _recomputeTickers();
+    _bootstrap();
+    _setStatus('ok');
+    // live-tier: refetch the perf series (server-side filtered) when its filters change
+    ['#fTicker','#fEnv','#fRange'].forEach(id=>{const e=$(id); if(e)e.addEventListener('change',loadPerf);});
+    document.querySelectorAll('#perfTabs button').forEach(b=>b.addEventListener('click',loadPerf));
+    _startRefresh();
+  }catch(err){
+    // never blank: fall back to the embedded static snapshot
+    _bootstrap();
+    _setStatus('err',(err&&err.kind==='auth'?'Auth failed':'Live data unavailable')+' &middot; showing static snapshot');
+  }
+}
+function _startRefresh(){
+  if(_posTimer)clearInterval(_posTimer);
+  if(_medTimer)clearInterval(_medTimer);
+  _posTimer=setInterval(async ()=>{      // LIVE tier ~15s: open positions + UPNL
+    try{ const pos=await _fetch('/pulse/positions');
+      const P=adaptPositions(pos.positions); POS_MORNING=P; POS_EVENING=P;
+      renderKpis();renderPositions();renderDonut();
+      _setStatus('ok'); $('#syncedTime').innerHTML=_syncedET();
+    }catch(e){ _setStatus('stale'); }
+  }, LIVE.posMs);
+  _medTimer=setInterval(async ()=>{       // MEDIUM tier ~60s: summaries / promotion / pipeline / perf
+    try{
+      const [sM,sE,cand]=await Promise.all([
+        _fetch('/pulse/summary?report=morning'),
+        _fetch('/pulse/summary?report=evening'),
+        _fetch('/pulse/promotion-candidates').catch(()=>({bots:[]}))
+      ]);
+      MODES={ morning:adaptSummary(sM,'morning'), evening:adaptSummary(sE,'evening') };
+      const cbots=(cand&&cand.bots)||[];
+      CAND=adaptCandidates(cbots); PROMO_EVENT=derivePromoEvent(cbots);
+      PIPE=adaptPipe((sM&&sM.pipeline)||{}); ALERTS=adaptAlerts((sM&&sM.alerts)||[]);
+      renderPromoBanner();renderAlerts();renderPipe();renderPromo();
+      applyMode(state.mode); loadPerf(); _setStatus('ok');
+    }catch(e){ _setStatus('stale'); }
+  }, LIVE.medMs);
+}
+
 /* ============= INIT ============= */
 Chart.defaults.color='#9fb0c8';Chart.defaults.font.family="'Share Tech Mono', monospace";
-populateTickers();renderPromoBanner();renderAlerts();renderPipe();renderPromo();
-applyMode(state.mode);            // morning by default; sets header + renders kpis/perf/positions/donut
-paintPerfTabs();paintPosTabs();wire();
+init();
 
 /* cross-dashboard navigation + sidebar collapse when embedded in reports.html */
 (function(){
