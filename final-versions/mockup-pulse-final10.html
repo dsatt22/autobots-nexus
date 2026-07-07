@@ -275,6 +275,17 @@ table.pos th.stick,table.pos td.stick{position:sticky;background:#0c1322;z-index
 table.pos thead th.stick{z-index:5}
 table.pos td.stick{background:#0b111d}
 table.pos tbody tr:hover td.stick{background:#101a2c}
+/* ticker group-header rows + sortable UPNL (Open Positions table only) */
+table.pos tr.pos-group td{background:#0e1626;border-top:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:.42rem .6rem;font-family:'Oxanium',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.04em;color:var(--text)}
+table.pos tr.pos-group .pg-tk{display:inline-flex;align-items:center;gap:.45rem}
+table.pos tr.pos-group .pg-tk .dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block}
+table.pos tr.pos-group .pg-cnt{color:var(--sub);font-weight:400;margin-left:.5rem;font-size:.66rem}
+table.pos th.pos-sort{cursor:pointer;user-select:none}
+table.pos th.pos-sort:hover{color:var(--accent)}
+table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
+.mob-sort{font-family:'Oxanium',sans-serif;font-weight:700;font-size:.72rem;color:var(--accent);background:rgba(100,180,255,0.1);
+  border:1px solid rgba(100,180,255,0.35);border-radius:8px;padding:.35rem .6rem;cursor:pointer;margin-left:auto}
 .stick-1{left:0;width:5rem;min-width:5rem}
 .stick-2{left:5rem;width:11.5rem;min-width:11.5rem}
 .stick-3{left:16.5rem;width:2.8rem;min-width:2.8rem}
@@ -501,14 +512,10 @@ table.pos.allcols .c-cur,table.pos.allcols .c-sl{display:table-cell !important}
       <div class="tb-left">
         <button class="hamb" id="hamb" aria-label="Menu">&#9776;</button>
         <div class="tb-titleblock"><div class="ptitle">Daily <span>Pulse</span></div>
-          <div class="psub"><span id="psubMain">Morning sync - Jun 27, 2026</span><span class="psub-since" id="psubSince">since 8 PM ET last night</span></div></div>
+          <div class="psub"><span id="psubMain">Live snapshot</span><span class="psub-since" id="psubSince">today so far</span></div></div>
       </div>
       <div class="tb-right">
         <span class="safe-chip">&#9679; LIVE CAPITAL SAFE</span>
-        <div class="toggle" id="meToggle">
-          <button data-me="morning" class="on">&#127749; Morning</button>
-          <button data-me="evening">&#127769; Evening</button>
-        </div>
         <div class="synced"><span><span class="led"></span>Last synced</span><b id="syncedTime">Jun 27, 2026 &middot; 9:00 AM ET</b></div>
       </div>
     </div>
@@ -565,8 +572,8 @@ table.pos.allcols .c-cur,table.pos.allcols .c-sl{display:table-cell !important}
             <div class="tscroll">
               <table class="pos">
                 <thead><tr>
-                  <th class="stick stick-1">Ticker</th><th class="stick stick-2">Bot</th><th class="stick stick-3 c-tf">TF</th><th class="stick stick-4">Side</th>
-                  <th class="r c-entry">Entry</th><th class="r c-cur">Current</th><th class="r">UPNL</th>
+                  <th class="stick stick-1 pos-sort" id="tkSort" title="Group by ticker (A-Z)">Ticker</th><th class="stick stick-2">Bot</th><th class="stick stick-3 c-tf">TF</th><th class="stick stick-4">Side</th>
+                  <th class="r c-entry">Entry</th><th class="r c-cur">Current</th><th class="r pos-sort" id="upnlSort" title="Sort by UPNL">UPNL <span class="sort-ind" id="upnlInd"></span></th>
                   <th class="r c-sl">SL</th><th class="r c-tp1">TP1</th><th class="r c-tp2">TP2</th><th class="r c-tp3">TP3</th>
                   <th class="c-dur">Dur</th><th class="c-traj">Trajectory</th>
                 </tr></thead>
@@ -785,6 +792,7 @@ let ALERTS=[];
    - SECTION TABS (local): perfTab / posTab. Narrow WITHIN the sidebar pool.
    A row is shown only if it satisfies BOTH the sidebar filter and the section tab. */
 const state={fTicker:'all',fEnv:'all',range:'none',perfTab:'all',posTab:'all',mode:'morning',
+  posSort:'ticker',posDir:-1,   // Open Positions: 'ticker' (grouped A-Z) default | 'upnl' (flat, posDir -1 desc / 1 asc)
   mobileView:'select', mobileSel:[]};   // mobile-only: 'select' chips screen vs 'cards'; selected tickers ([] / ['all'] / list)
 let perfChart,donutChart;
 const $=s=>document.querySelector(s);
@@ -918,7 +926,7 @@ function renderPerf(){
       scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11}}},
         y:{grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.28)':'rgba(255,255,255,0.04)'},
           ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11},callback:v=>'$'+v}}}}};
-  if(perfChart){perfChart.data=cfg.data;perfChart.options=cfg.options;perfChart.update();}
+  if(perfChart){perfChart.data=cfg.data;perfChart.options=cfg.options;perfChart.update('none');}  /* silent on refresh; animates on initial new Chart */
   else perfChart=new Chart($('#perfChart'),cfg);
 }
 
@@ -944,13 +952,10 @@ function trajBar(p){
     <div class="cur" style="left:${prog(p.cur)}%" title="Current ${fmtPrice(p.cur)}"></div>
   </div>`;
 }
-function renderPositions(){
-  const list=poolFor(state.posTab);
-  $('#posTag').textContent=list.length+' open';
-  $('#posBody').innerHTML=list.map(p=>{
-    const up=p.upnl,upc=up>=0?'pos':'neg';
-    // detail row reveals the columns hidden on mobile
-    const detail=`<tr class="pos-detail"><td colspan="13"><div class="pd-grid">
+function _posRowHtml(p){
+  const up=p.upnl,upc=up>=0?'pos':'neg';
+  // detail row reveals the columns hidden on mobile
+  const detail=`<tr class="pos-detail"><td colspan="13"><div class="pd-grid">
       <span class="pd-k">TF</span><span class="pd-v">${_txtMut(p.tf)}</span>
       <span class="pd-k">Current</span><span class="pd-v">${fmtPrice(p.cur)}</span>
       <span class="pd-k">SL</span><span class="pd-v" style="color:var(--neg)">${_pxMut(p.sl)}</span>
@@ -959,7 +964,7 @@ function renderPositions(){
       <span class="pd-k">TP3</span><span class="pd-v" style="color:var(--pos)">${_pxMut(p.tp3)}</span>
       <div class="pd-traj">${trajBar(p)}</div>
     </div></td></tr>`;
-    return `<tr class="posrow">
+  return `<tr class="posrow">
       <td class="stick stick-1"><span class="tk"><span class="dot" style="background:${tcol(p.ticker)}"></span>${p.ticker}</span><span class="exp-ind">+</span></td>
       <td class="stick stick-2"><span class="bot">${p.bot}</span> <span class="badge ${p.env}">${p.env.toUpperCase()}</span></td>
       <td class="stick stick-3 c-tf">${_txtMut(p.tf)}</td><td class="stick stick-4"><span class="side ${p.long?'long':'short'}">${p.side}</span></td>
@@ -971,7 +976,37 @@ function renderPositions(){
       <td class="r num c-tp3" style="color:var(--pos)">${_pxMut(p.tp3)}</td>
       <td class="c-dur" style="color:var(--sub)">${_txtMut(p.duration)}</td>
       <td class="c-traj">${trajBar(p)}</td></tr>${detail}`;
-  }).join('')||`<tr><td colspan="13" style="text-align:center;color:var(--sub);padding:2rem">No open positions match these filters.</td></tr>`;
+}
+// Open Positions ordering: 'ticker' groups A-Z (then env, then bot); 'upnl' is a flat ranked list.
+function _posSorted(list){
+  const a=[...list];
+  if(state.posSort==='upnl') return a.sort((x,y)=>(((x.upnl||0)-(y.upnl||0))*state.posDir));
+  return a.sort((x,y)=>x.ticker.localeCompare(y.ticker)||(x.env||'').localeCompare(y.env||'')||(x.bot||'').localeCompare(y.bot||''));
+}
+function _updSortInd(){const el=$('#upnlInd'); if(el) el.innerHTML=state.posSort==='upnl'?(state.posDir<0?'&#9660;':'&#9650;'):'';}
+// UPNL header cycles desc -> asc -> back to ticker grouping; Ticker header restores grouping.
+function _cyclePosSort(col){
+  if(col==='ticker') state.posSort='ticker';
+  else if(state.posSort!=='upnl'){state.posSort='upnl';state.posDir=-1;}
+  else if(state.posDir===-1) state.posDir=1;
+  else state.posSort='ticker';
+  renderPositions();
+}
+function renderPositions(){
+  const list=_posSorted(poolFor(state.posTab));
+  $('#posTag').textContent=list.length+' open';
+  _updSortInd();
+  const grouped=state.posSort==='ticker';
+  let html='',lastTk=null;
+  list.forEach(p=>{
+    if(grouped && p.ticker!==lastTk){
+      lastTk=p.ticker;
+      const cnt=list.reduce((n,x)=>n+(x.ticker===p.ticker?1:0),0);
+      html+=`<tr class="pos-group"><td colspan="13"><span class="pg-tk"><span class="dot" style="background:${tcol(p.ticker)}"></span>${p.ticker}</span><span class="pg-cnt">${cnt} open</span></td></tr>`;
+    }
+    html+=_posRowHtml(p);
+  });
+  $('#posBody').innerHTML=html||`<tr><td colspan="13" style="text-align:center;color:var(--sub);padding:2rem">No open positions match these filters.</td></tr>`;
   renderMobile(list);
 }
 
@@ -979,6 +1014,7 @@ function renderPositions(){
 function renderMobile(list){
   const sel=$('#tickerSelect'), cards=$('#posCards');
   if(!sel||!cards)return;
+  list=_posSorted(list);   // ticker A-Z (or flat UPNL when active) - same ordering as desktop
   if(state.mobileView==='select'){
     sel.style.display='block'; cards.style.display='none';
     // tickers with open positions in the current pool, with counts
@@ -1004,7 +1040,8 @@ function renderMobile(list){
     const shown=isAll?list:list.filter(p=>state.mobileSel.includes(p.ticker));
     const label=isAll?'All tickers':state.mobileSel.join(', ');
     cards.innerHTML=`<div class="cards-bar"><button class="back-btn" id="tsBack">&#8592; Ticker select</button>
-        <span class="note">${shown.length} shown &middot; ${label}</span></div>`+
+        <span class="note">${shown.length} shown &middot; ${label}</span>
+        <button class="mob-sort" id="mobSort">${state.posSort==='upnl'?('UPNL '+(state.posDir<0?'&#9660;':'&#9650;')):'Ticker A-Z'}</button></div>`+
       (shown.map(p=>{
         const up=p.upnl,upc=up>=0?'pos':'neg';
         return `<div class="pcard">
@@ -1051,7 +1088,7 @@ function renderDonut(){
   const cfg={type:'doughnut',data:{labels,datasets:[{data:counts,backgroundColor:colors,borderColor:'#080c14',borderWidth:2,hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'66%',
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed} open`}}}}};
-  if(donutChart){donutChart.data=cfg.data;donutChart.update();}else donutChart=new Chart($('#donutChart'),cfg);
+  if(donutChart){donutChart.data=cfg.data;donutChart.update('none');}else donutChart=new Chart($('#donutChart'),cfg);  /* silent on refresh; animates on initial load */
   $('#donutLegend').innerHTML=entries.map((e,i)=>`<div class="dleg-row"><span class="sw" style="background:${colors[i]}"></span><span class="nm">${e[0]}</span><span class="ct">${e[1]}</span></div>`).join('');
   requestAnimationFrame(syncPosHeights);
 }
@@ -1121,6 +1158,8 @@ function wire(){
     state.perfTab=b.dataset.env;paintPerfTabs();renderPerf();}));   // affects Performance only
   document.querySelectorAll('#posTabs button').forEach(b=>b.addEventListener('click',()=>{
     state.posTab=b.dataset.env;paintPosTabs();renderPositions();renderDonut();}));  // affects Open Positions only
+  {const _u=$('#upnlSort'); if(_u)_u.addEventListener('click',()=>_cyclePosSort('upnl'));
+   const _t=$('#tkSort'); if(_t)_t.addEventListener('click',()=>_cyclePosSort('ticker'));}  // Open Positions sort
   /* --- collapsible cards --- */
   document.addEventListener('click',ev=>{
     const h=ev.target.closest('[data-toggle]');if(!h)return;
@@ -1138,7 +1177,6 @@ function wire(){
     }
   });
   /* --- morning/evening --- */
-  document.querySelectorAll('#meToggle button').forEach(b=>b.addEventListener('click',()=>applyMode(b.dataset.me)));
   /* --- KPI summary bar expand (delegated; bar is re-rendered) --- */
   document.addEventListener('click',ev=>{
     if(ev.target.closest('#kpiBarToggle')){const bar=$('#kpiBar');bar.classList.toggle('open');
@@ -1157,6 +1195,7 @@ function wire(){
       else{state.mobileSel=state.mobileSel.filter(x=>x!=='all');
         const i=state.mobileSel.indexOf(tk);if(i>=0)state.mobileSel.splice(i,1);else state.mobileSel.push(tk);}
       renderMobile(poolFor(state.posTab));renderDonut();return;}
+    if(ev.target.closest('#mobSort')){_cyclePosSort('upnl');return;}   // mobile UPNL sort cycle (desc/asc/ticker)
     if(ev.target.closest('#tsView')){state.mobileView='cards';renderMobile(poolFor(state.posTab));renderDonut();return;}
     if(ev.target.closest('#tsBack')){state.mobileView='select';renderMobile(poolFor(state.posTab));renderDonut();return;}
     const pc=ev.target.closest('.pcard');
@@ -1171,7 +1210,6 @@ function wire(){
 // apply a report period (morning/evening): header text + re-render data-driven sections
 function applyMode(mode){
   state.mode=mode;const m=MODES[mode];
-  document.querySelectorAll('#meToggle button').forEach(x=>x.classList.toggle('on',x.dataset.me===mode));
   $('#syncedTime').innerHTML=m.synced;
   $('#psubMain').textContent=m.psub1;$('#psubSince').textContent=m.psub2;
   $('#perfTag').textContent=m.tag;
@@ -1251,8 +1289,8 @@ function adaptSummary(s,mode){
     infra:_infraStr(inf),
     approaching:(promo.count!=null?promo.count:0),
     synced:_syncedET(),
-    psub1:`${mode==='morning'?'Morning':'Evening'} sync - ${_syncedET().split(' &middot; ')[0]}`,
-    psub2:'live data', tag:'Cumulative PnL' };
+    psub1:`Live - ${_syncedET().split(' &middot; ')[0]}`,
+    psub2:'today so far', tag:'Cumulative PnL' };
 }
 function adaptCandidates(bots){
   // daysNeed=60 (paper->live promotion window), tradesNeed=10 (reliability floor) - real system constants
@@ -1308,14 +1346,13 @@ async function init(){
   if(!USE_LIVE){ _bootstrap(); return; }
   _setStatus('stale','Loading live data&hellip;');
   try{
-    const [sM,sE,pos,cand,perf]=await Promise.all([
-      _fetch('/pulse/summary?report=morning'),
-      _fetch('/pulse/summary?report=evening'),
+    const [sM,pos,cand,perf]=await Promise.all([
+      _fetch('/pulse/summary'),
       _fetch('/pulse/positions'),
       _fetch('/pulse/promotion-candidates').catch(()=>({bots:[]})),
       _fetch('/pulse/performance?range=30d').catch(()=>({points:[]}))
     ]);
-    MODES={ morning:adaptSummary(sM,'morning'), evening:adaptSummary(sE,'evening') };
+    const _sum=adaptSummary(sM); MODES={ morning:_sum, evening:_sum };   // single live snapshot (morning/evening toggle removed)
     const P=adaptPositions(pos.positions); POS_MORNING=P; POS_EVENING=P;
     NOW_BY_MODE={morning:Date.now(),evening:Date.now()};   // live date-range math uses real now
     const cbots=(cand&&cand.bots)||[];
@@ -1346,12 +1383,11 @@ function _startRefresh(){
   }, LIVE.posMs);
   _medTimer=setInterval(async ()=>{       // MEDIUM tier ~60s: summaries / promotion / pipeline / perf
     try{
-      const [sM,sE,cand]=await Promise.all([
-        _fetch('/pulse/summary?report=morning'),
-        _fetch('/pulse/summary?report=evening'),
+      const [sM,cand]=await Promise.all([
+        _fetch('/pulse/summary'),
         _fetch('/pulse/promotion-candidates').catch(()=>({bots:[]}))
       ]);
-      MODES={ morning:adaptSummary(sM,'morning'), evening:adaptSummary(sE,'evening') };
+      const _sum=adaptSummary(sM); MODES={ morning:_sum, evening:_sum };
       const cbots=(cand&&cand.bots)||[];
       CAND=adaptCandidates(cbots); PROMO_EVENT=derivePromoEvent(cbots);
       PIPE=adaptPipe((sM&&sM.pipeline)||{}); ALERTS=adaptAlerts((sM&&sM.alerts)||[]);
