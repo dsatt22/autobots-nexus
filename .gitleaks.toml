@@ -18,6 +18,15 @@ paths = [
     '''(^|/)node_modules/''',
     '''\.gitleaks-baseline\.json$''',      # scanner's own report files
     '''\.gitleaks-results\.json$''',
+    # DASHBOARD_API_TOKEN is intentionally public: read-only stats
+    # API token that ships in public dashboard JS by design.
+    # Accepted posture 2026-07-07 (GET-only endpoints, no write
+    # path, no account-control capability). Not an incident.
+    # Scoped to these 3 frozen mockup files only - any other path,
+    # including other final-versions/ files, is still scanned.
+    '''^final-versions/mockup-trading-final1\.html$''',
+    '''^final-versions/mockup-pulse-final10\.html$''',
+    '''^final-versions/mockup-champion-final1\.html$''',
 ]
 regexes = [
     # false-positive: 64-char hex (SHA-256 hash/fingerprint) in published
