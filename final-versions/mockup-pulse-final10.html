@@ -349,6 +349,11 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
 .pr-bot{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
 .pr-bot b{font-size:.82rem}
 .ready-badge{font-size:.6rem;font-family:'Oxanium';font-weight:700;color:var(--pos);border:1px solid rgba(0,200,150,.4);background:rgba(0,200,150,.12);padding:.12rem .45rem;border-radius:20px;letter-spacing:.06em}
+.attempt-badge{font-size:.6rem;font-family:'Oxanium';font-weight:700;color:var(--accent);border:1px solid rgba(100,180,255,.4);background:rgba(100,180,255,.12);padding:.12rem .45rem;border-radius:20px;letter-spacing:.06em}
+.pr-days{font-size:.72rem;color:var(--sub);text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:.4rem}
+.pr-days .pr-days-n{font-family:'Oxanium';font-weight:700;color:var(--text)}
+.pr-days .pr-days-tag{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);border:1px solid var(--border);border-radius:20px;padding:.05rem .4rem}
+@media(max-width:560px){.pr-days{justify-content:flex-start;text-align:left}}
 .pb-meta{display:flex;justify-content:space-between;font-size:.66rem;color:var(--sub);margin-bottom:.3rem}
 .progress{height:.5rem;border-radius:6px;background:rgba(255,255,255,0.08);overflow:hidden}
 .progress>i{display:block;height:100%;border-radius:6px}
@@ -754,18 +759,21 @@ function buildPos(RAW){return RAW.map((r,i)=>{
 let POS_EVENING=buildPos(RAW_EVENING), POS_MORNING=buildPos(RAW_MORNING);
 function activePOS(){return state.mode==='morning'?POS_MORNING:POS_EVENING;}
 
-// promotion candidates (approaching) [bot,ticker,days,daysNeed,trades,tradesNeed]
+// promotion candidates (approaching) [bot,ticker,days,trades,tradesNeed,attempts]
+// Flat-30 trades-only gate (2026-07-08 redesign): tradesNeed is the resolved
+// denominator - 30 for a first-time bot, a stamped +10 target for a deferred
+// one (attempts>=1). days is INFORMATIONAL only, no longer a gate arm.
 let CAND=[
- ['eth-mbc-4h','ETH',59,60,4,10],['eth-mtf-4h','ETH',59,60,5,10],['btc-1ms-4h','BTC',59,60,4,10],
- ['eth-emfi-4h','ETH',59,60,9,10],['avax-sfzl-4h','AVAX',54,60,3,10],['btc-atb-4h','BTC',54,60,6,10],
- ['sui-svs-4h','SUI',54,60,4,10],['sui-pps-4h','SUI',54,60,6,10],['wif-15sc-4h','WIF',52,60,5,10],
- ['wif-bbp-4h','WIF',51,60,4,10],['wif-hwr-4h','WIF',51,60,2,10],['wif-pps-4h','WIF',51,60,6,10],
- ['xrp-15sc-4h','XRP',51,60,4,10],['xrp-2etb-4h','XRP',51,60,5,10],['xrp-svs-4h','XRP',51,60,4,10],
- ['eth-iti-2h','ETH',51,60,5,15],['eth-15sc-2h','ETH',48,60,2,15],['dot-wete-2h','DOT',42,60,12,15],
- ['doge-scs-4h','DOGE',34,60,8,10],['trump-atb-2h','TRUMP',24,60,12,15]
-].map(c=>({bot:c[0],ticker:c[1],days:c[2],daysNeed:c[3],trades:c[4],tradesNeed:c[5],ready:false}));
+ ['eth-mbc-4h','ETH',59,4,30,0],['eth-mtf-4h','ETH',59,5,30,0],['btc-1ms-4h','BTC',59,4,30,0],
+ ['eth-emfi-4h','ETH',59,9,30,0],['avax-sfzl-4h','AVAX',54,3,30,0],['btc-atb-4h','BTC',54,6,30,0],
+ ['sui-svs-4h','SUI',54,4,30,0],['sui-pps-4h','SUI',54,6,30,0],['wif-15sc-4h','WIF',52,5,30,0],
+ ['wif-bbp-4h','WIF',51,4,30,0],['wif-hwr-4h','WIF',51,2,30,0],['wif-pps-4h','WIF',51,6,30,0],
+ ['xrp-15sc-4h','XRP',51,4,30,0],['xrp-2etb-4h','XRP',51,5,30,0],['xrp-svs-4h','XRP',51,24,30,0],
+ ['eth-iti-2h','ETH',51,5,30,0],['eth-15sc-2h','ETH',48,2,30,0],['dot-wete-2h','DOT',42,7,10,1],
+ ['doge-scs-4h','DOGE',34,8,30,0],['trump-atb-2h','TRUMP',24,3,10,2]
+].map(c=>({bot:c[0],ticker:c[1],days:c[2],trades:c[3],tradesNeed:c[4],attempts:c[5],ready:false}));
 
-let PROMO_EVENT={bot:'eth-fgc-4h',ticker:'ETH',trades:9,tradesNeed:10,days:60,daysNeed:60};
+let PROMO_EVENT={bot:'eth-fgc-4h',ticker:'ETH',trades:30,tradesNeed:30,days:60,attempts:0};
 
 // pipeline funnel: [label,count,desc,color]
 let PIPE=[
@@ -867,12 +875,14 @@ function renderKpis(){
 function renderPromoBanner(){
   if(!PROMO_EVENT){$('#promoBanner').innerHTML='';return;}
   const e=PROMO_EVENT;
+  // Gate is TRADES ONLY (flat-30 redesign). Days shown as informational, not a
+  // gate metric. Attempt shown when the bot was deferred before (attempts>=1).
+  const att=(e.attempts&&e.attempts>=1)?` (attempt #${e.attempts+1})`:'';
   $('#promoBanner').innerHTML=`<div class="promo-banner">
     <div class="pb-ico">&#127881;</div>
     <div class="pb-body"><div class="pb-title">PROMOTION GATE REACHED</div>
-      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) made it to the promotion gate. <span class="pb-inline">${e.days}/${e.daysNeed} days, ${e.trades}/${e.tradesNeed} trades. </span>A review notification was sent to Telegram for operator sign off.</div></div>
+      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate${att}. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in paper (informational). </span>A review notification was sent to Telegram for operator sign off.</div></div>
     <div class="pb-stats">
-      <div class="pb-stat"><div class="n">${e.days}/${e.daysNeed}</div><div class="l">Days</div></div>
       <div class="pb-stat"><div class="n">${e.trades}/${e.tradesNeed}</div><div class="l">Trades</div></div></div>
   </div>`;
 }
@@ -1120,16 +1130,19 @@ function renderPipe(){
 /* ============= PROMOTION CANDIDATES ============= */
 function renderPromo(){
   const _ct=$('#candTag'); if(_ct)_ct.textContent=CAND.length+' approaching';
+  // Gate is TRADES ONLY (flat-30 redesign): the trades bar is the only gate
+  // progress. Days is informational text, not a progress bar. Attempt badge
+  // flags a bot deferred before (attempts>=1) so repeatedly-surfaced bots show.
   $('#promoList').innerHTML=CAND.map(c=>{
-    const tp=Math.min(100,c.trades/c.tradesNeed*100),dp=Math.min(100,c.days/c.daysNeed*100);
-    const tdone=c.trades>=c.tradesNeed, ddone=c.days>=c.daysNeed;
+    const tp=Math.min(100,c.trades/c.tradesNeed*100);
+    const tdone=c.trades>=c.tradesNeed;
+    const att=(c.attempts&&c.attempts>=1)?`<span class="attempt-badge">Attempt #${c.attempts+1}</span>`:'';
     return `<div class="promo-row ${c.ready?'ready':''}">
       <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
-        <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
+        <b>${c.bot}</b> ${att} ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
       <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
         <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
-      <div><div class="pb-meta"><span>Days active</span><span>${c.days}/${c.daysNeed}</span></div>
-        <div class="progress"><i style="width:${dp}%;background:${ddone?'var(--pos)':'var(--accent)'}"></i></div></div>
+      <div class="pr-days"><span class="pr-days-n">${c.days}</span> days in paper <span class="pr-days-tag">info</span></div>
     </div>`;
   }).join('');
 }
@@ -1293,16 +1306,21 @@ function adaptSummary(s,mode){
     psub2:'today so far', tag:'Cumulative PnL' };
 }
 function adaptCandidates(bots){
-  // daysNeed=60 (paper->live promotion window), tradesNeed=10 (reliability floor) - real system constants
+  // Flat-30 trades-only gate: tradesNeed is the API's resolved denominator
+  // (COALESCE(next_promotion_trade_target, 30)) - read it, never hardcode. days
+  // is informational only. attempts (promotion_attempts) drives the Attempt badge.
   return (bots||[]).map(b=>({ bot:b.name, ticker:_tkFromName(b.name),
-    days:(b.days_elapsed!=null?b.days_elapsed:0), daysNeed:60,
-    trades:(b.trades_since_reset!=null?b.trades_since_reset:0), tradesNeed:10,
+    days:(b.days_elapsed!=null?b.days_elapsed:0),
+    trades:(b.trades_since_reset!=null?b.trades_since_reset:0),
+    tradesNeed:(b.trades_needed!=null?b.trades_needed:30),
+    attempts:(b.promotion_attempts!=null?b.promotion_attempts:0),
     ready:!!b.promotion_gate_hit }));
 }
 function derivePromoEvent(bots){
   const g=(bots||[]).find(b=>b.promotion_gate_hit);
-  return g?{bot:g.name,ticker:_tkFromName(g.name),trades:(g.trades_since_reset||0),tradesNeed:10,
-    days:(g.days_elapsed||0),daysNeed:60}:null;
+  return g?{bot:g.name,ticker:_tkFromName(g.name),trades:(g.trades_since_reset||0),
+    tradesNeed:(g.trades_needed!=null?g.trades_needed:30),
+    days:(g.days_elapsed||0),attempts:(g.promotion_attempts!=null?g.promotion_attempts:0)}:null;
 }
 function adaptPipe(pl){
   pl=pl||{}; const ss=pl.status_snapshot||{}, cg=pl.codegen||{}, wfv=pl.wfv||{}, opt=pl.optimization||{};
