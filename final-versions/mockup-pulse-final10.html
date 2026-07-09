@@ -875,12 +875,12 @@ function renderPromoBanner(){
   if(!PROMO_EVENT){$('#promoBanner').innerHTML='';return;}
   const e=PROMO_EVENT;
   // Gate is TRADES ONLY (flat-30 redesign). Days shown as informational, not a
-  // gate metric. Attempt shown when the bot was deferred before (attempts>=1).
-  const att=(e.attempts&&e.attempts>=1)?` (attempt #${e.attempts+1})`:'';
+  // gate metric. (Attempt count is not shown on the compact promotion section -
+  // it is rebuilt in the expanded detail during the later redesign.)
   $('#promoBanner').innerHTML=`<div class="promo-banner">
     <div class="pb-ico">&#127881;</div>
     <div class="pb-body"><div class="pb-title">PROMOTION GATE REACHED</div>
-      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate${att}. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in paper (informational). </span>A review notification was sent to Telegram for operator sign off.</div></div>
+      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in system (informational). </span>A review notification was sent to Telegram for operator sign off.</div></div>
     <div class="pb-stats">
       <div class="pb-stat"><div class="n">${e.trades}/${e.tradesNeed}</div><div class="l">Trades</div></div></div>
   </div>`;
@@ -1135,15 +1135,16 @@ function renderPromo(){
   $('#promoList').innerHTML=CAND.map(c=>{
     const tp=Math.min(100,c.trades/c.tradesNeed*100);
     const tdone=c.trades>=c.tradesNeed;
-    const att=(c.attempts&&c.attempts>=1)?`<span class="attempt-badge">Attempt #${c.attempts+1}</span>`:'';
     // Dynamic day-count label (no "paper" - works for paper AND demo bots): a
     // reviewed-and-kept bot shows its since-reset count; a never-reviewed bot's
     // since-review count equals its time in system. Days is secondary context;
     // the trades bar is the gate. INFO pill removed - de-gating is clear enough.
+    // Attempt count is NOT shown here - it moves to the expanded detail in the
+    // later redesign (promotion_attempts data still flows from the API).
     const dayLabel=c.reviewed?'days since reset':'days in system';
     return `<div class="promo-row ${c.ready?'ready':''}">
       <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
-        <b>${c.bot}</b> ${att} ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
+        <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
       <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
         <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
       <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
