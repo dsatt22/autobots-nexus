@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Promotion Detail - Layout Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#080c14; --bg-card:rgba(20,30,50,0.72); --bg-card2:rgba(15,26,48,0.55);
+  --bg-raised:rgba(8,12,20,0.5); --bg-surface:#1a2a50;
+  --accent:#64b4ff; --accent2:#4a9aee; --accent3:#a78bfa;
+  --text:#e8f4ff; --sub:#9fb0c8; --dim:rgba(232,244,255,0.4);
+  --green:#00ff64; --pos:#00c896; --red:#ff4a36; --neg:#e84142; --amber:#f5a94f;
+  --purple:#a855f7; --orange:#ff8c42; --gray:#8892a4; --teal:#4ecca3;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(16px,0.4vw + 13.5px,22px);background:var(--bg)}
+body{font-family:'Share Tech Mono',monospace;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(60vw 55vh at 12% 6%,rgba(100,180,255,0.14),transparent 60%),
+  radial-gradient(55vw 45vh at 92% 8%,rgba(74,154,238,0.10),transparent 60%),
+  radial-gradient(70vw 60vh at 78% 96%,rgba(167,139,250,0.10),transparent 65%),
+  radial-gradient(52vw 50vh at 16% 96%,rgba(0,200,150,0.06),transparent 60%);
+  animation:aur 26s ease-in-out infinite alternate}
+@keyframes aur{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(0,-2%,0) scale(1.05)}}
+h1,h2,h3,h4,.ox{font-family:'Oxanium',sans-serif}
+button{font-family:inherit;cursor:pointer;color:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:rgba(100,180,255,0.22);border-radius:6px}
+
+.wrap{max-width:1120px;margin:0 auto;padding:clamp(1rem,3vw,2.4rem)}
+.pagehead{margin-bottom:1.3rem}
+.pagehead h1{font-size:clamp(1.3rem,2.2vw,1.9rem);font-weight:800;letter-spacing:.02em}
+.pagehead p{color:var(--sub);font-size:.82rem;margin-top:.35rem}
+
+/* layout switcher (dashboard .tabs style) */
+.switchbar{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;margin:1.1rem 0 1.4rem}
+.tabs{display:inline-flex;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:9px;padding:.2rem;gap:.15rem;flex-wrap:wrap}
+.tabs button{border:none;background:transparent;color:var(--sub);padding:.42rem .95rem;border-radius:7px;font-size:.78rem;letter-spacing:.05em}
+.tabs button.on{background:rgba(100,180,255,0.2);color:var(--text)}
+.switch-note{font-size:.72rem;color:var(--sub)}
+
+/* card (dashboard) */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:hidden;display:flex;flex-direction:column}
+.card-head{display:flex;align-items:center;gap:.7rem;width:100%;padding:clamp(.85rem,1vw,1.15rem) clamp(1rem,1.2vw,1.3rem)}
+.card-head .ci{font-size:1.05rem;opacity:.9}
+.card-head h2{font-family:'Oxanium';font-weight:700;font-size:clamp(.95rem,1.05vw,1.25rem);letter-spacing:.02em;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.tag{font-size:.64rem;font-family:'Share Tech Mono';color:var(--accent);background:rgba(100,180,255,0.12);border:1px solid rgba(100,180,255,0.3);border-radius:20px;padding:.15rem .6rem;letter-spacing:.07em}
+.tag.amber{color:var(--amber);background:rgba(245,169,79,0.12);border-color:rgba(245,169,79,0.35)}
+.card-body{padding:0 clamp(1rem,1.2vw,1.3rem) clamp(1.05rem,1.3vw,1.4rem);display:flex;flex-direction:column;gap:.9rem}
+.note{font-size:.74rem;color:var(--sub)}
+
+/* promotion list + compact row (Phase 0 look preserved) */
+.promo-list{display:flex;flex-direction:column;gap:.55rem}
+.promo-item{display:flex;flex-direction:column}
+.promo-row{background:rgba(8,12,20,0.4);border:1px solid var(--border);border-radius:11px;padding:.7rem .85rem;
+  display:grid;grid-template-columns:minmax(140px,1.1fr) 1fr 1fr 2.1rem;gap:.9rem;align-items:center}
+.promo-item.open .promo-row{border-color:var(--border2);border-bottom-left-radius:0;border-bottom-right-radius:0;background:rgba(8,12,20,0.55)}
+.pr-bot{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.pr-bot b{font-size:.82rem}
+.dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block}
+.pb-meta{display:flex;justify-content:space-between;font-size:.66rem;color:var(--sub);margin-bottom:.3rem}
+.progress{height:.5rem;border-radius:6px;background:rgba(255,255,255,0.08);overflow:hidden}
+.progress>i{display:block;height:100%;border-radius:6px}
+.pr-days{font-size:.72rem;color:var(--sub);text-align:right;line-height:1.3}
+.pr-days .pr-days-n{font-family:'Oxanium';font-weight:700;color:var(--text);margin-right:.3rem}
+
+/* the "+" expand control */
+.pd-toggle{width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border2);border-radius:8px;background:var(--bg-raised);color:var(--sub);
+  font-family:'Oxanium';font-weight:700;font-size:1.15rem;line-height:1;transition:background .15s,color .15s,border-color .15s;justify-self:end}
+.pd-toggle:hover{background:rgba(100,180,255,0.16);border-color:rgba(100,180,255,0.45);color:var(--text)}
+.promo-item.open .pd-toggle{background:rgba(100,180,255,0.18);border-color:rgba(100,180,255,0.5);color:var(--text)}
+
+/* the expanded detail box - inset/offset, belongs to its parent */
+.promo-detail{display:none;border:1px solid var(--border2);border-top:none;
+  border-left:3px solid var(--accent);border-bottom-left-radius:11px;border-bottom-right-radius:11px;
+  background:rgba(10,16,28,0.6);margin:0 0 0 .9rem;padding:1rem 1rem 1.1rem}
+.promo-item.open .promo-detail{display:block;animation:pdOpen .18s ease}
+@keyframes pdOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* PnL TRAJECTORY - the centerpiece (shared across layouts) */
+.pd-traj{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.8rem;
+  background:linear-gradient(165deg,rgba(100,180,255,0.10),rgba(8,12,20,0.35));
+  border:1px solid var(--border2);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1rem}
+.pd-traj-side{text-align:center}
+.pd-traj-lbl{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
+.pd-traj-val{font-family:'Oxanium';font-weight:800;font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;margin-top:.2rem}
+.pd-traj-arrow{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.pd-traj-arrow .arw{font-size:1.7rem;line-height:1;color:var(--dim)}       /* neutral/example - real color wired later */
+.pd-traj-arrow .arw.up{color:var(--pos)} .pd-traj-arrow .arw.down{color:var(--neg)}
+.pd-traj-cap{font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.pd-traj-legend{grid-column:1/-1;display:flex;justify-content:center;gap:1rem;margin-top:.5rem;font-size:.58rem;color:var(--sub)}
+.pd-traj-legend .up{color:var(--pos)} .pd-traj-legend .down{color:var(--neg)}
+.pd-title{font-family:'Oxanium';font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin:.2rem 0 .55rem}
+
+/* LAYOUT A - stat-tile grid (dashboard .etile look) */
+.pd-a{display:none}
+.pd-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+.etile{background:rgba(8,12,20,0.5);border:1px solid var(--border);border-radius:9px;padding:.6rem .7rem}
+.etile .k{font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--sub)}
+.etile .v{font-family:'Oxanium';font-weight:700;font-size:1.15rem;margin-top:.15rem}
+
+/* LAYOUT B - grouped sections */
+.pd-b{display:none}
+.pd-group{margin-top:.9rem}
+.pd-group:first-child{margin-top:0}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem .9rem}
+.pd-kv{display:flex;justify-content:space-between;gap:.6rem;padding:.32rem 0;border-bottom:1px dashed var(--border)}
+.pd-kv .k{font-size:.7rem;color:var(--sub)} .pd-kv .v{font-family:'Oxanium';font-weight:700;font-size:.86rem}
+
+/* LAYOUT C - hybrid: trajectory strip on top + dense 2-col list */
+.pd-c{display:none}
+.pd-list2{display:grid;grid-template-columns:1fr 1fr;gap:.28rem 1.4rem}
+
+/* switch which layout shows */
+body.layout-a .pd-a{display:block}
+body.layout-b .pd-b{display:block}
+body.layout-c .pd-c{display:block}
+
+@media(max-width:560px){
+  .promo-row{grid-template-columns:1fr auto;gap:.55rem .7rem}
+  .pr-bot{grid-column:1} .pd-toggle{grid-column:2;grid-row:1 / span 3;align-self:center}
+  .pr-days{text-align:left}
+  .promo-detail{margin-left:0}
+  .pd-tiles{grid-template-columns:repeat(2,1fr)}
+  .pd-grid,.pd-list2{grid-template-columns:1fr}
+  .pd-traj-val{font-size:1.5rem}
+}
+</style>
+</head>
+<body class="layout-a">
+<div class="wrap">
+  <div class="pagehead">
+    <h1>Promotion Detail - Layout Mockups</h1>
+    <p>Expandable per-candidate detail on the Daily Pulse promotion section. All metric values are placeholders ("-") this phase; real data wires in a later phase. Pick a layout below, then click a candidate's "+" to expand it.</p>
+  </div>
+
+  <div class="switchbar">
+    <div class="tabs" id="layoutTabs">
+      <button data-layout="a" class="on">Option A - Stat tiles</button>
+      <button data-layout="b">Option B - Grouped</button>
+      <button data-layout="c">Option C - Hybrid</button>
+    </div>
+    <span class="switch-note" id="switchNote">Stat-tile grid: every metric as a small tile, trajectory as a feature strip.</span>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><span class="ci">&#128640;</span>
+      <h2>Promotion Candidates <span class="tag amber">2 approaching</span></h2>
+    </div>
+    <div class="card-body">
+      <div class="note">Bots approaching the gate. Click "+" to see the full review detail.</div>
+      <div class="promo-list" id="promoList"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const TC={BTC:'#f7931a',ETH:'#627eea',SOL:'#9945ff',BNB:'#f3ba2f',ADA:'#3cc8c8',DOGE:'#ba8f1a',DOT:'#e6007a',AVAX:'#e84142',LINK:'#2a5ada',XRP:'#00aae4',WIF:'#9945ff',SUI:'#4da2ff',TRUMP:'#f5a94f'};
+const tcol=t=>TC[t]||'#64b4ff';
+const D='-';  // placeholder dash for every not-yet-wired value
+
+// sample candidates - compact values realistic (Phase 0 look), detail all dashes
+const CANDS=[
+  {bot:'eth-atb-2h',ticker:'ETH',trades:28,tradesNeed:30,days:65,reviewed:false},
+  {bot:'wif-sm-15m',ticker:'WIF',trades:7,tradesNeed:10,days:34,reviewed:true},
+  {bot:'sol-xg-2h',ticker:'SOL',trades:24,tradesNeed:30,days:52,reviewed:false},
+  {bot:'btc-1ms-4h',ticker:'BTC',trades:23,tradesNeed:30,days:59,reviewed:false},
+  {bot:'dot-wete-2h',ticker:'DOT',trades:8,tradesNeed:10,days:42,reviewed:true},
+];
+
+// the shared trajectory centerpiece (placeholder values + neutral example arrow)
+function trajHtml(){
+  return `<div class="pd-traj">
+    <div class="pd-traj-side"><div class="pd-traj-lbl">At last review</div><div class="pd-traj-val">${D}</div></div>
+    <div class="pd-traj-arrow"><span class="arw">&#8593;</span><span class="pd-traj-cap">vs</span></div>
+    <div class="pd-traj-side"><div class="pd-traj-lbl">Now</div><div class="pd-traj-val">${D}</div></div>
+    <div class="pd-traj-legend"><span><span class="up">&#8593;</span> recovering (now &gt; at review)</span><span><span class="down">&#8595;</span> declining (now &lt; at review)</span></div>
+  </div>`;
+}
+
+// metric set (label, placeholder value) - all dashes this phase
+const M={
+  win:['Win rate (W/L)', `${D} (${D}W / ${D}L)`],
+  pf:['Profit factor', D],
+  wpnl:['Window PnL', D],
+  trend:['Recent trend', D],
+  dd:['Drawdown', D],
+  rf:['Recovery factor', D],
+  sharpe:['Sharpe', D],
+  dur:['Avg trade duration', D],
+  attempts:['Times reviewed', D],
+  life:['Days in system', D],
+};
+
+function tile(k){return `<div class="etile"><div class="k">${M[k][0]}</div><div class="v">${M[k][1]}</div></div>`;}
+function kv(k){return `<div class="pd-kv"><span class="k">${M[k][0]}</span><span class="v">${M[k][1]}</span></div>`;}
+
+// LAYOUT A: trajectory feature strip + tile grid
+function layoutA(){
+  const order=['win','pf','wpnl','trend','dd','rf','sharpe','dur','attempts','life'];
+  return `<div class="pd-a">${trajHtml()}
+    <div class="pd-title">Performance and risk</div>
+    <div class="pd-tiles">${order.map(tile).join('')}</div></div>`;
+}
+// LAYOUT B: trajectory + themed groups
+function layoutB(){
+  const grp=(title,keys)=>`<div class="pd-group"><div class="pd-title">${title}</div><div class="pd-grid">${keys.map(kv).join('')}</div></div>`;
+  return `<div class="pd-b">${trajHtml()}
+    ${grp('Performance',['win','pf','wpnl','trend','dur'])}
+    ${grp('Risk',['dd','rf','sharpe'])}
+    ${grp('Meta',['attempts','life'])}</div>`;
+}
+// LAYOUT C: hybrid - trajectory strip on top, dense 2-col list below
+function layoutC(){
+  const keys=['win','pf','wpnl','trend','dd','rf','sharpe','dur','attempts','life'];
+  return `<div class="pd-c">${trajHtml()}
+    <div class="pd-title">All metrics</div>
+    <div class="pd-list2">${keys.map(kv).join('')}</div></div>`;
+}
+
+function rowHtml(c,i){
+  const tp=Math.min(100,c.trades/c.tradesNeed*100), tdone=c.trades>=c.tradesNeed;
+  const dayLabel=c.reviewed?'days since reset':'days in system';
+  return `<div class="promo-item" data-i="${i}">
+    <div class="promo-row">
+      <div class="pr-bot"><span class="dot" style="background:${tcol(c.ticker)}"></span><b>${c.bot}</b></div>
+      <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
+        <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
+      <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
+      <button class="pd-toggle" aria-label="Expand detail" data-i="${i}">+</button>
+    </div>
+    <div class="promo-detail">${layoutA()}${layoutB()}${layoutC()}</div>
+  </div>`;
+}
+
+function render(){document.getElementById('promoList').innerHTML=CANDS.map(rowHtml).join('');}
+render();
+
+// one-at-a-time accordion expand/collapse
+document.getElementById('promoList').addEventListener('click',e=>{
+  const btn=e.target.closest('.pd-toggle'); if(!btn)return;
+  const item=btn.closest('.promo-item'); const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.promo-item.open').forEach(o=>{o.classList.remove('open');o.querySelector('.pd-toggle').textContent='+';});
+  if(!wasOpen){item.classList.add('open');btn.textContent='−';}  // minus sign when open
+});
+
+// layout switcher
+const NOTES={a:'Stat-tile grid: every metric as a small tile, trajectory as a feature strip.',
+  b:'Grouped sections: metrics themed into Performance / Risk / Meta under subheaders.',
+  c:'Hybrid: trajectory feature strip on top, a dense two-column metric list below.'};
+document.getElementById('layoutTabs').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const l=b.dataset.layout;
+  document.body.className='layout-'+l;
+  document.querySelectorAll('#layoutTabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.getElementById('switchNote').textContent=NOTES[l];
+});
+</script>
+</body>
+</html>
