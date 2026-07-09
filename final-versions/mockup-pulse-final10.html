@@ -350,10 +350,9 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
 .pr-bot b{font-size:.82rem}
 .ready-badge{font-size:.6rem;font-family:'Oxanium';font-weight:700;color:var(--pos);border:1px solid rgba(0,200,150,.4);background:rgba(0,200,150,.12);padding:.12rem .45rem;border-radius:20px;letter-spacing:.06em}
 .attempt-badge{font-size:.6rem;font-family:'Oxanium';font-weight:700;color:var(--accent);border:1px solid rgba(100,180,255,.4);background:rgba(100,180,255,.12);padding:.12rem .45rem;border-radius:20px;letter-spacing:.06em}
-.pr-days{font-size:.72rem;color:var(--sub);text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:.4rem}
-.pr-days .pr-days-n{font-family:'Oxanium';font-weight:700;color:var(--text)}
-.pr-days .pr-days-tag{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);border:1px solid var(--border);border-radius:20px;padding:.05rem .4rem}
-@media(max-width:560px){.pr-days{justify-content:flex-start;text-align:left}}
+.pr-days{font-size:.72rem;color:var(--sub);text-align:right;line-height:1.3}
+.pr-days .pr-days-n{font-family:'Oxanium';font-weight:700;color:var(--text);margin-right:.3rem}
+@media(max-width:560px){.pr-days{text-align:left}}
 .pb-meta{display:flex;justify-content:space-between;font-size:.66rem;color:var(--sub);margin-bottom:.3rem}
 .progress{height:.5rem;border-radius:6px;background:rgba(255,255,255,0.08);overflow:hidden}
 .progress>i{display:block;height:100%;border-radius:6px}
@@ -771,7 +770,7 @@ let CAND=[
  ['xrp-15sc-4h','XRP',51,4,30,0],['xrp-2etb-4h','XRP',51,5,30,0],['xrp-svs-4h','XRP',51,24,30,0],
  ['eth-iti-2h','ETH',51,5,30,0],['eth-15sc-2h','ETH',48,2,30,0],['dot-wete-2h','DOT',42,7,10,1],
  ['doge-scs-4h','DOGE',34,8,30,0],['trump-atb-2h','TRUMP',24,3,10,2]
-].map(c=>({bot:c[0],ticker:c[1],days:c[2],trades:c[3],tradesNeed:c[4],attempts:c[5],ready:false}));
+].map(c=>({bot:c[0],ticker:c[1],days:c[2],trades:c[3],tradesNeed:c[4],attempts:c[5],ready:false,reviewed:c[4]===10}));
 
 let PROMO_EVENT={bot:'eth-fgc-4h',ticker:'ETH',trades:30,tradesNeed:30,days:60,attempts:0};
 
@@ -876,12 +875,12 @@ function renderPromoBanner(){
   if(!PROMO_EVENT){$('#promoBanner').innerHTML='';return;}
   const e=PROMO_EVENT;
   // Gate is TRADES ONLY (flat-30 redesign). Days shown as informational, not a
-  // gate metric. Attempt shown when the bot was deferred before (attempts>=1).
-  const att=(e.attempts&&e.attempts>=1)?` (attempt #${e.attempts+1})`:'';
+  // gate metric. (Attempt count is not shown on the compact promotion section -
+  // it is rebuilt in the expanded detail during the later redesign.)
   $('#promoBanner').innerHTML=`<div class="promo-banner">
     <div class="pb-ico">&#127881;</div>
     <div class="pb-body"><div class="pb-title">PROMOTION GATE REACHED</div>
-      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate${att}. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in paper (informational). </span>A review notification was sent to Telegram for operator sign off.</div></div>
+      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in system (informational). </span>A review notification was sent to Telegram for operator sign off.</div></div>
     <div class="pb-stats">
       <div class="pb-stat"><div class="n">${e.trades}/${e.tradesNeed}</div><div class="l">Trades</div></div></div>
   </div>`;
@@ -1136,13 +1135,19 @@ function renderPromo(){
   $('#promoList').innerHTML=CAND.map(c=>{
     const tp=Math.min(100,c.trades/c.tradesNeed*100);
     const tdone=c.trades>=c.tradesNeed;
-    const att=(c.attempts&&c.attempts>=1)?`<span class="attempt-badge">Attempt #${c.attempts+1}</span>`:'';
+    // Dynamic day-count label (no "paper" - works for paper AND demo bots): a
+    // reviewed-and-kept bot shows its since-reset count; a never-reviewed bot's
+    // since-review count equals its time in system. Days is secondary context;
+    // the trades bar is the gate. INFO pill removed - de-gating is clear enough.
+    // Attempt count is NOT shown here - it moves to the expanded detail in the
+    // later redesign (promotion_attempts data still flows from the API).
+    const dayLabel=c.reviewed?'days since reset':'days in system';
     return `<div class="promo-row ${c.ready?'ready':''}">
       <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
-        <b>${c.bot}</b> ${att} ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
+        <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
       <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
         <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
-      <div class="pr-days"><span class="pr-days-n">${c.days}</span> days in paper <span class="pr-days-tag">info</span></div>
+      <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
     </div>`;
   }).join('');
 }
@@ -1314,6 +1319,8 @@ function adaptCandidates(bots){
     trades:(b.trades_since_reset!=null?b.trades_since_reset:0),
     tradesNeed:(b.trades_needed!=null?b.trades_needed:30),
     attempts:(b.promotion_attempts!=null?b.promotion_attempts:0),
+    // reviewed-and-kept = a stamped re-eval target -> "since reset" day label
+    reviewed:(b.next_promotion_trade_target!=null),
     ready:!!b.promotion_gate_hit }));
 }
 function derivePromoEvent(bots){
