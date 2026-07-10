@@ -366,10 +366,23 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
   border-bottom-left-radius:11px;border-bottom-right-radius:11px;background:rgba(10,16,28,0.6);margin:0 0 0 .9rem;padding:1rem 1rem 1.1rem}
 .promo-item.open .promo-detail{display:block;animation:pdOpen .18s ease}
 @keyframes pdOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* Live refresh re-applies .open to freshly-rebuilt nodes, which would REPLAY the
+   pdOpen fade/slide on every cycle. renderPromo() tags a re-applied item with
+   .pd-reopened so values swap silently (no animation) on refresh; a user-driven
+   expand (click handler) does NOT set it, so the initial open still animates. */
+.promo-item.pd-reopened .promo-detail{animation:none}
 /* PnL trajectory - the centerpiece feature tile */
-.pd-traj{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.8rem;
+/* minmax(0,1fr) tracks (NOT plain 1fr): a plain 1fr track has min-width:auto,
+   so the nowrap value would grow its track and push the whole strip wider than
+   .promo-detail (a leak) instead of being clipped/measured as overflow - and the
+   JS fit would see scrollWidth==clientWidth and never shrink. minmax(0,1fr) pins
+   the track min to 0 so the value's clientWidth is the real constrained width;
+   the fit then actually triggers and overflow:hidden clips any transient. This
+   is what makes the trajectory fit CONTINUOUSLY at any width, not just snap at
+   breakpoints. */
+.pd-traj{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:.8rem;
   background:linear-gradient(165deg,rgba(100,180,255,0.10),rgba(8,12,20,0.35));border:1px solid var(--border2);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1rem}
-.pd-traj-side{text-align:center}
+.pd-traj-side{text-align:center;min-width:0}
 .pd-traj-lbl{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
 .pd-traj-val{font-family:'Oxanium';font-weight:800;font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;margin-top:.2rem;white-space:nowrap;overflow:hidden}
 .pd-traj-arrow{display:flex;flex-direction:column;align-items:center;gap:.2rem}
@@ -385,6 +398,12 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
    Tablet -> 2/row, mobile -> 2/row. */
 .pd-tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem}
 .pd-tiles .etile{flex:0 1 calc(33.333% - .38rem);max-width:calc(33.333% - .38rem);min-width:0}
+/* ultrawide only (2560px+ covers 2560 and 3440 monitors, never a 1920 desktop):
+   4 tiles/row so wide screens don't waste horizontal space. justify-content:center
+   keeps a final partial row centered here too (11 tiles = 4+4+3, last 3 centered). */
+@media(min-width:2560px){
+  .pd-tiles .etile{flex:0 1 calc(25% - .42rem);max-width:calc(25% - .42rem)}
+}
 .pd-tiles .etile .k{font-size:.56rem}
 /* consistent base value size across tiles; nowrap + overflow:hidden so the JS
    fit-to-width pass can shrink ONLY the values that would otherwise spill
@@ -1279,7 +1298,7 @@ function renderPromo(){
   }).join('');
   if(_openKey){
     const it=[...document.querySelectorAll('#promoList .promo-item')].find(el=>el.getAttribute('data-bot')===_openKey);
-    if(it){ it.classList.add('open'); const t=it.querySelector('.pd-toggle'); if(t)t.textContent='−'; fitPromoItem(it); }
+    if(it){ it.classList.add('open','pd-reopened'); const t=it.querySelector('.pd-toggle'); if(t)t.textContent='−'; fitPromoItem(it); }  // pd-reopened -> values swap silently, no pdOpen replay
   }
 }
 
@@ -1313,8 +1332,8 @@ function wire(){
   {const _pl=$('#promoList'); if(_pl)_pl.addEventListener('click',ev=>{
     const btn=ev.target.closest('.pd-toggle'); if(!btn)return;
     const item=btn.closest('.promo-item'); const wasOpen=item.classList.contains('open');
-    document.querySelectorAll('#promoList .promo-item.open').forEach(o=>{o.classList.remove('open');const t=o.querySelector('.pd-toggle');if(t)t.textContent='+';});
-    if(!wasOpen){item.classList.add('open');btn.textContent='−';fitPromoItem(item);}  // "-" (minus) when open; fit values to their tiles once visible
+    document.querySelectorAll('#promoList .promo-item.open').forEach(o=>{o.classList.remove('open','pd-reopened');const t=o.querySelector('.pd-toggle');if(t)t.textContent='+';});
+    if(!wasOpen){item.classList.remove('pd-reopened');item.classList.add('open');btn.textContent='−';fitPromoItem(item);}  // user expand animates (no pd-reopened); "-" (minus) when open
   });}
   /* --- collapsible cards --- */
   document.addEventListener('click',ev=>{
