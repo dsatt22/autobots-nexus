@@ -343,8 +343,8 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
 .promo-list{display:flex;flex-direction:column;gap:.55rem;max-height:none;overflow-y:visible;padding-right:.2rem}
 @media(min-width:1181px){.promo-list{max-height:none}}
 .promo-row{background:rgba(8,12,20,0.4);border:1px solid var(--border);border-radius:11px;padding:.7rem .85rem;
-  display:grid;grid-template-columns:minmax(150px,1.1fr) 1fr 1fr;gap:.9rem;align-items:center}
-@media(max-width:560px){.promo-row{grid-template-columns:1fr;gap:.55rem}}
+  display:grid;grid-template-columns:minmax(140px,1.1fr) 1fr 1fr 2.1rem;gap:.9rem;align-items:center}
+@media(max-width:560px){.promo-row{grid-template-columns:1fr auto;gap:.5rem .7rem}}
 .promo-row.ready{border-color:rgba(0,200,150,0.45);background:rgba(0,200,150,0.07)}
 .pr-bot{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
 .pr-bot b{font-size:.82rem}
@@ -356,6 +356,40 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
 .pb-meta{display:flex;justify-content:space-between;font-size:.66rem;color:var(--sub);margin-bottom:.3rem}
 .progress{height:.5rem;border-radius:6px;background:rgba(255,255,255,0.08);overflow:hidden}
 .progress>i{display:block;height:100%;border-radius:6px}
+/* ---- expandable promotion detail (Layout A - stat-tile grid) ---- */
+.promo-item{display:flex;flex-direction:column}
+.promo-item.open .promo-row{border-color:var(--border2);border-bottom-left-radius:0;border-bottom-right-radius:0;background:rgba(8,12,20,0.55)}
+.pd-toggle{width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);border-radius:8px;background:var(--bg-raised);color:var(--sub);font-family:'Oxanium';font-weight:700;font-size:1.15rem;line-height:1;transition:background .15s,color .15s,border-color .15s;justify-self:end}
+.pd-toggle:hover{background:rgba(100,180,255,0.16);border-color:rgba(100,180,255,0.45);color:var(--text)}
+.promo-item.open .pd-toggle{background:rgba(100,180,255,0.18);border-color:rgba(100,180,255,0.5);color:var(--text)}
+.promo-detail{display:none;border:1px solid var(--border2);border-top:none;border-left:3px solid var(--accent);
+  border-bottom-left-radius:11px;border-bottom-right-radius:11px;background:rgba(10,16,28,0.6);margin:0 0 0 .9rem;padding:1rem 1rem 1.1rem}
+.promo-item.open .promo-detail{display:block;animation:pdOpen .18s ease}
+@keyframes pdOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* PnL trajectory - the centerpiece feature tile */
+.pd-traj{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.8rem;
+  background:linear-gradient(165deg,rgba(100,180,255,0.10),rgba(8,12,20,0.35));border:1px solid var(--border2);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1rem}
+.pd-traj-side{text-align:center}
+.pd-traj-lbl{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
+.pd-traj-val{font-family:'Oxanium';font-weight:800;font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;margin-top:.2rem}
+.pd-traj-arrow{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.pd-traj-arrow .arw{font-size:1.7rem;line-height:1;color:var(--dim)}
+.pd-traj-arrow .arw.up{color:var(--pos)} .pd-traj-arrow .arw.down{color:var(--neg)}
+.pd-traj-cap{font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.pd-traj-legend{grid-column:1/-1;display:flex;justify-content:center;gap:1rem;margin-top:.5rem;font-size:.58rem;color:var(--sub)}
+.pd-traj-legend .up{color:var(--pos)} .pd-traj-legend .down{color:var(--neg)}
+.pd-title{font-family:'Oxanium';font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin:.2rem 0 .55rem}
+/* stat-tile grid: flex + justify-content:center so a final PARTIAL row centers
+   (equal space both sides) instead of left-aligning, at any per-row remainder */
+.pd-tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem}
+.pd-tiles .etile{flex:0 1 132px;min-width:112px}
+.pd-tiles .etile .k{font-size:.56rem}
+.pd-tiles .etile .v{font-size:1.1rem}
+@media(max-width:560px){
+  .promo-row>.pd-toggle{grid-column:2;grid-row:1 / span 3;align-self:center;justify-self:end}
+  .promo-detail{margin-left:0}
+  .pd-tiles .etile{flex:1 1 42%}
+}
 
 /* ============ INFRA GRID ============ */
 .infra-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.7rem}
@@ -1127,27 +1161,53 @@ function renderPipe(){
 }
 
 /* ============= PROMOTION CANDIDATES ============= */
+// ---- expandable promotion detail (Layout A - stat-tile grid) ----
+// Every metric is a placeholder hyphen this phase; real data wires in a later
+// phase. The PnL trajectory (at last review vs now) is the centerpiece.
+const _PD='-';
+const _PD_METRICS=[
+  ['Win rate (W/L)', `${_PD} (${_PD}W / ${_PD}L)`],
+  ['Profit factor', _PD], ['Window PnL', _PD], ['Recent trend', _PD],
+  ['Drawdown', _PD], ['Recovery factor', _PD], ['Sharpe', _PD],
+  ['Avg trade duration', _PD], ['Times reviewed', _PD], ['Days in system', _PD],
+];
+function _pdTraj(){
+  return `<div class="pd-traj">
+    <div class="pd-traj-side"><div class="pd-traj-lbl">At last review</div><div class="pd-traj-val">${_PD}</div></div>
+    <div class="pd-traj-arrow"><span class="arw">&#8593;</span><span class="pd-traj-cap">vs</span></div>
+    <div class="pd-traj-side"><div class="pd-traj-lbl">Now</div><div class="pd-traj-val">${_PD}</div></div>
+    <div class="pd-traj-legend"><span><span class="up">&#8593;</span> recovering (now &gt; at review)</span><span><span class="down">&#8595;</span> declining (now &lt; at review)</span></div>
+  </div>`;
+}
+function _pdDetail(){
+  const tiles=_PD_METRICS.map(m=>`<div class="etile"><div class="k">${m[0]}</div><div class="v">${m[1]}</div></div>`).join('');
+  return `<div class="promo-detail">${_pdTraj()}
+    <div class="pd-title">Performance and risk</div>
+    <div class="pd-tiles">${tiles}</div></div>`;
+}
+
 function renderPromo(){
   const _ct=$('#candTag'); if(_ct)_ct.textContent=CAND.length+' approaching';
-  // Gate is TRADES ONLY (flat-30 redesign): the trades bar is the only gate
-  // progress. Days is informational text, not a progress bar. Attempt badge
-  // flags a bot deferred before (attempts>=1) so repeatedly-surfaced bots show.
+  // Compact row keeps its Phase 0 state (dynamic day label, no attempt badge,
+  // no INFO pill). We ADD a "+" expand control that opens the Layout A detail
+  // below (accordion, one open at a time). The attempt count lives in the detail.
   $('#promoList').innerHTML=CAND.map(c=>{
     const tp=Math.min(100,c.trades/c.tradesNeed*100);
     const tdone=c.trades>=c.tradesNeed;
     // Dynamic day-count label (no "paper" - works for paper AND demo bots): a
     // reviewed-and-kept bot shows its since-reset count; a never-reviewed bot's
-    // since-review count equals its time in system. Days is secondary context;
-    // the trades bar is the gate. INFO pill removed - de-gating is clear enough.
-    // Attempt count is NOT shown here - it moves to the expanded detail in the
-    // later redesign (promotion_attempts data still flows from the API).
+    // since-review count equals its time in system.
     const dayLabel=c.reviewed?'days since reset':'days in system';
-    return `<div class="promo-row ${c.ready?'ready':''}">
-      <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
-        <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
-      <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
-        <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
-      <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
+    return `<div class="promo-item">
+      <div class="promo-row ${c.ready?'ready':''}">
+        <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
+          <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
+        <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
+          <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
+        <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
+        <button class="pd-toggle" aria-label="Expand detail">+</button>
+      </div>
+      ${_pdDetail()}
     </div>`;
   }).join('');
 }
@@ -1178,6 +1238,13 @@ function wire(){
     state.posTab=b.dataset.env;paintPosTabs();renderPositions();renderDonut();}));  // affects Open Positions only
   {const _u=$('#upnlSort'); if(_u)_u.addEventListener('click',()=>_cyclePosSort('upnl'));
    const _t=$('#tkSort'); if(_t)_t.addEventListener('click',()=>_cyclePosSort('ticker'));}  // Open Positions sort
+  /* --- promotion detail expand/collapse (one open at a time, accordion) --- */
+  {const _pl=$('#promoList'); if(_pl)_pl.addEventListener('click',ev=>{
+    const btn=ev.target.closest('.pd-toggle'); if(!btn)return;
+    const item=btn.closest('.promo-item'); const wasOpen=item.classList.contains('open');
+    document.querySelectorAll('#promoList .promo-item.open').forEach(o=>{o.classList.remove('open');const t=o.querySelector('.pd-toggle');if(t)t.textContent='+';});
+    if(!wasOpen){item.classList.add('open');btn.textContent='−';}  // "-" (minus) when open
+  });}
   /* --- collapsible cards --- */
   document.addEventListener('click',ev=>{
     const h=ev.target.closest('[data-toggle]');if(!h)return;
