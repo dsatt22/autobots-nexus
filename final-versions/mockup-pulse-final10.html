@@ -1164,24 +1164,45 @@ function renderPipe(){
 // ---- expandable promotion detail (Layout A - stat-tile grid) ----
 // Every metric is a placeholder hyphen this phase; real data wires in a later
 // phase. The PnL trajectory (at last review vs now) is the centerpiece.
+// Placeholder dash. Under ?live=0 (static CAND has no .metrics) every field is
+// absent -> dashes; under live, the Phase 2 API fields drive real values. A null
+// from the API (PF below floor, recovery undefined, sharpe always) -> dash too:
+// expected, not an error. Never render NaN/undefined.
 const _PD='-';
-const _PD_METRICS=[
-  ['Win rate (W/L)', `${_PD} (${_PD}W / ${_PD}L)`],
-  ['Profit factor', _PD], ['Window PnL', _PD], ['Recent trend', _PD],
-  ['Drawdown', _PD], ['Recovery factor', _PD], ['Sharpe', _PD],
-  ['Avg trade duration', _PD], ['Times reviewed', _PD], ['Days in system', _PD],
-];
-function _pdTraj(){
+const _pdMoney=v=>(v==null?_PD:(v<0?'-$':'$')+Math.abs(Number(v)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
+const _pdNum=v=>(v==null?_PD:Number(v).toFixed(2));
+const _pdHrs=v=>(v==null?_PD:Number(v).toFixed(1)+'h');
+const _pdInt=v=>(v==null?_PD:String(v));
+function _pdWL(m){ if(!m||m.win_rate==null) return _PD; return `${Number(m.win_rate).toFixed(1)}% (${m.wins!=null?m.wins:'-'}W / ${m.losses!=null?m.losses:'-'}L)`; }
+function _pdTraj(m){
+  m=m||{};
+  const at=m.pnl_at_last_review, now=m.pnl_now, dir=m.pnl_direction;
+  let arw='<span class="arw" style="opacity:.4">&#8722;</span>';   // neutral: not yet reviewed / flat
+  if(dir==='up') arw='<span class="arw up">&#8593;</span>';         // green up = recovering
+  else if(dir==='down') arw='<span class="arw down">&#8595;</span>'; // red down = declining
   return `<div class="pd-traj">
-    <div class="pd-traj-side"><div class="pd-traj-lbl">At last review</div><div class="pd-traj-val">${_PD}</div></div>
-    <div class="pd-traj-arrow"><span class="arw">&#8593;</span><span class="pd-traj-cap">vs</span></div>
-    <div class="pd-traj-side"><div class="pd-traj-lbl">Now</div><div class="pd-traj-val">${_PD}</div></div>
+    <div class="pd-traj-side"><div class="pd-traj-lbl">At last review</div><div class="pd-traj-val">${_pdMoney(at)}</div></div>
+    <div class="pd-traj-arrow">${arw}<span class="pd-traj-cap">vs</span></div>
+    <div class="pd-traj-side"><div class="pd-traj-lbl">Now</div><div class="pd-traj-val">${_pdMoney(now)}</div></div>
     <div class="pd-traj-legend"><span><span class="up">&#8593;</span> recovering (now &gt; at review)</span><span><span class="down">&#8595;</span> declining (now &lt; at review)</span></div>
   </div>`;
 }
-function _pdDetail(){
-  const tiles=_PD_METRICS.map(m=>`<div class="etile"><div class="k">${m[0]}</div><div class="v">${m[1]}</div></div>`).join('');
-  return `<div class="promo-detail">${_pdTraj()}
+function _pdDetail(c){
+  const m=(c&&c.metrics)||null;
+  const rows=[
+    ['Win rate (W/L)', _pdWL(m)],
+    ['Profit factor', _pdNum(m&&m.profit_factor)],
+    ['Window PnL', m?_pdMoney(m.window_pnl):_PD],
+    ['Recent trend', (m&&m.trend)?m.trend:_PD],
+    ['Drawdown', m?_pdMoney(m.drawdown_usd):_PD],
+    ['Recovery factor', _pdNum(m&&m.recovery_factor)],
+    ['Sharpe', _pdNum(m&&m.sharpe)],
+    ['Avg trade duration', _pdHrs(m&&m.avg_duration_hours)],
+    ['Times reviewed', _pdInt(c&&c.attempts)],
+    ['Days in system', _pdInt(m&&m.days_in_system)],
+  ];
+  const tiles=rows.map(r=>`<div class="etile"><div class="k">${r[0]}</div><div class="v">${r[1]}</div></div>`).join('');
+  return `<div class="promo-detail">${_pdTraj(m)}
     <div class="pd-title">Performance and risk</div>
     <div class="pd-tiles">${tiles}</div></div>`;
 }
@@ -1207,7 +1228,7 @@ function renderPromo(){
         <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
         <button class="pd-toggle" aria-label="Expand detail">+</button>
       </div>
-      ${_pdDetail()}
+      ${_pdDetail(c)}
     </div>`;
   }).join('');
 }
@@ -1388,6 +1409,17 @@ function adaptCandidates(bots){
     attempts:(b.promotion_attempts!=null?b.promotion_attempts:0),
     // reviewed-and-kept = a stamped re-eval target -> "since reset" day label
     reviewed:(b.next_promotion_trade_target!=null),
+    // Phase 3: the batched since-reset detail metrics (Phase 2 API). Absent under
+    // ?live=0 -> the detail tiles fall back to dashes. Null fields stay null -> dash.
+    metrics:{
+      win_rate:b.win_rate, wins:b.wins, losses:b.losses,
+      profit_factor:b.profit_factor, window_pnl:b.window_pnl,
+      drawdown_usd:b.drawdown_usd, avg_duration_hours:b.avg_duration_hours,
+      trend:b.trend, recovery_factor:b.recovery_factor, sharpe:b.sharpe,
+      days_in_system:b.days_in_system,
+      pnl_at_last_review:b.pnl_at_last_review, pnl_now:b.pnl_now,
+      pnl_delta:b.pnl_delta, pnl_direction:b.pnl_direction,
+    },
     ready:!!b.promotion_gate_hit }));
 }
 function derivePromoEvent(bots){
