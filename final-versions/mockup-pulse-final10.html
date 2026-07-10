@@ -371,7 +371,7 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
   background:linear-gradient(165deg,rgba(100,180,255,0.10),rgba(8,12,20,0.35));border:1px solid var(--border2);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1rem}
 .pd-traj-side{text-align:center}
 .pd-traj-lbl{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
-.pd-traj-val{font-family:'Oxanium';font-weight:800;font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;margin-top:.2rem}
+.pd-traj-val{font-family:'Oxanium';font-weight:800;font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;margin-top:.2rem;white-space:nowrap;overflow:hidden}
 .pd-traj-arrow{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .pd-traj-arrow .arw{font-size:1.7rem;line-height:1;color:var(--dim)}
 .pd-traj-arrow .arw.up{color:var(--pos)} .pd-traj-arrow .arw.down{color:var(--neg)}
@@ -379,16 +379,28 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
 .pd-traj-legend{grid-column:1/-1;display:flex;justify-content:center;gap:1rem;margin-top:.5rem;font-size:.58rem;color:var(--sub)}
 .pd-traj-legend .up{color:var(--pos)} .pd-traj-legend .down{color:var(--neg)}
 .pd-title{font-family:'Oxanium';font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin:.2rem 0 .55rem}
-/* stat-tile grid: flex + justify-content:center so a final PARTIAL row centers
-   (equal space both sides) instead of left-aligning, at any per-row remainder */
+/* stat-tile grid: exactly 3 tiles per row on desktop (wider tiles prevent most
+   value overflow); justify-content:center so a final PARTIAL row centers (equal
+   space both sides) instead of left-aligning, at any per-row remainder.
+   Tablet -> 2/row, mobile -> 2/row. */
 .pd-tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem}
-.pd-tiles .etile{flex:0 1 132px;min-width:112px}
+.pd-tiles .etile{flex:0 1 calc(33.333% - .38rem);max-width:calc(33.333% - .38rem);min-width:0}
 .pd-tiles .etile .k{font-size:.56rem}
-.pd-tiles .etile .v{font-size:1.1rem}
+/* consistent base value size across tiles; nowrap + overflow:hidden so the JS
+   fit-to-width pass can shrink ONLY the values that would otherwise spill
+   (long / thousands-scale numbers). Values that fit stay at the base size. */
+.pd-tiles .etile .v{font-size:1.1rem;white-space:nowrap;overflow:hidden}
+/* win rate: percentage at the base value size, W/L breakdown as a smaller
+   subline BELOW it (never wrapping awkwardly beside the percentage) */
+.pd-tiles .etile .v .wrpct{display:block}
+.pd-tiles .etile .v .subv{display:block;font-size:.62rem;font-weight:600;color:var(--sub);margin-top:.12rem;letter-spacing:.02em}
+@media(max-width:900px){
+  .pd-tiles .etile{flex:0 1 calc(50% - .28rem);max-width:calc(50% - .28rem)}
+}
 @media(max-width:560px){
   .promo-row>.pd-toggle{grid-column:2;grid-row:1 / span 3;align-self:center;justify-self:end}
   .promo-detail{margin-left:0}
-  .pd-tiles .etile{flex:1 1 42%}
+  .pd-tiles .etile{flex:1 1 calc(50% - .28rem);max-width:calc(50% - .28rem)}
 }
 
 /* ============ INFRA GRID ============ */
@@ -1174,6 +1186,33 @@ const _pdNum=v=>(v==null?_PD:Number(v).toFixed(2));
 const _pdHrs=v=>(v==null?_PD:Number(v).toFixed(1)+'h');
 const _pdInt=v=>(v==null?_PD:String(v));
 function _pdWL(m){ if(!m||m.win_rate==null) return _PD; return `${Number(m.win_rate).toFixed(1)}% (${m.wins!=null?m.wins:'-'}W / ${m.losses!=null?m.losses:'-'}L)`; }
+// Win-rate tile value: percentage as the primary (base-size) line, W/L as a
+// smaller subline below - no awkward beside-the-percentage wrap on any width.
+function _pdWLcell(m){
+  if(!m||m.win_rate==null) return `<span class="wrpct">${_PD}</span>`;
+  const wl=`${m.wins!=null?m.wins:'-'}W / ${m.losses!=null?m.losses:'-'}L`;
+  return `<span class="wrpct">${Number(m.win_rate).toFixed(1)}%</span><span class="subv">${wl}</span>`;
+}
+// Fit-to-width: keep a consistent base value size across tiles, but shrink ONLY
+// the values that would overflow their container (long / thousands-scale numbers
+// like -$1,255.13), so nothing spills outside a tile while short values stay at
+// the base size. Requires the target to be white-space:nowrap; overflow:hidden.
+// A collapsed (display:none) detail measures 0 width -> skipped; the fit runs
+// when it expands (accordion open) and again after each live re-render.
+function _fitToWidth(el,minPx){
+  if(!el)return;
+  el.style.fontSize='';                                    // reset to the CSS-defined base
+  if(!el.clientWidth)return;                               // hidden/collapsed - fit later on expand
+  let px=parseFloat(getComputedStyle(el).fontSize)||16, guard=0;
+  while(el.scrollWidth>el.clientWidth+0.5 && px>minPx && guard<80){
+    px-=1; el.style.fontSize=px+'px'; guard++;
+  }
+}
+function fitPromoItem(item){
+  if(!item)return;
+  item.querySelectorAll('.pd-tiles .etile .v').forEach(v=>_fitToWidth(v,10));
+  item.querySelectorAll('.pd-traj-val').forEach(v=>_fitToWidth(v,13));
+}
 function _pdTraj(m){
   m=m||{};
   const at=m.pnl_at_last_review, now=m.pnl_now, dir=m.pnl_direction;
@@ -1190,7 +1229,7 @@ function _pdTraj(m){
 function _pdDetail(c){
   const m=(c&&c.metrics)||null;
   const rows=[
-    ['Win rate (W/L)', _pdWL(m)],
+    ['Win rate', _pdWLcell(m)],
     ['Profit factor', _pdNum(m&&m.profit_factor)],
     ['Window PnL', m?_pdMoney(m.window_pnl):_PD],
     ['Recent trend', (m&&m.trend)?m.trend:_PD],
@@ -1209,6 +1248,13 @@ function _pdDetail(c){
 
 function renderPromo(){
   const _ct=$('#candTag'); if(_ct)_ct.textContent=CAND.length+' approaching';
+  // Preserve which candidate is expanded across live re-renders. The medium-tier
+  // (~60s) refresh calls renderPromo() and rebuilds this list's innerHTML, which
+  // destroys every DOM node - without this the open detail would collapse on its
+  // own mid-view. Capture the open bot key first, rebuild, then re-apply the open
+  // state to the same candidate so it stays open and its tiles refresh in place.
+  const _openEl=document.querySelector('#promoList .promo-item.open');
+  const _openKey=_openEl?_openEl.getAttribute('data-bot'):null;
   // Compact row keeps its Phase 0 state (dynamic day label, no attempt badge,
   // no INFO pill). We ADD a "+" expand control that opens the Layout A detail
   // below (accordion, one open at a time). The attempt count lives in the detail.
@@ -1219,7 +1265,7 @@ function renderPromo(){
     // reviewed-and-kept bot shows its since-reset count; a never-reviewed bot's
     // since-review count equals its time in system.
     const dayLabel=c.reviewed?'days since reset':'days in system';
-    return `<div class="promo-item">
+    return `<div class="promo-item" data-bot="${c.bot}">
       <div class="promo-row ${c.ready?'ready':''}">
         <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
           <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
@@ -1231,6 +1277,10 @@ function renderPromo(){
       ${_pdDetail(c)}
     </div>`;
   }).join('');
+  if(_openKey){
+    const it=[...document.querySelectorAll('#promoList .promo-item')].find(el=>el.getAttribute('data-bot')===_openKey);
+    if(it){ it.classList.add('open'); const t=it.querySelector('.pd-toggle'); if(t)t.textContent='−'; fitPromoItem(it); }
+  }
 }
 
 /* ============= FILTER WIRING ============= */
@@ -1264,7 +1314,7 @@ function wire(){
     const btn=ev.target.closest('.pd-toggle'); if(!btn)return;
     const item=btn.closest('.promo-item'); const wasOpen=item.classList.contains('open');
     document.querySelectorAll('#promoList .promo-item.open').forEach(o=>{o.classList.remove('open');const t=o.querySelector('.pd-toggle');if(t)t.textContent='+';});
-    if(!wasOpen){item.classList.add('open');btn.textContent='−';}  // "-" (minus) when open
+    if(!wasOpen){item.classList.add('open');btn.textContent='−';fitPromoItem(item);}  // "-" (minus) when open; fit values to their tiles once visible
   });}
   /* --- collapsible cards --- */
   document.addEventListener('click',ev=>{
@@ -1272,7 +1322,7 @@ function wire(){
     const card=h.closest('.card');card.classList.toggle('collapsed');
     setTimeout(()=>{perfChart&&perfChart.resize();donutChart&&donutChart.resize();syncPosHeights();},260);
   });
-  window.addEventListener('resize',()=>{clearTimeout(window.__ph);window.__ph=setTimeout(syncPosHeights,160);});
+  window.addEventListener('resize',()=>{clearTimeout(window.__ph);window.__ph=setTimeout(()=>{syncPosHeights();fitPromoItem(document.querySelector('#promoList .promo-item.open'));},160);});
   /* --- expandable position rows (mobile): tap a row to reveal hidden columns --- */
   $('#posBody').addEventListener('click',ev=>{
     const row=ev.target.closest('.posrow');if(!row)return;
