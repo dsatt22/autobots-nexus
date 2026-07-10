@@ -1481,7 +1481,14 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
 .vs-btn:hover{color:var(--text)}
 .vs-btn.on{background:linear-gradient(135deg,rgba(100,180,255,0.28),rgba(167,139,250,0.2));color:var(--text);box-shadow:0 0 12px rgba(100,180,255,0.25)}
 
-#dashWrap{min-height:100vh;padding-top:calc(clamp(48px,5.5vh,60px) + 4.5rem)}
+/* html/body are overflow:hidden (line 31) so the document never scrolls - the
+   Reports view (#pageWrap) copes via its own inner overflow-y:auto containers.
+   #dashWrap is normal flow, so on mobile (1-col grid) the stacked dash tiles run
+   past the viewport and get clipped with no way to scroll. Give #dashWrap its own
+   viewport-tall scroll context so the landing scrolls and every tile is reachable.
+   dvh (with a vh fallback) keeps the bottom clear of mobile browser chrome; the
+   fixed #dashFrameWrap overlay is position:fixed so it's unaffected. */
+#dashWrap{height:100vh;height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(clamp(48px,5.5vh,60px) + 4.5rem)}
 #dashLanding{max-width:1200px;margin:0 auto;padding:1rem clamp(1rem,3vw,2.5rem) 4rem}
 .dash-head{text-align:center;margin-bottom:2.2rem}
 .dash-eye{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem}
