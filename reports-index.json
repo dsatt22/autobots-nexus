@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "weekly_review",
+      "title": "Weekly Trading Review",
+      "date": "2026-07-12",
+      "time": "8:00 AM ET",
+      "file": "reports/weekly/weekly_review_2026-07-12_0800.json",
+      "format": "json"
+    },
+    {
       "type": "evening_briefing",
       "title": "Evening Briefing",
       "date": "2026-07-11",
@@ -655,13 +663,6 @@
       "time": "11:22 AM ET",
       "file": "reports/weekly/weekly_review_2026-04-27_1122.json",
       "format": "json"
-    },
-    {
-      "type": "weekly",
-      "title": "Weekly Trading Review",
-      "date": "2026-04-19",
-      "time": "8:00 AM ET",
-      "file": "reports/weekly/2026-04-19-trading-review.html"
     },
     {
       "type": "weekly-comparison",
