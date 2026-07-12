@@ -580,9 +580,42 @@ const LIVE={enabled:true, base:'https://api.autobotsnexus.com',
   token:'G3lbXH5ndXybBeGAb5l7Zzwhmgo9UOzv3spjVNaXeVI', refreshMs:60000};
 const _q=new URLSearchParams(location.search); if(_q.get('base'))LIVE.base=_q.get('base');
 const USE_LIVE=LIVE.enabled && _q.get('live')!=='0';
-const LIVE_CUR_WEEK='jun-w4', LIVE_CUR_MONTH='jun';   // API current completed period aligns with these static slots
-let LIVE_ROWS={week:null,month:null}, LIVE_PRIOR={week:null,month:null};
-let LIVE_EQUITY={week:null,month:null};   // real period-scoped curves from /trading/equity
+// Dynamic period catalog + per-period cache, built from GET /trading/periods.
+// No hardcoded month/week anchors: the in-progress current week/month and every
+// completed period come from the API with real-date labels, so a new week/month
+// never needs a code change and a period is never mislabeled. (?live=0 keeps the
+// static MONTHS/BASE catalog below as an offline fallback.)
+let LIVE_PERIODS=null;      // {current_week,current_month,weeks:[...],months:[...]}
+let LIVE_MONTHS=[];         // MONTHS-shaped catalog derived from LIVE_PERIODS (live mode)
+const LIVE_CACHE={};        // 'week|<key>' / 'month|<key>' -> {rows, prior, equity}
+const _MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function _isoParts(iso){const p=String(iso).slice(0,10).split('-');return {y:+p[0],m:+p[1],d:+p[2]};}
+function _mdLabel(iso){const p=_isoParts(iso);return _MON[p.m-1]+' '+p.d;}                 // 'Jul 6'
+function _wkRange(sIso,eIso){const a=_isoParts(sIso),b=_isoParts(eIso);
+  return a.m===b.m?`${_MON[a.m-1]} ${a.d}-${b.d}`:`${_MON[a.m-1]} ${a.d}-${_MON[b.m-1]} ${b.d}`;}
+function _moName(mk){const p=mk.split('-');const y=+p[0],m=+p[1];
+  return ['January','February','March','April','May','June','July','August','September','October','November','December'][m-1]+' '+y;}
+function isCurrentPeriod(){return !!(LIVE_PERIODS && (state.viewType==='week'
+  ? state.weekId===LIVE_PERIODS.current_week : state.mkey===LIVE_PERIODS.current_month));}
+// Build the MONTHS-shaped catalog from the API periods payload.
+function buildLiveCatalog(per){
+  LIVE_PERIODS=per;
+  const byMonth={};
+  (per.weeks||[]).forEach(w=>{(byMonth[w.month]=byMonth[w.month]||[]).push(w);});
+  const monthLabel={},monthLive={};
+  (per.months||[]).forEach(m=>{monthLabel[m.period]=m.label;monthLive[m.period]=!!m.live;});
+  // every month that has a rollup OR contains a listed week, newest-first
+  const monthKeys=[...new Set([...(per.months||[]).map(m=>m.period), ...Object.keys(byMonth)])]
+    .sort().reverse();
+  LIVE_MONTHS=monthKeys.map(mk=>{
+    const wks=(byMonth[mk]||[]).slice().sort((a,b)=>a.start<b.start?-1:1).map((w,i)=>{
+      const p=_isoParts(w.start);
+      return {id:w.period,n:i+1,range:_wkRange(w.start,w.end),start:_mdLabel(w.start),
+        yr:p.y,label:w.label,live:!!w.live,month:w.month};
+    });
+    return {key:mk,name:monthLabel[mk]||_moName(mk),live:!!monthLive[mk],weeks:wks};
+  });
+}
 
 /* Reshape the /trading/equity response into the chart's {labels,data} shape. The
    endpoint returns the REAL period-scoped cumulative curve (builds from ~0 to the
@@ -614,10 +647,11 @@ function _reshapeMonthEquity(resp){
   const wks=Object.keys(buckets).map(Number).sort((a,b)=>a-b);
   return {labels:wks.map(w=>'W'+w), data:wks.map(w=>+Number(buckets[w]).toFixed(2))};
 }
-async function _fetchEquity(scope){
+async function _fetchEquity(scope,period){
   const t=state.fTicker!=='all'?'&ticker='+encodeURIComponent(state.fTicker):'';
   const e=state.fEnv!=='all'?'&env='+encodeURIComponent(state.fEnv):'';
-  const resp=await _fetch('/trading/equity?scope='+scope+t+e);
+  const p=period?'&period='+encodeURIComponent(period):'';
+  const resp=await _fetch('/trading/equity?scope='+scope+p+t+e);
   return scope==='month'?_reshapeMonthEquity(resp):_reshapeWeekEquity(resp);
 }
 
@@ -654,53 +688,65 @@ function adaptRow(r){
     trend:(Array.isArray(r.trend)?r.trend:[])};
 }
 function _adaptRows(rows){return (rows||[]).map(adaptRow);}
-function _liveScopeActive(){
-  return !!(USE_LIVE && ((state.viewType==='week' && state.weekId===LIVE_CUR_WEEK && LIVE_ROWS.week)
-    || (state.viewType==='month' && state.mkey===LIVE_CUR_MONTH && LIVE_ROWS.month)));
-}
+function _activeKey(){return state.viewType==='week'?state.weekId:state.mkey;}
+function _activeCache(){return USE_LIVE?LIVE_CACHE[state.viewType+'|'+_activeKey()]:null;}
+function _liveScopeActive(){return USE_LIVE && !!_activeCache();}
 function _handleErr(err){_setStatus('err', err&&err.kind==='auth'?'Live data auth failed ('+(err.status||401)+')':'Unable to reach live data');}
 
-async function _loadCurrent(){
-  const [wLb,mLb,wSum,mSum]=await Promise.all([
-    _fetch('/trading/leaderboard?scope=week'),
-    _fetch('/trading/leaderboard?scope=month'),
-    _fetch('/trading/summary?scope=week').catch(()=>null),
-    _fetch('/trading/summary?scope=month').catch(()=>null),
-  ]);
-  LIVE_ROWS.week=_adaptRows(wLb.rows); LIVE_ROWS.month=_adaptRows(mLb.rows);
-  // Real period-scoped equity curves (best-effort; equitySeries falls back to the
-  // synthetic shape if a fetch fails). Honours the current ticker/env filters.
-  try{const [wEq,mEq]=await Promise.all([_fetchEquity('week'),_fetchEquity('month')]);
-    LIVE_EQUITY.week=wEq; LIVE_EQUITY.month=mEq;}catch(e){}
-  // prior-period rows -> real deltas (best-effort; deltaHtml already handles null prev)
-  try{const pw=wSum&&wSum.prior&&wSum.prior.period_key;
-    if(pw){const p=await _fetch('/trading/leaderboard?scope=week&period='+encodeURIComponent(pw));LIVE_PRIOR.week=_adaptRows(p.rows);}}catch(e){}
-  try{const pm=mSum&&mSum.prior&&mSum.prior.period_key;
-    if(pm){const p=await _fetch('/trading/leaderboard?scope=month&period='+encodeURIComponent(pm));LIVE_PRIOR.month=_adaptRows(p.rows);}}catch(e){}
+// Fetch (and cache) one period's rows + prior-period rows (for deltas) + equity
+// curve. The in-progress current period returns the LIVE trades-based data; any
+// completed period returns its snapshot data - same endpoints, the API dispatches.
+async function ensurePeriod(scope,key,opts){
+  const force=opts&&opts.force; const ck=scope+'|'+key;
+  if(!force && LIVE_CACHE[ck])return LIVE_CACHE[ck];
+  const lb=await _fetch('/trading/leaderboard?scope='+scope+'&period='+encodeURIComponent(key));
+  const rows=_adaptRows(lb.rows);
+  let prior=null;
+  try{const sm=await _fetch('/trading/summary?scope='+scope+'&period='+encodeURIComponent(key));
+    const pk=sm&&sm.prior&&sm.prior.period_key;
+    if(pk){const p=await _fetch('/trading/leaderboard?scope='+scope+'&period='+encodeURIComponent(pk));prior=_adaptRows(p.rows);}
+  }catch(e){}
+  let equity=null; try{equity=await _fetchEquity(scope,key);}catch(e){}
+  LIVE_CACHE[ck]={rows,prior,equity};
+  return LIVE_CACHE[ck];
+}
+// Load the dynamic period catalog and default the selection to the in-progress
+// current week (live). state stays on the static-safe defaults until this
+// succeeds, so a live-fetch failure cleanly falls back to the ?live=0 catalog.
+async function _loadPeriods(){
+  const per=await _fetch('/trading/periods');
+  buildLiveCatalog(per);
+  state.mkey=per.current_month; state.viewType='week'; state.weekId=per.current_week;
 }
 
 async function init(){
-  if(!USE_LIVE){populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();return;}
+  if(!USE_LIVE){populateMonths();populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();return;}
   _setStatus('stale','Loading live data&hellip;');
-  try{await _loadCurrent();}
-  catch(err){
-    // Never leave the page blank: fall back to the embedded static snapshot.
+  try{
+    await _loadPeriods();                       // dynamic catalog + default = current week
+    await ensurePeriod('week',state.weekId);    // the in-progress current week (live)
+    ensurePeriod('month',state.mkey).catch(()=>{});   // prefetch current month in the background
+  }catch(err){
+    // Never leave the page blank: fall back to the embedded static snapshot catalog.
     _handleErr(err);
-    populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
+    populateMonths();populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
     _setStatus('err',(err&&err.kind==='auth'?'Auth failed':'Live data unavailable')+' &middot; showing static snapshot');
     return;
   }
-  populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
+  populateMonths();populateTickers();buildPeriodDropdown();applyViewType();paintSortArrows();wire();render();
   _setStatus('ok',_syncedET());
-  // Equity chart honours ticker/env: refetch the period-scoped curve when they change
-  // (an aggregate series can't be filtered client-side like the rows). Added alongside
-  // wire()'s handlers, not replacing them.
+  // Equity honours ticker/env: refetch the ACTIVE period's period-scoped curve when
+  // they change (an aggregate series can't be filtered client-side like the rows).
   ['#fTicker','#fEnv'].forEach(id=>{const el=$(id); if(el) el.addEventListener('change',async()=>{
-    try{const [w,m]=await Promise.all([_fetchEquity('week'),_fetchEquity('month')]); LIVE_EQUITY.week=w; LIVE_EQUITY.month=m; render();}catch(e){}
+    const c=_activeCache(); if(c){try{c.equity=await _fetchEquity(state.viewType,_activeKey());}catch(e){}} render();
   });});
   setInterval(async()=>{
-    try{await _loadCurrent();render();_setStatus('ok',_syncedET());}
-    catch(err){_setStatus('stale','Live refresh failed &middot; showing last good');}
+    try{
+      // Only the in-progress current period is fast-moving; completed periods are
+      // immutable, so refetch (force) ONLY when the current period is selected.
+      if(isCurrentPeriod())await ensurePeriod(state.viewType,_activeKey(),{force:true});
+      render();_setStatus('ok',_syncedET());
+    }catch(err){_setStatus('stale','Live refresh failed &middot; showing last good');}
   },LIVE.refreshMs);
 }
 
@@ -774,9 +820,12 @@ const MONTHS=[
    {id:'jun-w1',n:1,range:'Jun 1-7',start:'Jun 1'},{id:'jun-w2',n:2,range:'Jun 8-14',start:'Jun 8'},
    {id:'jun-w3',n:3,range:'Jun 15-21',start:'Jun 15'},{id:'jun-w4',n:4,range:'Jun 22-28',start:'Jun 22'}]}
 ];
-const monthByKey=k=>MONTHS.find(m=>m.key===k);
+// In live mode the catalog is the dynamic LIVE_MONTHS (real periods); ?live=0 uses
+// the static MONTHS below. Every period lookup / label routes through here.
+function _catalog(){return (USE_LIVE && LIVE_MONTHS.length)?LIVE_MONTHS:MONTHS;}
+const monthByKey=k=>_catalog().find(m=>m.key===k);
 const ALL_WEEKS=MONTHS.flatMap(m=>m.weeks.map(w=>({...w,mkey:m.key})));
-const weekById=id=>ALL_WEEKS.find(w=>w.id===id);
+const weekById=id=>_catalog().flatMap(m=>m.weeks).find(w=>w.id===id);
 const DAY_LABELS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 /* ================= PER-BOT PER-WEEK GENERATION =================
@@ -840,8 +889,9 @@ function botMonth(base,mkey){
 
 /* rows for the active scope (unfiltered) */
 function scopeRows(){
-  // Live current period overlays the newest static slot; past periods stay static.
-  if(_liveScopeActive())return state.viewType==='week'?LIVE_ROWS.week:LIVE_ROWS.month;
+  // Live mode: every selected period (in-progress OR completed) comes from the API,
+  // cached per period. ?live=0: the static BASE-derived synthetic rows.
+  if(USE_LIVE){const c=_activeCache();return c?c.rows:[];}
   if(state.viewType==='week')return BASE.map(b=>botWeek(b,state.weekId)).filter(Boolean);
   return BASE.map(b=>botMonth(b,state.mkey)).filter(Boolean);
 }
@@ -874,7 +924,7 @@ function aggregate(rows){
 function prevAggregate(){
   // Live current period -> real prior-period rows for the deltas.
   if(_liveScopeActive()){
-    const pr=state.viewType==='week'?LIVE_PRIOR.week:LIVE_PRIOR.month;
+    const c=_activeCache(); const pr=c?c.prior:null;
     return (pr&&pr.length)?aggregate(filtRows(pr)):null;
   }
   let rows=[];
@@ -909,8 +959,9 @@ function equitySeries(net){
   // Live current period: the REAL period-scoped curve from /trading/equity (builds
   // from ~0 to the trade-level period net). Past/static periods + any fetch miss
   // fall through to the seeded shape scaled to `net`.
-  if(_liveScopeActive() && LIVE_EQUITY[state.viewType] && LIVE_EQUITY[state.viewType].data.length)
-    return LIVE_EQUITY[state.viewType];
+  const _c=_activeCache();
+  if(_liveScopeActive() && _c && _c.equity && _c.equity.data.length)
+    return _c.equity;
   // week -> 7 daily points; month -> N weekly points. Shape seeded, scaled to `net`.
   let labels,steps;
   if(state.viewType==='week'){
@@ -948,8 +999,13 @@ function render(){
 function renderHeader(){
   const scopeWk=state.viewType==='week';
   $('#pTitle').innerHTML=scopeWk?'Weekly <span>Trading Activity</span>':'Monthly <span>Trading Activity</span>';
-  if(scopeWk){const w=weekById(state.weekId);$('#pSub').textContent='Week of '+w.start+', 2026';$('#eqTag').textContent=weekById(state.weekId).range;$('#periodLabel').textContent='Week';}
-  else{$('#pSub').textContent=monthByKey(state.mkey).name;$('#eqTag').textContent=monthByKey(state.mkey).name;$('#periodLabel').textContent='Period';}
+  const liveTag=isCurrentPeriod()?' &middot; live':'';
+  if(scopeWk){const w=weekById(state.weekId);
+    $('#pSub').innerHTML=(w?'Week of '+w.start+', '+(w.yr||2026):'-')+liveTag;
+    $('#eqTag').textContent=w?w.range:'-';$('#periodLabel').textContent='Week';}
+  else{const m=monthByKey(state.mkey);
+    $('#pSub').innerHTML=(m?m.name:'-')+liveTag;
+    $('#eqTag').textContent=m?m.name:'-';$('#periodLabel').textContent='Period';}
   $('#tmapTag').textContent=(state.fTicker==='all'?'by ticker':state.fTicker+' only');
 }
 
@@ -1031,11 +1087,18 @@ function renderTopBottom(agg){
 }
 
 function renderTreemap(agg){
+  // Drill-down: a specific ticker selected -> one tile PER BOT within it; otherwise
+  // one tile per ticker. agg.rows is already ticker-filtered by filtRows.
+  const drill=state.fTicker!=='all';
   const groups={};
-  agg.rows.forEach(r=>{if(!groups[r.ticker])groups[r.ticker]={ticker:r.ticker,pnl:0,trades:0};groups[r.ticker].pnl+=r.pnl;groups[r.ticker].trades+=r.trades;});
+  agg.rows.forEach(r=>{const k=drill?r.bot:r.ticker;
+    if(!groups[k])groups[k]={name:k,ticker:r.ticker,pnl:0,trades:0};
+    groups[k].pnl+=r.pnl;groups[k].trades+=r.trades;});
   const list=Object.values(groups).map(g=>({...g,pnl:+g.pnl.toFixed(2)})).filter(g=>g.trades>0);
-  $('#tmapNote').textContent=list.length+' tickers traded · tile size = share of |PnL|, green gains / red losses';
-  if(!list.length){$('#tmap').innerHTML='<div class="dim" style="padding:1rem 0">No ticker activity for these filters.</div>';return;}
+  $('#tmapNote').textContent=drill
+    ? list.length+' '+state.fTicker+' bot'+(list.length===1?'':'s')+' · tile size = share of |PnL|, green gains / red losses'
+    : list.length+' tickers traded · tile size = share of |PnL|, green gains / red losses';
+  if(!list.length){$('#tmap').innerHTML='<div class="dim" style="padding:1rem 0">No '+(drill?state.fTicker+' bot':'ticker')+' activity for these filters.</div>';return;}
   const maxAbs=Math.max(...list.map(t=>Math.abs(t.pnl)),1);
   const total=list.reduce((s,t)=>s+Math.abs(t.pnl),0)||1;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -1045,25 +1108,31 @@ function renderTreemap(agg){
     const up=t.pnl>=0;const base=up?'0,200,150':'232,65,66';
     const intensity=0.14+(Math.abs(t.pnl)/maxAbs)*0.34;
     return `<div class="tile" style="grid-column:span ${col};grid-row:span ${rowSpan};background:rgba(${base},${intensity.toFixed(2)});border-color:rgba(${base},0.5)">
-      <div class="tt" style="color:${tcol(t.ticker)}">${t.ticker}</div>
+      <div class="tt" style="color:${drill?'var(--text)':tcol(t.ticker)}">${t.name}</div>
       <div><div class="tp ${up?'pos':'neg'}">${fmtUsd(t.pnl)}</div><div class="tx">${t.trades} trade${t.trades===1?'':'s'}</div></div>
     </div>`;
   }).join('');
 }
 
+// distinct-hue palette for per-bot donut slices (a ticker's bots share its color,
+// so bot slices need their own spread of hues)
+function _botColor(i){return `hsl(${(i*47)%360} 62% 55%)`;}
 function renderDonut(agg){
+  // Drill-down: a specific ticker selected -> profitable BOTS within it; otherwise
+  // profitable tickers. agg.rows is already ticker-filtered by filtRows.
+  const drill=state.fTicker!=='all';
   const groups={};
-  agg.rows.forEach(r=>{groups[r.ticker]=(groups[r.ticker]||0)+r.pnl;});
+  agg.rows.forEach(r=>{const k=drill?r.bot:r.ticker;groups[k]=(groups[k]||0)+r.pnl;});
   const pos=Object.entries(groups).filter(([,v])=>v>0).map(([k,v])=>[k,+v.toFixed(2)]).sort((a,b)=>b[1]-a[1]);
   const totalProfit=pos.reduce((s,e)=>s+e[1],0);
   $('#donutN').textContent=fmtUsdPlain(totalProfit);
-  const labels=pos.map(e=>e[0]),data=pos.map(e=>e[1]),colors=labels.map(t=>tcol(t));
+  const labels=pos.map(e=>e[0]),data=pos.map(e=>e[1]),colors=labels.map((t,i)=>drill?_botColor(i):tcol(t));
   const cfg={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#080c14',borderWidth:2,hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'66%',
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${fmtUsdPlain(c.parsed)} (${totalProfit?(c.parsed/totalProfit*100).toFixed(1):0}%)`}}}}};
   if(donutChart){donutChart.data=cfg.data;donutChart.update();}else donutChart=new Chart($('#donutChart'),cfg);
   $('#donutLegend').innerHTML=pos.length?pos.map((e,i)=>`<div class="dleg-row"><span class="sw" style="background:${colors[i]}"></span><span class="nm">${e[0]}</span><span class="ct">${fmtUsdPlain(e[1])}</span></div>`).join('')
-    :'<div class="dim">No profitable tickers in this scope.</div>';
+    :'<div class="dim">No profitable '+(drill?state.fTicker+' bots':'tickers')+' in this scope.</div>';
 }
 
 /* ---------- leaderboard ---------- */
@@ -1165,8 +1234,15 @@ function renderLbMobile(all){
 // Weeks dropdown lists the weeks of the sidebar-selected month. In Monthly mode the
 // dropdown is hidden entirely and the view is the full-month rollup of that month.
 function buildPeriodDropdown(){
-  const m=monthByKey(state.mkey);
-  $('#fPeriod').innerHTML=m.weeks.map(w=>`<option value="${w.id}" ${state.weekId===w.id?'selected':''}>Week ${w.n} - ${w.range}</option>`).join('');
+  const m=monthByKey(state.mkey); if(!m)return;
+  $('#fPeriod').innerHTML=m.weeks.map(w=>`<option value="${w.id}" ${state.weekId===w.id?'selected':''}>${w.live?'● ':''}${w.range}</option>`).join('');
+}
+// Date Range (month) selector: real months, newest-first, in live mode. ?live=0
+// keeps the static <option>s already in the markup.
+function populateMonths(){
+  if(!(USE_LIVE && LIVE_MONTHS.length))return;
+  const sel=$('#fRange'); if(!sel)return;
+  sel.innerHTML=LIVE_MONTHS.map(m=>`<option value="${m.key}" ${state.mkey===m.key?'selected':''}>${m.live?'Current month ('+m.name+')':m.name}</option>`).join('');
 }
 function lastWeekOf(mkey){const w=monthByKey(mkey).weeks;return w[w.length-1].id;}
 function firstWeekOf(mkey){return monthByKey(mkey).weeks[0].id;}
@@ -1182,8 +1258,9 @@ function applyViewType(){
 function populateTickers(){
   // In live mode source the ticker list from the live current-week rows (superset of
   // what is trading now); fall back to the static BASE roster.
-  const set=(USE_LIVE && LIVE_ROWS.week && LIVE_ROWS.week.length)
-    ? [...new Set(LIVE_ROWS.week.map(r=>r.ticker))].sort()
+  const cur=USE_LIVE&&LIVE_PERIODS?LIVE_CACHE['week|'+LIVE_PERIODS.current_week]:null;
+  const set=(cur&&cur.rows&&cur.rows.length)
+    ? [...new Set(cur.rows.map(r=>r.ticker))].sort()
     : [...new Set(BASE.map(b=>b[1]))].sort();
   const sel=$('#fTicker');set.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
 }
@@ -1192,26 +1269,39 @@ function resetPageAndRender(){state.page=1;render();}
 function wire(){
   $('#fTicker').addEventListener('change',e=>{state.fTicker=e.target.value;resetPageAndRender();});
   $('#fEnv').addEventListener('change',e=>{state.fEnv=e.target.value;resetPageAndRender();});
-  /* Weekly/Monthly toggle: sets the view type; weeks dropdown only matters in Weekly */
-  document.querySelectorAll('#wmToggle button').forEach(b=>b.addEventListener('click',()=>{
+  /* Weekly/Monthly toggle: sets the view type; weeks dropdown only matters in Weekly.
+     Toggling to Weekly picks the most-recent week of the selected month (the current
+     week when the current month is selected). */
+  document.querySelectorAll('#wmToggle button').forEach(b=>b.addEventListener('click',async()=>{
     state.viewType=b.dataset.wm;
     if(state.viewType==='week'){
-      state.weekId=firstWeekOf(state.mkey);   // toggling to Weekly defaults to the first week of the selected month
+      state.weekId=lastWeekOf(state.mkey);
       buildPeriodDropdown();
     }
-    applyViewType();resetPageAndRender();
+    applyViewType();
+    if(USE_LIVE)await ensurePeriod(state.viewType,_activeKey());
+    resetPageAndRender();
   }));
-  /* Sidebar Date Range selects the month (does not change Weekly/Monthly) */
-  $('#fRange').addEventListener('change',e=>{
+  /* Sidebar Date Range selects the month -> Monthly rollup of that month */
+  $('#fRange').addEventListener('change',async e=>{
     state.mkey=e.target.value;
-    state.viewType='month';state.weekId=null;   // changing month forces the Monthly rollup (user can toggle to Weekly)
-    applyViewType();resetPageAndRender();
+    state.viewType='month';state.weekId=null;
+    applyViewType();
+    if(USE_LIVE)await ensurePeriod('month',state.mkey);
+    resetPageAndRender();
   });
   /* Weeks dropdown (Weekly mode only) */
-  $('#fPeriod').addEventListener('change',e=>{state.weekId=e.target.value;resetPageAndRender();});
-  $('#fReset').addEventListener('click',()=>{
-    state.fTicker='all';state.fEnv='all';state.mkey='jun';state.viewType='week';state.weekId='jun-w4';state.lbTab='all';state.q='';state.per=10;
-    $('#fTicker').value='all';$('#fEnv').value='all';$('#fRange').value='jun';$('#lbSearch').value='';if($('#lbPer'))$('#lbPer').value='10';
+  $('#fPeriod').addEventListener('change',async e=>{
+    state.weekId=e.target.value;
+    if(USE_LIVE)await ensurePeriod('week',state.weekId);
+    resetPageAndRender();
+  });
+  $('#fReset').addEventListener('click',async()=>{
+    state.fTicker='all';state.fEnv='all';state.lbTab='all';state.q='';state.per=10;
+    if(USE_LIVE && LIVE_PERIODS){state.mkey=LIVE_PERIODS.current_month;state.viewType='week';state.weekId=LIVE_PERIODS.current_week;}
+    else{state.mkey='jun';state.viewType='week';state.weekId='jun-w4';}
+    $('#fTicker').value='all';$('#fEnv').value='all';if($('#fRange'))$('#fRange').value=state.mkey;$('#lbSearch').value='';if($('#lbPer'))$('#lbPer').value='10';
+    if(USE_LIVE)await ensurePeriod('week',state.weekId);
     buildPeriodDropdown();applyViewType();resetPageAndRender();
   });
   /* Rows per page */
