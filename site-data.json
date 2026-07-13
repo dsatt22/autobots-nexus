@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-13T10:46:27.684510-04:00",
+  "last_updated": "2026-07-13T13:21:27.700336-04:00",
   "hero": {
     "trading_bots_paper": 95,
     "strategies_discovered": 943,
@@ -22,8 +22,8 @@
     "postgresql_symbols": 149,
     "postgresql_size": "60 GB",
     "sql_schemas": 8,
-    "sql_tables": 96,
-    "sql_migrations": 164,
+    "sql_tables": 98,
+    "sql_migrations": 166,
     "hand_built_bots": 3,
     "pipeline_bots": 134,
     "pipeline_tickers": 24,
@@ -65,8 +65,8 @@
     "known_cves": 8,
     "affected_packages": 3,
     "bots_scanned": 99,
-    "tables_secured": 96,
-    "security_migrations": 164,
+    "tables_secured": 98,
+    "security_migrations": 166,
     "last_scan": "2026-07-13T07:31:29.233030-04:00",
     "packages_scanned": 146,
     "gitleaks_findings_count": 0
