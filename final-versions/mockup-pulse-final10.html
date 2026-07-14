@@ -349,6 +349,15 @@ table.pos th .sort-ind{font-size:.75em;color:var(--accent)}
 .pr-bot{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
 .pr-bot b{font-size:.82rem}
 .ready-badge{font-size:.6rem;font-family:'Oxanium';font-weight:700;color:var(--pos);border:1px solid rgba(0,200,150,.4);background:rgba(0,200,150,.12);padding:.12rem .45rem;border-radius:20px;letter-spacing:.06em}
+/* AT GATE: a bot that has REACHED its gate, awaiting operator review. Distinct
+   from "approaching" - it needs action now, so it is grouped and badged apart. */
+.at-gate-badge{font-size:.6rem;font-family:'Oxanium';font-weight:800;color:#0b1120;background:var(--pos);padding:.14rem .5rem;border-radius:20px;letter-spacing:.06em}
+.promo-item.at-gate .promo-row{border-color:rgba(0,200,150,0.55);background:rgba(0,200,150,0.10)}
+.promo-group-head{display:flex;align-items:center;justify-content:space-between;margin:.95rem .1rem .5rem;font-family:'Oxanium';font-weight:800;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub)}
+.promo-group-head:first-child{margin-top:.2rem}
+.promo-group-head.at-gate{color:var(--pos)}
+.promo-group-head .pgh-c{font-size:.66rem;background:rgba(255,255,255,0.06);border-radius:20px;padding:.1rem .5rem;color:var(--text)}
+.promo-group-head.at-gate .pgh-c{background:rgba(0,200,150,0.16);color:var(--pos)}
 .attempt-badge{font-size:.6rem;font-family:'Oxanium';font-weight:700;color:var(--accent);border:1px solid rgba(100,180,255,.4);background:rgba(100,180,255,.12);padding:.12rem .45rem;border-radius:20px;letter-spacing:.06em}
 .pr-days{font-size:.72rem;color:var(--sub);text-align:right;line-height:1.3}
 .pr-days .pr-days-n{font-family:'Oxanium';font-weight:700;color:var(--text);margin-right:.3rem}
@@ -677,7 +686,7 @@ table.pos.allcols .c-cur,table.pos.allcols .c-sl{display:table-cell !important}
         <button class="card-head" data-toggle><span class="ci">&#128640;</span>
           <h2>Promotion Candidates <span class="tag amber" id="candTag">20 approaching</span></h2><span class="chev">&#9660;</span></button>
         <div class="card-body">
-          <div class="note">Bots approaching the gate. Bots that have arrived show in the banner above.</div>
+          <div class="note">Bots at their gate (awaiting review) are listed first, then bots approaching the gate.</div>
           <div class="promo-list" id="promoList"></div>
         </div>
       </section>
@@ -835,9 +844,12 @@ let CAND=[
  ['xrp-15sc-4h','XRP',51,4,30,0],['xrp-2etb-4h','XRP',51,5,30,0],['xrp-svs-4h','XRP',51,24,30,0],
  ['eth-iti-2h','ETH',51,5,30,0],['eth-15sc-2h','ETH',48,2,30,0],['dot-wete-2h','DOT',42,7,10,1],
  ['doge-scs-4h','DOGE',34,8,30,0],['trump-atb-2h','TRUMP',24,3,10,2]
-].map(c=>({bot:c[0],ticker:c[1],days:c[2],trades:c[3],tradesNeed:c[4],attempts:c[5],ready:false,reviewed:c[4]===10}));
+].map(c=>({bot:c[0],ticker:c[1],days:c[2],trades:c[3],tradesNeed:c[4],attempts:c[5],ready:false,reviewed:c[4]===10,at_gate:false}));
+// Static (?live=0) demo: mark two bots AT GATE so the distinct "at gate" group
+// renders without the API. Live mode overwrites CAND from /pulse/promotion-candidates.
+['xrp-svs-4h','trump-atb-2h'].forEach(n=>{const b=CAND.find(x=>x.bot===n); if(b){b.at_gate=true;b.ready=true;b.trades=b.tradesNeed;}});
 
-let PROMO_EVENT={bot:'eth-fgc-4h',ticker:'ETH',trades:30,tradesNeed:30,days:60,attempts:0};
+let PROMO_EVENT={bot:'xrp-svs-4h',ticker:'XRP',trades:30,tradesNeed:30,days:51,attempts:0,count:2};
 
 // pipeline funnel: [label,count,desc,color]
 let PIPE=[
@@ -945,7 +957,7 @@ function renderPromoBanner(){
   $('#promoBanner').innerHTML=`<div class="promo-banner">
     <div class="pb-ico">&#127881;</div>
     <div class="pb-body"><div class="pb-title">PROMOTION GATE REACHED</div>
-      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in system (informational). </span>A review notification was sent to Telegram for operator sign off.</div></div>
+      <div class="pb-text"><b>${e.bot}</b> (${e.ticker}) reached the promotion gate. <span class="pb-inline">${e.trades}/${e.tradesNeed} trades &middot; ${e.days} days in system (informational). </span>A review notification was sent to Telegram for operator sign off.${(e.count>1)?` <b>${e.count-1}</b> more ${e.count-1===1?'bot is':'bots are'} also at the gate awaiting review.`:''}</div></div>
     <div class="pb-stats">
       <div class="pb-stat"><div class="n">${e.trades}/${e.tradesNeed}</div><div class="l">Trades</div></div></div>
   </div>`;
@@ -1265,8 +1277,40 @@ function _pdDetail(c){
     <div class="pd-tiles">${tiles}</div></div>`;
 }
 
+// One candidate row. isAtGate bots read as COMPLETE: promotion_gate_hit is the
+// authoritative "reached the gate" fact, so the progress shows full (N/N) even if
+// the live since-reset count later drifts by a trade. The raw metrics remain in
+// the expanded detail. Approaching bots keep their exact two-tier progress.
+function _promoItemHTML(c){
+  const atg=!!c.at_gate;
+  const shownTrades=atg?Math.max(c.trades,c.tradesNeed):c.trades;
+  const tp=atg?100:Math.min(100,c.trades/c.tradesNeed*100);
+  const tdone=atg||c.trades>=c.tradesNeed;
+  // Dynamic day-count label (no "paper" - works for paper AND demo bots): a
+  // reviewed-and-kept bot shows its since-reset count; a never-reviewed bot's
+  // since-review count equals its time in system.
+  const dayLabel=c.reviewed?'days since reset':'days in system';
+  return `<div class="promo-item${atg?' at-gate':''}" data-bot="${c.bot}">
+      <div class="promo-row ${atg?'ready':''}">
+        <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
+          <b>${c.bot}</b> ${atg?'<span class="at-gate-badge">AT GATE</span>':''}</div>
+        <div><div class="pb-meta"><span>Trades</span><span>${shownTrades}/${c.tradesNeed}</span></div>
+          <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
+        <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
+        <button class="pd-toggle" aria-label="Expand detail">+</button>
+      </div>
+      ${_pdDetail(c)}
+    </div>`;
+}
+
 function renderPromo(){
-  const _ct=$('#candTag'); if(_ct)_ct.textContent=CAND.length+' approaching';
+  // Two distinct groups: AT GATE (reached the gate, needs review) listed FIRST and
+  // visually prioritized, then Approaching (getting close). A gate-hit bot must
+  // never vanish - it stays here flagged at_gate until the operator acts.
+  const atGate=CAND.filter(c=>c.at_gate);
+  const approaching=CAND.filter(c=>!c.at_gate);
+  const _ct=$('#candTag');
+  if(_ct)_ct.innerHTML=(atGate.length?atGate.length+' at gate &middot; ':'')+approaching.length+' approaching';
   // Preserve which candidate is expanded across live re-renders. The medium-tier
   // (~60s) refresh calls renderPromo() and rebuilds this list's innerHTML, which
   // destroys every DOM node - without this the open detail would collapse on its
@@ -1274,28 +1318,17 @@ function renderPromo(){
   // state to the same candidate so it stays open and its tiles refresh in place.
   const _openEl=document.querySelector('#promoList .promo-item.open');
   const _openKey=_openEl?_openEl.getAttribute('data-bot'):null;
-  // Compact row keeps its Phase 0 state (dynamic day label, no attempt badge,
-  // no INFO pill). We ADD a "+" expand control that opens the Layout A detail
-  // below (accordion, one open at a time). The attempt count lives in the detail.
-  $('#promoList').innerHTML=CAND.map(c=>{
-    const tp=Math.min(100,c.trades/c.tradesNeed*100);
-    const tdone=c.trades>=c.tradesNeed;
-    // Dynamic day-count label (no "paper" - works for paper AND demo bots): a
-    // reviewed-and-kept bot shows its since-reset count; a never-reviewed bot's
-    // since-review count equals its time in system.
-    const dayLabel=c.reviewed?'days since reset':'days in system';
-    return `<div class="promo-item" data-bot="${c.bot}">
-      <div class="promo-row ${c.ready?'ready':''}">
-        <div class="pr-bot"><span class="tk"><span class="dot" style="background:${tcol(c.ticker)};width:.6rem;height:.6rem;border-radius:50%;display:inline-block"></span></span>
-          <b>${c.bot}</b> ${c.ready?'<span class="ready-badge">READY</span>':''}</div>
-        <div><div class="pb-meta"><span>Trades</span><span>${c.trades}/${c.tradesNeed}</span></div>
-          <div class="progress"><i style="width:${tp}%;background:${tdone?'var(--pos)':'var(--accent3)'}"></i></div></div>
-        <div class="pr-days"><span class="pr-days-n">${c.days}</span>${dayLabel}</div>
-        <button class="pd-toggle" aria-label="Expand detail">+</button>
-      </div>
-      ${_pdDetail(c)}
-    </div>`;
-  }).join('');
+  let html='';
+  if(atGate.length){
+    html+=`<div class="promo-group-head at-gate"><span class="pgh-t">At gate &middot; awaiting review</span><span class="pgh-c">${atGate.length}</span></div>`;
+    html+=atGate.map(_promoItemHTML).join('');
+  }
+  if(approaching.length){
+    if(atGate.length)html+=`<div class="promo-group-head"><span class="pgh-t">Approaching the gate</span><span class="pgh-c">${approaching.length}</span></div>`;
+    html+=approaching.map(_promoItemHTML).join('');
+  }
+  if(!atGate.length && !approaching.length)html='<div class="dim" style="padding:1rem 0">No bots approaching promotion.</div>';
+  $('#promoList').innerHTML=html;
   if(_openKey){
     const it=[...document.querySelectorAll('#promoList .promo-item')].find(el=>el.getAttribute('data-bot')===_openKey);
     if(it){ it.classList.add('open','pd-reopened'); const t=it.querySelector('.pd-toggle'); if(t)t.textContent='−'; fitPromoItem(it); }  // pd-reopened -> values swap silently, no pdOpen replay
@@ -1489,13 +1522,22 @@ function adaptCandidates(bots){
       pnl_at_last_review:b.pnl_at_last_review, pnl_now:b.pnl_now,
       pnl_delta:b.pnl_delta, pnl_direction:b.pnl_direction,
     },
+    // at_gate: reached the gate, awaiting review (distinct from approaching).
+    // ready kept for back-compat (same source). API sends at_gate explicitly.
+    at_gate:!!(b.at_gate!=null?b.at_gate:b.promotion_gate_hit),
     ready:!!b.promotion_gate_hit }));
 }
 function derivePromoEvent(bots){
-  const g=(bots||[]).find(b=>b.promotion_gate_hit);
-  return g?{bot:g.name,ticker:_tkFromName(g.name),trades:(g.trades_since_reset||0),
-    tradesNeed:(g.trades_needed!=null?g.trades_needed:30),
-    days:(g.days_elapsed||0),attempts:(g.promotion_attempts!=null?g.promotion_attempts:0)}:null;
+  // Fire for any bot that has reached the gate. Trades read as complete (the gate
+  // was reached), and count carries how many are at the gate for the banner text.
+  const hits=(bots||[]).filter(b=>b.at_gate||b.promotion_gate_hit);
+  const g=hits[0];
+  if(!g)return null;
+  const need=(g.trades_needed!=null?g.trades_needed:30);
+  return {bot:g.name,ticker:_tkFromName(g.name),
+    trades:Math.max(g.trades_since_reset||0,need),tradesNeed:need,
+    days:(g.days_elapsed||0),attempts:(g.promotion_attempts!=null?g.promotion_attempts:0),
+    count:hits.length};
 }
 function adaptPipe(pl){
   pl=pl||{}; const ss=pl.status_snapshot||{}, cg=pl.codegen||{}, wfv=pl.wfv||{}, opt=pl.optimization||{};
