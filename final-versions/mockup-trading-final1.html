@@ -230,6 +230,19 @@ select:focus{outline:none;border-color:var(--accent)}
 .tmap.drill{grid-auto-rows:clamp(62px,7vw,90px)}
 .tmap.drill .tile .tt{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;line-height:1.15}
 @media(max-width:640px){.tmap{grid-template-columns:repeat(6,1fr)}}
+/* LAPTOP ONLY (1025-1919px): in the all-tickers view the smallest PnL tiles were too
+   short/narrow to show the ticker + PnL legibly. The MINIMUM TILE SIZE + big-tile
+   compression is enforced in JS (renderTreemap: laptop raises the span floor to
+   4 cols / 2 rows and caps the max to 8 cols so nothing clips and big tiles do not
+   dominate); this block only bumps the text so both lines read cleanly. The 12-col
+   grid is kept (a narrower grid would leave the inline span-10 tiles requesting more
+   tracks than exist, creating tiny implicit columns). Desktop/ultrawide (>=1920) and
+   the per-bot drill-down are deliberately untouched (:not(.drill) + width bounds). */
+@media(min-width:1025px) and (max-width:1919px){
+  #tmap:not(.drill) .tile .tt{font-size:.95rem;line-height:1.1}
+  #tmap:not(.drill) .tile .tp{font-size:.86rem}
+  #tmap:not(.drill) .tile .tx{font-size:.62rem}
+}
 
 /* ============ DONUT ============ */
 .donut-wrap{position:relative;height:clamp(240px,20vw,340px)}
@@ -1124,11 +1137,17 @@ function renderTreemap(agg){
   const maxAbs=Math.max(...list.map(t=>Math.abs(t.pnl)),1);
   const total=list.reduce((s,t)=>s+Math.abs(t.pnl),0)||1;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  // LAPTOP (1025-1919px), all-tickers only: raise the tile floor to 4 cols / 2 rows and
+  // cap the max at 8 cols so every tile - even the smallest PnL - has room for ticker +
+  // PnL with no clipping, while big tiles are compressed (roughly proportional, not exact
+  // scale; bigger still reads bigger). Keeps the 12-col grid so span<=8 never spills into
+  // implicit columns. Desktop/ultrawide keep the exact 2-10 range; drill-down unchanged.
+  const lap=!drill && typeof window!=='undefined' && window.innerWidth>=1025 && window.innerWidth<=1919;
   $('#tmap').innerHTML=list.sort((a,b)=>Math.abs(b.pnl)-Math.abs(a.pnl)).map(t=>{
     // Drill-down: raise the tile floor (min 4 cols / 2 rows) so full bot names fit;
-    // all-tickers keeps the compact 2-10 col range.
-    const col=clamp(Math.round(Math.abs(t.pnl)/total*30),drill?4:2,drill?12:10);
-    const rowSpan=clamp(Math.round(Math.abs(t.pnl)/maxAbs*3),drill?2:1,drill?4:3);
+    // all-tickers keeps the compact 2-10 col range (or the laptop 4-8 floor above).
+    const col=clamp(Math.round(Math.abs(t.pnl)/total*30),lap?4:(drill?4:2),lap?8:(drill?12:10));
+    const rowSpan=clamp(Math.round(Math.abs(t.pnl)/maxAbs*3),lap?2:(drill?2:1),lap?3:(drill?4:3));
     const up=t.pnl>=0;const base=up?'0,200,150':'232,65,66';
     const intensity=0.14+(Math.abs(t.pnl)/maxAbs)*0.34;
     return `<div class="tile" style="grid-column:span ${col};grid-row:span ${rowSpan};background:rgba(${base},${intensity.toFixed(2)});border-color:rgba(${base},0.5)">
