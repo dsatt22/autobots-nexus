@@ -310,6 +310,79 @@ tr.unreliable .botname{color:var(--gray)}
 @media(max-width:359px){
   .mb-summary{grid-template-columns:1fr}
 }
+
+/* ============ FILE-EXPLORER TABS + PERIOD CONTROLS (added) ============ */
+.ftabs{display:flex;align-items:flex-end;gap:.15rem;flex-wrap:wrap;
+  border-bottom:1px solid var(--border2);margin-bottom:-1px;position:relative;z-index:1}
+.ftabs .ftab{display:inline-flex;align-items:center;gap:.45rem;font-family:'Oxanium',sans-serif;font-weight:700;
+  font-size:.86rem;letter-spacing:.02em;color:var(--sub);background:rgba(8,12,20,0.4);
+  border:1px solid var(--border2);border-bottom-color:transparent;border-radius:10px 10px 0 0;
+  padding:.6rem 1.1rem;position:relative;top:1px;transition:color .15s,background .15s}
+.ftabs .ftab .ico{font-size:1rem;opacity:.9}
+.ftabs .ftab:hover{color:var(--text)}
+/* active tab merges into the panel below (same bg, seam removed) */
+.ftabs .ftab[aria-selected="true"]{color:var(--text);background:var(--bg-card);
+  border-color:var(--border2);border-bottom-color:var(--bg-card);box-shadow:0 -2px 0 var(--accent) inset}
+.ftabs .pc{margin-left:auto;display:flex;align-items:center;gap:.7rem;padding:0 .1rem .45rem}
+/* Weekly / Monthly / All-time segmented toggle */
+.wm-toggle{display:inline-flex;background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:9px;padding:.15rem;gap:.1rem}
+.wm-toggle button{font-family:'Oxanium',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.04em;
+  color:var(--sub);background:transparent;border:0;border-radius:7px;padding:.42rem .7rem;transition:all .15s}
+.wm-toggle button:hover{color:var(--text)}
+.wm-toggle button.on{color:#06101f;background:var(--accent)}
+.pc .selw{min-width:150px}
+.pc .selw select{padding-top:.5rem;padding-bottom:.5rem;font-size:.8rem}
+.pc .selw.hidden{display:none}
+/* the two tab panels share the card surface; inactive is fully removed from flow */
+.tabpanel[hidden]{display:none}
+.tab-surface{background:var(--bg-card);border:1px solid var(--border2);border-top:0;border-radius:0 0 14px 14px;
+  padding:clamp(.9rem,1.3vw,1.4rem)}
+
+/* ============ GLOBAL RANKINGS TABLE (Tab 2, added) ============ */
+.gr-head{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.9rem}
+.gr-head h2{font-family:'Oxanium',sans-serif;font-weight:800;font-size:clamp(1.05rem,1.5vw,1.3rem)}
+.gr-head .gr-sub{font-size:.76rem;color:var(--sub)}
+.gr-head .gr-search{margin-left:auto;position:relative}
+.gr-head .gr-search input{background:rgba(8,12,20,0.6);border:1px solid var(--border2);border-radius:9px;color:var(--text);
+  font-family:inherit;font-size:.82rem;padding:.5rem .7rem .5rem 2rem;min-width:min(240px,60vw)}
+.gr-head .gr-search input:focus{outline:none;border-color:var(--accent)}
+.gr-head .gr-search .si{position:absolute;left:.65rem;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.85rem}
+.gr-wrap{overflow-x:auto;overflow-y:auto;max-height:68vh;border:1px solid var(--border);border-radius:12px}
+table.gr{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap}
+table.gr th{font-family:'Oxanium',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--sub);text-align:right;padding:.55rem .6rem;border-bottom:1px solid var(--border2);
+  position:sticky;top:0;background:#0c1322;z-index:2;cursor:pointer;user-select:none}
+table.gr th.l{text-align:left}
+table.gr th.sortable:hover{color:var(--text)}
+table.gr th .ar{font-size:.7em;color:var(--accent);margin-left:.15rem}
+table.gr td{padding:.5rem .6rem;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;text-align:right}
+table.gr td.l{text-align:left}
+table.gr tbody tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
+table.gr tbody tr:hover td{background:rgba(100,180,255,0.06)}
+table.gr tr.champ td{background:rgba(245,185,66,0.06)}
+table.gr tr.champ td.l:first-child{box-shadow:inset 3px 0 0 #f5b942}
+table.gr td.pos{color:var(--pos)} table.gr td.neg{color:var(--neg)} table.gr td.gr-null{color:var(--gray)}
+table.gr .gr-bot{display:inline-flex;align-items:center;gap:.45rem;font-family:'Oxanium',sans-serif;font-weight:600;color:var(--text)}
+table.gr .gr-tk{display:inline-flex;align-items:center;gap:.35rem}
+table.gr .gr-tk .dot{width:.6rem;height:.6rem;border-radius:50%;flex:0 0 auto}
+table.gr td.top{color:var(--accent);font-weight:700}
+table.gr td.top.z{color:var(--gray);font-weight:400}
+/* reliability floor: provisional (sub-10-trade) bots greyed + a divider before the group */
+table.gr tr.provisional td{color:var(--gray)}
+table.gr tr.provisional .gr-bot{color:var(--gray);opacity:.9}
+table.gr tr.prov-first td{border-top:2px solid var(--border2)}
+.gr-provlabel{font-family:'Oxanium',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:.06em;
+  color:var(--gray);padding:.5rem .6rem;background:rgba(136,146,164,0.06)}
+.gr-provlabel .bd{font-family:'Share Tech Mono',monospace;font-weight:400;text-transform:none;letter-spacing:0;color:var(--sub)}
+.gr-empty{padding:2.5rem;text-align:center;color:var(--sub)}
+/* sortable header affordance for the Tab-1 metrics table */
+table.cc th.sortable{cursor:pointer;user-select:none}
+table.cc th.sortable:hover{color:var(--text)}
+table.cc th .ar{font-size:.72em;color:var(--accent);margin-left:.12rem}
+@media(max-width:768px){
+  .ftabs .pc{width:100%;margin-left:0;justify-content:flex-start;flex-wrap:wrap}
+  .gr-wrap{max-height:none}
+}
 </style>
 </head>
 <body>
@@ -336,15 +409,16 @@ tr.unreliable .botname{color:var(--gray)}
     </div>
     <div class="filters">
       <div class="nav-label" style="padding-left:.35rem">Filters</div>
-      <div class="ff"><label for="fTicker">Ticker</label>
-        <div class="selw"><select id="fTicker"><option value="all">All tickers</option></select></div></div>
-      <div class="ff"><label for="fEnv">Environment</label>
-        <div class="selw"><select id="fEnv">
-          <option value="all">All environments</option><option value="live">Live</option>
-          <option value="demo">Demo</option><option value="paper">Paper</option>
-        </select></div></div>
-      <div class="ff"><label for="fRange">Comparison period</label>
-        <div class="selw"><select id="fRange"></select></div></div>
+      <!-- Tab-1 (per-ticker) filters; hidden on the Global Rankings tab which is fleet-wide -->
+      <div id="tab1Filters">
+        <div class="ff"><label for="fTicker">Ticker</label>
+          <div class="selw"><select id="fTicker"><option value="all">All tickers</option></select></div></div>
+        <div class="ff"><label for="fEnv">Environment</label>
+          <div class="selw"><select id="fEnv">
+            <option value="all">All environments</option><option value="live">Live</option>
+            <option value="demo">Demo</option><option value="paper">Paper</option>
+          </select></div></div>
+      </div>
       <button class="freset" id="fReset">Reset filters</button>
     </div>
     <button class="side-back" id="sideBack" title="Back to all dashboards"><span class="ico">&#8592;</span><span class="lbl">All dashboards</span></button>
@@ -366,6 +440,24 @@ tr.unreliable .botname{color:var(--gray)}
       </div>
     </div>
 
+    <!-- ===== FILE-EXPLORER TABS + SHARED PERIOD CONTROLS ===== -->
+    <div class="ftabs" role="tablist" aria-label="Dashboard views">
+      <button class="ftab" id="tabBtnChampion" role="tab" aria-selected="true" aria-controls="panelChampion" tabindex="0">
+        <span class="ico">&#127942;</span> Champion vs Challenger</button>
+      <button class="ftab" id="tabBtnGlobal" role="tab" aria-selected="false" aria-controls="panelGlobal" tabindex="-1">
+        <span class="ico">&#128202;</span> Global Rankings</button>
+      <div class="pc">
+        <div class="wm-toggle" id="wmToggle" role="group" aria-label="Time period">
+          <button data-wm="week" class="on">Weekly</button>
+          <button data-wm="month">Monthly</button>
+          <button data-wm="all">All-time</button>
+        </div>
+        <div class="selw" id="periodSelW"><select id="fRange" aria-label="Select period"></select></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 1: CHAMPION VS CHALLENGER ===== -->
+    <div class="tabpanel" id="panelChampion" role="tabpanel" aria-labelledby="tabBtnChampion">
     <!-- ===== DESKTOP ===== -->
     <div class="cc-desktop">
       <div class="sum-grid" id="sumGrid"></div>
@@ -393,6 +485,20 @@ tr.unreliable .botname{color:var(--gray)}
       <div class="mb-summary" id="mbSummary"></div>
       <div id="tickerSelect" class="ticker-select"></div>
       <div id="arenaCards" class="arena-cards" style="display:none"></div>
+    </div>
+    </div><!-- /panelChampion -->
+
+    <!-- ===== TAB 2: GLOBAL RANKINGS ===== -->
+    <div class="tabpanel" id="panelGlobal" role="tabpanel" aria-labelledby="tabBtnGlobal" hidden>
+      <div class="tab-surface">
+        <div class="gr-head">
+          <h2>Global Rankings</h2>
+          <span class="gr-sub" id="grSub">Every bot in the fleet, ranked</span>
+          <div class="gr-search"><span class="si">&#128269;</span>
+            <input id="grSearch" type="text" placeholder="Search bot or ticker..." autocomplete="off" /></div>
+        </div>
+        <div class="gr-wrap"><table class="gr" id="grTable"></table></div>
+      </div>
     </div>
   </main>
 </div>
@@ -424,16 +530,18 @@ const LIVE = {
   enabled: true,
   base: 'https://api.autobotsnexus.com',
   token: 'G3lbXH5ndXybBeGAb5l7Zzwhmgo9UOzv3spjVNaXeVI',
-  refreshMs: 20 * 60 * 1000,        // champion is slow-tier; refresh every 20 min
-  labels:  { latest: 'Latest',      monthly: 'Monthly'    },
-  windows: { latest: 'Past 7 days', monthly: 'This month' },
+  refreshMs: 20 * 60 * 1000,        // champion/global are slow-tier; refresh every 20 min
 };
 const _q = new URLSearchParams(location.search);
 if (_q.get('base')) LIVE.base = _q.get('base');   // local-test override only
 const USE_LIVE = LIVE.enabled && _q.get('live') !== '0';
 
-let DATA = STATIC_DATA;             // live mode replaces this with fetched data
-const _lastGood = {};               // period token -> last successful adapted report
+/* Period catalog (weeks + months from /trading/periods) + per-(scope|key) caches
+   for both tabs. state.scope in {week,month,all}; state.tab in {champion,global}.
+   The two tabs share the scope + period selection (one time toggle drives both). */
+let PERIODS = null;                 // {current_week, current_month, weeks:[], months:[]}
+const CC_CACHE = {};                // 'scope|key' -> {tickers, synced}   (Tab 1)
+const GR_CACHE = {};                // 'scope|key' -> {rows, synced}      (Tab 2)
 let _refreshTimer = null;
 
 function _syncedET(){
@@ -443,22 +551,6 @@ function _syncedET(){
     const tm  = d.toLocaleString('en-US', { timeZone:tz, hour:'numeric', minute:'2-digit', hour12:true });
     return `${day} · ${tm} ET`;   // "Jul 6, 2026 · 11:09 AM ET" (matches the static format)
   } catch(e){ return 'just now'; }
-}
-
-/* Adapt the API /champion response (one period) to the render-expected per-period
-   shape. The arena + bot-metrics field names already match (the API returns the same
-   strategy_comparison JSON this dashboard was built from), so tickers pass through
-   unchanged; we only wrap them with the period envelope the render code indexes. */
-function adaptChampion(resp, token){
-  const cc = resp && resp.champion_challenger;
-  const synced = _syncedET();
-  return {
-    label:  LIVE.labels[token]  || token,
-    date:   synced.split(' · ')[0],   // "Jul 6, 2026"
-    window: LIVE.windows[token] || '',
-    synced: synced,
-    tickers: (cc && cc.tickers) || [],
-  };
 }
 
 /* Recolor the header LED (green ok / amber stale / red error) without any layout
@@ -472,53 +564,70 @@ function _setStatus(kind, msg){
   if (msg) $('#syncedTime').innerHTML = msg;
 }
 
-async function _fetchChampion(token){
-  const r = await fetch(`${LIVE.base}/champion?period=${token}`, {
+async function _fetch(path){
+  const r = await fetch(`${LIVE.base}${path}`, {
     headers: { 'Authorization': 'Bearer ' + LIVE.token }, cache: 'no-store',
   });
   if (r.status === 401 || r.status === 403){ const e = new Error('auth'); e.kind = 'auth'; e.status = r.status; throw e; }
   if (!r.ok){ const e = new Error('http'); e.kind = 'http'; e.status = r.status; throw e; }
   return r.json();
 }
-
-/* Fetch + adapt + cache one period into DATA.reports. Throws on failure. */
-async function loadPeriod(token){
-  const period = adaptChampion(await _fetchChampion(token), token);
-  DATA.reports[token] = period;
-  _lastGood[token] = period;
-  if (!DATA.order.includes(token)) DATA.order.push(token);
-  return period;
-}
-
 function _handleFetchError(err){
   _setStatus('err', err && err.kind === 'auth'
     ? 'Live data auth failed (' + (err.status || 401) + ')'
     : 'Unable to reach live data');
 }
 
+/* the currently-selected period key for the active scope */
+function _activeKey(){ return state.scope === 'all' ? 'all' : state.scope === 'week' ? state.weekId : state.monthId; }
+function _isLivePeriod(){
+  if (!PERIODS) return false;
+  return state.scope === 'week' ? state.weekId === PERIODS.current_week
+       : state.scope === 'month' ? state.monthId === PERIODS.current_month : false;
+}
+function _periodQS(scope, key){ return scope === 'all' ? '' : '&period=' + encodeURIComponent(key); }
+
+async function ensureChampion(scope, key, opts){
+  const ck = scope + '|' + key;
+  if (!(opts && opts.force) && CC_CACHE[ck]) return CC_CACHE[ck];
+  const resp = await _fetch(`/champion?scope=${scope}${_periodQS(scope, key)}`);
+  const cc = resp && resp.champion_challenger;
+  CC_CACHE[ck] = { tickers: (cc && cc.tickers) || [], synced: _syncedET() };
+  return CC_CACHE[ck];
+}
+async function ensureGlobal(scope, key, opts){
+  const ck = scope + '|' + key;
+  if (!(opts && opts.force) && GR_CACHE[ck]) return GR_CACHE[ck];
+  const resp = await _fetch(`/global-rankings?scope=${scope}${_periodQS(scope, key)}`);
+  GR_CACHE[ck] = { rows: (resp && resp.rows) || [], synced: _syncedET() };
+  return GR_CACHE[ck];
+}
+/* Ensure the ACTIVE tab's data for the current scope/key is loaded. */
+async function loadActive(opts){
+  const key = _activeKey();
+  if (state.tab === 'global') await ensureGlobal(state.scope, key, opts);
+  else await ensureChampion(state.scope, key, opts);
+}
+async function _loadPeriods(){
+  PERIODS = await _fetch('/trading/periods');
+  state.scope = 'week'; state.weekId = PERIODS.current_week; state.monthId = PERIODS.current_month;
+}
+
 async function init(){
-  if (!USE_LIVE){
-    DATA = STATIC_DATA; state.rk = DATA.order[0];
-    populateFilters(); wire(); renderAll();
-    return;
-  }
-  DATA = { order: [], reports: {} };
+  if (!USE_LIVE){ _staticInit(); return; }
   _setStatus('stale', 'Loading live data&hellip;');
   try {
-    await loadPeriod('latest');                 // required
-    state.rk = 'latest';
+    await _loadPeriods();
+    await ensureChampion('week', PERIODS.current_week);   // default view: current week, Tab 1
   } catch(err){
     // Never leave the page blank: fall back to the embedded static snapshot.
-    _handleFetchError(err);
-    DATA = STATIC_DATA; state.rk = DATA.order[0];
-    populateFilters(); wire(); renderAll();
+    _handleFetchError(err); _staticInit();
     _setStatus('err', (err && err.kind === 'auth' ? 'Auth failed' : 'Live data unavailable')
       + ' &middot; showing static snapshot');
     return;
   }
-  try { await loadPeriod('monthly'); } catch(err){ /* monthly is optional/absent */ }
-  populateFilters(); wire(); renderAll();
-  _setStatus('ok');                             // green LED; refreshHeader set the text
+  buildPeriodDropdown(); populateTickers(); wire(); paintSortArrows(); renderAll();
+  _setStatus('ok');
   _startRefresh();
 }
 
@@ -526,13 +635,71 @@ function _startRefresh(){
   if (_refreshTimer) clearInterval(_refreshTimer);
   _refreshTimer = setInterval(async () => {
     try {
-      await loadPeriod(state.rk);
+      // Only the in-progress current period moves; refetch (force) just it.
+      if (_isLivePeriod()) await loadActive({ force: true });
       renderAll();
       _setStatus('ok');
     } catch(err){
       _setStatus('stale', 'Live refresh failed &middot; showing last good');   // keep last-good
     }
   }, LIVE.refreshMs);
+}
+
+/* ?live=0 (offline / rollback): build a period catalog + caches from the embedded
+   STATIC_DATA snapshot (two weeks). Monthly + all-time reuse the latest week's
+   arenas as a stand-in; Global Rankings rows are flattened from the arenas. */
+function _staticInit(){
+  const wk = STATIC_DATA.order.slice();
+  const rep0 = STATIC_DATA.reports[wk[0]];
+  PERIODS = {
+    current_week: wk[0], current_month: '2026-06',
+    weeks: wk.map((w, i) => { const r = STATIC_DATA.reports[w];
+      return { period: w, start: r.period_start, end: r.period_end, month: '2026-06',
+               label: 'Week of ' + (r.date || w).split(',')[0], live: i === 0 }; }),
+    months: [{ period: '2026-06', label: 'June 2026', live: true }],
+  };
+  wk.forEach(w => { const r = STATIC_DATA.reports[w];
+    CC_CACHE['week|' + w] = { tickers: r.tickers, synced: r.synced };
+    GR_CACHE['week|' + w] = { rows: _flattenGlobal(r.tickers, false), synced: r.synced }; });
+  const latestT = _withStaticTot(rep0.tickers);
+  CC_CACHE['month|2026-06'] = { tickers: latestT, synced: rep0.synced };
+  CC_CACHE['all|all'] = { tickers: latestT, synced: rep0.synced };
+  GR_CACHE['month|2026-06'] = { rows: _flattenGlobal(rep0.tickers, true), synced: rep0.synced };
+  GR_CACHE['all|all'] = { rows: _flattenGlobal(rep0.tickers, true), synced: rep0.synced };
+  state.scope = 'week'; state.weekId = wk[0]; state.monthId = '2026-06';
+  buildPeriodDropdown(); populateTickers(); wire(); paintSortArrows(); renderAll();
+}
+/* deterministic per-ticker times_on_top for the static month/all view */
+function _withStaticTot(tickers){
+  return tickers.map(g => {
+    const bots = (g.champion ? [g.champion] : []).concat(g.challengers || []);
+    bots.slice().sort((a,b)=>(Number(b.total_pnl_usd)||-1e9)-(Number(a.total_pnl_usd)||-1e9))
+        .forEach((b,i)=>{ b.times_on_top = i===0 ? 2 : i===1 ? 1 : 0; });
+    return g;
+  });
+}
+/* flatten arenas -> global leaderboard rows (static stand-in for /global-rankings) */
+function _flattenGlobal(tickers, withTot){
+  const rows = [];
+  tickers.forEach(g => {
+    ((g.champion ? [g.champion] : []).concat(g.challengers || [])).forEach(b => {
+      const wr = Number(b.win_rate_pct), tr = Number(b.total_trades) || 0;
+      const wins = isFinite(wr) ? Math.round(tr * wr / 100) : null;
+      rows.push({
+        bot_id: b.bot_name, bot_name: b.bot_name, ticker: g.ticker, timeframe: b.timeframe,
+        trading_mode: b.trading_mode, bot_role: b.bot_role, total_trades: tr,
+        wins: wins, losses: (wins == null ? null : tr - wins), win_rate_pct: b.win_rate_pct,
+        total_pnl_usd: b.total_pnl_usd, return_pct: b.return_pct, profit_factor: b.profit_factor,
+        recovery_factor: b.recovery_factor, max_drawdown_pct: b.max_drawdown_pct,
+        expectancy: b.expectancy_pct, sharpe_ratio: b.sharpe_ratio,
+        avg_trade_duration_hours: null, statistically_reliable: b.statistically_reliable,
+        badge: b.badge, times_on_top: withTot ? (Number(b.total_pnl_usd) >= 0 ? 1 : 0) : null,
+      });
+    });
+  });
+  rows.sort((a,b)=>(Number(b.total_pnl_usd)||-1e9)-(Number(a.total_pnl_usd)||-1e9));
+  rows.forEach((r,i)=>r.rank=i+1);
+  return rows;
 }
 
 /* ---- ticker colors (site palette + supplementary for tickers without a brand token) ---- */
@@ -590,11 +757,32 @@ function ddClass(v){if(v===null||v===undefined)return 'null';v=Number(v);return 
 const ALERT_LABEL={0:'No alerts',1:'Info',2:'Warning',3:'Paused',4:'Stopped'};
 
 /* ---- state ---- */
-const state={rk:DATA.order[0],ticker:'all',env:'all',sel:null,search:'',
-  mobileView:'select',mobileSel:null};
+const state={
+  tab:'champion',                       // 'champion' | 'global'
+  scope:'week', weekId:null, monthId:null,
+  ticker:'all', env:'all', sel:null, search:'',
+  mobileView:'select', mobileSel:null,
+  // Tab 1 metrics-table sort (default adjusted PnL desc)
+  sortKey:'total_pnl_usd', sortDir:-1,
+  // Tab 2 global-rankings sort (default adjusted PnL desc) + search
+  grSortKey:'total_pnl_usd', grSortDir:-1, grSearch:'',
+};
 let ccChart=null, acCharts=[];
 
-function rep(){return DATA.reports[state.rk];}
+/* the active Tab-1 champion payload for the current scope/period */
+function rep(){ return (CC_CACHE[state.scope+'|'+_activeKey()]) || {tickers:[]}; }
+/* the active Tab-2 global rows for the current scope/period */
+function grRows(){ return (GR_CACHE[state.scope+'|'+_activeKey()]||{}).rows || []; }
+/* times-on-top column shows only in monthly / all-time (both tabs) */
+function _showTot(){ return state.scope !== 'week'; }
+/* ratio metrics -> provisional (sub-10-trade) bots pinned to the bottom on Tab 2 */
+const RATIO_KEYS = ['win_rate_pct','profit_factor','expectancy','recovery_factor'];
+/* generic null-last comparator (nulls always sort last regardless of direction) */
+function _cmp(a,b,dir){
+  if(a==null&&b==null)return 0; if(a==null)return 1; if(b==null)return -1;
+  if(typeof a==='string'||typeof b==='string')return dir*String(a).localeCompare(String(b));
+  return dir*((Number(a))-(Number(b)));
+}
 /* arenas after ticker+env filters */
 function arenas(){
   let list=rep().tickers.slice();
@@ -693,6 +881,14 @@ function pfCell(bot,champ){
   let cls='';if(!bot.__isChamp&&champ&&champ.profit_factor!==null&&Number(v)>Number(champ.profit_factor))cls='win';
   return `<td class="mtc ${cls}">${Number(v).toFixed(2)}</td>`;
 }
+/* Times-on-top cell: weeks this bot finished #1 on its ticker by adjusted PnL.
+   Shown only in monthly / all-time views; a leading bot is accented + starred. */
+function totCell(bot){
+  const v=bot.times_on_top;
+  if(v===null||v===undefined)return `<td class="mtc null">-</td>`;
+  const n=Number(v);
+  return n>0?`<td class="mtc win">${n}</td>`:`<td class="mtc" style="color:var(--gray)">0</td>`;
+}
 function botRow(bot,champ,isChamp){
   bot.__isChamp=isChamp;
   const rel=bot.statistically_reliable;
@@ -711,6 +907,7 @@ function botRow(bot,champ,isChamp){
     ${ddCell(bot)}
     ${pnlCell(bot,champ)}
     ${metricCell(bot,champ,'recovery_factor',v=>Number(v).toFixed(2),true)}
+    ${_showTot()?totCell(bot):''}
     <td class="l"><span class="reclab ${rc}">${bot.recommendation_label||'-'}</span></td>
     <td><span class="alertdot a${al}" title="${alTip}"></span></td>
   </tr>`;
@@ -747,12 +944,16 @@ function renderDetail(){
   else ccChart=new Chart($('#ccChart'),cfg);
   $('#ccLegend').innerHTML=legend.map(l=>`<span><i class="${l.dash?'dash':''}" style="border-top-color:${l.color}"></i><span class="nm">${l.name}</span> <span style="color:var(--dim)">${l.role}</span></span>`).join('');
 
-  // table
+  // table: all bots sorted together by the active column (champion NOT pinned;
+  // it keeps its gold row wherever its metric ranks). Default sort = adjusted PnL.
+  const showTot=_showTot();
+  const H=(k,l,left,tip)=>`<th class="${left?'l ':''}sortable" data-k="${k}"${tip?` title="${tip}"`:''}>${l} <span class="ar"></span></th>`;
   const head=`<thead><tr>
-    <th class="l"></th><th class="l">Bot</th><th>TF</th><th>Trades</th><th>Win %</th><th>PF</th><th>Sharpe</th>
-    <th>Max DD</th><th>Total PnL</th><th>Recovery</th><th class="l">Recommendation</th><th>Alert</th></tr></thead>`;
-  const rows=(champ?botRow(champ,null,true):'')+g.challengers.map(c=>botRow(c,champ,false)).join('');
-  $('#ccTable').innerHTML=head+'<tbody>'+(rows||'<tr><td class="empty" colspan="12">No bots in this arena.</td></tr>')+'</tbody>';
+    <th class="l"></th>${H('bot_name','Bot',true)}${H('timeframe','TF')}${H('total_trades','Trades')}${H('win_rate_pct','Win %')}${H('profit_factor','PF')}${H('sharpe_ratio','Sharpe')}${H('max_drawdown_pct','Max DD')}${H('total_pnl_usd','Total PnL')}${H('recovery_factor','Recovery')}${showTot?H('times_on_top','Times on Top',false,'Weeks this bot finished #1 on its ticker by adjusted PnL'):''}<th class="l">Recommendation</th><th>Alert</th></tr></thead>`;
+  const sorted=bots.slice().sort((a,b)=>_cmp(a[state.sortKey],b[state.sortKey],state.sortDir));
+  const rows=sorted.map(b=>botRow(b,champ,b===champ)).join('');
+  $('#ccTable').innerHTML=head+'<tbody>'+(rows||`<tr><td class="empty" colspan="${showTot?13:12}">No bots in this arena.</td></tr>`)+'</tbody>';
+  paintSortArrows();
 }
 
 /* ================= MOBILE ================= */
@@ -828,37 +1029,168 @@ function renderMobile(){
         y:{grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.22)':'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{size:9},callback:v=>v+'%'}}}}}));
 }
 
-/* ================= FILTERS + WIRING ================= */
-function populateFilters(){
-  // tickers across the whole (current-report) set
+/* ================= PERIOD CONTROLS + TABS + WIRING ================= */
+function populateTickers(){
   const set=[...new Set(rep().tickers.map(g=>g.ticker))];
   const cur=$('#fTicker').value;
   $('#fTicker').innerHTML='<option value="all">All tickers</option>'+set.map(t=>`<option value="${t}">${t}</option>`).join('');
   $('#fTicker').value=[...set,'all'].includes(cur)?cur:'all';
-  // comparison period dropdown
-  $('#fRange').innerHTML=DATA.order.map(k=>{const r=DATA.reports[k];return `<option value="${k}">${r.label} (${r.date})</option>`;}).join('');
-  $('#fRange').value=state.rk;
+}
+/* Rebuild the period dropdown for the current scope (weeks / months / hidden for all). */
+function buildPeriodDropdown(){
+  const sel=$('#fRange'), w=$('#periodSelW');
+  if(!PERIODS){return;}
+  if(state.scope==='all'){ w.classList.add('hidden'); sel.innerHTML=''; return; }
+  w.classList.remove('hidden');
+  const arr=state.scope==='week'?(PERIODS.weeks||[]):(PERIODS.months||[]);
+  sel.innerHTML=arr.map(x=>`<option value="${x.period}">${x.label}${x.live?' &middot; live':''}</option>`).join('');
+  if(state.scope==='week'){ if(!arr.some(x=>x.period===state.weekId))state.weekId=PERIODS.current_week; sel.value=state.weekId; }
+  else{ if(!arr.some(x=>x.period===state.monthId))state.monthId=PERIODS.current_month; sel.value=state.monthId; }
+}
+function _periodLabel(){
+  if(state.scope==='all')return 'All-time';
+  const arr=state.scope==='week'?(PERIODS&&PERIODS.weeks):(PERIODS&&PERIODS.months);
+  const cur=(arr||[]).find(x=>x.period===_activeKey());
+  return cur?cur.label:_activeKey();
+}
+function _activeSynced(){
+  const c=state.tab==='global'?GR_CACHE[state.scope+'|'+_activeKey()]:CC_CACHE[state.scope+'|'+_activeKey()];
+  return (c&&c.synced)||_syncedET();
 }
 function refreshHeader(){
-  const r=rep();
-  $('#pSub').textContent=`${r.window} - ${r.date}`;
-  $('#syncedTime').innerHTML=r.synced.replace(' · ',' &middot; ');
+  $('#pSub').textContent=_periodLabel()+(_isLivePeriod()?' - live':'');
+  const s=_activeSynced(); if(s)$('#syncedTime').innerHTML=String(s).replace(' · ',' &middot; ');
+  document.querySelectorAll('#wmToggle button').forEach(b=>b.classList.toggle('on',b.dataset.wm===state.scope));
 }
-function renderAll(){refreshHeader();renderSummary();renderList();renderDetail();renderMobile();}
+function paintSortArrows(){
+  document.querySelectorAll('table.cc th.sortable .ar').forEach(a=>a.innerHTML='');
+  const cc=document.querySelector(`table.cc th.sortable[data-k="${state.sortKey}"] .ar`);
+  if(cc)cc.innerHTML=state.sortDir<0?'&#9660;':'&#9650;';
+  document.querySelectorAll('table.gr th.sortable .ar').forEach(a=>a.innerHTML='');
+  const gr=document.querySelector(`table.gr th.sortable[data-k="${state.grSortKey}"] .ar`);
+  if(gr)gr.innerHTML=state.grSortDir<0?'&#9660;':'&#9650;';
+}
+function renderAll(){
+  refreshHeader();
+  $('#tab1Filters').style.display=state.tab==='global'?'none':'';
+  if(state.tab==='global'){ renderGlobal(); }
+  else{ renderSummary();renderList();renderDetail();renderMobile(); }
+  paintSortArrows();
+}
+
+/* ================= TAB 2: GLOBAL RANKINGS ================= */
+function renderGlobal(){
+  let rows=grRows().slice();
+  if(state.grSearch){const q=state.grSearch.toLowerCase();
+    rows=rows.filter(r=>(r.bot_name||'').toLowerCase().includes(q)||(r.ticker||'').toLowerCase().includes(q));}
+  const showTot=_showTot();
+  const sk=state.grSortKey, sd=state.grSortDir, isRatio=RATIO_KEYS.includes(sk);
+  let rel, prov;
+  if(isRatio){
+    // reliability floor: sub-10-trade bots drop to a greyed provisional group at the
+    // bottom on ratio sorts; on absolute sorts (PnL, trades) everyone ranks together.
+    rel=rows.filter(r=>r.statistically_reliable); prov=rows.filter(r=>!r.statistically_reliable);
+    rel.sort((a,b)=>_cmp(a[sk],b[sk],sd)); prov.sort((a,b)=>_cmp(a[sk],b[sk],sd));
+  }else{ rows.sort((a,b)=>_cmp(a[sk],b[sk],sd)); rel=rows; prov=[]; }
+  const ncol=showTot?15:14;
+  const H=(k,l,left,tip)=>`<th class="${left?'l ':''}sortable" data-k="${k}"${tip?` title="${tip}"`:''}>${l} <span class="ar"></span></th>`;
+  const head=`<thead><tr>
+    <th>#</th>${H('bot_name','Bot',true)}${H('ticker','Ticker',true)}${H('timeframe','TF')}${H('total_trades','Trades')}<th>W/L</th>${H('win_rate_pct','Win %')}${H('total_pnl_usd','Adj PnL')}${H('profit_factor','PF')}${H('expectancy','Expectancy')}${H('max_drawdown_pct','Max DD')}${H('recovery_factor','Recovery')}${H('avg_trade_duration_hours','Avg Dur')}<th title="Not available at this grain">Sharpe</th>${showTot?H('times_on_top','Times on Top',false,'Weeks this bot finished #1 across the WHOLE fleet by adjusted PnL'):''}</tr></thead>`;
+  let pos=0;
+  const rowHtml=(r,extra)=>{
+    pos++;
+    const champ=r.bot_role==='champion', prv=!r.statistically_reliable;
+    const wl=(r.wins!=null&&r.losses!=null)?`${r.wins}/${r.losses}`:'-';
+    const pnl=r.total_pnl_usd, dur=r.avg_trade_duration_hours, tot=r.times_on_top;
+    const cell=(v,fmt,cls)=>(v==null||!isFinite(Number(v)))?`<td class="gr-null">-</td>`:`<td class="${cls||''}">${fmt(v)}</td>`;
+    return `<tr class="${champ?'champ ':''}${prv?'provisional ':''}${extra||''}">
+      <td>${pos}</td>
+      <td class="l"><span class="gr-bot">${champ?'&#128081; ':''}${r.bot_name} ${badgeHtml(r)}</span></td>
+      <td class="l"><span class="gr-tk"><span class="dot" style="background:${tc(r.ticker)}"></span>${r.ticker}</span></td>
+      <td>${r.timeframe||'-'}</td>
+      <td>${r.total_trades!=null?r.total_trades:'-'}</td>
+      <td>${wl}</td>
+      <td>${r.win_rate_pct!=null?Number(r.win_rate_pct).toFixed(0)+'%':'-'}</td>
+      <td class="${Number(pnl)>=0?'pos':'neg'}">${fmtUsd(pnl)}</td>
+      ${cell(r.profit_factor,v=>Number(v).toFixed(2))}
+      ${cell(r.expectancy,v=>fmtUsd(v))}
+      <td>${r.max_drawdown_pct!=null?Number(r.max_drawdown_pct).toFixed(1)+'%':'-'}</td>
+      ${cell(r.recovery_factor,v=>Number(v).toFixed(2))}
+      <td>${dur!=null?Number(dur).toFixed(1)+'h':'-'}</td>
+      <td class="gr-null" title="Not available at this grain">-</td>
+      ${showTot?`<td class="top ${!tot?'z':''}">${tot!=null?tot+(tot>0?' &#9733;':''):'-'}</td>`:''}
+    </tr>`;
+  };
+  let body=rel.map(r=>rowHtml(r,'')).join('');
+  if(prov.length){
+    body+=`<tr><td class="gr-provlabel" colspan="${ncol}">PROVISIONAL <span class="bd">under 10 trades - ratios not yet statistically reliable</span></td></tr>`;
+    body+=prov.map((r,i)=>rowHtml(r,i===0?'prov-first':'')).join('');
+  }
+  if(!body)body=`<tr><td class="gr-empty" colspan="${ncol}">No bots match.</td></tr>`;
+  $('#grTable').innerHTML=head+'<tbody>'+body+'</tbody>';
+  $('#grSub').textContent=`${rel.length+prov.length} bots - ${_periodLabel()}${_isLivePeriod()?' (live)':''}`;
+}
+
+/* ================= SCOPE / PERIOD / TAB TRANSITIONS ================= */
+async function _ensureAndRender(){
+  try{ _setStatus('stale'); await loadActive(); if(state.tab==='champion')populateTickers(); renderAll(); _setStatus('ok'); }
+  catch(err){ _handleFetchError(err); renderAll(); }
+}
+async function applyScope(newScope){
+  if(newScope===state.scope){return;}
+  state.scope=newScope; state.sel=null; state.mobileSel=null; state.mobileView='select';
+  buildPeriodDropdown();
+  await _ensureAndRender();
+}
+async function applyPeriod(val){
+  if(state.scope==='week')state.weekId=val; else if(state.scope==='month')state.monthId=val;
+  state.sel=null; state.mobileSel=null; state.mobileView='select';
+  await _ensureAndRender();
+}
+async function switchTab(tab){
+  if(tab===state.tab){return;}
+  state.tab=tab;
+  const bc=$('#tabBtnChampion'), bg=$('#tabBtnGlobal');
+  bc.setAttribute('aria-selected',tab==='champion'); bg.setAttribute('aria-selected',tab==='global');
+  bc.tabIndex=tab==='champion'?0:-1; bg.tabIndex=tab==='global'?0:-1;
+  $('#panelChampion').hidden=tab!=='champion'; $('#panelGlobal').hidden=tab!=='global';
+  await _ensureAndRender();
+  if(tab==='global'){$('#tabBtnGlobal').focus();resizeCharts();}
+}
 
 function wire(){
+  // file-explorer tabs (click + roving arrow keys, WAI-ARIA)
+  $('#tabBtnChampion').addEventListener('click',()=>switchTab('champion'));
+  $('#tabBtnGlobal').addEventListener('click',()=>switchTab('global'));
+  document.querySelector('.ftabs').addEventListener('keydown',e=>{
+    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'&&e.key!=='Home'&&e.key!=='End')return;
+    e.preventDefault(); switchTab(state.tab==='champion'?'global':'champion');
+  });
+  // period toggle (Weekly / Monthly / All-time)
+  document.querySelectorAll('#wmToggle button').forEach(b=>b.addEventListener('click',()=>applyScope(b.dataset.wm)));
+  // period dropdown
+  $('#fRange').addEventListener('change',e=>applyPeriod(e.target.value));
+  // Tab-1 filters
   $('#fTicker').addEventListener('change',e=>{state.ticker=e.target.value;state.sel=null;state.mobileSel=null;state.mobileView='select';renderAll();});
   $('#fEnv').addEventListener('change',e=>{state.env=e.target.value;state.sel=null;renderAll();});
-  $('#fRange').addEventListener('change',e=>{state.rk=e.target.value;state.sel=null;state.mobileSel=null;state.mobileView='select';populateFilters();renderAll();});
-  $('#fReset').addEventListener('click',()=>{state.ticker='all';state.env='all';state.rk=DATA.order[0];state.sel=null;state.search='';state.mobileSel=null;state.mobileView='select';
-    $('#arenaSearch').value='';populateFilters();renderAll();});
+  $('#fReset').addEventListener('click',()=>{state.ticker='all';state.env='all';state.sel=null;state.search='';state.mobileSel=null;state.mobileView='select';
+    $('#fTicker').value='all';$('#fEnv').value='all';$('#arenaSearch').value='';renderAll();});
   $('#arenaSearch').addEventListener('input',e=>{state.search=e.target.value;renderList();});
-  // arena list selection (delegation)
   $('#arenaList').addEventListener('click',e=>{const b=e.target.closest('.arena-item');if(!b)return;state.sel=b.dataset.ticker;renderList();renderDetail();});
-  // mobile: chip select
+  // Tab-1 metrics-table click-to-sort (all columns)
+  $('#ccTable').addEventListener('click',e=>{const th=e.target.closest('th.sortable');if(!th)return;
+    const k=th.dataset.k;
+    if(state.sortKey===k)state.sortDir*=-1; else{state.sortKey=k;state.sortDir=(k==='max_drawdown_pct')?1:-1;}
+    renderDetail();});
+  // Tab-2 global-table click-to-sort + search
+  $('#grTable').addEventListener('click',e=>{const th=e.target.closest('th.sortable');if(!th)return;
+    const k=th.dataset.k;
+    if(state.grSortKey===k)state.grSortDir*=-1; else{state.grSortKey=k;state.grSortDir=(k==='max_drawdown_pct')?1:-1;}
+    renderGlobal();paintSortArrows();});
+  $('#grSearch').addEventListener('input',e=>{state.grSearch=e.target.value;renderGlobal();});
+  // mobile: chip select + back + card expand (delegation)
   $('#tickerSelect').addEventListener('click',e=>{const c=e.target.closest('.ts-chip');if(!c)return;
     state.mobileSel=c.dataset.ticker;state.mobileView='cards';renderMobile();window.scrollTo(0,0);});
-  // mobile: back + card expand (delegation)
   $('#arenaCards').addEventListener('click',e=>{
     if(e.target.closest('#mbBack')){state.mobileView='select';renderMobile();return;}
     const cc=e.target.closest('.chcard');if(cc){cc.classList.toggle('open');const ex=cc.querySelector('.exp');if(ex)ex.textContent=cc.classList.contains('open')?'−':'+';}
