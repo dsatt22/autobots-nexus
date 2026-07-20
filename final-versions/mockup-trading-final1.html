@@ -220,10 +220,15 @@ select:focus{outline:none;border-color:var(--accent)}
 /* ============ TREEMAP ============ */
 .tmap{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:clamp(42px,4vw,58px);grid-auto-flow:dense;gap:6px}
 .tile{border-radius:9px;padding:.5rem .6rem;display:flex;flex-direction:column;justify-content:space-between;border:1px solid;overflow:hidden;position:relative}
-.tile .tt{font-family:'Oxanium';font-weight:800;font-size:clamp(.8rem,1vw,1rem);letter-spacing:.04em}
+.tile .tt{font-family:'Oxanium';font-weight:800;font-size:clamp(.8rem,1vw,1rem);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tile .tp{font-family:'Share Tech Mono';font-weight:700;font-size:.8rem}
 .tile .tp.pos{color:var(--pos)} .tile .tp.neg{color:var(--neg)}
 .tile .tx{font-size:.56rem;color:var(--sub)}
+/* Ticker drill-down (per-bot): fewer tiles, sized bigger so the FULL bot name is
+   always readable (operator requirement). No truncation - names wrap within the
+   larger tile instead of being clipped. */
+.tmap.drill{grid-auto-rows:clamp(62px,7vw,90px)}
+.tmap.drill .tile .tt{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;line-height:1.15}
 @media(max-width:640px){.tmap{grid-template-columns:repeat(6,1fr)}}
 
 /* ============ DONUT ============ */
@@ -621,8 +626,8 @@ function buildLiveCatalog(per){
    endpoint returns the REAL period-scoped cumulative curve (builds from ~0 to the
    period net). Weekly = per-trade points -> 7 chronological day buckets (end-of-day
    cumulative, forward-filled, weekday-labelled from the window start); monthly =
-   daily points -> week-of-month buckets. Date math uses the date portion only, so
-   it is timezone-robust. */
+   daily points rendered one-per-day (forward-filled) as a real day-by-day curve.
+   Date math uses the date portion only, so it is timezone-robust. */
 function _eqDayOffset(startISO, tISO){
   return Math.round((Date.parse(tISO.slice(0,10)+'T00:00:00Z') - Date.parse(startISO.slice(0,10)+'T00:00:00Z'))/86400000);
 }
@@ -640,12 +645,23 @@ function _reshapeWeekEquity(resp){
   return {labels,data};
 }
 function _reshapeMonthEquity(resp){
-  const pts=(resp&&resp.points)||[];
-  if(!pts.length) return {labels:[],data:[]};
-  const buckets={};
-  pts.forEach(p=>{const dom=parseInt(String(p.bucket||'').slice(8,10),10)||1; const wk=Math.floor((dom-1)/7)+1; if(p.cumulative_pnl!=null) buckets[wk]=p.cumulative_pnl;});
-  const wks=Object.keys(buckets).map(Number).sort((a,b)=>a-b);
-  return {labels:wks.map(w=>'W'+w), data:wks.map(w=>+Number(buckets[w]).toFixed(2))};
+  const start=resp&&resp.scope&&resp.scope.start, pts=(resp&&resp.points)||[];
+  if(!start||!pts.length) return {labels:[],data:[]};
+  // Plot the REAL daily cumulative curve across the month (one point per day,
+  // forward-filled) instead of collapsing to week-of-month buckets. This keeps the
+  // endpoint's daily granularity so the monthly curve is a genuine day-by-day shape,
+  // matching how the weekly view renders its daily points - not a 2-point W1->W2 line.
+  const base=Date.parse(start.slice(0,10)+'T00:00:00Z'); const byOff={}; let maxOff=0;
+  pts.forEach(p=>{const off=_eqDayOffset(start,String(p.bucket||p.exit_time||''));
+    if(off>=0&&p.cumulative_pnl!=null){byOff[off]=p.cumulative_pnl; if(off>maxOff)maxOff=off;}});
+  const labels=[],data=[]; let last=0;
+  for(let i=0;i<=maxOff;i++){
+    const d=new Date(base+i*86400000);
+    labels.push((d.getUTCMonth()+1)+'/'+d.getUTCDate());
+    if(byOff[i]!=null) last=byOff[i];
+    data.push(+Number(last).toFixed(2));
+  }
+  return {labels,data};
 }
 async function _fetchEquity(scope,period){
   const t=state.fTicker!=='all'?'&ticker='+encodeURIComponent(state.fTicker):'';
@@ -745,7 +761,7 @@ async function init(){
       // Only the in-progress current period is fast-moving; completed periods are
       // immutable, so refetch (force) ONLY when the current period is selected.
       if(isCurrentPeriod())await ensurePeriod(state.viewType,_activeKey(),{force:true});
-      render();_setStatus('ok',_syncedET());
+      render(true);_setStatus('ok',_syncedET());   // silent: no chart animation on refresh
     }catch(err){_setStatus('stale','Live refresh failed &middot; showing last good');}
   },LIVE.refreshMs);
 }
@@ -985,7 +1001,12 @@ function zeroGrad(ctx){const ch=ctx.chart,a=ch.chartArea;if(!a)return 'rgba(0,20
 /* ================= RENDER ================= */
 function activeAgg(){return aggregate(filtRows(scopeRows()));}
 
-function render(){
+// Silent on refresh: the auto-refresh loop calls render(true) so Chart.js updates
+// in place with no animation (values swap silently). Initial load and user-driven
+// changes (render() / render(false)) still animate.
+let _silentUpdate=false;
+function render(silent){
+  _silentUpdate=!!silent;
   const agg=activeAgg();
   renderHeader();
   renderMetrics(agg);
@@ -1065,7 +1086,7 @@ function renderEquity(agg){
       scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11}}},
         y:{grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.28)':'rgba(255,255,255,0.04)'},
           ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11},callback:v=>'$'+v}}}}};
-  if(eqChart){eqChart.data=cfg.data;eqChart.options=cfg.options;eqChart.update();}
+  if(eqChart){eqChart.data=cfg.data;eqChart.options=cfg.options;eqChart.update(_silentUpdate?'none':undefined);}
   else eqChart=new Chart($('#eqChart'),cfg);
 }
 
@@ -1090,6 +1111,7 @@ function renderTreemap(agg){
   // Drill-down: a specific ticker selected -> one tile PER BOT within it; otherwise
   // one tile per ticker. agg.rows is already ticker-filtered by filtRows.
   const drill=state.fTicker!=='all';
+  $('#tmap').classList.toggle('drill',drill);   // drill = bigger tiles, full names
   const groups={};
   agg.rows.forEach(r=>{const k=drill?r.bot:r.ticker;
     if(!groups[k])groups[k]={name:k,ticker:r.ticker,pnl:0,trades:0};
@@ -1103,8 +1125,10 @@ function renderTreemap(agg){
   const total=list.reduce((s,t)=>s+Math.abs(t.pnl),0)||1;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   $('#tmap').innerHTML=list.sort((a,b)=>Math.abs(b.pnl)-Math.abs(a.pnl)).map(t=>{
-    const col=clamp(Math.round(Math.abs(t.pnl)/total*30),2,10);
-    const rowSpan=clamp(Math.round(Math.abs(t.pnl)/maxAbs*3),1,3);
+    // Drill-down: raise the tile floor (min 4 cols / 2 rows) so full bot names fit;
+    // all-tickers keeps the compact 2-10 col range.
+    const col=clamp(Math.round(Math.abs(t.pnl)/total*30),drill?4:2,drill?12:10);
+    const rowSpan=clamp(Math.round(Math.abs(t.pnl)/maxAbs*3),drill?2:1,drill?4:3);
     const up=t.pnl>=0;const base=up?'0,200,150':'232,65,66';
     const intensity=0.14+(Math.abs(t.pnl)/maxAbs)*0.34;
     return `<div class="tile" style="grid-column:span ${col};grid-row:span ${rowSpan};background:rgba(${base},${intensity.toFixed(2)});border-color:rgba(${base},0.5)">
@@ -1130,13 +1154,18 @@ function renderDonut(agg){
   const cfg={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#080c14',borderWidth:2,hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'66%',
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${fmtUsdPlain(c.parsed)} (${totalProfit?(c.parsed/totalProfit*100).toFixed(1):0}%)`}}}}};
-  if(donutChart){donutChart.data=cfg.data;donutChart.update();}else donutChart=new Chart($('#donutChart'),cfg);
+  if(donutChart){donutChart.data=cfg.data;donutChart.update(_silentUpdate?'none':undefined);}else donutChart=new Chart($('#donutChart'),cfg);
   $('#donutLegend').innerHTML=pos.length?pos.map((e,i)=>`<div class="dleg-row"><span class="sw" style="background:${colors[i]}"></span><span class="nm">${e[0]}</span><span class="ct">${fmtUsdPlain(e[1])}</span></div>`).join('')
     :'<div class="dim">No profitable '+(drill?state.fTicker+' bots':'tickers')+' in this scope.</div>';
 }
 
 /* ---------- leaderboard ---------- */
-function spark(trend,color){if(!trend||trend.length<2)return '<span class="dim">-</span>';const w=90,h=24,min=Math.min(...trend),max=Math.max(...trend),rng=(max-min)||1;
+// Color the sparkline by ITS OWN DIRECTION so color always matches the line's shape:
+// a rising trend (ends >= it starts) is green, a falling trend is red. Keyed to the
+// drawn trajectory, NOT net-PnL sign - that mismatch was the bug (green line sloping
+// down / red line sloping up).
+function spark(trend){if(!trend||trend.length<2)return '<span class="dim">-</span>';const w=90,h=24,min=Math.min(...trend),max=Math.max(...trend),rng=(max-min)||1;
+  const color=trend[trend.length-1]>=trend[0]?'#00c896':'#e84142';
   const pts=trend.map((v,i)=>{const x=(i/(trend.length-1))*w;const y=h-((v-min)/rng)*(h-5)-2.5;return x.toFixed(1)+','+y.toFixed(1);}).join(' ');
   return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6"/></svg>`;}
 
@@ -1177,7 +1206,7 @@ function renderLeaderboard(agg){
       <td class="r c-worst neg">${r.worst==null?'-':fmtUsd(r.worst)}</td>
       <td class="r c-dur" style="color:var(--sub)">${r.durMin==null?'-':durStr(r.durMin)}</td>
       <td class="c c-streak">${r.streak==null?'-':r.streak}</td>
-      <td class="c c-spark">${spark(r.trend,up?'#00c896':'#e84142')}</td>
+      <td class="c c-spark">${spark(r.trend)}</td>
     </tr>`;
   }).join('')||`<tr><td colspan="15" style="text-align:center;color:var(--sub);padding:2rem">No bots match these filters.</td></tr>`;
   const s2=all.length?start+1:0, e2=Math.min(start+state.per,all.length);
@@ -1225,7 +1254,7 @@ function renderLbMobile(all){
           <div><span class="k">Worst Trade</span><span class="v neg">${r.worst==null?'-':fmtUsd(r.worst)}</span></div>
           <div><span class="k">Avg Dur</span><span class="v">${r.durMin==null?'-':durStr(r.durMin)}</span></div>
           <div><span class="k">Win Streak</span><span class="v">${r.streak==null?'-':r.streak}</span></div>
-          <div><span class="k">7D Trend</span><span class="v">${spark(r.trend,r.pnl>=0?'#00c896':'#e84142')}</span></div>
+          <div><span class="k">7D Trend</span><span class="v">${spark(r.trend)}</span></div>
         </div></div></div>`).join('')||`<div class="dim" style="padding:1rem 0">No bots for the selected tickers.</div>`);
   }
 }
