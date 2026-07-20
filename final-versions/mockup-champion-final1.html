@@ -189,11 +189,13 @@ select:focus{outline:none;border-color:var(--accent)}
 .dh-badge.hold{color:var(--pos);background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.35)}
 .dh-badge.openslot{color:var(--sub);background:rgba(136,146,164,0.12);border:1px solid var(--border2)}
 .cc-chart-wrap{position:relative;height:clamp(230px,26vh,340px);width:100%;padding:.4rem 1.2rem 0}
-.clegend{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;padding:.7rem 1.2rem 0;font-size:.72rem;color:var(--sub)}
+.clegend{display:flex;flex-wrap:wrap;gap:.6rem 1.1rem;padding:.7rem 1.2rem 0;font-size:clamp(.8rem,0.82vw,.95rem);color:var(--sub)}
 .clegend span{display:inline-flex;align-items:center;gap:.4rem;min-width:0}
-.clegend i{width:1.1rem;height:0;border-top-width:2.6px;border-top-style:solid;flex:0 0 auto}
+.clegend i{width:1.2rem;height:0;border-top-width:2.8px;border-top-style:solid;flex:0 0 auto}
 .clegend i.dash{border-top-style:dashed}
-.clegend .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:12rem}
+.clegend .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:11rem}
+.clegend .lmv{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.clegend .lmv.pos{color:var(--pos)} .clegend .lmv.neg{color:var(--neg)}
 
 /* metrics table */
 .cc-table-wrap{overflow-x:auto;padding:1rem 1.2rem 1.3rem}
@@ -730,6 +732,11 @@ function curve(bot,n){
 /* ---- helpers ---- */
 const N_PTS=8;
 const WEEK_LABELS=['','','','','','','',''].map((_,i)=>'D'+(i+1));
+/* Responsive chart tick/label font (Chart.js draws to canvas, so no CSS clamp):
+   scale with viewport, floored higher than the old fixed 11px so laptop stays
+   legible; desktop/ultrawide get a modest bump, never smaller than before. */
+function _ccFont(){const w=(typeof window!=='undefined'&&window.innerWidth)||1440;
+  return Math.round(Math.max(13,Math.min(15,w/100)));}
 function fmtPct(v){return v===null||v===undefined||!isFinite(v)?'-':(v>=0?'+':'')+Number(v).toFixed(1)+'%';}
 function fmtUsd(v){if(v===null||v===undefined||!isFinite(v))return '-';const s=v<0?'-':'';return s+'$'+Math.abs(Number(v)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtNum(v,d){return v===null||v===undefined||!isFinite(v)?null:Number(v).toFixed(d===undefined?2:d);}
@@ -924,25 +931,40 @@ function renderDetail(){
     <span class="dh-arena">${champ?'Live champion vs '+g.challengers.length+' shadow challenger'+(g.challengers.length===1?'':'s'):g.challengers.length+' challenger'+(g.challengers.length===1?'':'s')+', slot open'}</span>
     <span class="dh-badge ${st.cls}">${st.label}${st.delta!=null&&isFinite(st.delta)?' &middot; '+(st.code==='lead'?'+':'')+st.delta.toFixed(1)+'%':''}</span>`;
 
-  // chart: champion solid (ticker color), challengers dashed
+  // chart: champion solid (ticker color), challengers dashed. Plots the period
+  // return curve; the right axis reads the SAME curve as adjusted-PnL dollars
+  // (dollars = return% x $10, i.e. return% of the constant $1000 notional - exact,
+  // verified across the fleet). Both measures are shown: dual axis + tooltip + legend.
   const datasets=[];const legend=[];
   bots.forEach((b,i)=>{
     const isC=(b===champ);
     const color=isC?tc(g.ticker):CH_COLORS[i%CH_COLORS.length];
     datasets.push({label:b.bot_name,data:curve(b,N_PTS),borderColor:color,borderWidth:isC?2.8:2,
       borderDash:isC?[]:[6,4],tension:.32,pointRadius:0,pointHoverRadius:5,fill:false});
-    legend.push({name:b.bot_name,color,dash:!isC,role:isC?'Champion':'Challenger'});
+    legend.push({name:b.bot_name,color,dash:!isC,role:isC?'Champion':'Challenger',
+      pnl:b.total_pnl_usd,ret:b.return_pct});
   });
+  const cf=_ccFont();                 // responsive tick font (legible on laptop)
+  const _pnlOf=pct=>pct*10;           // return% -> adjusted-PnL dollars ($1000 notional)
   const cfg={type:'line',
     data:{labels:Array.from({length:N_PTS},(_,i)=>i===0?'Start':i===N_PTS-1?'Now':'D'+i),datasets},
     options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtPct(c.parsed.y)}}},
-      scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11}}},
-        y:{grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.28)':'rgba(255,255,255,0.04)'},
-          ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:11},callback:v=>(v>0?'+':'')+v+'%'}}}}};
+      layout:{padding:{right:2}},
+      plugins:{legend:{display:false},tooltip:{titleFont:{size:cf},bodyFont:{size:cf},
+        callbacks:{label:c=>c.dataset.label+': '+fmtUsd(_pnlOf(c.parsed.y))+' · '+fmtPct(c.parsed.y)}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:cf}}},
+        y:{position:'left',title:{display:true,text:'Return %',color:'#9fb0c8',font:{family:'Oxanium',size:cf}},
+          grid:{color:c=>c.tick.value===0?'rgba(255,255,255,0.28)':'rgba(255,255,255,0.04)'},
+          ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:cf},callback:v=>(v>0?'+':'')+v+'%'}},
+        y1:{position:'right',title:{display:true,text:'Adj PnL $',color:'#9fb0c8',font:{family:'Oxanium',size:cf}},
+          grid:{drawOnChartArea:false},
+          ticks:{color:'#9fb0c8',font:{family:'Share Tech Mono',size:cf},callback:v=>(v>0?'+$':'$')+Math.round(v)},
+          // lock the dollar axis to the percent axis (x10) so both read the same curve
+          afterDataLimits:(scale)=>{const y=scale.chart.scales.y; if(y&&isFinite(y.min)&&isFinite(y.max)){scale.min=y.min*10;scale.max=y.max*10;}}}}}};
   if(ccChart){ccChart.data=cfg.data;ccChart.options=cfg.options;ccChart.update();}
   else ccChart=new Chart($('#ccChart'),cfg);
-  $('#ccLegend').innerHTML=legend.map(l=>`<span><i class="${l.dash?'dash':''}" style="border-top-color:${l.color}"></i><span class="nm">${l.name}</span> <span style="color:var(--dim)">${l.role}</span></span>`).join('');
+  $('#ccLegend').innerHTML=legend.map(l=>`<span><i class="${l.dash?'dash':''}" style="border-top-color:${l.color}"></i><span class="nm">${l.name}</span> <span class="lmv ${(Number(l.pnl)>=0?'pos':'neg')}">${fmtUsd(l.pnl)} &middot; ${fmtPct(l.ret)}</span></span>`).join('');
 
   // table: all bots sorted together by the active column (champion NOT pinned;
   // it keeps its gold row wherever its metric ranks). Default sort = adjusted PnL.
