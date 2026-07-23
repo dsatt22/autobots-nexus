@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-07-23",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-07-23_0900.json",
+      "format": "json"
+    },
+    {
       "type": "evening_briefing",
       "title": "Evening Briefing",
       "date": "2026-07-22",
@@ -510,22 +518,6 @@
       "date": "2026-06-24",
       "time": "9:00 AM ET",
       "file": "reports/daily/morning_briefing_2026-06-24_0900.json",
-      "format": "json"
-    },
-    {
-      "type": "evening_briefing",
-      "title": "Evening Briefing",
-      "date": "2026-06-23",
-      "time": "8:30 PM ET",
-      "file": "reports/daily/evening_briefing_2026-06-23_2030.json",
-      "format": "json"
-    },
-    {
-      "type": "morning_briefing",
-      "title": "Morning Briefing",
-      "date": "2026-06-23",
-      "time": "9:00 AM ET",
-      "file": "reports/daily/morning_briefing_2026-06-23_0900.json",
       "format": "json"
     },
     {
