@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AutoBots Nexus - Pipeline</title>
 <style>
+/* `hidden` MUST WIN. It is a UA-stylesheet rule and any author rule
+   setting `display` on the same element beats it -- which is how the
+   Reports toggle stayed on screen after being marked hidden on
+   2026-08-13. scripts/frontend_check.py fails on that now; this makes
+   the attribute mean what everyone reading it assumes. */
+[hidden]{display:none!important}
+
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
 
 :root{

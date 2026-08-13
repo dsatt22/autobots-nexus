@@ -72,6 +72,15 @@ export default [
         CSSStyleSheet: "readonly",
         Notification: "readonly",
         ServiceWorker: "readonly",
+        // Loaded from a CDN by the dashboards, so genuinely a global
+        // there. Added 2026-08-13, the first time this config was ever
+        // actually run -- it had never been executed, so it had never
+        // been tuned against the code it lints.
+        Chart: "readonly",
+        // Standard browser globals that were simply missing from the
+        // list above.
+        TextEncoder: "readonly",
+        TextDecoder: "readonly",
         OffscreenCanvas: "readonly"
       }
     },
