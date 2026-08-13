@@ -1,5 +1,8 @@
 # Site Design Rules
 
+> **Renamed 2026-08-13:** `reports.html` is now `dashboards.html`. The Reporting Bot was retired 2026-08-05 and the page hosts the live dashboards, so the old name had stopped describing it. Every `reports.html` below means `dashboards.html`; the old path is a redirect stub kept for links that already went out.
+
+
 ## Fonts
 - Headings: `'Oxanium', sans-serif`
 - Body / data / monospace: `'Share Tech Mono', monospace`
