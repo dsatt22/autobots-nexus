@@ -36,12 +36,32 @@ WHAT IT CHECKS, and why each one is worth a run:
      404. Reachable from the sandbox through the egress proxy on
      `host.docker.internal`, measured 2026-08-13.
 
+  6. SECURITY PATTERNS. Operator, 2026-08-13: *"if we can't run any actual
+     scans on it to make sure no vulnerabilities exist in it, then this build
+     is far from complete."* They were right, and the gap was worse than it
+     looked -- the push broker's secret scan skipped `.html` entirely, so a
+     front-end change was scanned by scanning nothing. That half is fixed on
+     the broker. This half covers the web-specific faults a secret scanner has
+     no opinion about: injection sinks, an unvalidated `postMessage` listener,
+     third-party script tags with no integrity hash, mixed content, and
+     `target="_blank"` without `rel="noopener"`.
+  7. A `hidden` ELEMENT IS ACTUALLY HIDDEN. This one exists because it caught
+     me. `<div class="view-switch" hidden>` rendered anyway, because
+     `.view-switch{display:inline-flex}` is an AUTHOR rule and beats the
+     browser's built-in `[hidden]{display:none}`. The page parsed, every check
+     passed, and the toggle was still on screen -- the operator saw it before I
+     did. An element carrying `hidden` whose CSS also sets `display` is now a
+     failure.
+
 WHAT IT DELIBERATELY DOES NOT DO. It does not lint. eslint, stylelint and
 htmlhint are all configured in this repo, but the sandbox has no route to the
 npm registry -- the egress allowlist is five hosts and none of them is npm --
 so `npx eslint` cannot install anything. Claiming a lint gate that silently
 does not run would be worse than not having one. Bake the tools into the
-sandbox image and this becomes a sixth check.
+sandbox image and this becomes an eighth check.
+
+Nor does it replace `secret_scan.py` or gitleaks: both run HOST-side in the
+push broker on every push, where the binary and the credentials live.
 
 AN UNREACHABLE API IS "CANNOT VERIFY", NOT "BROKEN". If the API is stopped,
 that is not evidence against the change under test, and failing the change for
@@ -148,6 +168,150 @@ def check_page(path: str, problems: list) -> int:
         run += 1
         if not os.path.isfile(os.path.join(here, href)):
             problems.append(f"{_rel(path)}: links to {href}, which does not exist")
+
+    run += check_security(path, src, problems)
+    run += check_hidden_really_hides(path, src, problems)
+    return run
+
+
+# ---------------------------------------------------------------------------
+# Security
+# ---------------------------------------------------------------------------
+# WHY PATTERNS AND NOT A REAL SCANNER. Every JavaScript security tool worth
+# running installs from npm, and the sandbox this must run in has no route to
+# the registry. The choice is not "patterns or semgrep", it is "patterns or
+# nothing", and nothing is what this repo had.
+#
+# Each entry is a fault that has actually shipped in a page like these, and the
+# message says what to do instead -- a finding nobody can act on gets ignored,
+# and an ignored gate is worse than none.
+_SINKS = (
+    (re.compile(r"\.innerHTML\s*=\s*[^'\"`;]*[+`$]"),
+     "innerHTML assigned from something built at runtime. If any part of it "
+     "came from the API or the URL, that is script injection. Use "
+     "textContent, or build nodes."),
+    (re.compile(r"\bdocument\.write\s*\("),
+     "document.write executes whatever it is handed and blocks the parser. "
+     "Build the node instead."),
+    (re.compile(r"(?<![\w.])eval\s*\("),
+     "eval runs whatever string reaches it. There is no version of this page "
+     "that needs it."),
+    (re.compile(r"\bnew\s+Function\s*\("),
+     "new Function is eval with a different name."),
+    (re.compile(r"\.outerHTML\s*=\s*[^'\"`;]*[+`$]"),
+     "outerHTML assigned from a runtime value -- same injection risk as "
+     "innerHTML."),
+    (re.compile(r"""localStorage\.setItem\s*\(\s*['"][^'"]*(token|secret|key|password)""",
+                re.IGNORECASE),
+     "a credential in localStorage is readable by any script on the page and "
+     "survives the tab closing. Keep it in memory, or let the API set a "
+     "cookie."),
+)
+
+_MSG_LISTENER = re.compile(
+    r"addEventListener\s*\(\s*['\"]message['\"]\s*,\s*(?:function\s*\([^)]*\)|"
+    r"\([^)]*\)\s*=>|[A-Za-z_$][\w$]*)\s*\{?(.{0,600})", re.DOTALL)
+_ORIGIN_CHECK = re.compile(r"\.origin\b")
+
+_SCRIPT_SRC = re.compile(r"<script\b[^>]*\bsrc=[\"']([^\"']+)[\"'][^>]*>",
+                         re.IGNORECASE)
+_INTEGRITY = re.compile(r"\bintegrity=", re.IGNORECASE)
+_HTTP_RESOURCE = re.compile(r"""(?:src|href)=["'](http://[^"']+)["']""",
+                            re.IGNORECASE)
+_BLANK = re.compile(r"<a\b[^>]*target=[\"']_blank[\"'][^>]*>", re.IGNORECASE)
+
+
+def check_security(path: str, src: str, problems: list) -> int:
+    """Web-specific faults, on a page this repo actually publishes."""
+    run = 0
+    rel = _rel(path)
+
+    for pattern, why in _SINKS:
+        run += 1
+        for m in pattern.finditer(src):
+            line = src.count("\n", 0, m.start()) + 1
+            problems.append(f"{rel}:{line}: {why}")
+
+    # A message listener with no origin check accepts navigation commands from
+    # ANY page that can get a frame reference -- and these dashboards really do
+    # drive each other by postMessage, so this is not hypothetical here.
+    run += 1
+    for m in _MSG_LISTENER.finditer(src):
+        if not _ORIGIN_CHECK.search(m.group(1)):
+            line = src.count("\n", 0, m.start()) + 1
+            problems.append(
+                f"{rel}:{line}: a postMessage listener that never checks "
+                f"event.origin. Any page that can reach this frame can send "
+                f"it commands. Compare origin against the expected one before "
+                f"acting on the message.")
+
+    for m in _SCRIPT_SRC.finditer(src):
+        run += 1
+        tag, url = m.group(0), m.group(1)
+        if url.startswith(("http://", "https://")) and not _INTEGRITY.search(tag):
+            line = src.count("\n", 0, m.start()) + 1
+            problems.append(
+                f"{rel}:{line}: third-party script with no integrity hash "
+                f"({url.split('?')[0]}). If that host is ever compromised it "
+                f"runs whatever it likes on this page. Add "
+                f"integrity=... crossorigin=anonymous, or vendor the file.")
+
+    for m in _HTTP_RESOURCE.finditer(src):
+        run += 1
+        line = src.count("\n", 0, m.start()) + 1
+        problems.append(f"{rel}:{line}: loads {m.group(1)} over plain http. "
+                        f"On an https page this is blocked as mixed content.")
+
+    for m in _BLANK.finditer(src):
+        run += 1
+        if "noopener" not in m.group(0) and "noreferrer" not in m.group(0):
+            line = src.count("\n", 0, m.start()) + 1
+            problems.append(f"{rel}:{line}: target=\"_blank\" without "
+                            f"rel=\"noopener\" -- the opened page gets a "
+                            f"handle on this one via window.opener.")
+    return run
+
+
+# `hidden` is a UA-stylesheet rule (`[hidden]{display:none}`) and ANY author
+# rule setting `display` on the same element beats it. Hiding a thing and
+# having it stay on screen is silent, survives every other check here, and is
+# exactly what happened to the Reports toggle on 2026-08-13.
+_HIDDEN_EL = re.compile(r"<[a-z]+\b[^>]*\bhidden\b[^>]*>", re.IGNORECASE)
+_CLASS_ATTR = re.compile(r"class=[\"']([^\"']+)[\"']")
+_ID_ATTR = re.compile(r"id=[\"']([^\"']+)[\"']")
+
+
+# The one thing that makes the attribute safe again: an author rule marked
+# `!important` outranks any ordinary author `display`, so a page carrying this
+# has already answered the question and every `hidden` on it behaves.
+_HIDDEN_FIX = re.compile(r"\[hidden\]\s*\{[^}]*display\s*:\s*none\s*!important",
+                         re.IGNORECASE)
+
+
+def check_hidden_really_hides(path: str, src: str, problems: list) -> int:
+    run = 0
+    rel = _rel(path)
+    if _HIDDEN_FIX.search(src):
+        return 1
+    for m in _HIDDEN_EL.finditer(src):
+        run += 1
+        tag = m.group(0)
+        selectors = [f".{c}" for c in
+                     (_CLASS_ATTR.search(tag).group(1).split()
+                      if _CLASS_ATTR.search(tag) else [])]
+        if _ID_ATTR.search(tag):
+            selectors.append("#" + _ID_ATTR.search(tag).group(1))
+        for sel in selectors:
+            rule = re.search(
+                re.escape(sel) + r"\s*(?:,[^{]*)?\{([^}]*)\}", src)
+            if rule and re.search(r"(?<!-)\bdisplay\s*:", rule.group(1)):
+                line = src.count("\n", 0, m.start()) + 1
+                problems.append(
+                    f"{rel}:{line}: this element has `hidden` but `{sel}` "
+                    f"sets `display`, which overrides it -- the element is "
+                    f"still on screen. Add `[hidden]{{display:none!important}}` "
+                    f"or hide it another way.")
+                break
     return run
 
 
@@ -248,6 +412,16 @@ def main() -> int:
     # push broker's verdict gate looks for one and a front-end verdict has to
     # be readable by the same machinery as a pytest one.
     print(f"\n{run - len(problems)} checks passed, {len(problems)} failed")
+    if problems:
+        # WHAT A NON-ZERO COUNT MEANS HERE, said plainly, because the site
+        # starts with a backlog of them and a reader who thinks the gate is
+        # broken will route around it. QA runs this on the branch AND on the
+        # baseline: findings present in both are pre-existing and cancel, and
+        # only what is NEW on the branch blocks a push.
+        print("\nSome of these may be pre-existing. Run this on origin/main "
+              "too and compare -- only findings that are NEW on this branch "
+              "should block it. Do not 'fix' an old one in passing: it belongs "
+              "to its own change, with its own review.")
     return 1 if problems else 0
 
 

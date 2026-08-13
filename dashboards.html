@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>AutoBots Nexus - Reports</title>
 <style>
+/* `hidden` MUST WIN. It is a UA-stylesheet rule and any author rule
+   setting `display` on the same element beats it -- which is how the
+   Reports toggle stayed on screen after being marked hidden on
+   2026-08-13. scripts/frontend_check.py fails on that now; this makes
+   the attribute mean what everyone reading it assumes. */
+[hidden]{display:none!important}
+
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap');
 
 :root {
@@ -3253,6 +3260,10 @@ window.addEventListener('load',()=>{
   setView('dashboards');
   /* cross-dashboard navigation posted from inside the iframes */
   window.addEventListener('message',function(ev){
+    /* SAME ORIGIN ONLY. The dashboards are served from this host, so
+       anything arriving from elsewhere is not one of them. Without
+       this, any page able to reach this frame could drive it. */
+    if(ev.origin!==location.origin)return;
     const m=ev.data;if(!m||m.type!=='dashboard-nav')return;
     if(m.target==='overview'){el('dashLanding').style.display='';el('dashFrameWrap').style.display='none';
       el('dashFrame').setAttribute('src','about:blank');el('viewSwitch').style.display='';return;}
