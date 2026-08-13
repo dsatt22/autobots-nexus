@@ -1,5 +1,8 @@
 # AutoBots Nexus - GitHub Pages Site
 
+> **Renamed 2026-08-13:** `reports.html` is now `dashboards.html`. The Reporting Bot was retired 2026-08-05 and the page hosts the live dashboards, so the old name had stopped describing it. Every `reports.html` below means `dashboards.html`; the old path is a redirect stub kept for links that already went out.
+
+
 ## What This Is
 The public-facing website for the AutoBots Trading ecosystem. Hosted on GitHub Pages at https://dsatt22.github.io/autobots-nexus/. Shows how the ecosystem works, the architecture, pipeline, and roadmap. The Reports section is password-protected and displays trading reports for the operator only.
 

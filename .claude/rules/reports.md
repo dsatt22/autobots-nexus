@@ -1,5 +1,8 @@
 # Reports Page Rules
 
+> **Renamed 2026-08-13:** `reports.html` is now `dashboards.html`. The Reporting Bot was retired 2026-08-05 and the page hosts the live dashboards, so the old name had stopped describing it. Every `reports.html` below means `dashboards.html`; the old path is a redirect stub kept for links that already went out.
+
+
 ## Authentication
 - SHA-256 password hash compared via `crypto.subtle.digest('SHA-256', ...)` (`reports.html:3006`)
 - Session persists via `sessionStorage` key set at `reports.html:3013`, read at `:3033` (cleared on browser close)
