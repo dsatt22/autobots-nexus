@@ -53,12 +53,17 @@ WHAT IT CHECKS, and why each one is worth a run:
      did. An element carrying `hidden` whose CSS also sets `display` is now a
      failure.
 
-WHAT IT DELIBERATELY DOES NOT DO. It does not lint. eslint, stylelint and
-htmlhint are all configured in this repo, but the sandbox has no route to the
-npm registry -- the egress allowlist is five hosts and none of them is npm --
-so `npx eslint` cannot install anything. Claiming a lint gate that silently
-does not run would be worse than not having one. Bake the tools into the
-sandbox image and this becomes an eighth check.
+  8. ESLINT, STYLELINT AND HTMLHINT, against this repo's own configs. All
+     three were configured here and NONE had ever run. The reason given was
+     that the sandbox cannot reach the npm registry -- true at runtime and
+     beside the point, since the image is built on the host and already
+     npm-installs Claude Code that way. They are baked into
+     `hermes-sandbox:0.7`.
+
+     Running them for the first time surfaced ~45 findings that were always
+     there. That is expected and does not block anything: QA compares the
+     branch against the baseline, so pre-existing findings cancel. A missing
+     linter is reported as NOT RUN, never as a silent pass.
 
 Nor does it replace `secret_scan.py` or gitleaks: both run HOST-side in the
 push broker on every push, where the binary and the credentials live.
@@ -78,6 +83,7 @@ import html.parser
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -315,6 +321,206 @@ def check_hidden_really_hides(path: str, src: str, problems: list) -> int:
     return run
 
 
+# ---------------------------------------------------------------------------
+# The linters
+# ---------------------------------------------------------------------------
+# THIS REPO HAS CONFIGURED THREE AND RUN NONE OF THEM. `eslint.config.mjs`,
+# `.stylelintrc.json` and `.htmlhintrc` all exist and are real -- the eslint
+# config alone lists eighty browser globals and twenty rules, someone wrote it
+# carefully -- and nothing has ever executed them.
+#
+# The excuse was that the sandbox has no route to the npm registry. True at
+# runtime, and beside the point: the sandbox IMAGE is built on the host, where
+# npm works, and it already installs Claude Code that way. They are baked into
+# `hermes-sandbox:0.7`.
+#
+# THE JS AND CSS ARE INLINE, so the linters cannot see them by pointing at the
+# .html. They are extracted to real files first -- the same extraction that
+# feeds `node --check` -- and the reported line numbers are mapped BACK to the
+# page, because a finding you cannot locate is a finding people ignore.
+#
+# INTO A DIRECTORY UNDER THE REPO, not the system temp: eslint's flat config is
+# found by walking up from the linted file, so a file in /tmp gets no config
+# and silently lints against defaults.
+LINT_DIR = ".lintcheck"
+
+
+class _Blocks(html.parser.HTMLParser):
+    """Inline script and style bodies, each with the page line it starts on."""
+
+    def __init__(self, tag: str) -> None:
+        super().__init__()
+        self.tag, self.blocks, self._in, self._line = tag, [], False, 0
+
+    def handle_starttag(self, tag, attrs) -> None:
+        if tag == self.tag and not dict(attrs).get("src"):
+            self._in = True
+            self._line = self.getpos()[0]
+
+    def handle_endtag(self, tag) -> None:
+        if tag == self.tag:
+            self._in = False
+
+    def handle_data(self, data) -> None:
+        if self._in and data.strip():
+            # +1: the content starts on the line after the opening tag when the
+            # tag is alone on its line, which is how every page here is written.
+            self.blocks.append((self._line, data))
+
+
+def _have(tool: str) -> bool:
+    try:
+        subprocess.run([tool, "--version"], capture_output=True, timeout=30)
+        return True
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        return False
+
+
+def _extract(pages: list, tag: str, suffix: str, workdir: str) -> dict:
+    """One file per PAGE, line-aligned with it. Returns file -> (page, 0).
+
+    TWO THINGS THIS GETS RIGHT, both learned by getting them wrong first.
+
+    ONE FILE PER PAGE, NOT PER BLOCK. A page's inline scripts share one global
+    scope in the browser. Linting each block separately reported `setView`,
+    `openDashboard` and `closeDashboard` as undefined -- every one of them
+    defined in a sibling block on the same page. Fifty-eight false failures,
+    which is worse than no linter: people learn to skim past it.
+
+    LINE-ALIGNED, so the numbers need no translation. Everything that is not
+    inside the tag becomes a blank line, so line 3260 of the extracted file IS
+    line 3260 of the page. Mapping offsets by hand was the other version of
+    this, and an off-by-one there points a reviewer at the wrong function.
+    """
+    index = {}
+    for path in pages:
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                src = fh.read()
+        except OSError:
+            continue
+        parser = _Blocks(tag)
+        try:
+            parser.feed(src)
+        except Exception:                               # noqa: BLE001
+            continue                                    # the parse check reports it
+        if not parser.blocks:
+            continue
+        lines = src.splitlines()
+        keep = [""] * len(lines)
+        for start, body in parser.blocks:
+            for n, text in enumerate(body.splitlines()):
+                row = start - 1 + n
+                if 0 <= row < len(keep):
+                    keep[row] = text
+        name = os.path.basename(path).replace(".", "_") + suffix
+        with open(os.path.join(workdir, name), "w", encoding="utf-8") as fh:
+            fh.write("\n".join(keep) + "\n")
+        index[name] = (_rel(path), 1)
+    return index
+
+
+_ESLINT_LINE = re.compile(r"^\s*(\d+):(\d+)\s+(error|warning)\s+(.*?)\s\s+(\S+)\s*$")
+_STYLELINT_LINE = re.compile(r"^\s*(\d+):(\d+)\s+[✖⚠x]?\s*(.*?)\s\s+(\S+)\s*$")
+
+
+def _run_linter(cmd: list, workdir: str, index: dict, pattern, problems: list,
+                notes: list, warn_only: bool) -> int:
+    """Run a linter over the extracted files and re-anchor its output."""
+    try:
+        out = subprocess.run(cmd, cwd=workdir, capture_output=True, text=True,
+                             timeout=300)
+    except Exception as exc:                            # noqa: BLE001
+        notes.append(f"{cmd[0]} could not run ({type(exc).__name__}) -- those "
+                     f"checks did NOT happen; do not report them as passing.")
+        return 0
+    current = None
+    count = 0
+    for raw in (out.stdout or "").splitlines():
+        line = raw.rstrip()
+        base = os.path.basename(line.strip())
+        if base in index:
+            current = index[base]
+            continue
+        m = pattern.match(line)
+        if not m or current is None:
+            continue
+        count += 1
+        page, offset = current
+        if pattern is _ESLINT_LINE:
+            row, _col, sev, msg, rule = m.groups()
+        else:
+            row, _col, msg, rule = m.groups()
+            sev = "error"
+        where = f"{page}:{offset + int(row) - 1}"
+        text = f"{where}: {msg} ({rule})"
+        if sev == "warning" or warn_only:
+            notes.append(text)
+        else:
+            problems.append(text)
+    return count
+
+
+def check_linters(pages: list, problems: list, notes: list) -> int:
+    """eslint, stylelint and htmlhint, against this repo's own configs.
+
+    A MISSING LINTER IS A NOTE, NOT A SILENT PASS. On a host without the
+    sandbox image these are simply absent, and a check that quietly skips is
+    indistinguishable from one that ran clean -- which is the exact failure
+    this whole file exists to avoid.
+
+    ERRORS FAIL, WARNINGS DO NOT. That split is the config author's, not mine:
+    `eslint.config.mjs` marks the dangerous things (`no-eval`, `no-undef`,
+    `no-new-func`) as errors and the tidiness rules as warnings.
+    """
+    run = 0
+    workdir = os.path.join(ROOT, LINT_DIR)
+    missing = [t for t in ("eslint", "stylelint", "htmlhint") if not _have(t)]
+    if missing:
+        notes.append(
+            f"NOT INSTALLED, so these did not run: {', '.join(missing)}. They "
+            f"live in the sandbox image (hermes-sandbox:0.7); on a bare host "
+            f"they are absent. Say so in the verdict rather than implying a "
+            f"clean lint.")
+
+    if _have("htmlhint"):
+        rel = [_rel(p) for p in pages if os.path.isfile(p)]
+        try:
+            out = subprocess.run(["htmlhint", *rel], cwd=ROOT,
+                                 capture_output=True, text=True, timeout=300)
+            run += len(rel)
+            for line in (out.stdout or "").splitlines():
+                if "|" in line and ("error" in line.lower()
+                                    or "warning" in line.lower()):
+                    problems.append("htmlhint: " + line.strip())
+        except Exception as exc:                        # noqa: BLE001
+            notes.append(f"htmlhint could not run ({type(exc).__name__})")
+
+    if not (_have("eslint") or _have("stylelint")):
+        return run
+
+    shutil.rmtree(workdir, ignore_errors=True)
+    os.makedirs(workdir, exist_ok=True)
+    try:
+        if _have("eslint"):
+            idx = _extract(pages, "script", ".js", workdir)
+            if idx:
+                run += len(idx)
+                _run_linter(["eslint", "--no-color", "."], workdir, idx,
+                            _ESLINT_LINE, problems, notes, warn_only=False)
+        if _have("stylelint"):
+            idx = _extract(pages, "style", ".css", workdir)
+            if idx:
+                run += len(idx)
+                _run_linter(["stylelint", "--no-color", "*.css"], workdir, idx,
+                            _STYLELINT_LINE, problems, notes, warn_only=True)
+    finally:
+        # ALWAYS. A stray directory of extracted code inside the repo would be
+        # committed by the next job that runs `git add -A`.
+        shutil.rmtree(workdir, ignore_errors=True)
+    return run
+
+
 def api_paths() -> set:
     """Every endpoint the dashboards fetch, read out of their source."""
     found = set()
@@ -376,6 +582,8 @@ def main() -> int:
                     help="dashboard API base URL (default: %(default)s)")
     ap.add_argument("--no-api", action="store_true",
                     help="skip the endpoint check entirely")
+    ap.add_argument("--no-lint", action="store_true",
+                    help="skip eslint/stylelint/htmlhint")
     args = ap.parse_args()
 
     problems: list = []
@@ -399,6 +607,13 @@ def main() -> int:
                 json.load(fh)
         except Exception as exc:                        # noqa: BLE001
             problems.append(f"{name}: does not parse as JSON ({exc})")
+
+    # The linters, over the same set of pages. Placed before the API check so
+    # a lint failure and an unreachable API are reported in one pass.
+    if not args.no_lint:
+        run += check_linters(
+            [os.path.join(ROOT, n) for n in PUBLISHED] + DASHBOARDS,
+            problems, notes)
 
     if not args.no_api:
         run += check_api(args.api, problems, notes)
