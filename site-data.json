@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-08-13T15:30:05.473073-04:00",
+  "last_updated": "2026-08-13T16:10:05.456780-04:00",
   "hero": {
-    "trading_bots_paper": 108,
+    "trading_bots_paper": 109,
     "strategies_discovered": 965,
     "auto_deployed_bots": 144,
     "candles": "248M",
@@ -11,8 +11,8 @@
     "risk_per_trade": "5%",
     "bot_types": 7,
     "hierarchy_tiers": 5,
-    "engine_bots_live": 4,
-    "trading_bots": 108,
+    "engine_bots_live": 3,
+    "trading_bots": 109,
     "build_phases": 7
   },
   "architecture": {
@@ -39,7 +39,7 @@
     "sources_scanned": 15,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "77%",
+    "codegen_pass_rate": "76%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
