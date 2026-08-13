@@ -595,7 +595,10 @@ body { font-family:'Share Tech Mono',monospace; background:var(--bg); color:var(
       <li><a href="#sec-security">Security</a></li>
       <li><a href="#sec-roadmap">Roadmap</a></li>
       <li><a href="pipeline.html">Pipeline</a></li>
-      <li><a href="reports.html">Reports</a></li>
+      <!-- Reports retired 2026-08-05: the Reporting Bot was replaced by the
+           live dashboards. This tab is the ONLY route to the dashboards, which
+           reports.html hosts, so it is relabelled rather than hidden. -->
+      <li><a href="reports.html">Dashboards</a></li>
     </ul>
   </div>
 </nav>
@@ -788,7 +791,10 @@ body { font-family:'Share Tech Mono',monospace; background:var(--bg); color:var(
       <div class="flow-node" style="left:90%"><div class="flow-node-icon">&#127760;</div><div class="flow-node-name">AutoBots Nexus</div><div class="flow-node-sub">Reports published<br>on this site</div></div>
     </div>
   </div>
-  <div class="reports-section">
+  <!-- Retired with the Reporting Bot, 2026-08-05. Hidden, not removed:
+       the four cards below describe reports that no longer run. The
+       wrapper keeps its id so the IntersectionObserver still resolves. -->
+  <div class="reports-section" hidden>
     <div class="reports-label">Scheduled Reports</div>
     <div class="report-cards" id="notifReportCards">
       <div class="report-card" style="transition-delay:0.1s"><div class="report-schedule">Daily &middot; 9:00 AM ET</div><div class="report-name">Morning Briefing</div><div class="report-desc">Full overnight summary covering trade activity, bot health, codegen and Whisper stats, errors and warnings, and action items.</div><span class="report-tag" style="border-color:rgba(100,180,255,0.3);color:var(--blue)">&#9679; Daily</span></div>

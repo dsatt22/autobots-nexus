@@ -1565,13 +1565,19 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
       <li><a href="index.html#sec-security">Security</a></li>
       <li><a href="index.html#sec-roadmap">Roadmap</a></li>
       <li><a href="pipeline.html">Pipeline</a></li>
-      <li><a href="reports.html" class="active">Reports</a></li>
+      <!-- Reports retired 2026-08-05: the Reporting Bot was replaced by the
+           live dashboards. This tab is the ONLY route to the dashboards, which
+           reports.html hosts, so it is relabelled rather than hidden. -->
+      <li><a href="reports.html" class="active">Dashboards</a></li>
     </ul>
   </div>
 </nav>
 
 <!-- Reports / Dashboards view toggle -->
-<div class="view-switch" id="viewSwitch">
+<!-- Toggle hidden 2026-08-13: the reports half is retired, so there is
+     nothing to switch between. The markup and both views stay in place;
+     removing `hidden` here brings the Reports view straight back. -->
+<div class="view-switch" id="viewSwitch" hidden>
   <button class="vs-btn on" data-view="reports" onclick="setView('reports')">Reports</button>
   <button class="vs-btn" data-view="dashboards" onclick="setView('dashboards')">Dashboards</button>
 </div>
@@ -3239,6 +3245,11 @@ window.addEventListener('load',()=>{
     el('dashLanding').style.display='';
     el('viewSwitch').style.display='';
   };
+  /* OPEN ON THE DASHBOARDS. The reports half is retired and its toggle is
+     hidden, so without this the page would land on a view with no way out.
+     `style.display=''` inside setView only clears the INLINE property, so the
+     `hidden` attribute on #viewSwitch still wins and the toggle stays gone. */
+  setView('dashboards');
   /* cross-dashboard navigation posted from inside the iframes */
   window.addEventListener('message',function(ev){
     const m=ev.data;if(!m||m.type!=='dashboard-nav')return;
