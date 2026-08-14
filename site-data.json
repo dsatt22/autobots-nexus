@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-08-14T10:29:37.800227-04:00",
+  "last_updated": "2026-08-14T19:00:00.081373-04:00",
   "hero": {
     "trading_bots_paper": 109,
-    "strategies_discovered": 966,
+    "strategies_discovered": 967,
     "auto_deployed_bots": 144,
     "candles": "248M",
     "symbols": 149,
@@ -67,7 +67,7 @@
     "bots_scanned": 113,
     "tables_secured": 99,
     "security_migrations": 176,
-    "last_scan": "2026-08-13T18:50:16.445012-04:00",
+    "last_scan": "2026-08-14T18:50:19.572513-04:00",
     "packages_scanned": 146,
     "gitleaks_findings_count": 0
   },
