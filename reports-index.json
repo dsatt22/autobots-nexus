@@ -1,6 +1,14 @@
 {
   "reports": [
     {
+      "type": "morning_briefing",
+      "title": "Morning Briefing",
+      "date": "2026-08-17",
+      "time": "9:00 AM ET",
+      "file": "reports/daily/morning_briefing_2026-08-17_0900.json",
+      "format": "json"
+    },
+    {
       "type": "strategy_comparison",
       "title": "Weekly Strategy Comparison",
       "date": "2026-08-16",
@@ -382,22 +390,6 @@
       "date": "2026-07-19",
       "time": "9:00 AM ET",
       "file": "reports/daily/morning_briefing_2026-07-19_0900.json",
-      "format": "json"
-    },
-    {
-      "type": "evening_briefing",
-      "title": "Evening Briefing",
-      "date": "2026-07-18",
-      "time": "8:30 PM ET",
-      "file": "reports/daily/evening_briefing_2026-07-18_2030.json",
-      "format": "json"
-    },
-    {
-      "type": "morning_briefing",
-      "title": "Morning Briefing",
-      "date": "2026-07-18",
-      "time": "9:00 AM ET",
-      "file": "reports/daily/morning_briefing_2026-07-18_0900.json",
       "format": "json"
     },
     {
