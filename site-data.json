@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-08-22T22:00:55.954100-04:00",
+  "last_updated": "2026-08-22T23:58:55.951412-04:00",
   "hero": {
     "trading_bots_paper": 113,
-    "strategies_discovered": 978,
+    "strategies_discovered": 983,
     "auto_deployed_bots": 148,
     "candles": "248M",
     "symbols": 149,
@@ -39,7 +39,7 @@
     "sources_scanned": 15,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "77%",
+    "codegen_pass_rate": "78%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
