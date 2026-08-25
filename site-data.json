@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-25T15:56:12.136969-04:00",
+  "last_updated": "2026-08-25T19:00:00.026979-04:00",
   "hero": {
     "trading_bots_paper": 115,
     "strategies_discovered": 1001,
@@ -39,7 +39,7 @@
     "sources_scanned": 15,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "79%",
+    "codegen_pass_rate": "78%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -67,7 +67,7 @@
     "bots_scanned": 118,
     "tables_secured": 101,
     "security_migrations": 180,
-    "last_scan": "2026-08-24T18:50:19.346931-04:00",
+    "last_scan": "2026-08-25T18:50:26.137346-04:00",
     "packages_scanned": 147,
     "gitleaks_findings_count": 0
   },
