@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-09-22T09:48:48.165222-04:00",
+  "last_updated": "2026-09-22T13:23:50.711402-04:00",
   "hero": {
     "trading_bots_paper": 360,
     "strategies_discovered": 1226,
     "auto_deployed_bots": 406,
     "candles": "255M",
     "symbols": 152,
-    "indicators_mapped": 661,
+    "indicators_mapped": 666,
     "leverage": "10x",
     "risk_per_trade": "5%",
     "bot_types": 7,
@@ -272,7 +272,7 @@
       "status": "live",
       "pills": {
         "active_sources": 15,
-        "indicators": 661,
+        "indicators": 666,
         "videos_transcribed": 1953
       }
     },
