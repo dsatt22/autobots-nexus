@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-08T11:28:14.438554-04:00",
+  "last_updated": "2026-10-08T12:35:46.717486-04:00",
   "hero": {
     "trading_bots_paper": 623,
     "strategies_discovered": 1511,
@@ -11,7 +11,7 @@
     "risk_per_trade": "5%",
     "bot_types": 7,
     "hierarchy_tiers": 5,
-    "engine_bots_live": 2,
+    "engine_bots_live": 1,
     "trading_bots": 623,
     "build_phases": 7
   },
@@ -64,7 +64,7 @@
     "low_severity": 0,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 625,
+    "bots_scanned": 624,
     "tables_secured": 114,
     "security_migrations": 206,
     "last_scan": "2026-10-08T07:54:07.834131-04:00",
