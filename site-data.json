@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-09T08:14:46.702441-04:00",
+  "last_updated": "2026-10-09T16:58:46.694458-04:00",
   "hero": {
-    "trading_bots_paper": 623,
-    "strategies_discovered": 1511,
-    "auto_deployed_bots": 684,
+    "trading_bots_paper": 627,
+    "strategies_discovered": 1593,
+    "auto_deployed_bots": 689,
     "candles": "256M",
     "symbols": 152,
     "indicators_mapped": 666,
@@ -12,20 +12,20 @@
     "bot_types": 7,
     "hierarchy_tiers": 5,
     "engine_bots_live": 2,
-    "trading_bots": 623,
+    "trading_bots": 627,
     "build_phases": 7
   },
   "architecture": {
     "research_sources": 15,
-    "builder_bots_deployed": 684,
+    "builder_bots_deployed": 689,
     "postgresql_candles": "256M",
     "postgresql_symbols": 152,
     "postgresql_size": "64 GB",
     "sql_schemas": 8,
-    "sql_tables": 115,
-    "sql_migrations": 208,
+    "sql_tables": 116,
+    "sql_migrations": 210,
     "hand_built_bots": 3,
-    "pipeline_bots": 684,
+    "pipeline_bots": 689,
     "pipeline_tickers": 35,
     "telegram_bots": 5,
     "email_reports": 4
@@ -39,7 +39,7 @@
     "sources_scanned": 15,
     "retry_attempts": 3,
     "dry_run_candles": 100,
-    "codegen_pass_rate": "93%",
+    "codegen_pass_rate": "94%",
     "parallel_backtests": 3,
     "score_threshold": 80,
     "rolling_windows": 6,
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 196295,
-    "python_files": 904,
+    "lines_scanned": 203107,
+    "python_files": 970,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
@@ -64,10 +64,10 @@
     "low_severity": 0,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 625,
-    "tables_secured": 115,
-    "security_migrations": 208,
-    "last_scan": "2026-10-08T18:50:17.518810-04:00",
+    "bots_scanned": 629,
+    "tables_secured": 116,
+    "security_migrations": 210,
+    "last_scan": "2026-10-09T08:53:13.471523-04:00",
     "packages_scanned": 154,
     "gitleaks_findings_count": 0
   },
@@ -279,7 +279,7 @@
     "phase3": {
       "status": "live",
       "pills": {
-        "bots_deployed": 684
+        "bots_deployed": 689
       }
     },
     "phase4": {
