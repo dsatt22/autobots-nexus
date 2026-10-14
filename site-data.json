@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-13T19:00:00.045722-04:00",
+  "last_updated": "2026-10-14T08:15:00.013814-04:00",
   "hero": {
-    "trading_bots_paper": 872,
+    "trading_bots_paper": 879,
     "strategies_discovered": 1593,
-    "auto_deployed_bots": 934,
+    "auto_deployed_bots": 941,
     "candles": "257M",
     "symbols": 152,
     "indicators_mapped": 666,
@@ -12,12 +12,12 @@
     "bot_types": 7,
     "hierarchy_tiers": 5,
     "engine_bots_live": 2,
-    "trading_bots": 872,
+    "trading_bots": 879,
     "build_phases": 7
   },
   "architecture": {
     "research_sources": 15,
-    "builder_bots_deployed": 934,
+    "builder_bots_deployed": 941,
     "postgresql_candles": "257M",
     "postgresql_symbols": 152,
     "postgresql_size": "64 GB",
@@ -25,7 +25,7 @@
     "sql_tables": 126,
     "sql_migrations": 222,
     "hand_built_bots": 3,
-    "pipeline_bots": 934,
+    "pipeline_bots": 941,
     "pipeline_tickers": 35,
     "telegram_bots": 5,
     "email_reports": 4
@@ -51,7 +51,7 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 223005,
+    "lines_scanned": 223006,
     "python_files": 1252,
     "high_severity": 0,
     "secrets_leaked": 0,
@@ -64,10 +64,10 @@
     "low_severity": 0,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 874,
+    "bots_scanned": 881,
     "tables_secured": 126,
     "security_migrations": 222,
-    "last_scan": "2026-10-13T07:54:14.773997-04:00",
+    "last_scan": "2026-10-14T07:53:49.232729-04:00",
     "packages_scanned": 154,
     "gitleaks_findings_count": 0
   },
@@ -279,7 +279,7 @@
     "phase3": {
       "status": "live",
       "pills": {
-        "bots_deployed": 934
+        "bots_deployed": 941
       }
     },
     "phase4": {
