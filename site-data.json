@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-15T19:00:00.035065-04:00",
+  "last_updated": "2026-10-16T08:15:00.024375-04:00",
   "hero": {
-    "trading_bots_paper": 889,
-    "strategies_discovered": 1701,
-    "auto_deployed_bots": 951,
+    "trading_bots_paper": 891,
+    "strategies_discovered": 1759,
+    "auto_deployed_bots": 953,
     "candles": "257M",
     "symbols": 152,
     "indicators_mapped": 666,
@@ -12,20 +12,20 @@
     "bot_types": 7,
     "hierarchy_tiers": 5,
     "engine_bots_live": 2,
-    "trading_bots": 889,
+    "trading_bots": 891,
     "build_phases": 7
   },
   "architecture": {
     "research_sources": 15,
-    "builder_bots_deployed": 951,
+    "builder_bots_deployed": 953,
     "postgresql_candles": "257M",
     "postgresql_symbols": 152,
     "postgresql_size": "64 GB",
     "sql_schemas": 9,
-    "sql_tables": 133,
-    "sql_migrations": 228,
+    "sql_tables": 134,
+    "sql_migrations": 230,
     "hand_built_bots": 3,
-    "pipeline_bots": 951,
+    "pipeline_bots": 953,
     "pipeline_tickers": 35,
     "telegram_bots": 5,
     "email_reports": 4
@@ -51,23 +51,23 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 227640,
-    "python_files": 1272,
+    "lines_scanned": 229770,
+    "python_files": 1277,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
     "code_analysis_pct": 98,
     "dependency_audit_pct": 100,
     "bot_protections_pct": 100,
-    "database_safety_pct": 87,
+    "database_safety_pct": 86,
     "medium_severity": 1,
     "low_severity": 0,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 891,
-    "tables_secured": 133,
-    "security_migrations": 228,
-    "last_scan": "2026-10-15T18:50:20.168334-04:00",
+    "bots_scanned": 893,
+    "tables_secured": 134,
+    "security_migrations": 230,
+    "last_scan": "2026-10-16T07:53:34.700036-04:00",
     "packages_scanned": 154,
     "gitleaks_findings_count": 0
   },
@@ -279,7 +279,7 @@
     "phase3": {
       "status": "live",
       "pills": {
-        "bots_deployed": 951
+        "bots_deployed": 953
       }
     },
     "phase4": {
