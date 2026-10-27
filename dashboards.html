@@ -1599,21 +1599,6 @@ html, body { height:100%; overflow:hidden; font-family:'Share Tech Mono',monospa
       <p class="dash-sub">Interactive views of the trading system - same data, richer lens. Behind the same access as the reports.</p>
     </div>
     <div class="dash-grid">
-      <button class="dash-tile" style="--tileclr:#64b4ff" data-dash="pulse" onclick="openDashboard('pulse')">
-        <div class="dt-ico">&#9889;</div><div class="dt-name">Daily Pulse</div>
-        <div class="dt-desc">Morning and evening snapshot - open positions, unrealized PnL, the promotion gate and pipeline activity.</div>
-        <div class="dt-go">Open dashboard &#8594;</div>
-      </button>
-      <button class="dash-tile" style="--tileclr:#00c896" data-dash="trading" onclick="openDashboard('trading')">
-        <div class="dt-ico">&#128202;</div><div class="dt-name">Trading Activity</div>
-        <div class="dt-desc">Weekly and monthly performance - net adjusted PnL, equity build, asset treemap and the bot leaderboard.</div>
-        <div class="dt-go">Open dashboard &#8594;</div>
-      </button>
-      <button class="dash-tile" style="--tileclr:#a855f7" data-dash="champion" onclick="openDashboard('champion')">
-        <div class="dt-ico">&#127942;</div><div class="dt-name">Champion vs Challenger</div>
-        <div class="dt-desc">Head-to-head of the live champion against its shadow challengers per ticker - equity overlay, metrics and promotion signals.</div>
-        <div class="dt-go">Open dashboard &#8594;</div>
-      </button>
       <div class="dash-tile soon" style="--tileclr:#ff8c42">
         <span class="dt-soon-badge">COMING SOON</span>
         <div class="dt-ico">&#128293;</div><div class="dt-name">System Health</div>
@@ -3222,9 +3207,6 @@ window.addEventListener('load',()=>{
 ══════════════════════════════════ */
 (function(){
   const DASHES={
-    pulse:{title:'Daily Pulse',src:'final-versions/mockup-pulse-final10.html'},
-    trading:{title:'Trading Activity',src:'final-versions/mockup-trading-final1.html'},
-    champion:{title:'Champion vs Challenger',src:'final-versions/mockup-champion-final1.html'},
     health:{title:'System Health',desc:'Infrastructure, bot uptime, data freshness and error monitoring is on the roadmap. Not built yet.'}
   };
   const el=id=>document.getElementById(id);
