@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-10-28T19:00:00.012822-04:00",
+  "last_updated": "2026-10-29T07:54:58.858300-04:00",
   "hero": {
-    "trading_bots_paper": 725,
+    "trading_bots_paper": 936,
     "strategies_discovered": 1759,
     "auto_deployed_bots": 973,
     "candles": "295M",
@@ -12,7 +12,7 @@
     "bot_types": 7,
     "hierarchy_tiers": 5,
     "engine_bots_live": 2,
-    "trading_bots": 725,
+    "trading_bots": 936,
     "build_phases": 7
   },
   "architecture": {
@@ -26,7 +26,7 @@
     "sql_migrations": 258,
     "hand_built_bots": 3,
     "pipeline_bots": 973,
-    "pipeline_tickers": 27,
+    "pipeline_tickers": 36,
     "telegram_bots": 5,
     "email_reports": 4
   },
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 269829,
-    "python_files": 1552,
+    "lines_scanned": 270661,
+    "python_files": 1560,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
@@ -64,13 +64,13 @@
     "low_severity": 0,
     "known_cves": 0,
     "affected_packages": 0,
-    "bots_scanned": 727,
+    "bots_scanned": 938,
     "tables_secured": 152,
     "security_migrations": 258,
-    "last_scan": "2026-10-28T18:50:23.070063-04:00",
+    "last_scan": "2026-10-29T07:46:19.037606-04:00",
     "packages_scanned": 300,
-    "gitleaks_findings_count": 0,
-    "accepted_cves": 20,
+    "gitleaks_findings_count": 1,
+    "accepted_cves": 21,
     "envs_scanned": 2
   },
   "roadmap": {
