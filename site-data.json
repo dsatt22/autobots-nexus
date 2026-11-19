@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-18T19:00:00.030016-05:00",
+  "last_updated": "2026-11-19T08:15:00.022589-05:00",
   "hero": {
     "trading_bots_paper": 935,
     "strategies_discovered": 1759,
@@ -51,8 +51,8 @@
     "live_slot_per_ticker": 1
   },
   "security": {
-    "lines_scanned": 272249,
-    "python_files": 1570,
+    "lines_scanned": 272416,
+    "python_files": 1571,
     "high_severity": 0,
     "secrets_leaked": 0,
     "secret_detection_pct": 100,
@@ -67,7 +67,7 @@
     "bots_scanned": 937,
     "tables_secured": 152,
     "security_migrations": 258,
-    "last_scan": "2026-11-18T07:47:56.819794-05:00",
+    "last_scan": "2026-11-19T07:47:13.804657-05:00",
     "packages_scanned": 300,
     "gitleaks_findings_count": 0,
     "accepted_cves": 21,
