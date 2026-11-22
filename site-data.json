@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-11-21T19:00:00.029913-05:00",
+  "last_updated": "2026-11-22T08:15:00.015390-05:00",
   "hero": {
     "trading_bots_paper": 935,
     "strategies_discovered": 1759,
     "auto_deployed_bots": 973,
-    "candles": "297M",
+    "candles": "298M",
     "symbols": 179,
     "indicators_mapped": 666,
     "leverage": "10x",
@@ -18,7 +18,7 @@
   "architecture": {
     "research_sources": 15,
     "builder_bots_deployed": 973,
-    "postgresql_candles": "297M",
+    "postgresql_candles": "298M",
     "postgresql_symbols": 179,
     "postgresql_size": "80 GB",
     "sql_schemas": 10,
@@ -67,7 +67,7 @@
     "bots_scanned": 937,
     "tables_secured": 152,
     "security_migrations": 258,
-    "last_scan": "2026-11-21T07:47:00.146963-05:00",
+    "last_scan": "2026-11-22T07:46:52.360009-05:00",
     "packages_scanned": 300,
     "gitleaks_findings_count": 0,
     "accepted_cves": 21,
